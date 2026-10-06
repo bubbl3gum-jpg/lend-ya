@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { BookingActions } from "@/components/booking-actions";
 import { SiteHeader } from "@/components/site-header";
+import { parsePathId } from "@/lib/api-validation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -20,8 +21,13 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
   }
 
   const { id } = await params;
+  const bookingId = parsePathId(id);
+  if (bookingId === null) {
+    notFound();
+  }
+
   const booking = await prisma.booking.findUnique({
-    where: { id: Number(id) },
+    where: { id: bookingId },
     select: {
       id: true,
       ownerId: true,
@@ -44,11 +50,42 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       owner: { select: { id: true, name: true, email: true } },
       renter: { select: { id: true, name: true, email: true } },
       meetingStation: { select: { code: true, name: true } },
+      handoff: {
+        select: {
+          performedBy: true,
+          confirmedBy: true,
+          timestamp: true,
+          conditionNotes: true,
+          conditionConfirmed: true,
+        },
+      },
+      return: {
+        select: {
+          initiatedBy: true,
+          confirmedBy: true,
+          timestamp: true,
+          confirmedAt: true,
+          conditionNotes: true,
+          conditionConfirmed: true,
+        },
+      },
+      dispute: {
+        select: {
+          openedBy: true,
+          reason: true,
+          description: true,
+          status: true,
+          createdAt: true,
+        },
+      },
     },
   });
 
   if (!booking) {
-    redirect("/dashboard");
+    notFound();
+  }
+  if (booking.ownerId !== currentUser.id && booking.renterId !== currentUser.id) {
+    notFound();
   }
 
   return (
@@ -104,6 +141,28 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           </div>
         </div>
 
+        <section className="mt-8 border-t border-slate-200 pt-6">
+          <h2 className="text-lg font-semibold text-slate-900">Handoff and return</h2>
+          <div className="mt-3 grid gap-4 text-sm text-slate-600 md:grid-cols-2">
+            <div>
+              <p className="font-medium text-slate-900">Pickup handoff</p>
+              <p>{booking.handoff ? `Recorded ${formatDate(booking.handoff.timestamp)}` : "Not started"}</p>
+              {booking.handoff?.conditionNotes ? <p className="mt-1">{booking.handoff.conditionNotes}</p> : null}
+            </div>
+            <div>
+              <p className="font-medium text-slate-900">Return</p>
+              <p>{booking.return ? `Submitted ${formatDate(booking.return.timestamp)}` : "Not started"}</p>
+              {booking.return?.conditionNotes ? <p className="mt-1">{booking.return.conditionNotes}</p> : null}
+            </div>
+          </div>
+          {booking.dispute ? (
+            <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">
+              <p className="font-semibold">Dispute: {booking.dispute.reason}</p>
+              <p className="mt-1">{booking.dispute.description}</p>
+            </div>
+          ) : null}
+        </section>
+
         <div className="mt-8">
           <BookingActions
             bookingId={booking.id}
@@ -111,7 +170,8 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
             ownerId={booking.ownerId}
             renterId={booking.renterId}
             status={booking.status}
-            listingType={booking.listing.type}
+            handoffPerformerId={booking.handoff?.performedBy}
+            hasDispute={Boolean(booking.dispute)}
           />
         </div>
       </div>

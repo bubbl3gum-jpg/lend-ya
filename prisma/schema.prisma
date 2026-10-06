@@ -24,10 +24,18 @@ enum ListingStatus {
 enum BookingStatus {
   PENDING
   CONFIRMED
+  HANDOFF_PENDING
   IN_USE
   RETURN_PENDING
+  INSPECTION
   COMPLETED
+  DISPUTED
   CANCELLED
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED
 }
 
 model User {
@@ -44,6 +52,11 @@ model User {
   bookingsAsOwner Booking[] @relation("BookingOwner")
   bookingsAsRenter Booking[] @relation("BookingRenter")
   authSessions    AuthSession[]
+  handoffsPerformed Handoff[] @relation("HandoffPerformer")
+  handoffsConfirmed Handoff[] @relation("HandoffConfirmer")
+  returnsInitiated Return[] @relation("ReturnInitiator")
+  returnsConfirmed Return[] @relation("ReturnConfirmer")
+  disputesOpened   Dispute[] @relation("DisputeOpener")
 }
 
 model AuthSession {
@@ -118,8 +131,63 @@ model Booking {
   owner          User        @relation("BookingOwner", fields: [ownerId], references: [id])
   renter         User        @relation("BookingRenter", fields: [renterId], references: [id])
   meetingStation MrtStation  @relation(fields: [meetingStationId], references: [id])
+  handoff        Handoff?
+  return         Return?
+  dispute        Dispute?
 
   @@index([listingId, status])
+  @@index([listingId, status, startAt, endAt])
   @@index([ownerId, status])
   @@index([renterId, status])
+}
+
+model Handoff {
+  id                 Int      @id @default(autoincrement())
+  bookingId          Int      @unique
+  performedBy        Int
+  confirmedBy        Int?
+  timestamp          DateTime @default(now())
+  confirmedAt        DateTime?
+  serialNumber       String?
+  conditionNotes     String?
+  conditionConfirmed Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  booking     Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  performer   User    @relation("HandoffPerformer", fields: [performedBy], references: [id])
+  confirmer   User?   @relation("HandoffConfirmer", fields: [confirmedBy], references: [id])
+}
+
+model Return {
+  id                 Int      @id @default(autoincrement())
+  bookingId          Int      @unique
+  initiatedBy        Int
+  confirmedBy        Int?
+  timestamp          DateTime @default(now())
+  confirmedAt        DateTime?
+  conditionNotes     String?
+  conditionConfirmed Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  booking    Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  initiator  User    @relation("ReturnInitiator", fields: [initiatedBy], references: [id])
+  confirmer  User?   @relation("ReturnConfirmer", fields: [confirmedBy], references: [id])
+}
+
+model Dispute {
+  id          Int           @id @default(autoincrement())
+  bookingId   Int           @unique
+  openedBy    Int
+  reason      String
+  description String
+  status      DisputeStatus @default(OPEN)
+  createdAt   DateTime      @default(now())
+  resolvedAt  DateTime?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  opener  User    @relation("DisputeOpener", fields: [openedBy], references: [id])
+
+  @@index([status, createdAt])
 }

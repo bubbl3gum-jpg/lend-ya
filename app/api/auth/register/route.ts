@@ -1,6 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
-import { hashPassword } from "@/lib/auth";
+import {
+  hashPassword,
+  newSessionCredential,
+  persistSession,
+  setSessionCookie,
+} from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   parseEmail,
@@ -34,17 +39,24 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        passwordHash: await hashPassword(password),
-        role: "USER",
-        verificationStatus: "UNVERIFIED",
-      },
-      select: safeUserSelect,
+    const credential = newSessionCredential();
+    const user = await prisma.$transaction(async (transaction) => {
+      const createdUser = await transaction.user.create({
+        data: {
+          name,
+          email,
+          passwordHash: await hashPassword(password),
+          role: "USER",
+          verificationStatus: "UNVERIFIED",
+        },
+        select: safeUserSelect,
+      });
+
+      await persistSession(createdUser.id, credential, transaction);
+      return createdUser;
     });
 
+    await setSessionCookie(credential);
     return Response.json({ user }, { status: 201 });
   } catch (error) {
     if (

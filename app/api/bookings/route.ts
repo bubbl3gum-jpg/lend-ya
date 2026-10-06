@@ -50,6 +50,21 @@ function dateRangeDays(start: Date, end: Date): number {
   return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
 }
 
+function isSerializationConflict(error: unknown): boolean {
+  if (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2034"
+  ) {
+    return true;
+  }
+
+  if (error instanceof Error && typeof error.cause === "object" && error.cause !== null) {
+    return "originalCode" in error.cause && error.cause.originalCode === "40001";
+  }
+
+  return false;
+}
+
 export async function GET(): Promise<Response> {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
@@ -125,43 +140,51 @@ export async function POST(request: Request): Promise<Response> {
       return apiError("The selected meeting station is not supported for this listing.", 400);
     }
 
-    const existingOverlap = await prisma.booking.findFirst({
-      where: {
-        listingId,
-        status: { in: ["PENDING", "CONFIRMED", "IN_USE", "RETURN_PENDING"] },
-        startAt: { lt: endAt },
-        endAt: { gt: startAt },
-      },
-      select: { id: true },
-    });
-
-    if (existingOverlap) {
-      return apiError("This listing is already booked for part of the selected period.", 409);
-    }
-
     const totalDays = dateRangeDays(startAt, endAt);
     const totalPrice = listing.type === "SERVICE"
       ? listing.price
       : listing.price.mul(new Prisma.Decimal(totalDays));
 
-    const booking = await prisma.booking.create({
-      data: {
-        listingId,
-        ownerId: listing.ownerId,
-        renterId: currentUser.id,
-        meetingStationId,
-        startAt,
-        endAt,
-        status: "PENDING",
-        totalPrice,
-        deposit: listing.deposit ?? null,
-        notes: notes && notes.length > 0 ? notes : null,
-      },
-      select: bookingSelect,
-    });
+    const booking = await prisma.$transaction(async (transaction) => {
+      const existingOverlap = await transaction.booking.findFirst({
+        where: {
+          listingId,
+          status: { notIn: ["CANCELLED", "COMPLETED"] },
+          startAt: { lt: endAt },
+          endAt: { gt: startAt },
+        },
+        select: { id: true },
+      });
+
+      if (existingOverlap) {
+        throw new Error("BOOKING_OVERLAP");
+      }
+
+      return transaction.booking.create({
+        data: {
+          listingId,
+          ownerId: listing.ownerId,
+          renterId: currentUser.id,
+          meetingStationId,
+          startAt,
+          endAt,
+          status: "PENDING",
+          totalPrice,
+          deposit: listing.deposit ?? null,
+          notes: notes && notes.length > 0 ? notes : null,
+        },
+        select: bookingSelect,
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
     return Response.json({ booking }, { status: 201 });
   } catch (error) {
+    if (error instanceof Error && error.message === "BOOKING_OVERLAP") {
+      return apiError("This listing is already booked for part of the selected period.", 409);
+    }
+    if (isSerializationConflict(error)) {
+      return apiError("This listing is already booked for part of the selected period.", 409);
+    }
     return internalServerError("POST /api/bookings", error);
   }
 }

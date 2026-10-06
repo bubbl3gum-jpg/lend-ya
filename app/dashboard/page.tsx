@@ -116,7 +116,6 @@ export default async function DashboardPage() {
                   ownerId={booking.ownerId}
                   renterId={booking.renterId}
                   status={booking.status}
-                  listingType={booking.listing.type}
                 />
               </div>
             ))

@@ -4,6 +4,7 @@ import {
   scrypt,
   timingSafeEqual,
 } from "node:crypto";
+import { Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
@@ -36,6 +37,44 @@ function hashSessionToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
+export type SessionCredential = {
+  token: string;
+  expiresAt: Date;
+};
+
+export function newSessionCredential(): SessionCredential {
+  return {
+    token: randomBytes(32).toString("base64url"),
+    expiresAt: new Date(Date.now() + sessionLifetimeSeconds * 1000),
+  };
+}
+
+export async function persistSession(
+  userId: number,
+  credential: SessionCredential,
+  client: Pick<Prisma.TransactionClient, "authSession"> = prisma,
+): Promise<void> {
+  await client.authSession.create({
+    data: {
+      tokenHash: hashSessionToken(credential.token),
+      userId,
+      expiresAt: credential.expiresAt,
+    },
+  });
+}
+
+export async function setSessionCookie(credential: SessionCredential): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set(sessionCookieName, credential.token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    expires: credential.expiresAt,
+    maxAge: sessionLifetimeSeconds,
+  });
+}
+
 export async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16).toString("hex");
   const key = await derivePasswordKey(password, salt);
@@ -62,26 +101,9 @@ export async function verifyPassword(
 }
 
 export async function createSession(userId: number): Promise<void> {
-  const token = randomBytes(32).toString("base64url");
-  const expiresAt = new Date(Date.now() + sessionLifetimeSeconds * 1000);
-
-  await prisma.authSession.create({
-    data: {
-      tokenHash: hashSessionToken(token),
-      user: { connect: { id: userId } },
-      expiresAt,
-    },
-  });
-
-  const cookieStore = await cookies();
-  cookieStore.set(sessionCookieName, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    expires: expiresAt,
-    maxAge: sessionLifetimeSeconds,
-  });
+  const credential = newSessionCredential();
+  await persistSession(userId, credential);
+  await setSessionCookie(credential);
 }
 
 export async function deleteCurrentSession(): Promise<void> {

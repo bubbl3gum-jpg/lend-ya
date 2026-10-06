@@ -1,37 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lend-Ya
 
-## Getting Started
+Lend-Ya is a booking-based peer-to-peer marketplace MVP built with Next.js, Prisma, and PostgreSQL. A Booking owns the rental lifecycle; handoff, return, and dispute records are attached directly to it.
 
-First, run the development server:
+## Local development
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install dependencies with `npm install`.
+2. Start PostgreSQL with `docker compose up -d`.
+3. Set `DATABASE_URL` in `.env`:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+	```text
+	DATABASE_URL="postgresql://p2p_user:p2p_password@localhost:55433/p2p_marketplace?schema=public"
+	```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Apply migrations, generate Prisma Client, and seed demo data:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+	```bash
+	npx prisma migrate deploy
+	npx prisma generate
+	npx prisma db seed
+	```
 
-## Learn More
+5. Start Next.js with `npm run dev` and open <http://localhost:3000>.
 
-To learn more about Next.js, take a look at the following resources:
+The seed creates local demo accounts `alice@example.test`, `bob@example.test`, and `charlie@example.test`. Their development password is `LocalDev123!`. Do not use these credentials outside local development.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Booking lifecycle
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`PENDING -> CONFIRMED -> HANDOFF_PENDING -> IN_USE -> RETURN_PENDING -> INSPECTION -> COMPLETED`
 
-## Deploy on Vercel
+Participants can open a dispute during return review, moving the Booking to `DISPUTED`. Cancellation is limited to pending or confirmed bookings. Handoff and Return each have at most one record per Booking.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Migration history
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# lend-ya
+The original migrations are retained as immutable history. The forward migration `20261006150000_booking_lifecycle_backbone` converts legacy requests and transactions to Booking records, carries over handoffs and disputes where possible, then removes the parallel legacy tables. Legacy listings receive Taipei Main Station as a migration fallback because the old schema had no meeting-station data.
+
+A fresh database should use `prisma migrate deploy` to apply the complete history and arrive at the current Booking-based schema. This workspace's pre-existing local database had already been created with `db push`; after verifying that its schema exactly matched the current Prisma schema, its migration history was baselined with `prisma migrate resolve`. Do not replay the historical migrations against a `db push`-created database without first verifying and baselining that database.
