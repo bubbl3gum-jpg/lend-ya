@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: p2p-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: p2p_user
+      POSTGRES_PASSWORD: p2p_password
+      POSTGRES_DB: p2p_marketplace
+
+    ports:
+      - "55433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

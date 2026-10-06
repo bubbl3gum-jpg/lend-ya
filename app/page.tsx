@@ -1,69 +1,66 @@
-import Image from "next/image";
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { SiteHeader } from "@/components/site-header";
 
-export default function Home() {
+function formatPrice(value: string | number | { toString(): string }) {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(value.toString()));
+}
+
+export default async function HomePage() {
+  const listings = await prisma.listing.findMany({
+    where: { status: "ACTIVE" },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      category: true,
+      type: true,
+      price: true,
+      deposit: true,
+      condition: true,
+      owner: { select: { name: true } },
+    },
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <SiteHeader />
+
+      <section className="mx-auto grid max-w-6xl gap-10 px-6 py-18 md:grid-cols-2 md:items-center">
+        <div>
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">Marketplace</p>
+          <h1 className="mt-4 text-5xl font-semibold tracking-tight text-slate-900">Rent what you need. Share what you have.</h1>
+          <p className="mt-6 max-w-lg text-lg text-slate-600">Book trusted rentals and services across the city using simple meeting-station pickups and clear request flows.</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/listings" className="rounded-xl bg-slate-900 px-5 py-3 font-medium text-white">Browse listings</Link>
+            <Link href="/listings/new" className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-medium text-slate-900">Create listing</Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl bg-emerald-50 p-5 text-sm text-emerald-800">
+            <p className="font-semibold">Demo flow</p>
+            <p className="mt-2">Browse → request → owner accepts → pickup → use → return → complete.</p>
+          </div>
+          <div className="mt-6 space-y-4">
+            {listings.map((listing) => (
+              <Link key={listing.id} href={`/listings/${listing.id}`} className="block rounded-2xl border border-slate-200 p-4 transition hover:border-slate-300 hover:bg-slate-50">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{listing.type}</p>
+                    <h2 className="mt-1 text-lg font-semibold text-slate-900">{listing.title}</h2>
+                  </div>
+                  <span className="text-lg font-semibold text-slate-900">{formatPrice(listing.price)}</span>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">{listing.category} · {listing.condition}</p>
+                <p className="mt-3 line-clamp-2 text-sm text-slate-600">{listing.description}</p>
+              </Link>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
