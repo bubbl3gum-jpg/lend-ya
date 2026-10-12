@@ -7,7 +7,6 @@ type BookingFormProps = {
   listing: {
     id: number;
     title: string;
-    type: "RENTAL" | "SERVICE";
     supportedStations: Array<{ station: { id: number; code: string; name: string } }>;
   };
 };
@@ -56,7 +55,7 @@ export function BookingForm({ listing }: BookingFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h3 className="mb-4 text-xl font-semibold text-slate-900">Request this {listing.type === "RENTAL" ? "rental" : "service"}</h3>
+      <h3 className="mb-4 text-xl font-semibold text-slate-900">Request this rental</h3>
 
       <div className="space-y-4">
         <label className="block text-sm font-medium text-slate-700">

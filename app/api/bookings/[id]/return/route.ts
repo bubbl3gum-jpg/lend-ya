@@ -1,3 +1,4 @@
+import { parseEvidence } from "@/lib/booking-evidence";
 import { Prisma } from "@prisma/client";
 import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
 import { getCurrentUser } from "@/lib/auth";
@@ -31,6 +32,9 @@ export async function POST(
     return apiError("Condition notes must be 2000 characters or fewer.", 400);
   }
 
+  const evidence = parseEvidence(body);
+  if (!evidence) return apiError("Evidence must contain up to eight HTTPS photo URLs and a boolean checklist.", 400);
+
   try {
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
@@ -48,6 +52,7 @@ export async function POST(
         data: {
           bookingId,
           initiatedBy: currentUser.id,
+          ...evidence,
           conditionNotes,
         },
       });

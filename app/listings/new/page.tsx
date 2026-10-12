@@ -17,7 +17,7 @@ export default async function NewListingPage() {
     <main className="mx-auto max-w-5xl px-6 py-12">
       <div className="mb-6">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">Create listing</p>
-        <h1 className="mt-2 text-4xl font-semibold text-slate-900">List an item or a service</h1>
+        <h1 className="mt-2 text-4xl font-semibold text-slate-900">List an item to rent</h1>
       </div>
       <CreateListingForm stations={stations} />
     </main>

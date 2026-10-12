@@ -1,3 +1,4 @@
+import { ListingManagement } from "@/components/listing-management";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
@@ -21,7 +22,6 @@ export default async function DashboardPage() {
     select: {
       id: true,
       title: true,
-      type: true,
       status: true,
       price: true,
     },
@@ -38,7 +38,7 @@ export default async function DashboardPage() {
       startAt: true,
       endAt: true,
       totalPrice: true,
-      listing: { select: { title: true, type: true } },
+      listing: { select: { title: true } },
       owner: { select: { name: true } },
       renter: { select: { name: true } },
     },
@@ -56,8 +56,14 @@ export default async function DashboardPage() {
         <Link href="/listings/new" className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white">New listing</Link>
       </div>
 
+      <div className="mb-6 flex flex-wrap gap-4 rounded-2xl bg-emerald-50 p-5">
+        <Link href="/account">Account settings</Link>
+        <Link href={`/profile/${currentUser.id}`}>My public trust profile</Link>
+        <Link href="/account/verification">Trustworthiness &amp; verification</Link>
+        <Link href="/account/activity">Activity logs</Link>
+      </div>
       <div className="grid gap-8 lg:grid-cols-2">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section id="listings" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold text-slate-900">My listings</h2>
           <div className="mt-4 space-y-3">
             {listings.length === 0 ? (
@@ -66,8 +72,9 @@ export default async function DashboardPage() {
               listings.map((listing) => (
                 <div key={listing.id} className="flex items-center justify-between rounded-2xl border border-slate-200 p-3">
                   <div>
-                    <p className="font-medium text-slate-900">{listing.title}</p>
-                    <p className="text-sm text-slate-600">{listing.type} · {listing.status}</p>
+                    <Link href={`/listings/${listing.id}`} className="font-medium text-slate-900 underline">{listing.title}</Link>
+                    <ListingManagement id={listing.id} title={listing.title} />
+                    <p className="text-sm text-slate-600">{listing.status}</p>
                   </div>
                   <span className="text-sm font-medium text-slate-700">{formatPrice(listing.price)}</span>
                 </div>
@@ -77,17 +84,17 @@ export default async function DashboardPage() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">My bookings</h2>
+          <h2 id="borrowings" className="text-xl font-semibold text-slate-900">My borrowings</h2>
           <div className="mt-4 space-y-3">
             {bookings.length === 0 ? (
               <p className="text-sm text-slate-600">No bookings yet.</p>
             ) : (
-              bookings.map((booking) => (
+              bookings.filter((booking) => booking.renterId === currentUser.id).map((booking) => (
                 <Link key={booking.id} href={`/bookings/${booking.id}`} className="block rounded-2xl border border-slate-200 p-3">
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <p className="font-medium text-slate-900">{booking.listing.title}</p>
-                      <p className="text-sm text-slate-600">{booking.status}</p>
+                      <p className="text-sm text-slate-600">{["COMPLETED", "CANCELLED"].includes(booking.status) ? "Historical" : "Active"} · {booking.status}</p>
                     </div>
                     <span className="text-sm font-medium text-slate-700">{formatPrice(booking.totalPrice)}</span>
                   </div>

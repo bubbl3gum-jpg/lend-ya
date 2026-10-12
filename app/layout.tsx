@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "MRT Market",
-  description: "Peer-to-peer marketplace for rentals and services.",
+  description: "Peer-to-peer marketplace for physical item rentals.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

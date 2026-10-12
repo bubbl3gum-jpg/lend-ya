@@ -16,10 +16,18 @@ export async function SiteHeader() {
 
           {currentUser ? (
             <>
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-700">
-                Signed in: {currentUser.name}
-              </span>
-              <Link href="/dashboard" className="rounded-full bg-slate-900 px-4 py-2 text-white transition hover:bg-slate-700">Dashboard</Link>
+              <details className="relative">
+                <summary className="cursor-pointer rounded-full bg-slate-900 px-4 py-2 text-white">Account center · {currentUser.name}</summary>
+                <div className="absolute right-0 z-50 mt-2 grid w-72 gap-3 rounded-xl border bg-white p-5 shadow-lg">
+                  <Link href="/dashboard">Dashboard</Link>
+                  <Link href="/account">Account settings</Link>
+                  <Link href={`/profile/${currentUser.id}`}>Public profile view</Link>
+                  <Link href="/account/activity">Activity logs</Link>
+                  <Link href="/dashboard#listings">My listings</Link>
+                  <Link href="/dashboard#borrowings">My borrowings · active &amp; historical</Link>
+                  <Link href="/account/verification">Trustworthiness &amp; profile verification</Link>
+                </div>
+              </details>
               <LogoutButton />
             </>
           ) : (

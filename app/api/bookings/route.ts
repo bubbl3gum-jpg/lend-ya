@@ -24,7 +24,6 @@ const bookingSelect = {
       title: true,
       description: true,
       category: true,
-      type: true,
       price: true,
       deposit: true,
       status: true,
@@ -117,11 +116,12 @@ export async function POST(request: Request): Promise<Response> {
         id: true,
         title: true,
         ownerId: true,
-        type: true,
         status: true,
         price: true,
         deposit: true,
         supportedStations: { select: { stationId: true } },
+        reports: { where: { status: "OPEN" }, select: { id: true }, take: 1 },
+        bookings: { where: { status: "DISPUTED" }, select: { id: true }, take: 1 },
       },
     });
 
@@ -130,6 +130,9 @@ export async function POST(request: Request): Promise<Response> {
     }
     if (listing.status !== "ACTIVE") {
       return apiError("This listing is inactive.", 409);
+    }
+    if (listing.reports.length > 0 || listing.bookings.length > 0) {
+      return apiError("This listing is flagged and cannot receive bookings.", 409);
     }
     if (listing.ownerId === currentUser.id) {
       return apiError("You cannot book your own listing.", 409);
@@ -141,9 +144,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const totalDays = dateRangeDays(startAt, endAt);
-    const totalPrice = listing.type === "SERVICE"
-      ? listing.price
-      : listing.price.mul(new Prisma.Decimal(totalDays));
+    const totalPrice = listing.price.mul(new Prisma.Decimal(totalDays));
 
     const booking = await prisma.$transaction(async (transaction) => {
       const existingOverlap = await transaction.booking.findFirst({

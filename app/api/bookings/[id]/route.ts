@@ -23,7 +23,6 @@ const bookingSelect = {
       title: true,
       description: true,
       category: true,
-      type: true,
       price: true,
       deposit: true,
       status: true,

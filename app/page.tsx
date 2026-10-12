@@ -1,13 +1,11 @@
 import Link from "next/link";
+import { ListingCard } from "@/components/listing-card";
 import { prisma } from "@/lib/prisma";
+import { getListingAvailability } from "@/lib/listing-status";
 import { SiteHeader } from "@/components/site-header";
 
-function formatPrice(value: string | number | { toString(): string }) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(value.toString()));
-}
-
 export default async function HomePage() {
-  const listings = await prisma.listing.findMany({
+  const records = await prisma.listing.findMany({
     where: { status: "ACTIVE" },
     orderBy: { createdAt: "desc" },
     take: 3,
@@ -16,13 +14,28 @@ export default async function HomePage() {
       title: true,
       description: true,
       category: true,
-      type: true,
       price: true,
-      deposit: true,
       condition: true,
-      owner: { select: { name: true } },
+      media: { where: { kind: "PHOTO" }, orderBy: { createdAt: "asc" }, take: 1, select: { url: true } },
+      supportedStations: { select: { station: { select: { name: true } } } },
+      bookings: {
+        where: { status: { in: ["HANDOFF_PENDING", "IN_USE", "RETURN_PENDING", "INSPECTION", "DISPUTED"] } },
+        select: { status: true },
+      },
+      reports: { where: { status: "OPEN" }, select: { id: true }, take: 1 },
     },
   });
+  const listings = records.map((listing) => ({
+    id: listing.id,
+    title: listing.title,
+    description: listing.description,
+    category: listing.category,
+    condition: listing.condition,
+    price: listing.price.toString(),
+    availability: getListingAvailability({ bookings: listing.bookings, openReports: listing.reports }),
+    pickupStations: listing.supportedStations.map(({ station }) => station.name),
+    photoUrl: listing.media[0]?.url ?? null,
+  }));
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -32,34 +45,26 @@ export default async function HomePage() {
         <div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">Marketplace</p>
           <h1 className="mt-4 text-5xl font-semibold tracking-tight text-slate-900">Rent what you need. Share what you have.</h1>
-          <p className="mt-6 max-w-lg text-lg text-slate-600">Book trusted rentals and services across the city using simple meeting-station pickups and clear request flows.</p>
+          <p className="mt-6 max-w-lg text-lg text-slate-600">Find physical items nearby, agree on a pickup station, and rent directly from their owners.</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/listings" className="rounded-xl bg-slate-900 px-5 py-3 font-medium text-white">Browse listings</Link>
             <Link href="/listings/new" className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-medium text-slate-900">Create listing</Link>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="rounded-2xl bg-emerald-50 p-5 text-sm text-emerald-800">
-            <p className="font-semibold">Demo flow</p>
-            <p className="mt-2">Browse → request → owner accepts → pickup → use → return → complete.</p>
+        <section aria-labelledby="recent-listings-title">
+          <div className="mb-3 flex items-baseline justify-between gap-3">
+            <h2 id="recent-listings-title" className="text-xl font-semibold text-slate-900">Recent listings</h2>
+            <Link href="/listings" className="text-sm font-medium text-emerald-800 underline underline-offset-4">Browse all</Link>
           </div>
-          <div className="mt-6 space-y-4">
-            {listings.map((listing) => (
-              <Link key={listing.id} href={`/listings/${listing.id}`} className="block rounded-2xl border border-slate-200 p-4 transition hover:border-slate-300 hover:bg-slate-50">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{listing.type}</p>
-                    <h2 className="mt-1 text-lg font-semibold text-slate-900">{listing.title}</h2>
-                  </div>
-                  <span className="text-lg font-semibold text-slate-900">{formatPrice(listing.price)}</span>
-                </div>
-                <p className="mt-2 text-sm text-slate-600">{listing.category} · {listing.condition}</p>
-                <p className="mt-3 line-clamp-2 text-sm text-slate-600">{listing.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
+          {listings.length > 0 ? (
+            <div className="space-y-3">
+              {listings.map((listing) => <ListingCard key={listing.id} listing={listing} compact />)}
+            </div>
+          ) : (
+            <p className="border-t border-slate-200 py-6 text-sm text-slate-600">No active item listings yet.</p>
+          )}
+        </section>
       </section>
     </main>
   );

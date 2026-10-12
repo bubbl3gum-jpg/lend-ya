@@ -99,7 +99,6 @@ async function main(): Promise<void> {
     title: string;
     description: string;
     category: string;
-    type: "RENTAL" | "SERVICE";
     price: string;
     deposit?: string;
     condition: string;
@@ -116,7 +115,6 @@ async function main(): Promise<void> {
           data: {
             description: input.description,
             category: input.category,
-            type: input.type,
             price: input.price,
             deposit: input.deposit ?? null,
             condition: input.condition,
@@ -129,7 +127,6 @@ async function main(): Promise<void> {
             title: input.title,
             description: input.description,
             category: input.category,
-            type: input.type,
             price: input.price,
             deposit: input.deposit ?? null,
             condition: input.condition,
@@ -158,7 +155,6 @@ async function main(): Promise<void> {
     title: "Sony A7 III Camera",
     description: "Full-frame camera with body, charger, battery, and carry case. Great for travel, events, and portraits.",
     category: "Camera",
-    type: "RENTAL",
     price: "800.00",
     deposit: "10000.00",
     condition: "Good",
@@ -166,12 +162,11 @@ async function main(): Promise<void> {
     stationCodes: ["TPE", "ZSH", "XIM"],
   });
 
-  const tent = await ensureListing({
+  await ensureListing({
     ownerId: alice.id,
     title: "Three-Person Camping Tent",
     description: "Durable hiking tent with rainfly, poles, and groundsheet. Ready for a weekend trip.",
     category: "Camping",
-    type: "RENTAL",
     price: "200.00",
     deposit: "1000.00",
     condition: "Excellent",
@@ -179,15 +174,14 @@ async function main(): Promise<void> {
     stationCodes: ["TPE", "JNT"],
   });
 
-  const excelService = await ensureListing({
+  const cordlessDrill = await ensureListing({
     ownerId: charlie.id,
-    title: "Excel Cleanup and Reporting Help",
-    description: "I can clean spreadsheets, build formulas, and create dashboards for small business reporting needs.",
-    category: "Business",
-    type: "SERVICE",
-    price: "1500.00",
-    deposit: "0.00",
-    condition: "Ready",
+    title: "Cordless Drill Driver",
+    description: "18 V drill driver with two batteries, charger, and compact carry case.",
+    category: "Tools",
+    price: "150.00",
+    deposit: "1000.00",
+    condition: "Good",
     status: "ACTIVE",
     stationCodes: ["TPE", "SSH"],
   });
@@ -227,28 +221,28 @@ async function main(): Promise<void> {
   await prisma.booking.upsert({
     where: { id: 2 },
     update: {
-      listingId: excelService.id,
+      listingId: cordlessDrill.id,
       ownerId: charlie.id,
       renterId: bob.id,
       meetingStationId: stationByCode.SSH.id,
       startAt: startB,
       endAt: addDays(startB, 1),
       status: "PENDING",
-      totalPrice: "1500.00",
-      deposit: "0.00",
-      notes: "Need spreadsheet cleanup for a sales report.",
+      totalPrice: "150.00",
+      deposit: "1000.00",
+      notes: "Pickup with both batteries and charger.",
     },
     create: {
-      listingId: excelService.id,
+      listingId: cordlessDrill.id,
       ownerId: charlie.id,
       renterId: bob.id,
       meetingStationId: stationByCode.SSH.id,
       startAt: startB,
       endAt: addDays(startB, 1),
       status: "PENDING",
-      totalPrice: "1500.00",
-      deposit: "0.00",
-      notes: "Need spreadsheet cleanup for a sales report.",
+      totalPrice: "150.00",
+      deposit: "1000.00",
+      notes: "Pickup with both batteries and charger.",
     },
   });
 

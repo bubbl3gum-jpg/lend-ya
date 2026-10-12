@@ -1,3 +1,4 @@
+import { VerifiedReviewForm } from "@/components/verified-review-form";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { BookingActions } from "@/components/booking-actions";
@@ -42,7 +43,6 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
         select: {
           id: true,
           title: true,
-          type: true,
           description: true,
           price: true,
         },
@@ -128,11 +128,11 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           <div className="space-y-4 text-sm text-slate-600">
             <div>
               <p className="font-medium text-slate-900">Owner</p>
-              <p>{booking.owner.name}</p>
+              <Link href={`/profile/${booking.ownerId}`} className="underline">{booking.owner.name}</Link>
             </div>
             <div>
               <p className="font-medium text-slate-900">Renter</p>
-              <p>{booking.renter.name}</p>
+              <Link href={`/profile/${booking.renterId}`} className="underline">{booking.renter.name}</Link>
             </div>
             <div>
               <p className="font-medium text-slate-900">Notes</p>
@@ -163,6 +163,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           ) : null}
         </section>
 
+        {booking.status === "COMPLETED" && <VerifiedReviewForm bookingId={booking.id} />}
         <div className="mt-8">
           <BookingActions
             bookingId={booking.id}

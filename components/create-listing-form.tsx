@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { categoryDetailFields, listingCategories, type ListingCategory } from "@/lib/listing-options";
 
 type Station = { id: number; code: string; name: string };
 
@@ -11,18 +12,18 @@ type CreateListingFormProps = {
 
 export function CreateListingForm({ stations }: CreateListingFormProps) {
   const router = useRouter();
-  const [type, setType] = useState("RENTAL");
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<ListingCategory>(listingCategories[0]);
   const [description, setDescription] = useState("");
   const [condition, setCondition] = useState("");
   const [price, setPrice] = useState("150.00");
   const [deposit, setDeposit] = useState("500.00");
   const [selectedStations, setSelectedStations] = useState<number[]>([]);
+  const [categoryDetails, setCategoryDetails] = useState<Record<string, string>>({});
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [video, setVideo] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const stationOptions = useMemo(() => stations, [stations]);
 
   function toggleStation(stationId: number) {
     setSelectedStations((current) =>
@@ -38,22 +39,30 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
     setLoading(true);
 
     try {
-      const payload = {
-        title,
-        description,
-        category,
-        condition,
-        type,
-        price,
-        deposit: type === "RENTAL" ? deposit : "0.00",
-        status: "ACTIVE",
-        stationIds: type === "RENTAL" ? selectedStations : [],
-      };
+      if (photos.length === 0) {
+        throw new Error("Upload at least one item photo before publishing.");
+      }
+      if (selectedStations.length === 0) {
+        throw new Error("Select at least one pickup station.");
+      }
+
+      const payload = new FormData();
+      payload.set("title", title);
+      payload.set("description", description);
+      payload.set("category", category);
+      payload.set("condition", condition);
+      payload.set("price", price);
+      payload.set("deposit", deposit);
+      payload.set("stationIds", JSON.stringify(selectedStations));
+      for (const field of categoryDetailFields[category]) {
+        payload.set(`detail_${field.key}`, categoryDetails[field.key] ?? "");
+      }
+      photos.forEach((photo) => payload.append("photos", photo));
+      if (video) payload.set("video", video);
 
       const response = await fetch("/api/listings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: payload,
       });
 
       const result = await response.json();
@@ -72,7 +81,7 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <form onSubmit={handleSubmit} className="space-y-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="grid gap-5 md:grid-cols-2">
         <label className="block text-sm font-medium text-slate-700 md:col-span-2">
           Listing title
@@ -86,23 +95,15 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
 
         <label className="block text-sm font-medium text-slate-700">
           Category
-          <input
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
-            required
-          />
-        </label>
-
-        <label className="block text-sm font-medium text-slate-700">
-          Type
           <select
-            value={type}
-            onChange={(event) => setType(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            value={category}
+            onChange={(event) => {
+              setCategory(event.target.value as ListingCategory);
+              setCategoryDetails({});
+            }}
+            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 focus:border-emerald-500 focus:outline-none"
           >
-            <option value="RENTAL">Rental</option>
-            <option value="SERVICE">Service</option>
+            {listingCategories.map((entry) => <option key={entry}>{entry}</option>)}
           </select>
         </label>
 
@@ -114,31 +115,22 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
             step="0.01"
             value={price}
             onChange={(event) => setPrice(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             required
           />
         </label>
 
-        {type === "RENTAL" ? (
           <label className="block text-sm font-medium text-slate-700">
             Deposit
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={deposit}
-              onChange={(event) => setDeposit(event.target.value)}
-              className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
-            />
+            <input type="number" min="0" step="0.01" value={deposit} onChange={(event) => setDeposit(event.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none" />
           </label>
-        ) : null}
 
         <label className="block text-sm font-medium text-slate-700 md:col-span-2">
           Condition
           <input
             value={condition}
             onChange={(event) => setCondition(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             required
           />
         </label>
@@ -149,29 +141,48 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             rows={5}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            placeholder="Describe the item's condition, age, size and dimensions, included accessories, and technical specifications. Mention any wear or limitations a renter should know about."
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             required
           />
+          <span className="mt-1 block text-xs font-normal text-slate-500">Include condition, age, dimensions, accessories, and technical specifications where relevant.</span>
         </label>
       </div>
 
-      {type === "RENTAL" ? (
-        <div>
-          <p className="mb-2 text-sm font-medium text-slate-700">Supported MRT pickup stations</p>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {stationOptions.map((station) => (
-              <label key={station.id} className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={selectedStations.includes(station.id)}
-                  onChange={() => toggleStation(station.id)}
-                />
-                {station.name}
-              </label>
-            ))}
-          </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {categoryDetailFields[category].map((field) => (
+          <label key={field.key} className="block text-sm font-medium text-slate-700">
+            {field.label}
+            <input value={categoryDetails[field.key] ?? ""} onChange={(event) => setCategoryDetails((current) => ({ ...current, [field.key]: event.target.value }))} maxLength={180} placeholder={field.placeholder} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2" />
+          </label>
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="block text-sm font-medium text-slate-700">
+          Item photos <span className="text-rose-700">Required</span>
+          <input type="file" accept="image/jpeg,image/png,image/webp" multiple required onChange={(event) => setPhotos(Array.from(event.target.files ?? []))} className="mt-1 block w-full rounded-lg border border-slate-200 px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-emerald-100 file:px-3 file:py-1.5 file:font-medium file:text-emerald-900" />
+          <span className="mt-1 block text-xs font-normal text-slate-500">JPEG, PNG, or WebP. Up to 8 photos, 10 MB each.</span>
+          {photos.length > 0 ? <span className="mt-1 block text-xs font-normal text-slate-600">{photos.length} photo{photos.length === 1 ? "" : "s"} selected</span> : null}
+        </label>
+        <label className="block text-sm font-medium text-slate-700">
+          Item video <span className="font-normal text-slate-500">Optional</span>
+          <input type="file" accept="video/mp4,video/webm" onChange={(event) => setVideo(event.target.files?.[0] ?? null)} className="mt-1 block w-full rounded-lg border border-slate-200 px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:font-medium file:text-slate-800" />
+          <span className="mt-1 block text-xs font-normal text-slate-500">MP4 or WebM, up to 30 MB.</span>
+        </label>
+      </div>
+
+      <div>
+        <p className="mb-2 text-sm font-medium text-slate-700">Pickup stations</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {stations.map((station) => (
+            <label key={station.id} className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700">
+              <input type="checkbox" checked={selectedStations.includes(station.id)} onChange={() => toggleStation(station.id)} />
+              {station.name}
+            </label>
+          ))}
         </div>
-      ) : null}
+      </div>
 
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 

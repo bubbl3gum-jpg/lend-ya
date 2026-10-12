@@ -1,3 +1,4 @@
+import { parseEvidence } from "@/lib/booking-evidence";
 import { Prisma } from "@prisma/client";
 import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
 import { getCurrentUser } from "@/lib/auth";
@@ -36,6 +37,9 @@ export async function POST(
     return apiError("Serial number or condition notes exceed the allowed length.", 400);
   }
 
+  const evidence = parseEvidence(body);
+  if (!evidence) return apiError("Evidence must contain up to eight HTTPS photo URLs and a boolean checklist.", 400);
+
   try {
     const participantBooking = await prisma.booking.findUnique({
       where: { id: bookingId },
@@ -62,6 +66,7 @@ export async function POST(
           data: {
             bookingId,
             performedBy: currentUser.id,
+            ...evidence,
             serialNumber,
             conditionNotes,
           },

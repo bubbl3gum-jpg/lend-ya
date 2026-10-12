@@ -78,11 +78,11 @@ export function BookingActions({
       ) : null}
 
       {status === "CONFIRMED" && isParticipant ? (
-        <button type="button" onClick={() => post("handoff", { conditionConfirmed: true })} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Start Handoff</button>
+        <button type="button" onClick={() => post("handoff", { checklist: { conditionInspected: conditionConfirmed }, conditionConfirmed: true })} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Start Handoff</button>
       ) : null}
 
       {status === "HANDOFF_PENDING" && isParticipant && handoffPerformerId !== currentUserId ? (
-        <button type="button" onClick={() => post("handoff", { conditionConfirmed: true })} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Confirm Handoff</button>
+        <button type="button" onClick={() => post("handoff", { checklist: { conditionInspected: conditionConfirmed }, conditionConfirmed: true })} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Confirm Handoff</button>
       ) : null}
 
       {status === "HANDOFF_PENDING" && isParticipant && handoffPerformerId === currentUserId ? (

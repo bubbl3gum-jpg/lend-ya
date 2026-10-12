@@ -1,0 +1,17 @@
+"use client";
+import { useState } from "react";
+import type { TrustProfileData } from "@/lib/trust-profile";
+export function TrustProfile({ profile }: { profile: TrustProfileData }) {
+ const [role, setRole] = useState<"renter" | "owner">("renter");
+ const stats = role === "renter" ? profile.renterStats : profile.ownerStats;
+ return <div className="space-y-6">
+ <header><h1 className="text-4xl font-semibold">{profile.name}</h1><p className="mt-2 text-emerald-800">{profile.identityVerified ? "✓ Identity verified" : "Identity not verified"}</p><p>Member since {profile.memberSince.slice(0,10)}</p></header>
+ <section className="rounded-2xl border bg-emerald-50 p-6"><h2 className="text-xl font-semibold">Lend Ya trust record</h2><p className="my-2 text-3xl">{profile.trustScore === null ? "Score pending" : `${profile.trustScore} / 100`}</p><p>Confidence: {profile.confidenceIndicator ?? "Not assessed"} · {profile.completedBookings} verified completed bookings</p><p className="mt-2 text-sm">Phase 1 shows verified behavior. The weighted score will be introduced in Phase 2.</p></section>
+ <div role="tablist" aria-label="Track record" className="flex gap-3">{(["renter", "owner"] as const).map(r => <button key={r} id={`tab-${r}`} role="tab" aria-selected={role === r} aria-controls="track-record" onClick={() => setRole(r)} className={`rounded-xl px-4 py-3 ${role === r ? "bg-slate-900 text-white" : "bg-slate-100"}`}>{r === "renter" ? "Renter track record" : "Owner track record"}</button>)}</div>
+ <section id="track-record" role="tabpanel" aria-labelledby={`tab-${role}`} className="grid gap-4 sm:grid-cols-3">{[
+ ["Completed bookings", stats.completedBookings], ["Canceled bookings (context only)", stats.cancelledBookings], [role === "renter" ? "On-time returns" : "On-time handoffs", stats.onTimeRate === null ? "No confirmed evidence" : `${stats.onTimeRate}% (${stats.onTimeCount}/${stats.timedCount})`], ["Confirmed condition checks", stats.conditionConfirmedCount], ["Verified review rating", stats.reviewRating === null ? "No verified reviews" : `${stats.reviewRating.toFixed(1)} / 5 · ${stats.reviewCount} reviews`], ["Listing accuracy", "Not yet assessed"]
+ ].map(([label,value]) => <div key={label} className="rounded-xl border bg-white p-5"><p className="text-sm text-slate-600">{label}</p><p className="mt-2 text-xl font-semibold">{value}</p></div>)}</section>
+ <section className="rounded-2xl border p-6"><h2 className="text-xl font-semibold">Trust indicators</h2><ul className="mt-3 space-y-2"><li>Identity: {profile.identityVerified ? "Platform verified" : "Unverified"}</li><li>{stats.handoffConfirmedCount} bilateral handoff confirmations</li><li>{stats.conditionConfirmedCount} inspected and confirmed returns</li><li>{stats.resolvedConcerns} resolved concerns · resolution alone does not assign fault</li></ul><p className="mt-3 text-sm text-slate-600">Timeliness uses the submitted handoff or return time only after the other party confirms. Open disputes are withheld. Empty evidence is never treated as a perfect rate.</p></section>
+ <section className="rounded-2xl bg-slate-50 p-6"><h2 className="text-xl font-semibold">Planned score categories</h2><ul className="mt-3 grid gap-2 sm:grid-cols-2">{["Transaction reliability · 30%", "Timeliness · 20%", "Item care & condition · 20%", "Communication · 10% · awaiting evidence", "Identity verification · 10%", "Accountability · 10% · awaiting evidence"].map(text => <li key={text}>{text}</li>)}</ul></section>
+ </div>;
+}

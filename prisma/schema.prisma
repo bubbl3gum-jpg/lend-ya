@@ -11,14 +11,20 @@ enum UserRole {
   ADMIN
 }
 
-enum ListingType {
-  RENTAL
-  SERVICE
-}
-
 enum ListingStatus {
   ACTIVE
   INACTIVE
+}
+
+enum ListingMediaKind {
+  PHOTO
+  VIDEO
+}
+
+enum ListingReportStatus {
+  OPEN
+  REVIEWED
+  DISMISSED
 }
 
 enum BookingStatus {
@@ -48,7 +54,14 @@ model User {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  identityVerified Boolean @default(false)
+  trustScore Int?
+  confidenceIndicator String?
+  reviewsWritten VerifiedReview[] @relation("ReviewAuthor")
+  reviewsReceived VerifiedReview[] @relation("ReviewSubject")
+
   listings        Listing[]
+  listingReports  ListingReport[]
   bookingsAsOwner Booking[] @relation("BookingOwner")
   bookingsAsRenter Booking[] @relation("BookingRenter")
   authSessions    AuthSession[]
@@ -88,7 +101,7 @@ model Listing {
   title       String
   description String
   category    String
-  type        ListingType  @default(RENTAL)
+  categoryDetails Json?
   price       Decimal      @db.Decimal(12, 2)
   deposit     Decimal?     @db.Decimal(12, 2)
   condition   String
@@ -99,6 +112,8 @@ model Listing {
   owner            User            @relation(fields: [ownerId], references: [id])
   supportedStations ListingStation[]
   bookings         Booking[]
+  media            ListingMedia[]
+  reports          ListingReport[]
 }
 
 model ListingStation {
@@ -134,6 +149,7 @@ model Booking {
   handoff        Handoff?
   return         Return?
   dispute        Dispute?
+  reviews        VerifiedReview[]
 
   @@index([listingId, status])
   @@index([listingId, status, startAt, endAt])
@@ -148,6 +164,8 @@ model Handoff {
   confirmedBy        Int?
   timestamp          DateTime @default(now())
   confirmedAt        DateTime?
+  photos             Json?
+  checklist          Json?
   serialNumber       String?
   conditionNotes     String?
   conditionConfirmed Boolean  @default(false)
@@ -162,6 +180,8 @@ model Handoff {
 model Return {
   id                 Int      @id @default(autoincrement())
   bookingId          Int      @unique
+  photos             Json?
+  checklist          Json?
   initiatedBy        Int
   confirmedBy        Int?
   timestamp          DateTime @default(now())
@@ -190,4 +210,47 @@ model Dispute {
   opener  User    @relation("DisputeOpener", fields: [openedBy], references: [id])
 
   @@index([status, createdAt])
+}
+
+model ListingMedia {
+  id        Int             @id @default(autoincrement())
+  listingId Int
+  url       String
+  mimeType  String
+  kind      ListingMediaKind
+  createdAt DateTime        @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, createdAt])
+}
+
+model ListingReport {
+  id          Int                @id @default(autoincrement())
+  listingId   Int
+  reporterId  Int
+  reason      String
+  description String?
+  status      ListingReportStatus @default(OPEN)
+  createdAt   DateTime           @default(now())
+
+  listing  Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reporter User    @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, reporterId])
+  @@index([status, createdAt])
+}
+model VerifiedReview {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  authorId Int
+  subjectId Int
+  rating Int
+  comment String?
+  createdAt DateTime @default(now())
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  author User @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  subject User @relation("ReviewSubject", fields: [subjectId], references: [id], onDelete: Restrict)
+  @@unique([bookingId, authorId])
+  @@index([subjectId])
 }

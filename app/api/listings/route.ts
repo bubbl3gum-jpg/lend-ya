@@ -1,10 +1,10 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
+import { apiError, internalServerError } from "@/lib/api-response";
 import { getCurrentUser } from "@/lib/auth";
 import { parseCurrency, parseRequiredString } from "@/lib/api-validation";
-
-const listingStatuses = ["ACTIVE", "INACTIVE"] as const;
-const listingTypes = ["RENTAL", "SERVICE"] as const;
+import { categoryDetailFields, listingCategories } from "@/lib/listing-options";
+import { deleteStoredListingMedia, storeListingMedia, validateListingMedia } from "@/lib/listing-media";
 
 const listingSelect = {
   id: true,
@@ -12,7 +12,7 @@ const listingSelect = {
   title: true,
   description: true,
   category: true,
-  type: true,
+  categoryDetails: true,
   price: true,
   deposit: true,
   condition: true,
@@ -20,12 +20,25 @@ const listingSelect = {
   createdAt: true,
   updatedAt: true,
   owner: { select: { id: true, name: true, email: true } },
+  media: {
+    select: { id: true, url: true, mimeType: true, kind: true, createdAt: true },
+    orderBy: { createdAt: "asc" },
+  },
+  bookings: {
+    where: { status: { in: ["HANDOFF_PENDING", "IN_USE", "RETURN_PENDING", "INSPECTION", "DISPUTED"] } },
+    select: { status: true },
+  },
+  reports: {
+    where: { status: "OPEN" },
+    select: { id: true },
+    take: 1,
+  },
   supportedStations: {
     select: {
       station: { select: { id: true, code: true, name: true } },
     },
   },
-} as const;
+} satisfies Prisma.ListingSelect;
 
 function normalizeStationIds(value: unknown): number[] | null {
   if (!Array.isArray(value)) {
@@ -60,27 +73,43 @@ export async function POST(request: Request): Promise<Response> {
       return apiError("Authentication required.", 401);
     }
 
-    const body = await readJsonObject(request);
-    if (!body) {
-      return apiError("Request body must be a valid JSON object.", 400);
+    const contentLength = Number(request.headers.get("content-length") ?? 0);
+    if (contentLength > 60 * 1024 * 1024) {
+      return apiError("The combined photo and video size must be 60 MB or smaller.", 413);
+    }
+    if (!request.headers.get("content-type")?.includes("multipart/form-data")) {
+      return apiError("Listing creation requires a multipart request with at least one photo.", 400);
     }
 
-    const title = parseRequiredString(body.title, 120);
-    const description = parseRequiredString(body.description, 2000);
-    const category = parseRequiredString(body.category, 80);
-    const condition = parseRequiredString(body.condition, 100);
-    const price = parseCurrency(body.price, false);
-    const deposit = body.deposit === undefined ? null : parseCurrency(body.deposit, true);
-    const type = typeof body.type === "string" && listingTypes.includes(body.type as (typeof listingTypes)[number])
-      ? (body.type as (typeof listingTypes)[number])
+    const formData = await request.formData();
+    const title = parseRequiredString(formData.get("title"), 120);
+    const description = parseRequiredString(formData.get("description"), 2000);
+    const rawCategory = formData.get("category");
+    const category = typeof rawCategory === "string" && listingCategories.includes(rawCategory as (typeof listingCategories)[number])
+      ? rawCategory as (typeof listingCategories)[number]
       : null;
-    const statusInput = body.status !== undefined
-      ? typeof body.status === "string" && listingStatuses.includes(body.status as (typeof listingStatuses)[number])
-        ? (body.status as (typeof listingStatuses)[number])
-        : null
-      : "ACTIVE";
+    const condition = parseRequiredString(formData.get("condition"), 100);
+    const price = parseCurrency(formData.get("price"), false);
+    const rawDeposit = formData.get("deposit");
+    const deposit = rawDeposit === null || rawDeposit === "" ? null : parseCurrency(rawDeposit, true);
+    let stationInput: unknown = null;
+    try {
+      stationInput = JSON.parse(String(formData.get("stationIds") ?? ""));
+    } catch {
+      stationInput = null;
+    }
+    const stationIds = normalizeStationIds(stationInput);
 
-    const stationIds = normalizeStationIds(body.stationIds);
+    const photoEntries = formData.getAll("photos");
+    const videoEntry = formData.get("video");
+    if (photoEntries.some((entry) => !(entry instanceof File))) {
+      return apiError("Photos must be uploaded as files.", 400);
+    }
+    if (videoEntry !== null && !(videoEntry instanceof File)) {
+      return apiError("The optional video must be uploaded as a file.", 400);
+    }
+    const photos = photoEntries.filter((entry): entry is File => entry instanceof File);
+    const video = videoEntry instanceof File && videoEntry.size > 0 ? videoEntry : null;
 
     if (
       title === null ||
@@ -88,64 +117,83 @@ export async function POST(request: Request): Promise<Response> {
       category === null ||
       condition === null ||
       price === null ||
-      type === null ||
-      statusInput === null ||
-      (type === "RENTAL" && (!stationIds || stationIds.length === 0))
+      (rawDeposit !== null && rawDeposit !== "" && deposit === null) ||
+      !stationIds ||
+      stationIds.length === 0
     ) {
       return apiError(
-        "Provide valid listing data, including title, description, category, condition, price, type, and at least one MRT station for rental listings.",
+        "Provide a valid title, description, category, condition, price, deposit, and at least one pickup station.",
         400,
       );
     }
 
-    const listing = await prisma.$transaction(async (tx) => {
-      const created = await tx.listing.create({
-        data: {
-          title,
-          description,
-          category,
-          type,
-          price,
-          deposit,
-          condition,
-          status: statusInput,
-          owner: { connect: { id: currentUser.id } },
-        },
-        select: listingSelect,
-      });
-
-      if (stationIds && stationIds.length > 0) {
-        const validStations = await tx.mrtStation.findMany({
-          where: { id: { in: stationIds } },
-          select: { id: true },
-        });
-
-        if (validStations.length !== stationIds.length) {
-          throw new Error("Invalid MRT station selection.");
-        }
-
-        await Promise.all(
-          stationIds.map((stationId) =>
-            tx.listingStation.create({
-              data: {
-                listingId: created.id,
-                stationId,
-              },
-            }),
-          ),
-        );
+    const fields = categoryDetailFields[category];
+    const categoryDetails: Record<string, string> = {};
+    for (const field of fields) {
+      const value = formData.get(`detail_${field.key}`);
+      if (value !== null && typeof value !== "string") {
+        return apiError("Category details must be text.", 400);
       }
+      if (typeof value === "string" && value.trim()) {
+        if (value.trim().length > 180) {
+          return apiError("Category detail values must be 180 characters or fewer.", 400);
+        }
+        categoryDetails[field.key] = value.trim();
+      }
+    }
 
-      return tx.listing.findUniqueOrThrow({
-        where: { id: created.id },
-        select: listingSelect,
-      });
+    const mediaError = await validateListingMedia(photos, video);
+    if (mediaError) {
+      return apiError(mediaError, 400);
+    }
+
+    const validStations = await prisma.mrtStation.findMany({
+      where: { id: { in: stationIds } },
+      select: { id: true },
     });
+    if (validStations.length !== stationIds.length) {
+      return apiError("One or more pickup stations are invalid.", 400);
+    }
 
-    return Response.json({ listing }, { status: 201 });
+    const uploads = [
+      ...photos.map((file) => ({ file, kind: "PHOTO" as const })),
+      ...(video ? [{ file: video, kind: "VIDEO" as const }] : []),
+    ];
+    const storedMedia = await storeListingMedia(uploads);
+    try {
+      const listing = await prisma.$transaction(async (tx) =>
+        tx.listing.create({
+          data: {
+            title,
+            description,
+            category,
+            ...(Object.keys(categoryDetails).length > 0
+              ? { categoryDetails: categoryDetails as Prisma.InputJsonObject }
+              : {}),
+            price,
+            deposit,
+            condition,
+            status: "ACTIVE",
+            ownerId: currentUser.id,
+            supportedStations: {
+              create: stationIds.map((stationId) => ({ stationId })),
+            },
+            media: {
+              create: storedMedia.map(({ url, mimeType, kind }) => ({ url, mimeType, kind })),
+            },
+          },
+          select: listingSelect,
+        }),
+      );
+
+      return Response.json({ listing }, { status: 201 });
+    } catch (error) {
+      await deleteStoredListingMedia(storedMedia);
+      throw error;
+    }
   } catch (error) {
-    if (error instanceof Error && error.message === "Invalid MRT station selection.") {
-      return apiError("One or more MRT stations are invalid.", 400);
+    if (error instanceof Error && error.message.includes("Uploaded file")) {
+      return apiError(error.message, 400);
     }
     return internalServerError("POST /api/listings", error);
   }
