@@ -1,7 +1,7 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RentalEvidenceForm } from "@/components/rental-evidence-form";
 
 type BookingActionsProps = {
   bookingId: number;
@@ -11,146 +11,262 @@ type BookingActionsProps = {
   status: string;
   handoffPerformerId?: number | null;
   hasDispute?: boolean;
+  inspectionRecorded?: boolean;
 };
-
 export function BookingActions({
   bookingId,
   currentUserId,
   ownerId,
   renterId,
   status,
-  handoffPerformerId = null,
   hasDispute = false,
+  inspectionRecorded = false,
 }: BookingActionsProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [conditionConfirmed, setConditionConfirmed] = useState(false);
-  const [conditionNotes, setConditionNotes] = useState("");
+  const [message, setMessage] = useState("");
+  const [reason, setReason] = useState("");
   const [disputeOpen, setDisputeOpen] = useState(false);
   const [disputeReason, setDisputeReason] = useState("");
   const [disputeDescription, setDisputeDescription] = useState("");
-
-  async function send(path: string, method: "PATCH" | "POST", body: Record<string, unknown>) {
-    setLoading(true);
+  const isOwner = currentUserId === ownerId;
+  const isBorrower = currentUserId === renterId;
+  const isParticipant = isOwner || isBorrower;
+  const saved = (feedback: string) => {
+    setMessage(feedback);
+    router.refresh();
+  };
+  async function send(action: string, body: Record<string, unknown> = {}) {
+    if (
+      !window.confirm(
+        action === "dispute"
+          ? "Open a dispute for administrative review?"
+          : `Confirm ${action} booking?`,
+      )
+    )
+      return false;
+    setBusy(true);
     setError("");
-
     try {
-      const response = await fetch(path, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const payload = await response.json();
-      if (!response.ok) {
-        throw new Error(payload.error || "Unable to update booking.");
-      }
-      router.refresh();
+      const response = await fetch(
+        action === "dispute"
+          ? `/api/bookings/${bookingId}/dispute`
+          : `/api/bookings/${bookingId}`,
+        {
+          method: action === "dispute" ? "POST" : "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, ...body }),
+        },
+      );
+      const result = await response.json();
+      if (!response.ok)
+        throw new Error(result.error || "Unable to update booking.");
+      saved(
+        action === "dispute"
+          ? "Dispute saved. Administrative review is required."
+          : "Booking updated.",
+      );
       return true;
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Unknown booking update error.";
-      setError(message);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Unable to update booking.",
+      );
       return false;
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
   }
-
-  function patch(action: string, body: Record<string, unknown> = {}) {
-    return send(`/api/bookings/${bookingId}`, "PATCH", { action, ...body });
-  }
-
-  function post(route: "handoff" | "return" | "dispute", body: Record<string, unknown> = {}) {
-    return send(`/api/bookings/${bookingId}/${route}`, "POST", body);
-  }
-
-  const isOwner = currentUserId === ownerId;
-  const isRenter = currentUserId === renterId;
-  const isParticipant = isOwner || isRenter;
-
+  const buttonClass =
+    "rounded-xl border border-slate-200 px-4 py-2 text-sm disabled:opacity-50";
   return (
-    <div className="space-y-3">
-      {status === "PENDING" && isOwner ? (
-        <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => patch("accept")} disabled={loading} className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-60">Accept</button>
-          <button type="button" onClick={() => patch("reject")} disabled={loading} className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60">Reject</button>
-        </div>
+    <div className="space-y-4">
+      {(status === "PENDING" || status === "CONFIRMED") && isParticipant ? (
+        <>
+          <label className="grid gap-1 text-sm">
+            Cancellation or rejection reason (optional)
+            <textarea
+              value={reason}
+              onChange={(event) => setReason(event.target.value)}
+              maxLength={2000}
+              rows={2}
+              className="rounded-xl border p-2"
+            />
+          </label>
+          <div className="flex flex-wrap gap-3">
+            {status === "PENDING" && isOwner ? (
+              <>
+                <button
+                  disabled={busy}
+                  onClick={() => send("accept")}
+                  className={buttonClass}
+                >
+                  Accept request
+                </button>
+                <button
+                  disabled={busy}
+                  onClick={() => send("reject", { reason })}
+                  className={buttonClass}
+                >
+                  Reject request
+                </button>
+              </>
+            ) : null}
+            <button
+              disabled={busy}
+              onClick={() => send("cancel", { reason })}
+              className={buttonClass}
+            >
+              Cancel booking
+            </button>
+          </div>
+        </>
       ) : null}
-
-      {status === "CONFIRMED" && isParticipant ? (
-        <button type="button" onClick={() => post("handoff", { checklist: { conditionInspected: conditionConfirmed }, conditionConfirmed: true })} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Start Handoff</button>
+      {status === "CONFIRMED" && isOwner ? (
+        <RentalEvidenceForm
+          bookingId={bookingId}
+          action="handoff"
+          title="Submit owner handoff"
+          collectSerialNumber
+          onSaved={saved}
+        />
       ) : null}
-
-      {status === "HANDOFF_PENDING" && isParticipant && handoffPerformerId !== currentUserId ? (
-        <button type="button" onClick={() => post("handoff", { checklist: { conditionInspected: conditionConfirmed }, conditionConfirmed: true })} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Confirm Handoff</button>
+      {status === "CONFIRMED" && isBorrower ? (
+        <p className="text-sm">
+          Waiting for the owner to submit the handoff condition record.
+        </p>
       ) : null}
-
-      {status === "HANDOFF_PENDING" && isParticipant && handoffPerformerId === currentUserId ? (
-        <p className="text-sm text-slate-600">Waiting for the other participant to confirm the handoff.</p>
+      {status === "HANDOFF_PENDING" && isBorrower ? (
+        <RentalEvidenceForm
+          bookingId={bookingId}
+          action="handoff"
+          title="Confirm receipt as borrower"
+          onSaved={saved}
+        />
       ) : null}
-
-      {status === "IN_USE" && isRenter ? (
-        <button type="button" onClick={() => post("return")} disabled={loading} className="rounded-xl bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-60">Return Item</button>
+      {status === "HANDOFF_PENDING" && isOwner ? (
+        <p className="text-sm">
+          Owner handoff saved. Waiting for the borrower to review and confirm
+          receipt.
+        </p>
       ) : null}
-
+      {status === "IN_USE" && isBorrower ? (
+        <RentalEvidenceForm
+          bookingId={bookingId}
+          action="return"
+          title="Submit item return"
+          onSaved={saved}
+        />
+      ) : null}
       {status === "RETURN_PENDING" && isOwner ? (
-        <button type="button" onClick={() => patch("inspect")} disabled={loading} className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60">Start Inspection</button>
+        <button
+          disabled={busy}
+          onClick={() => send("inspect")}
+          className={buttonClass}
+        >
+          Begin return inspection
+        </button>
       ) : null}
-
-      {status === "RETURN_PENDING" && isRenter ? (
-        <p className="text-sm text-slate-600">Return submitted. Waiting for the owner to inspect it.</p>
+      {status === "RETURN_PENDING" && isBorrower ? (
+        <p className="text-sm">Return saved. Waiting for owner inspection.</p>
       ) : null}
-
-      {status === "INSPECTION" && isOwner ? (
-        <div className="space-y-3">
-          <label className="block text-sm text-slate-700">
-            <span className="mb-1 block font-medium">Inspection notes</span>
-            <textarea value={conditionNotes} onChange={(event) => setConditionNotes(event.target.value)} maxLength={2000} rows={3} className="w-full rounded-xl border border-slate-200 px-3 py-2" />
-          </label>
-          <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input type="checkbox" checked={conditionConfirmed} onChange={(event) => setConditionConfirmed(event.target.checked)} />
-            I inspected the returned item condition
-          </label>
-          <button type="button" onClick={() => patch("complete", { conditionConfirmed, conditionNotes })} disabled={loading || !conditionConfirmed} className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60">Confirm Return</button>
-        </div>
+      {status === "INSPECTION" && isOwner && !inspectionRecorded ? (
+        <RentalEvidenceForm
+          bookingId={bookingId}
+          action="inspection"
+          title="Save owner inspection decision"
+          onSaved={saved}
+        />
       ) : null}
-
-      {status === "INSPECTION" && isRenter ? (
-        <p className="text-sm text-slate-600">The owner is inspecting the return.</p>
+      {status === "INSPECTION" && inspectionRecorded ? (
+        <p className="text-sm text-amber-800">
+          A condition concern was recorded. Completion is blocked; open a
+          dispute for administrative review.
+        </p>
       ) : null}
-
-      {(status === "RETURN_PENDING" || status === "INSPECTION") && isParticipant ? (
-        hasDispute ? (
-          <p className="text-sm font-medium text-rose-700">A dispute has been opened for this booking.</p>
-        ) : disputeOpen ? (
-          <form onSubmit={async (event) => {
-            event.preventDefault();
-            const opened = await post("dispute", { reason: disputeReason, description: disputeDescription });
-            if (opened) setDisputeOpen(false);
-          }} className="space-y-3 rounded-xl border border-rose-200 p-4">
-            <label className="block text-sm text-slate-700">
-              <span className="mb-1 block font-medium">Reason</span>
-              <input value={disputeReason} onChange={(event) => setDisputeReason(event.target.value)} maxLength={120} required className="w-full rounded-xl border border-slate-200 px-3 py-2" />
+      {status === "INSPECTION" && isBorrower && !inspectionRecorded ? (
+        <p className="text-sm">The owner is inspecting your return.</p>
+      ) : null}
+      {["IN_USE", "RETURN_PENDING", "INSPECTION"].includes(status) &&
+      isParticipant &&
+      !hasDispute ? (
+        disputeOpen ? (
+          <form
+            className="space-y-3 rounded-xl border border-rose-200 p-4"
+            onSubmit={async (event) => {
+              event.preventDefault();
+              if (
+                await send("dispute", {
+                  reason: disputeReason,
+                  description: disputeDescription,
+                })
+              )
+                setDisputeOpen(false);
+            }}
+          >
+            <label className="grid gap-1 text-sm">
+              Dispute reason
+              <input
+                required
+                maxLength={120}
+                value={disputeReason}
+                onChange={(event) => setDisputeReason(event.target.value)}
+                className="rounded-xl border p-2"
+              />
             </label>
-            <label className="block text-sm text-slate-700">
-              <span className="mb-1 block font-medium">What is wrong?</span>
-              <textarea value={disputeDescription} onChange={(event) => setDisputeDescription(event.target.value)} maxLength={2000} rows={3} required className="w-full rounded-xl border border-slate-200 px-3 py-2" />
+            <label className="grid gap-1 text-sm">
+              Concern details
+              <textarea
+                required
+                maxLength={2000}
+                value={disputeDescription}
+                onChange={(event) => setDisputeDescription(event.target.value)}
+                rows={3}
+                className="rounded-xl border p-2"
+              />
             </label>
-            <div className="flex gap-3">
-              <button type="submit" disabled={loading} className="rounded-xl bg-rose-700 px-4 py-2 text-sm font-medium text-white disabled:opacity-60">Open Dispute</button>
-              <button type="button" onClick={() => setDisputeOpen(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">Close</button>
-            </div>
+            <button disabled={busy} className={buttonClass}>
+              Submit dispute
+            </button>
+            <button
+              type="button"
+              onClick={() => setDisputeOpen(false)}
+              className={buttonClass}
+            >
+              Close form
+            </button>
           </form>
         ) : (
-          <button type="button" onClick={() => setDisputeOpen(true)} className="rounded-xl border border-rose-200 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50">Report a problem</button>
+          <button className={buttonClass} onClick={() => setDisputeOpen(true)}>
+            Open dispute
+          </button>
         )
       ) : null}
-
-      {(status === "PENDING" || status === "CONFIRMED") && isParticipant ? (
-        <button type="button" onClick={() => patch("cancel")} disabled={loading} className="rounded-xl border border-rose-200 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60">Cancel booking</button>
+      {status === "ADMIN_CLOSED" ? (
+        <p className="rounded-xl bg-slate-100 p-4 text-sm">
+          This returned rental was closed by an administrator after reviewing
+          the recorded inspection. Participant evidence is preserved. This does
+          not represent normal completion, verified-review eligibility, or a
+          payment settlement.
+        </p>
       ) : null}
-
-      {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+      {status === "DISPUTED" ? (
+        <p className="rounded-xl bg-rose-50 p-4 text-sm text-rose-800">
+          Administrative review is required. Condition evidence is preserved.
+          Normal rental completion is blocked.
+        </p>
+      ) : null}
+      {busy ? <p role="status">Saving booking…</p> : null}
+      {message ? (
+        <p role="status" className="text-sm text-emerald-800">
+          {message}
+        </p>
+      ) : null}
+      {error ? (
+        <p role="alert" className="text-sm text-rose-700">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

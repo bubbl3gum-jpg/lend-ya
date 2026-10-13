@@ -1,8 +1,10 @@
-import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
+import { authenticationLimit } from "@/lib/auth-rate-limit";
 import {
-  createSession,
-  verifyPassword,
-} from "@/lib/auth";
+  apiError,
+  internalServerError,
+  readJsonObject,
+} from "@/lib/api-response";
+import { createSession, verifyPassword } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { parseEmail, parsePassword } from "@/lib/api-validation";
 
@@ -28,12 +30,18 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
+    const limited = await authenticationLimit("login", email);
+    if (limited) return limited;
     const user = await prisma.user.findUnique({
       where: { email },
       select: { ...safeUserSelect, passwordHash: true },
     });
 
-    if (!user || !(await verifyPassword(password, user.passwordHash))) {
+    const valid = await verifyPassword(
+      password,
+      user?.passwordHash ?? `scrypt$unregistered-account$${"0".repeat(128)}`,
+    );
+    if (!user || !valid) {
       return apiError("Invalid email or password.", 401);
     }
 

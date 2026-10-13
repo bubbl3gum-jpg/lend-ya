@@ -17,6 +17,7 @@ const safeUserSelect = {
   name: true,
   email: true,
   role: true,
+  accountStatus: true,
   verificationStatus: true,
   createdAt: true,
 } as const;

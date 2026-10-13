@@ -1,5 +1,10 @@
+import { authenticationLimit } from "@/lib/auth-rate-limit";
 import { Prisma } from "@prisma/client";
-import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
+import {
+  apiError,
+  internalServerError,
+  readJsonObject,
+} from "@/lib/api-response";
 import {
   hashPassword,
   newSessionCredential,
@@ -39,6 +44,8 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
+    const limited = await authenticationLimit("register", email);
+    if (limited) return limited;
     const credential = newSessionCredential();
     const user = await prisma.$transaction(async (transaction) => {
       const createdUser = await transaction.user.create({

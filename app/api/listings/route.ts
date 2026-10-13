@@ -1,10 +1,17 @@
+import { parseStationIds } from "@/lib/listing-input";
+import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { apiError, internalServerError } from "@/lib/api-response";
 import { getCurrentUser } from "@/lib/auth";
 import { parseCurrency, parseRequiredString } from "@/lib/api-validation";
 import { categoryDetailFields, listingCategories } from "@/lib/listing-options";
-import { deleteStoredListingMedia, storeListingMedia, validateListingMedia } from "@/lib/listing-media";
+import {
+  deleteStoredListingMedia,
+  storeListingMedia,
+  validateListingMedia,
+  boundedListingForm,
+} from "@/lib/listing-media";
 
 const listingSelect = {
   id: true,
@@ -19,13 +26,29 @@ const listingSelect = {
   status: true,
   createdAt: true,
   updatedAt: true,
-  owner: { select: { id: true, name: true, email: true } },
+  owner: { select: { id: true, name: true } },
   media: {
-    select: { id: true, url: true, mimeType: true, kind: true, createdAt: true },
+    select: {
+      id: true,
+      url: true,
+      mimeType: true,
+      kind: true,
+      createdAt: true,
+    },
     orderBy: { createdAt: "asc" },
   },
   bookings: {
-    where: { status: { in: ["HANDOFF_PENDING", "IN_USE", "RETURN_PENDING", "INSPECTION", "DISPUTED"] } },
+    where: {
+      status: {
+        in: [
+          "HANDOFF_PENDING",
+          "IN_USE",
+          "RETURN_PENDING",
+          "INSPECTION",
+          "DISPUTED",
+        ],
+      },
+    },
     select: { status: true },
   },
   reports: {
@@ -40,22 +63,15 @@ const listingSelect = {
   },
 } satisfies Prisma.ListingSelect;
 
-function normalizeStationIds(value: unknown): number[] | null {
-  if (!Array.isArray(value)) {
-    return null;
-  }
-
-  const ids = value
-    .map((entry) => (typeof entry === "number" ? entry : Number(entry)))
-    .filter((entry) => Number.isInteger(entry) && entry > 0);
-
-  return ids.length ? [...new Set(ids)] : null;
-}
-
 export async function GET(): Promise<Response> {
   try {
     const listings = await prisma.listing.findMany({
-      where: { status: "ACTIVE" },
+      where: {
+        status: "ACTIVE",
+        adminRestricted: false,
+        owner: { accountStatus: "ACTIVE" },
+        media: { some: { kind: "PHOTO" } },
+      },
       orderBy: { createdAt: "desc" },
       select: listingSelect,
     });
@@ -73,32 +89,50 @@ export async function POST(request: Request): Promise<Response> {
       return apiError("Authentication required.", 401);
     }
 
+    if (currentUser.accountStatus !== "ACTIVE")
+      return apiError(
+        "Your account is suspended; new listings are restricted.",
+        403,
+      );
     const contentLength = Number(request.headers.get("content-length") ?? 0);
     if (contentLength > 60 * 1024 * 1024) {
-      return apiError("The combined photo and video size must be 60 MB or smaller.", 413);
+      return apiError(
+        "The combined photo and video size must be 60 MB or smaller.",
+        413,
+      );
     }
     if (!request.headers.get("content-type")?.includes("multipart/form-data")) {
-      return apiError("Listing creation requires a multipart request with at least one photo.", 400);
+      return apiError(
+        "Listing creation requires a multipart request with at least one photo.",
+        400,
+      );
     }
 
-    const formData = await request.formData();
+    const formData = await boundedListingForm(request);
     const title = parseRequiredString(formData.get("title"), 120);
     const description = parseRequiredString(formData.get("description"), 2000);
     const rawCategory = formData.get("category");
-    const category = typeof rawCategory === "string" && listingCategories.includes(rawCategory as (typeof listingCategories)[number])
-      ? rawCategory as (typeof listingCategories)[number]
-      : null;
+    const category =
+      typeof rawCategory === "string" &&
+      listingCategories.includes(
+        rawCategory as (typeof listingCategories)[number],
+      )
+        ? (rawCategory as (typeof listingCategories)[number])
+        : null;
     const condition = parseRequiredString(formData.get("condition"), 100);
     const price = parseCurrency(formData.get("price"), false);
     const rawDeposit = formData.get("deposit");
-    const deposit = rawDeposit === null || rawDeposit === "" ? null : parseCurrency(rawDeposit, true);
+    const deposit =
+      rawDeposit === null || rawDeposit === ""
+        ? null
+        : parseCurrency(rawDeposit, true);
     let stationInput: unknown = null;
     try {
       stationInput = JSON.parse(String(formData.get("stationIds") ?? ""));
     } catch {
       stationInput = null;
     }
-    const stationIds = normalizeStationIds(stationInput);
+    const stationIds = parseStationIds(stationInput);
 
     const photoEntries = formData.getAll("photos");
     const videoEntry = formData.get("video");
@@ -108,8 +142,11 @@ export async function POST(request: Request): Promise<Response> {
     if (videoEntry !== null && !(videoEntry instanceof File)) {
       return apiError("The optional video must be uploaded as a file.", 400);
     }
-    const photos = photoEntries.filter((entry): entry is File => entry instanceof File);
-    const video = videoEntry instanceof File && videoEntry.size > 0 ? videoEntry : null;
+    const photos = photoEntries.filter(
+      (entry): entry is File => entry instanceof File,
+    );
+    const video =
+      videoEntry instanceof File && videoEntry.size > 0 ? videoEntry : null;
 
     if (
       title === null ||
@@ -136,7 +173,10 @@ export async function POST(request: Request): Promise<Response> {
       }
       if (typeof value === "string" && value.trim()) {
         if (value.trim().length > 180) {
-          return apiError("Category detail values must be 180 characters or fewer.", 400);
+          return apiError(
+            "Category detail values must be 180 characters or fewer.",
+            400,
+          );
         }
         categoryDetails[field.key] = value.trim();
       }
@@ -161,8 +201,9 @@ export async function POST(request: Request): Promise<Response> {
     ];
     const storedMedia = await storeListingMedia(uploads);
     try {
-      const listing = await prisma.$transaction(async (tx) =>
-        tx.listing.create({
+      const listing = await prisma.$transaction(async (tx) => {
+        await requireActiveAccounts(tx, [currentUser.id]);
+        return tx.listing.create({
           data: {
             title,
             description,
@@ -179,12 +220,16 @@ export async function POST(request: Request): Promise<Response> {
               create: stationIds.map((stationId) => ({ stationId })),
             },
             media: {
-              create: storedMedia.map(({ url, mimeType, kind }) => ({ url, mimeType, kind })),
+              create: storedMedia.map(({ url, mimeType, kind }) => ({
+                url,
+                mimeType,
+                kind,
+              })),
             },
           },
           select: listingSelect,
-        }),
-      );
+        });
+      });
 
       return Response.json({ listing }, { status: 201 });
     } catch (error) {
