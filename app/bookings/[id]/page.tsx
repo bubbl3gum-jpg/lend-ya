@@ -1,3 +1,4 @@
+import { stationSelect, stationLabel } from "@/lib/mrt/network";
 import { RentalEvidence } from "@/components/rental-evidence";
 import { formatRentalTime, rentalDays } from "@/lib/booking-time";
 import { VerifiedReviewForm } from "@/components/verified-review-form";
@@ -62,7 +63,7 @@ export default async function BookingPage({
       },
       owner: { select: { id: true, name: true, email: true } },
       renter: { select: { id: true, name: true, email: true } },
-      meetingStation: { select: { code: true, name: true } },
+      meetingStation: { select: stationSelect },
       reviews: {
         select: {
           id: true,
@@ -184,7 +185,11 @@ export default async function BookingPage({
               <div>
                 <p className="font-medium text-slate-900">Meeting station</p>
                 <p>
-                  {booking.meetingStation.code} · {booking.meetingStation.name}
+                  {stationLabel(booking.meetingStation)}
+                  <span className="mt-2 block text-xs">
+                    This physical station is a meeting area. Agree on an exact
+                    exit or meeting point; no exit is confirmed here.
+                  </span>
                 </p>
               </div>
               <div>

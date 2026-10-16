@@ -1,3 +1,5 @@
+import { isSerializationConflict } from "@/lib/database-conflicts";
+import { stationSelect, eligibleStationWhere } from "@/lib/mrt/network";
 import { Prisma } from "@prisma/client";
 import { parseStationIds } from "@/lib/listing-input";
 import {
@@ -42,7 +44,7 @@ const listingSelect = {
   },
   supportedStations: {
     select: {
-      station: { select: { id: true, code: true, name: true } },
+      station: { select: stationSelect },
     },
   },
 } as const;
@@ -203,27 +205,38 @@ export async function PATCH(
         ? undefined
         : parseStationIds(body.stationIds);
     if (stationIds === null)
-      return apiError("Choose 1–50 valid pickup stations.", 400);
-    if (stationIds)
+      return apiError("Choose 1–120 valid pickup stations.", 400);
+    if (stationIds) {
+      data.updatedAt = new Date();
       data.supportedStations = {
         deleteMany: {},
         create: stationIds.map((stationId) => ({ stationId })),
       };
+    }
     if (!Object.keys(data).length)
       return apiError("No editable fields supplied.", 400);
-    const updated = await prisma.$transaction(async (tx) => {
-      await requireActiveAccounts(tx, [currentUser.id]);
-      await tx.$queryRaw`SELECT id FROM "Listing" WHERE id = ${id} FOR UPDATE`;
-      if (
-        stationIds &&
-        (await tx.mrtStation.count({ where: { id: { in: stationIds } } })) !==
-          stationIds.length
-      )
-        throw new Error("INVALID_STATIONS");
-      const latest = await tx.listing.findUniqueOrThrow({ where: { id } });
-      if (latest.adminRestricted) throw new Error("LISTING_RESTRICTED");
-      return tx.listing.update({ where: { id }, data, select: listingSelect });
-    });
+    const updated = await prisma.$transaction(
+      async (tx) => {
+        await requireActiveAccounts(tx, [currentUser.id]);
+        await tx.$queryRaw`SELECT id FROM "Listing" WHERE id = ${id} FOR UPDATE`;
+        if (
+          stationIds &&
+          (await tx.mrtStation.count({
+            where: { id: { in: stationIds }, ...eligibleStationWhere },
+          })) !== stationIds.length
+        )
+          throw new Error("INVALID_STATIONS");
+        const latest = await tx.listing.findUniqueOrThrow({ where: { id } });
+        if (latest.adminRestricted) throw new Error("LISTING_RESTRICTED");
+        if (latest.ownerId !== currentUser.id) throw new Error("OWNER_CHANGED");
+        return tx.listing.update({
+          where: { id },
+          data,
+          select: listingSelect,
+        });
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
 
     return Response.json({ listing: updated });
   } catch (error) {
@@ -232,6 +245,13 @@ export async function PATCH(
     if (error instanceof Error && error.message === "LISTING_RESTRICTED")
       return apiError(
         "This listing is restricted by administration; owner edits cannot override it.",
+        409,
+      );
+    if (error instanceof Error && error.message === "OWNER_CHANGED")
+      return apiError("Only the listing owner can update availability.", 403);
+    if (isSerializationConflict(error))
+      return apiError(
+        "Availability changed concurrently. Refresh and try again.",
         409,
       );
     return internalServerError("PATCH /api/listings/[id]", error);

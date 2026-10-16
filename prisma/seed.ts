@@ -1,7 +1,7 @@
 import "dotenv/config";
+import { importMrt } from "../lib/mrt/import";
 import { scryptSync } from "node:crypto";
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { prisma } from "../lib/prisma";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -20,10 +20,6 @@ if (process.env.NODE_ENV === "production") {
   throw new Error("Refusing to run development seed with NODE_ENV=production.");
 }
 
-const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: databaseUrl }),
-});
-
 function developmentPasswordHash(email: string): string {
   const salt = `p2p-marketplace-seed:${email}`;
   const derivedKey = scryptSync("LocalDev123!", salt, 64).toString("hex");
@@ -37,6 +33,7 @@ function addDays(date: Date, days: number): Date {
 }
 
 async function main(): Promise<void> {
+  await importMrt();
   const alice = await prisma.user.upsert({
     where: { email: "alice@example.test" },
     update: {},

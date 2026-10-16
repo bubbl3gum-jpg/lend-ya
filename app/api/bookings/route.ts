@@ -1,3 +1,5 @@
+import { isSerializationConflict } from "@/lib/database-conflicts";
+import { stationSelect, eligibleStationWhere } from "@/lib/mrt/network";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import {
   parseRentalTime,
@@ -43,29 +45,8 @@ const bookingSelect = {
   },
   owner: { select: { id: true, name: true } },
   renter: { select: { id: true, name: true } },
-  meetingStation: { select: { id: true, code: true, name: true } },
+  meetingStation: { select: stationSelect },
 } as const;
-
-function isSerializationConflict(error: unknown): boolean {
-  if (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    error.code === "P2034"
-  ) {
-    return true;
-  }
-
-  if (
-    error instanceof Error &&
-    typeof error.cause === "object" &&
-    error.cause !== null
-  ) {
-    return (
-      "originalCode" in error.cause && error.cause.originalCode === "40001"
-    );
-  }
-
-  return false;
-}
 
 export async function GET(): Promise<Response> {
   const currentUser = await getCurrentUser();
@@ -135,148 +116,170 @@ export async function POST(request: Request): Promise<Response> {
       (typeof body.notes !== "string" || body.notes.length > 2000)
     )
       return apiError("Notes must be text of at most 2000 characters.", 400);
-    return await prisma.$transaction(async (transaction) => {
-      await requireActiveAccounts(transaction, [currentUser.id]);
-      await transaction.$queryRaw`SELECT id FROM "Listing" WHERE id = ${listingId} FOR UPDATE`;
-      const listing = await transaction.listing.findUnique({
-        where: { id: listingId },
-        select: {
-          id: true,
-          title: true,
-          ownerId: true,
-          status: true,
-          adminRestricted: true,
-          owner: { select: { accountStatus: true } },
-          media: { where: { kind: "PHOTO" }, select: { id: true }, take: 1 },
-          price: true,
-          deposit: true,
-          supportedStations: { select: { stationId: true } },
-          reports: { where: { status: "OPEN" }, select: { id: true }, take: 1 },
-          bookings: {
-            where: { status: "DISPUTED" },
-            select: { id: true },
-            take: 1,
-          },
-        },
-      });
-
-      if (!listing) {
-        return apiError("Listing not found.", 404);
-      }
-      if (
-        listing.status !== "ACTIVE" ||
-        listing.adminRestricted ||
-        !listing.media.length ||
-        listing.owner.accountStatus !== "ACTIVE"
-      ) {
-        return apiError(
-          "This listing is unavailable due to its status, moderation, owner account or missing photos.",
-          409,
-        );
-      }
-      if (listing.reports.length > 0 || listing.bookings.length > 0) {
-        return apiError(
-          "This listing is flagged and cannot receive bookings.",
-          409,
-        );
-      }
-      await requireActiveAccounts(transaction, [listing.ownerId]);
-      if (listing.ownerId === currentUser.id) {
-        return apiError("You cannot book your own listing.", 409);
-      }
-
-      const stationIds = listing.supportedStations.map(
-        (entry) => entry.stationId,
-      );
-      if (!stationIds.includes(meetingStationId)) {
-        return apiError(
-          "The selected meeting station is not supported for this listing.",
-          400,
-        );
-      }
-
-      const totalDays = rentalDays(startAt, endAt);
-      const totalPrice = listing.price.mul(new Prisma.Decimal(totalDays));
-
-      if (
-        !listing.price.isFinite() ||
-        listing.price.lte(0) ||
-        !totalPrice.isFinite() ||
-        totalPrice.gt("9999999999.99") ||
-        (listing.deposit !== null &&
-          (!listing.deposit.isFinite() || listing.deposit.isNegative()))
-      )
-        return apiError("Listing price is outside the supported range.", 400);
-      const existingOverlap = await transaction.booking.findFirst({
-        where: {
-          listingId,
-          OR: [
-            {
-              status: {
-                in: [
-                  "HANDOFF_PENDING",
-                  "IN_USE",
-                  "RETURN_PENDING",
-                  "INSPECTION",
-                  "DISPUTED",
-                ],
-              },
+    return await prisma.$transaction(
+      async (transaction) => {
+        await requireActiveAccounts(transaction, [currentUser.id]);
+        await transaction.$queryRaw`SELECT id FROM "Listing" WHERE id = ${listingId} FOR UPDATE`;
+        const listing = await transaction.listing.findUnique({
+          where: { id: listingId },
+          select: {
+            id: true,
+            title: true,
+            ownerId: true,
+            status: true,
+            adminRestricted: true,
+            owner: { select: { accountStatus: true } },
+            media: { where: { kind: "PHOTO" }, select: { id: true }, take: 1 },
+            price: true,
+            deposit: true,
+            supportedStations: { select: { stationId: true } },
+            reports: {
+              where: { status: "OPEN" },
+              select: { id: true },
+              take: 1,
             },
-            {
-              status: "CONFIRMED",
-              startAt: { lt: endAt },
-              endAt: { gt: startAt },
+            bookings: {
+              where: { status: "DISPUTED" },
+              select: { id: true },
+              take: 1,
             },
-          ],
-        },
-        select: { id: true },
-      });
-
-      if (existingOverlap) {
-        throw new Error("BOOKING_OVERLAP");
-      }
-
-      if (body.quote === true)
-        return Response.json({
-          quote: {
-            title: listing.title,
-            startAt,
-            endAt,
-            days: totalDays,
-            dailyPrice: listing.price,
-            totalPrice,
-            deposit: listing.deposit ?? "0",
-            meetingStationId,
           },
         });
-      if (
-        body.expectedQuote !== undefined &&
-        body.expectedQuote !==
-          `${listing.price}:${totalPrice}:${listing.deposit ?? "0"}`
-      )
-        return apiError(
-          "The listing price changed. Review a new quotation before submitting.",
-          409,
-        );
-      const booking = await transaction.booking.create({
-        data: {
-          listingId,
-          ownerId: listing.ownerId,
-          renterId: currentUser.id,
-          meetingStationId,
-          startAt,
-          endAt,
-          status: "PENDING",
-          totalPrice,
-          dailyPrice: listing.price,
-          deposit: listing.deposit ?? null,
-          notes: notes && notes.length > 0 ? notes : null,
-        },
-        select: bookingSelect,
-      });
 
-      return Response.json({ booking }, { status: 201 });
-    });
+        if (!listing) {
+          return apiError("Listing not found.", 404);
+        }
+        if (
+          listing.status !== "ACTIVE" ||
+          listing.adminRestricted ||
+          !listing.media.length ||
+          listing.owner.accountStatus !== "ACTIVE"
+        ) {
+          return apiError(
+            "This listing is unavailable due to its status, moderation, owner account or missing photos.",
+            409,
+          );
+        }
+        if (listing.reports.length > 0 || listing.bookings.length > 0) {
+          return apiError(
+            "This listing is flagged and cannot receive bookings.",
+            409,
+          );
+        }
+        await requireActiveAccounts(transaction, [listing.ownerId]);
+        if (listing.ownerId === currentUser.id) {
+          return apiError("You cannot book your own listing.", 409);
+        }
+
+        const station = await transaction.mrtStation.findUnique({
+          where: { id: meetingStationId },
+        });
+        if (!station) return apiError("Meeting station does not exist.", 400);
+        const eligible =
+          station.operational &&
+          station.canonicalId !== null &&
+          eligibleStationWhere.canonicalId.in.includes(station.canonicalId);
+        const supported = listing.supportedStations.some(
+          (entry) => entry.stationId === meetingStationId,
+        );
+        if (
+          !eligible ||
+          !supported ||
+          (body.canonicalStationId !== undefined &&
+            body.canonicalStationId !== station.canonicalId)
+        )
+          return Response.json(
+            {
+              error:
+                "This station is no longer available. Choose and confirm another meeting station.",
+              code: "STATION_UNAVAILABLE",
+            },
+            { status: 409 },
+          );
+        const totalDays = rentalDays(startAt, endAt);
+        const totalPrice = listing.price.mul(new Prisma.Decimal(totalDays));
+
+        if (
+          !listing.price.isFinite() ||
+          listing.price.lte(0) ||
+          !totalPrice.isFinite() ||
+          totalPrice.gt("9999999999.99") ||
+          (listing.deposit !== null &&
+            (!listing.deposit.isFinite() || listing.deposit.isNegative()))
+        )
+          return apiError("Listing price is outside the supported range.", 400);
+        const existingOverlap = await transaction.booking.findFirst({
+          where: {
+            listingId,
+            OR: [
+              {
+                status: {
+                  in: [
+                    "HANDOFF_PENDING",
+                    "IN_USE",
+                    "RETURN_PENDING",
+                    "INSPECTION",
+                    "DISPUTED",
+                  ],
+                },
+              },
+              {
+                status: "CONFIRMED",
+                startAt: { lt: endAt },
+                endAt: { gt: startAt },
+              },
+            ],
+          },
+          select: { id: true },
+        });
+
+        if (existingOverlap) {
+          throw new Error("BOOKING_OVERLAP");
+        }
+
+        if (body.quote === true)
+          return Response.json({
+            quote: {
+              title: listing.title,
+              startAt,
+              endAt,
+              days: totalDays,
+              dailyPrice: listing.price,
+              totalPrice,
+              deposit: listing.deposit ?? "0",
+              meetingStationId,
+            },
+          });
+        if (
+          body.expectedQuote !== undefined &&
+          body.expectedQuote !==
+            `${listing.price}:${totalPrice}:${listing.deposit ?? "0"}`
+        )
+          return apiError(
+            "The listing price changed. Review a new quotation before submitting.",
+            409,
+          );
+        const booking = await transaction.booking.create({
+          data: {
+            listingId,
+            ownerId: listing.ownerId,
+            renterId: currentUser.id,
+            meetingStationId,
+            startAt,
+            endAt,
+            status: "PENDING",
+            totalPrice,
+            dailyPrice: listing.price,
+            deposit: listing.deposit ?? null,
+            notes: notes && notes.length > 0 ? notes : null,
+          },
+          select: bookingSelect,
+        });
+
+        return Response.json({ booking }, { status: 201 });
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
   } catch (error) {
     if (error instanceof Error && error.message === "BOOKING_OVERLAP") {
       return apiError(
@@ -284,12 +287,15 @@ export async function POST(request: Request): Promise<Response> {
         409,
       );
     }
-    if (isSerializationConflict(error)) {
-      return apiError(
-        "This listing is already booked for part of the selected period.",
-        409,
+    if (isSerializationConflict(error))
+      return Response.json(
+        {
+          error:
+            "Listing availability changed. Choose and confirm your station again.",
+          code: "STATION_UNAVAILABLE",
+        },
+        { status: 409 },
       );
-    }
     return internalServerError("POST /api/bookings", error);
   }
 }

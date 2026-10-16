@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -16,6 +17,8 @@ test("real booking API: two-user persistence, validation, privacy, history and c
     process.env.TEST_BASE_URL,
     "Start Next against TEST_DATABASE_URL and set TEST_BASE_URL.",
   );
+  const ownedDatabase = await connectTestDatabase();
+  await ownedDatabase.end();
   const pool = new Pool({ connectionString: process.env.TEST_DATABASE_URL });
   const tag = randomUUID();
   const users: number[] = [];
@@ -63,10 +66,7 @@ test("real booking API: two-user persistence, validation, privacy, history and c
     const borrower = await register("borrower");
     const outsider = await register("outsider");
     stationId = (
-      await pool.query(
-        'INSERT INTO "MrtStation" (code,name) VALUES ($1,$2) RETURNING id',
-        [tag, tag],
-      )
+      await pool.query("SELECT id FROM \"MrtStation\" WHERE code='TPE'")
     ).rows[0].id;
     listingId = (
       await pool.query(
@@ -401,8 +401,6 @@ test("real booking API: two-user persistence, validation, privacy, history and c
       ]);
       await pool.query('DELETE FROM "Listing" WHERE id=$1', [listingId]);
     }
-    if (stationId)
-      await pool.query('DELETE FROM "MrtStation" WHERE id=$1', [stationId]);
     if (users.length)
       await pool.query('DELETE FROM "User" WHERE id = ANY($1::int[])', [users]);
     await pool.end();

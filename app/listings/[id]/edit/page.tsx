@@ -1,3 +1,4 @@
+import { stationSelect, eligibleStationWhere } from "@/lib/mrt/network";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -20,7 +21,8 @@ export default async function EditPage({
   if (!listing || listing.ownerId !== user.id) notFound();
   const stations = await prisma.mrtStation.findMany({
     orderBy: { name: "asc" },
-    select: { id: true, name: true, code: true },
+    select: stationSelect,
+    where: eligibleStationWhere,
   });
   return (
     <main>

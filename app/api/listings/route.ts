@@ -1,3 +1,4 @@
+import { stationSelect, eligibleStationWhere } from "@/lib/mrt/network";
 import { parseStationIds } from "@/lib/listing-input";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import { Prisma } from "@prisma/client";
@@ -58,7 +59,7 @@ const listingSelect = {
   },
   supportedStations: {
     select: {
-      station: { select: { id: true, code: true, name: true } },
+      station: { select: stationSelect },
     },
   },
 } satisfies Prisma.ListingSelect;
@@ -188,7 +189,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const validStations = await prisma.mrtStation.findMany({
-      where: { id: { in: stationIds } },
+      where: { id: { in: stationIds }, ...eligibleStationWhere },
       select: { id: true },
     });
     if (validStations.length !== stationIds.length) {

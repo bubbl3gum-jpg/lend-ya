@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -8,9 +9,11 @@ import { promisify } from "node:util";
 import { Pool } from "pg";
 const run = promisify(execFile);
 test("Milestone 4B forward migrations preserve populated 4A account, rental, case and evidence history", async () => {
+  const ownedDatabase = await connectTestDatabase();
+  await ownedDatabase.end();
   const url = process.env.TEST_DATABASE_URL;
   assert.ok(
-    url && new URL(url).pathname.endsWith("_migration_test"),
+    url && new URL(url).pathname.startsWith("/hustlen_test_"),
     "Use an empty dedicated _migration_test database.",
   );
   const pool = new Pool({ connectionString: url }),
@@ -26,7 +29,7 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
     const migrations = path.join(dir, "migrations");
     await cp("prisma/migrations", migrations, { recursive: true });
     for (const name of await readdir(migrations))
-      if (name.startsWith("20261014"))
+      if (/^\d/.test(name) && name >= "20261014")
         await rm(path.join(migrations, name), { recursive: true });
     const config = path.join(dir, "prisma.config.ts");
     await writeFile(

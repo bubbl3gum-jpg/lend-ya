@@ -95,6 +95,13 @@ model AuthSession {
 }
 
 model MrtStation {
+  canonicalId String? @unique
+  nameEn String?
+  nameZh String?
+  lineCodes String[] @default([])
+  operatorIds String[] @default([])
+  systemIds String[] @default([])
+  operational Boolean @default(false)
   id        Int      @id @default(autoincrement())
   code      String   @unique
   name      String   @unique

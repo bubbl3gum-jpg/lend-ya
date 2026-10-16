@@ -77,22 +77,22 @@ npm run lint
 npm run build
 ```
 
-Create separate disposable PostgreSQL databases named `lend_ya_booking_test`, `lend_ya_admin_test`, `lend_ya_moderation_test`, `lend_ya_migration_test` and `lend_ya_mvp_test`, using the same local database server. Set `TEST_DATABASE_URL` securely to the appropriate test connection (never production or an existing user database). Migrate the booking, admin and moderation databases with `DATABASE_URL="$TEST_DATABASE_URL" npx prisma migrate deploy --config prisma7.config.ts`. The migration fixture database must start without application tables; its test deploys the pre-4B history first, creates synthetic historical fixtures, then applies the forward migrations.
+Set `MRT_TEST_DATABASE_URL` securely to a **nonexisting** local database named `hustlen_test_*`, distinct from the development `DATABASE_URL`. Do not create or migrate it yourself: the isolated runner creates, marks and removes it, refusing existing databases. The PostgreSQL role needs create/drop permission. Set `MRT_BROWSER_PATH` and `CHROMIUM_PATH` to an installed Chromium executable (cloud: `/usr/bin/chromium`); install FFmpeg/ffprobe for media tests.
 
 ```bash
-# TEST_DATABASE_URL points to lend_ya_booking_test.
-npm run test:integration
-# Then set TEST_DATABASE_URL to lend_ya_admin_test, which must have no user data.
+npm run test:unit
+npm run build:verify
+npm run test:migration       # populated full Admin/MVP -> combined
+npm run test:admin-migration # older pre-moderation -> combined
+npm run test:integration     # MRT UI, booking, editing and concurrency
+npm run test:rental-api
+npm run test:rental-browser
 npm run test:admin
-# Then use the empty dedicated lend_ya_moderation_test database.
 npm run test:moderation
-# Then use lend_ya_migration_test, which must have no application tables.
-npm run test:migration
-# Then use an empty lend_ya_mvp_test database. This suite migrates it itself.
 npm run test:mvp
 ```
 
-The rental script owns/stops its API server before launching the two-session browser suite. The admin suite owns its own API/browser server. Rental/admin fixtures are removed explicitly, including case records protected by restrictive foreign keys. The dedicated moderation suite requires zero users at entry and truncates its own fixture database on teardown because ordinary audit-row deletion is intentionally prohibited. The migration suite requires no application tables and clears only its dedicated fixture schema at teardown. Neither suite resets the application database. Stop only your own dev server before these commands because Next dev locks are shared within one checkout. Defaults: rental API port 3001, rental browser port 3002, admin port 3003, moderation port 3005, MVP port 3006; override with TEST_API_PORT, TEST_BROWSER_PORT, TEST_ADMIN_PORT, TEST_MODERATION_PORT, TEST_MVP_PORT. FFmpeg/ffprobe is required for optional video container validation and the media tests (Ubuntu: `sudo apt-get install ffmpeg`). Chromium is required for browser tests: the cloud machine provides `/usr/bin/chromium`; elsewhere set CHROMIUM_PATH to an installed Chromium executable. Run these suites sequentially.
+Run these sequentially; the target name can be reused after successful cleanup. Each run uses its own database ownership marker, generated dev output and dynamically allocated ports. Private evidence, audit immutability and historical records are checked within those isolated fixtures. Test artifacts live under ignored `.test-artifacts/`. A normal `npm run build` reads the bound application database; `build:verify` uses a fresh combined schema instead.
 
 Detailed acceptance, exact files, results and limitations: [Milestone 3](docs/milestone-3-report.md) and [Milestone 4A](docs/milestone-4a-report.md) and [Milestone 4B](docs/milestone-4b-report.md). The older Milestone 2 report retains its original blocked run and points to the newer verified results.
 
@@ -110,3 +110,9 @@ Owners can edit categories, category details and pickup stations atomically, as 
 The PostgreSQL `AuthRateLimit` model is added by forward migration `20261014030000_mvp_security`; existing user/rental/audit data is untouched. The scoped `prisma -> mysql2 3.24.6` override fixes MySQL transport advisories without changing Prisma/Next major versions. Nine advisory-bearing package entries remain across the deepmerge-ts and braces toolchains; see the security report for reachability and compatibility limits. No clean vulnerability audit is claimed.
 
 `.github/workflows/verify.yml` installs locked dependencies, provisions isolated PostgreSQL databases and browser/media tools, runs checks/build/tests sequentially and captures audit evidence. Its YAML/steps were validated locally; hosted execution has not occurred. Optional test environment variables are `TEST_DATABASE_URL`, `TEST_API_PORT`, `TEST_BROWSER_PORT`, `TEST_ADMIN_PORT`, `TEST_MODERATION_PORT`, `TEST_MVP_PORT` and `CHROMIUM_PATH`; connection values stay in private environment configuration. The MVP suite rejects pre-existing users and only clears its dedicated fixture database after acquiring ownership of an empty-at-entry dataset.
+
+## Combined Admin/MVP and official MRT branch
+
+`integration/hustlen-mrt-complete` combines Admin/MVP with all 120 official physical MRT locations (136 codes). See the [combined integration report](docs/combined/INTEGRATION_REPORT.md) and [safe Mac upgrade guide](docs/combined/MAC_UPGRADE.md). Preserve all historical migrations. Run `npm run db:preflight` against an existing Admin/MVP database before deploying; do not reset it.
+
+Database integration tests now require an explicit **nonexisting**, disposable `MRT_TEST_DATABASE_URL` named `hustlen_test_*`, distinct from `DATABASE_URL`, with local PostgreSQL create/drop permission. The runner owns and deletes that new database. Set `MRT_BROWSER_PATH` / `CHROMIUM_PATH` to a Chromium executable; install ffmpeg for media/security tests. `npm run test:migration` checks populated Admin-to-combined upgrade; `npm run test:integration` checks MRT browser/API flows. Admin, moderation, rental API/browser, MVP security and historical migration checks have separate `test:*` scripts. `npm run build:verify` builds using a fresh isolated combined database.

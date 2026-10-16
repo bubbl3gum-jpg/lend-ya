@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -17,9 +18,11 @@ test(
   "Milestone 4A: admin provisioning, database reads, authorization and desktop/mobile browser",
   { timeout: 120000 },
   async (t) => {
+    const ownedDatabase = await connectTestDatabase();
+    await ownedDatabase.end();
     const databaseUrl = process.env.TEST_DATABASE_URL;
     assert.ok(
-      databaseUrl && new URL(databaseUrl).pathname.endsWith("_admin_test"),
+      databaseUrl && new URL(databaseUrl).pathname.startsWith("/hustlen_test_"),
       "Use the separate disposable _admin_test database.",
     );
     const pool = new Pool({ connectionString: databaseUrl });
@@ -30,7 +33,7 @@ test(
       "Admin test database must start without user data; migrate it, do not seed first.",
     );
     const port = Number(process.env.TEST_ADMIN_PORT ?? 3003),
-      base = `http://127.0.0.1:${port}`;
+      base = `http://localhost:${port}`;
     const log = openSync("/tmp/lend-ya-admin-server.log", "w");
     let server: ChildProcess | undefined;
     let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
@@ -132,7 +135,8 @@ test(
       return { id: result.json.user.id, cookie: result.cookie, email };
     };
     let overviewExpected:
-      { users: number; admins: number; activeRentals: number } | undefined;
+      | { users: number; admins: number; activeRentals: number }
+      | undefined;
     try {
       server = spawn(
         process.execPath,
@@ -140,7 +144,7 @@ test(
           "node_modules/next/dist/bin/next",
           "dev",
           "--hostname",
-          "127.0.0.1",
+          "localhost",
           "--port",
           String(port),
         ],

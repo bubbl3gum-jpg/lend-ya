@@ -1,3 +1,4 @@
+import { stationSelect } from "@/lib/mrt/network";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -43,7 +44,7 @@ export default async function ListingDetailPage({
         select: { id: true, name: true, accountStatus: true },
       },
       supportedStations: {
-        select: { station: { select: { id: true, code: true, name: true } } },
+        select: { station: { select: stationSelect } },
       },
       media: {
         orderBy: { createdAt: "asc" },

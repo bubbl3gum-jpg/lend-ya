@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -23,7 +24,7 @@ test(
       "Use an isolated migrated _test database.",
     );
     const port = Number(process.env.TEST_BROWSER_PORT ?? 3002);
-    const base = `http://127.0.0.1:${port}`;
+    const base = `http://localhost:${port}`;
     const log = openSync("/tmp/lend-ya-browser-server.log", "w");
     let server: ChildProcess | undefined;
     const stop = async () => {
@@ -40,7 +41,7 @@ test(
           "node_modules/next/dist/bin/next",
           "dev",
           "--hostname",
-          "127.0.0.1",
+          "localhost",
           "--port",
           String(port),
         ],
@@ -64,6 +65,8 @@ test(
       }
       throw new Error("Test server did not become ready.");
     };
+    const ownedDatabase = await connectTestDatabase();
+    await ownedDatabase.end();
     const pool = new Pool({ connectionString: process.env.TEST_DATABASE_URL });
     const tag = randomUUID();
     const userIds: number[] = [],
@@ -111,10 +114,7 @@ test(
       await login(owner, "owner");
       await login(borrower, "borrower");
       stationId = (
-        await pool.query(
-          'INSERT INTO "MrtStation" (code,name) VALUES ($1,$1) RETURNING id',
-          [`browser-${tag}`],
-        )
+        await pool.query("SELECT id FROM \"MrtStation\" WHERE code='TPE'")
       ).rows[0].id;
       const bookViaUi = async () => {
         const listing = await owner.request.post(`${base}/api/listings`, {
@@ -142,6 +142,16 @@ test(
           ),
         );
         await borrower.goto(`${base}/listings/${data.id}`);
+        await borrower
+          .getByRole("button", { name: "Choose meeting station", exact: true })
+          .click();
+        await borrower
+          .getByRole("dialog")
+          .locator('[data-station-id="taipei-main"] .station-hit')
+          .click();
+        await borrower
+          .getByRole("button", { name: "Confirm meeting station", exact: true })
+          .click();
         await borrower.getByLabel("Start date").fill("2035-01-01T10:00");
         await borrower.getByLabel("End date").fill("2035-01-02T10:01");
         await borrower
@@ -405,8 +415,6 @@ test(
         ]);
       }
       await Promise.all(files.map((file) => unlink(file)));
-      if (stationId)
-        await pool.query('DELETE FROM "MrtStation" WHERE id=$1', [stationId]);
       if (userIds.length)
         await pool.query('DELETE FROM "User" WHERE id=ANY($1::int[])', [
           userIds,

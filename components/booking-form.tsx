@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { MRTStationSelector } from "./mrt/MRTStationSelector";
+import { stationLabel, type DatabaseStation } from "@/lib/mrt/network";
+
 type BookingFormProps = {
   listing: {
     id: number;
     title: string;
     supportedStations: Array<{
-      station: { id: number; code: string; name: string };
+      station: DatabaseStation;
     }>;
   };
 };
@@ -17,9 +20,7 @@ export function BookingForm({ listing }: BookingFormProps) {
   const router = useRouter();
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
-  const [meetingStationId, setMeetingStationId] = useState(
-    String(listing.supportedStations[0]?.station.id ?? ""),
-  );
+  const [meetingStationId, setMeetingStationId] = useState("");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [quote, setQuote] = useState<{
@@ -38,6 +39,8 @@ export function BookingForm({ listing }: BookingFormProps) {
     setLoading(true);
 
     try {
+      if (!meetingStationId)
+        throw new Error("Choose and confirm a meeting station.");
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,6 +49,9 @@ export function BookingForm({ listing }: BookingFormProps) {
           startAt,
           endAt,
           meetingStationId: Number(meetingStationId),
+          canonicalStationId: listing.supportedStations.find(
+            (s) => s.station.id === Number(meetingStationId),
+          )?.station.canonicalId,
           notes,
           quote: reviewed !== selection,
           ...(reviewed === selection && quote
@@ -58,6 +64,11 @@ export function BookingForm({ listing }: BookingFormProps) {
 
       const result = await response.json();
       if (!response.ok) {
+        if (result.code === "STATION_UNAVAILABLE") {
+          setMeetingStationId("");
+          setQuote(null);
+          router.refresh();
+        }
         throw new Error(result.error || "Unable to create booking request.");
       }
 
@@ -116,20 +127,12 @@ export function BookingForm({ listing }: BookingFormProps) {
           />
         </label>
 
-        <label className="block text-sm font-medium text-slate-700">
-          MRT station
-          <select
-            value={meetingStationId}
-            onChange={(event) => setMeetingStationId(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
-          >
-            {listing.supportedStations.map(({ station }) => (
-              <option key={station.id} value={station.id}>
-                {station.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <MRTStationSelector
+          mode="borrower"
+          stations={listing.supportedStations.map((s) => s.station)}
+          selectedIds={meetingStationId ? [Number(meetingStationId)] : []}
+          onChange={(ids) => setMeetingStationId(ids[0] ? String(ids[0]) : "")}
+        />
 
         <label className="block text-sm font-medium text-slate-700">
           Notes
@@ -162,11 +165,12 @@ export function BookingForm({ listing }: BookingFormProps) {
           </p>
           <p>
             Pickup:{" "}
-            {
-              listing.supportedStations.find(
+            {(() => {
+              const station = listing.supportedStations.find(
                 ({ station }) => String(station.id) === meetingStationId,
-              )?.station.name
-            }
+              )?.station;
+              return station ? stationLabel(station) : "Choose a station";
+            })()}
           </p>
         </div>
       ) : null}

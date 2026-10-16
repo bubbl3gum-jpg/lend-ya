@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -60,6 +61,8 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
     process.env.TEST_BASE_URL,
     "Set TEST_BASE_URL to a server using that same isolated database.",
   );
+  const ownedDatabase = await connectTestDatabase();
+  await ownedDatabase.end();
   const pool = new Pool({ connectionString: process.env.TEST_DATABASE_URL });
   const tag = randomUUID();
   const userIds: number[] = [],
@@ -150,10 +153,7 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
       borrower = await account("Borrower"),
       outsider = await account("Outsider");
     stationId = (
-      await pool.query(
-        'INSERT INTO "MrtStation" (code,name) VALUES ($1,$1) RETURNING id',
-        [`m3-${tag}`],
-      )
+      await pool.query("SELECT id FROM \"MrtStation\" WHERE code='TPE'")
     ).rows[0].id;
     const patch = (id: number, cookie: string, action: string, extra = {}) =>
       api(`/api/bookings/${id}`, cookie, "PATCH", { action, ...extra });
@@ -817,8 +817,6 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
       ]);
     }
     await Promise.all(listingFiles.map((file) => unlink(file)));
-    if (stationId)
-      await pool.query('DELETE FROM "MrtStation" WHERE id=$1', [stationId]);
     if (userIds.length)
       await pool.query('DELETE FROM "User" WHERE id=ANY($1::int[])', [userIds]);
     await pool.end();

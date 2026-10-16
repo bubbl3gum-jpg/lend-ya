@@ -1,0 +1,94 @@
+{
+  "prisma/migrations/20261002105848_init/migration.sql": {
+    "sha256": "10d15eda85c796155df0213be9f6916d5b8b044b7d6079a0475c3cb3e8325f12",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261002110330_set_currency_precision/migration.sql": {
+    "sha256": "2a46f73e2b0025bf252ef9e1f24f1b55ec72bf7fa426d8416db989822ed5bee6",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261002112754_add_auth_sessions/migration.sql": {
+    "sha256": "3ee297957335154d7bf9f080a23ebfa3013e7120747869fa9bbda20f4d4bd5d9",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261002130231_add_transaction_handoffs/migration.sql": {
+    "sha256": "5289b9110c3270feaaab010a965c351bc0904758aa70457d8eabb02941c9d2c5",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261006150000_booking_lifecycle_backbone/migration.sql": {
+    "sha256": "80262e1a4bd4eb60fd97b582cf260bbadf97ca3e21870f498a5d4b61b14032b9",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261012120000_physical_listing_media_reports/migration.sql": {
+    "sha256": "f13e3e6ab87d263196913ac9fc641f4dba9577625d1e5db8c89bc3ffddc7e031",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261012150000_trust_profiles/migration.sql": {
+    "sha256": "5473ab2ad6b4f2721f1cd74cb61627dd83b8828eea24dfeecccf2f05f688a992",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261013080000_booking_cancellation/migration.sql": {
+    "sha256": "854951df0c137141ddc190e606cffc992454057d7f28067503bc9643f067c050",
+    "sources": [
+      "admin"
+    ]
+  },
+  "prisma/migrations/20261013100000_private_rental_evidence/migration.sql": {
+    "sha256": "0cacf72d9e91589c37f50a0342d004c8112177aed62c42193359fc175db0dc90",
+    "sources": [
+      "admin"
+    ]
+  },
+  "prisma/migrations/20261014010000_admin_moderation/migration.sql": {
+    "sha256": "a5e0281f999bf62a7f061808dad02f935c4cdf68e4db974e1b51ff11d128be60",
+    "sources": [
+      "admin"
+    ]
+  },
+  "prisma/migrations/20261014020000_dispute_case_history/migration.sql": {
+    "sha256": "488af1cc7cc05398c282abf6a621b21ae16810361a4b7326d240bf87171e9cde",
+    "sources": [
+      "admin"
+    ]
+  },
+  "prisma/migrations/20261014030000_mvp_security/migration.sql": {
+    "sha256": "741a48d67c33158a127ac9ff13122330a04cb32fba105e62bde252c03d77e00f",
+    "sources": [
+      "admin"
+    ]
+  },
+  "prisma/migrations/migration_lock.toml": {
+    "sha256": "99836963713b4f5b269ad49af0ed3d7b0b2e336115c2f92dc9ac683d139d0900",
+    "sources": [
+      "admin",
+      "mrt"
+    ]
+  },
+  "prisma/migrations/20261016100000_official_mrt_stations/migration.sql": {
+    "sha256": "944d20a67d5fc19b31a36fc144d147d5b86b509abef376d1ec4ba596f4f374d1",
+    "sources": [
+      "mrt"
+    ]
+  }
+}

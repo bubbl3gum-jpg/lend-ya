@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-16T18:52:47.218Z",
+  "sourceAdminCommit": "18529a30bb7da3c3db08baca614ef1fe2764eb10",
+  "adminMigrations": [
+    {
+      "migration_name": "20261002105848_init",
+      "checksum": "10d15eda85c796155df0213be9f6916d5b8b044b7d6079a0475c3cb3e8325f12"
+    },
+    {
+      "migration_name": "20261002110330_set_currency_precision",
+      "checksum": "2a46f73e2b0025bf252ef9e1f24f1b55ec72bf7fa426d8416db989822ed5bee6"
+    },
+    {
+      "migration_name": "20261002112754_add_auth_sessions",
+      "checksum": "3ee297957335154d7bf9f080a23ebfa3013e7120747869fa9bbda20f4d4bd5d9"
+    },
+    {
+      "migration_name": "20261002130231_add_transaction_handoffs",
+      "checksum": "5289b9110c3270feaaab010a965c351bc0904758aa70457d8eabb02941c9d2c5"
+    },
+    {
+      "migration_name": "20261006150000_booking_lifecycle_backbone",
+      "checksum": "80262e1a4bd4eb60fd97b582cf260bbadf97ca3e21870f498a5d4b61b14032b9"
+    },
+    {
+      "migration_name": "20261012120000_physical_listing_media_reports",
+      "checksum": "f13e3e6ab87d263196913ac9fc641f4dba9577625d1e5db8c89bc3ffddc7e031"
+    },
+    {
+      "migration_name": "20261012150000_trust_profiles",
+      "checksum": "5473ab2ad6b4f2721f1cd74cb61627dd83b8828eea24dfeecccf2f05f688a992"
+    },
+    {
+      "migration_name": "20261013080000_booking_cancellation",
+      "checksum": "854951df0c137141ddc190e606cffc992454057d7f28067503bc9643f067c050"
+    },
+    {
+      "migration_name": "20261013100000_private_rental_evidence",
+      "checksum": "0cacf72d9e91589c37f50a0342d004c8112177aed62c42193359fc175db0dc90"
+    },
+    {
+      "migration_name": "20261014010000_admin_moderation",
+      "checksum": "a5e0281f999bf62a7f061808dad02f935c4cdf68e4db974e1b51ff11d128be60"
+    },
+    {
+      "migration_name": "20261014020000_dispute_case_history",
+      "checksum": "488af1cc7cc05398c282abf6a621b21ae16810361a4b7326d240bf87171e9cde"
+    },
+    {
+      "migration_name": "20261014030000_mvp_security",
+      "checksum": "741a48d67c33158a127ac9ff13122330a04cb32fba105e62bde252c03d77e00f"
+    }
+  ],
+  "pendingBeforeUpgrade": [
+    "20261016100000_official_mrt_stations"
+  ],
+  "totalApplied": 13,
+  "passed": [
+    "Real Prisma deploy to Admin/MVP state (all five divergent migrations)",
+    "Only official MRT migration pending before upgrade",
+    "Every prior row preserved across all 14 history/security tables",
+    "Admin restriction true preserved",
+    "Cancellation and private evidence bytes preserved",
+    "Resolved and open dispute case history and immutable admin audits preserved",
+    "Five legacy station primary keys and all booking/listing foreign keys preserved",
+    "120 physical locations and 136 line codes",
+    "Two imports preserve existing application data",
+    "No migration checksum changed",
+    "Combined Prisma schema diff empty"
+  ]
+}

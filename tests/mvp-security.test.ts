@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -39,9 +40,11 @@ test(
   "Milestone 5: authentication, listing editing/upload privacy, CSRF, profiles and responsive marketplace",
   { timeout: 240000 },
   async (t) => {
+    const ownedDatabase = await connectTestDatabase();
+    await ownedDatabase.end();
     const db = process.env.TEST_DATABASE_URL;
     assert.ok(
-      db && new URL(db).pathname.endsWith("_mvp_test"),
+      db && new URL(db).pathname.startsWith("/hustlen_test_"),
       "Use a separate disposable _mvp_test database.",
     );
     const pool = new Pool({ connectionString: db });
@@ -51,7 +54,7 @@ test(
         NODE_ENV: "development" as const,
       },
       port = Number(process.env.TEST_MVP_PORT ?? 3006),
-      base = `http://127.0.0.1:${port}`,
+      base = `http://localhost:${port}`,
       tag = randomUUID(),
       password = `Test-${randomUUID()}`,
       files: string[] = [];
@@ -76,7 +79,7 @@ test(
           "node_modules/next/dist/bin/next",
           production ? "start" : "dev",
           "--hostname",
-          "127.0.0.1",
+          "localhost",
           "--port",
           String(port),
         ],
@@ -226,10 +229,9 @@ test(
       for (const n of [1, 2])
         stations.push(
           (
-            await pool.query(
-              'INSERT INTO "MrtStation" (code,name) VALUES ($1,$1) RETURNING id',
-              [`MVP-${n}-${tag}`],
-            )
+            await pool.query('SELECT id FROM "MrtStation" WHERE code=$1', [
+              n === 1 ? "TPE" : "XIM",
+            ])
           ).rows[0].id,
         );
       await t.test(
@@ -966,7 +968,19 @@ test(
             mimeType: "image/png",
             buffer: Buffer.from(image),
           });
-          await page.getByRole("checkbox", { name: `MVP-1-${tag}` }).check();
+          await page
+            .getByRole("button", {
+              name: "Choose pickup stations",
+              exact: true,
+            })
+            .click();
+          await page
+            .getByRole("dialog")
+            .locator('[data-station-id="taipei-main"] .station-hit')
+            .click();
+          await page
+            .getByRole("button", { name: "Confirm availability", exact: true })
+            .click();
           await page
             .getByRole("button", { name: "Publish listing", exact: true })
             .click();
@@ -992,11 +1006,22 @@ test(
             .getByLabel("Brand and model")
             .fill("Browser verified camera");
           await page
-            .getByRole("checkbox", { name: `MVP-1-${tag} · MVP-1-${tag}` })
-            .uncheck();
+            .getByRole("button", {
+              name: "Choose pickup stations",
+              exact: true,
+            })
+            .click();
           await page
-            .getByRole("checkbox", { name: `MVP-2-${tag} · MVP-2-${tag}` })
-            .check();
+            .getByRole("dialog")
+            .locator('[data-station-id="taipei-main"] .station-hit')
+            .click();
+          await page
+            .getByRole("dialog")
+            .locator('[data-station-id="ximen"] .station-hit')
+            .click();
+          await page
+            .getByRole("button", { name: "Confirm availability", exact: true })
+            .click();
           await page
             .getByRole("button", { name: "Save listing", exact: true })
             .click();
@@ -1021,7 +1046,13 @@ test(
             .selectOption("Cameras");
           await page
             .getByRole("combobox", { name: "Pickup station", exact: true })
-            .selectOption(`MVP-2-${tag}`);
+            .selectOption(
+              (
+                await pool.query('SELECT name FROM "MrtStation" WHERE id=$1', [
+                  stations[1],
+                ])
+              ).rows[0].name,
+            );
           await expect(
             page.getByText("1 listing", { exact: true }),
           ).toBeVisible();

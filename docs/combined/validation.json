@@ -1,0 +1,58 @@
+{
+  "verifiedAt": "2026-10-16",
+  "database": "PostgreSQL 17, newly created owned disposable databases only",
+  "suites": {
+    "unit": {
+      "tests": 21,
+      "pass": 21,
+      "fail": 0,
+      "skipped": 0
+    },
+    "rental-api": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skipped": 0
+    },
+    "admin": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0
+    },
+    "moderation": {
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "skipped": 0
+    },
+    "rental-browser": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0
+    },
+    "mvp": {
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "skipped": 0
+    },
+    "admin-migration": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "freshReplay": "passed: all 13 migrations",
+  "populatedAdminUpgrade": "passed: all 12 Admin migrations to combined13; all14 populated tables and old station identities preserved; importer twice; schema diff empty; read-only preflight before/after",
+  "mrtBrowserAndApi": "passed: 10 scenarios, no browser errors; see mrt-validation.json",
+  "productionBuild": "passed via npm run build:verify on isolated combined schema",
+  "lint": "passed",
+  "typecheck": "passed",
+  "prismaValidateAndGenerate": "passed",
+  "migrationFiles": "All source migration files byte-identical to both refs",
+  "githubActions": "workflow updated; remote run not yet verified",
+  "macDatabase": "Not accessed; see MAC_UPGRADE.md"
+}

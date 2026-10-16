@@ -1,3 +1,4 @@
+import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -46,9 +47,11 @@ test(
   "Milestone 4B: persisted moderation, case resolution, immutable audits and full browser scenario",
   { timeout: 240000 },
   async (t) => {
+    const ownedDatabase = await connectTestDatabase();
+    await ownedDatabase.end();
     const databaseUrl = process.env.TEST_DATABASE_URL;
     assert.ok(
-      databaseUrl && new URL(databaseUrl).pathname.endsWith("_moderation_test"),
+      databaseUrl && new URL(databaseUrl).pathname.startsWith("/hustlen_test_"),
       "Use an empty isolated _moderation_test database.",
     );
     const pool = new Pool({ connectionString: databaseUrl });
@@ -58,7 +61,7 @@ test(
       "Dedicated database must start empty.",
     );
     const port = Number(process.env.TEST_MODERATION_PORT ?? 3005),
-      base = `http://127.0.0.1:${port}`,
+      base = `http://localhost:${port}`,
       env = {
         ...process.env,
         DATABASE_URL: databaseUrl,
@@ -150,11 +153,7 @@ test(
       if (r.status === 201)
         r.json.listing.media.forEach((m) =>
           files.push(
-            path.join(
-              process.cwd(),
-              "storage/listings",
-              path.basename(m.url),
-            ),
+            path.join(process.cwd(), "storage/listings", path.basename(m.url)),
           ),
         );
       return r;
@@ -267,7 +266,7 @@ test(
           "node_modules/next/dist/bin/next",
           "dev",
           "--hostname",
-          "127.0.0.1",
+          "localhost",
           "--port",
           String(port),
         ],
@@ -306,10 +305,7 @@ test(
       assert.equal(login.status, 200);
       admin.cookie = login.cookie;
       stationId = (
-        await pool.query(
-          'INSERT INTO "MrtStation" (code,name) VALUES ($1,$1) RETURNING id',
-          [tag],
-        )
+        await pool.query("SELECT id FROM \"MrtStation\" WHERE code='TPE'")
       ).rows[0].id;
       await t.test(
         "every new admin API authenticates, rejects spoofing/cross-origin/invalid input, and never logs failure",

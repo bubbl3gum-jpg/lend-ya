@@ -1,0 +1,29 @@
+/* Scoped styles for the ported SVG; no application-wide element rules. */
+.mrt-selector .map-stage { position:relative; height: min(65dvh,680px); min-height:350px; overflow:hidden; background:#f8faf9; border:1px solid #dde6e1; border-radius:12px; }
+.mrt-selector .map-stage svg { width:100%; height:100%; touch-action:none; user-select:none; }
+.mrt-selector .station {cursor:pointer}
+.mrt-selector .station.disabled {cursor:not-allowed;opacity:.4}
+.mrt-selector .station:focus-visible {outline:2px solid #047857}
+.mrt-selector .map-label {fill:#344c40;font-weight:600;paint-order:stroke;stroke:#fff;stroke-linejoin:round}
+.mrt-selector .map-label-en {fill:#62766a;font-weight:400}
+.mrt-selector .map-label-code {fill:#819486;font-weight:400}
+.mrt-selector .map-guidance {position:absolute;top:10px;left:10px;max-width:90%;padding:6px;background:#fffffff0;font-size:11px;pointer-events:none}
+.mrt-selector .map-tools {position:absolute;bottom:35px;right:12px;display:flex;align-items:center;gap:10px;background:white;border:1px solid #cbd5e1;border-radius:8px;padding:5px}
+.mrt-selector .map-tools button {width:40px;height:40px;font-size:24px;cursor:pointer}
+.mrt-selector .map-tools span {min-width:35px;text-align:center}
+.mrt-selector .map-caption {position:absolute;bottom:8px;left:12px;font-size:10px;pointer-events:none}
+.mrt-selector .map-caption > span:last-child {margin-left:10px}
+.mrt-dialog {border:0;border-radius:16px;width:min(1200px,96vw);max-width:96vw;max-height:96dvh;padding:20px;color:#0f172a}
+.mrt-dialog::backdrop {background:#0f172aaa}
+.mrt-workspace {display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.mrt-station-list {max-height:43dvh;overflow:auto;display:grid;gap:5px}
+.mrt-station-list button {text-align:left;border:1px solid #d1d5db;border-radius:6px;padding:10px;font-size:13px;cursor:pointer}
+.mrt-station-list button[aria-pressed=true] {background:#d1fae5;border-color:#059669}
+.mrt-station-list button:disabled {color:#64748b;background:#f1f5f9;cursor:not-allowed}
+@media(max-width:700px) {
+ .mrt-dialog {width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;border-radius:0;padding:12px}
+ .mrt-workspace {grid-template-columns:minmax(0,1fr)}
+ .mrt-selector .map-stage {height:52dvh;min-height:300px}
+ .mrt-station-list {max-height:22dvh}
+ .mrt-selector .map-caption > span:last-child {display:none}
+}

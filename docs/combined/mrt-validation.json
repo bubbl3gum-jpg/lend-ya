@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-16T18:53:21.296Z",
+  "listingId": 1,
+  "bookingId": 1,
+  "checks": [
+    "Random-session challenge verifies application and test client share the owned database",
+    "120 canonical mappings, five legacy IDs and historical booking foreign keys",
+    "Owner creates listing through map, multipart photo/video upload and PostgreSQL persistence",
+    "Owner edits availability; unauthorized and manipulated updates rejected",
+    "Borrower explicit selection, disabled stations, search/zoom/pan, bilingual booking and integer station FK",
+    "Removed or mismatched station requests rejected; historical meeting station unchanged",
+    "Real station-only and full-form PATCH races reject waiting stale bookings; historical locations and concurrent overlap protection preserved",
+    "Mobile fullscreen modal, touch selection, zoom/reset, no horizontal overflow",
+    "Original accept → dual handoff → return → inspection → completed lifecycle and evidence",
+    "Existing dispute authorization, authentication, logout and login"
+  ],
+  "browserErrors": []
+}

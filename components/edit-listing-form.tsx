@@ -1,4 +1,6 @@
 "use client";
+import { MRTStationSelector } from "./mrt/MRTStationSelector";
+import type { DatabaseStation } from "@/lib/mrt/network";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -23,8 +25,9 @@ export function EditListingForm({
   stations,
 }: {
   listing: Editable;
-  stations: { id: number; name: string; code: string }[];
+  stations: DatabaseStation[];
 }) {
+  const [stationIds, setStationIds] = useState(listing.stationIds);
   const router = useRouter(),
     [category, setCategory] = useState(listing.category as ListingCategory),
     [error, setError] = useState(""),
@@ -41,13 +44,12 @@ export function EditListingForm({
         setBusy(true);
         setError("");
         const values = new FormData(e.currentTarget);
-        const stationIds = values.getAll("stationIds").map(Number),
-          categoryDetails = Object.fromEntries(
-            (categoryDetailFields[category] ?? []).map((f) => [
-              f.key,
-              values.get(`detail_${f.key}`),
-            ]),
-          );
+        const categoryDetails = Object.fromEntries(
+          (categoryDetailFields[category] ?? []).map((f) => [
+            f.key,
+            values.get(`detail_${f.key}`),
+          ]),
+        );
         try {
           const r = await fetch(`/api/listings/${listing.id}`, {
               method: "PATCH",
@@ -132,24 +134,12 @@ export function EditListingForm({
           />
         </label>
       ))}
-      <fieldset className="rounded border p-3">
-        <legend>Pickup stations · select at least one</legend>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {stations.map((s) => (
-            <label key={s.id} className="flex min-w-0 items-center gap-2">
-              <input
-                type="checkbox"
-                name="stationIds"
-                value={s.id}
-                defaultChecked={listing.stationIds.includes(s.id)}
-              />
-              <span className="break-words">
-                {s.name} · {s.code}
-              </span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      <MRTStationSelector
+        mode="owner"
+        stations={stations}
+        selectedIds={stationIds}
+        onChange={setStationIds}
+      />
       <label>
         Status
         <select

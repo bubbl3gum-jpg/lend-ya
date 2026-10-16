@@ -1,3 +1,4 @@
+import { stationSelect } from "@/lib/mrt/network";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import { parseEvidence } from "@/lib/booking-evidence";
 import { submitRentalStage } from "@/lib/rental-lifecycle";
@@ -43,7 +44,7 @@ const bookingSelect = {
   },
   owner: { select: { id: true, name: true } },
   renter: { select: { id: true, name: true } },
-  meetingStation: { select: { id: true, code: true, name: true } },
+  meetingStation: { select: stationSelect },
   handoff: {
     select: {
       id: true,
