@@ -1,105 +1,174 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
 import path from "node:path";
-
-const maxPhotoSize = 10 * 1024 * 1024;
-const maxVideoSize = 30 * 1024 * 1024;
-const maxPhotos = 8;
-const maxTotalSize = 60 * 1024 * 1024;
-
-export type ListingMediaUpload = {
-  file: File;
-  kind: "PHOTO" | "VIDEO";
-};
-
+import sharp from "sharp";
+export type ListingMediaUpload = { file: File; kind: "PHOTO" | "VIDEO" };
 export type StoredListingMedia = {
   url: string;
   mimeType: string;
   kind: "PHOTO" | "VIDEO";
   filePath: string;
 };
-
-function identifyMedia(bytes: Uint8Array, kind: ListingMediaUpload["kind"]): { mimeType: string; extension: string } | null {
-  if (kind === "PHOTO") {
-    if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
-      return { mimeType: "image/jpeg", extension: ".jpg" };
+export async function boundedListingForm(request: Request): Promise<FormData> {
+  const maximum = 60 * 1024 * 1024 + 65536,
+    reader = request.body?.getReader();
+  if (!reader) throw new Error("Uploaded file submission is empty.");
+  let total = 0;
+  const chunks: Uint8Array[] = [];
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.length;
+      if (total > maximum) {
+        await reader.cancel();
+        throw new Error("Uploaded file submission exceeds 60 MB.");
+      }
+      chunks.push(value);
     }
-    if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
-      return { mimeType: "image/png", extension: ".png" };
-    }
+  } finally {
+    reader.releaseLock();
+  }
+  try {
+    return await new Response(Buffer.concat(chunks), {
+      headers: { "Content-Type": request.headers.get("content-type") ?? "" },
+    }).formData();
+  } catch {
+    throw new Error("Uploaded file multipart submission is malformed.");
+  }
+}
+async function sanitizePhoto(file: File) {
+  try {
+    const image = sharp(Buffer.from(await file.arrayBuffer()), {
+        failOn: "warning",
+        limitInputPixels: 16777216,
+      }).timeout({ seconds: 5 }),
+      meta = await image.metadata();
     if (
-      String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
-      String.fromCharCode(...bytes.slice(8, 12)) === "WEBP"
-    ) {
-      return { mimeType: "image/webp", extension: ".webp" };
-    }
-    return null;
+      !["jpeg", "png", "webp"].includes(meta.format ?? "") ||
+      !meta.width ||
+      !meta.height ||
+      meta.width > 4096 ||
+      meta.height > 4096 ||
+      (meta.pages ?? 1) > 1 ||
+      (file.type && file.type !== `image/${meta.format}`)
+    )
+      throw new Error("Invalid image");
+    const bytes = await image
+      .rotate()
+      .resize({
+        width: 2048,
+        height: 2048,
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .toFormat(meta.format as "jpeg" | "png" | "webp")
+      .toBuffer();
+    if (bytes.length > 10 * 1024 * 1024) throw new Error("Image exceeds limit");
+    return {
+      bytes,
+      mimeType: `image/${meta.format}`,
+      extension: meta.format === "jpeg" ? "jpg" : meta.format!,
+    };
+  } catch {
+    throw new Error(
+      "Uploaded file photo is malformed, animated, oversized or does not match JPEG/PNG/WebP content.",
+    );
   }
-
-  if (String.fromCharCode(...bytes.slice(4, 8)) === "ftyp") {
-    return { mimeType: "video/mp4", extension: ".mp4" };
-  }
-  if (bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3) {
-    return { mimeType: "video/webm", extension: ".webm" };
-  }
-  return null;
 }
-
-export async function validateListingMedia(photos: File[], video: File | null): Promise<string | null> {
-  if (photos.length === 0) {
+async function inspectVideo(file: File) {
+  if (!["video/mp4", "video/webm"].includes(file.type))
+    throw new Error("Uploaded file video must be MP4 or WebM.");
+  const bytes = Buffer.from(await file.arrayBuffer());
+  try {
+    const output = await new Promise<string>((resolve, reject) => {
+      const child = execFile(
+        "ffprobe",
+        [
+          "-v",
+          "error",
+          "-protocol_whitelist",
+          "pipe",
+          "-show_entries",
+          "format=format_name:stream=codec_type,codec_name",
+          "-of",
+          "json",
+          "pipe:0",
+        ],
+        { timeout: 5000, maxBuffer: 65536 },
+        (error, stdout) => (error ? reject(error) : resolve(stdout)),
+      );
+      child.stdin?.on("error", () => {});
+      child.stdin?.end(bytes);
+    });
+    const info = JSON.parse(output) as {
+      format?: { format_name: string };
+      streams?: { codec_type: string; codec_name: string }[];
+    };
+    const match =
+      file.type === "video/mp4"
+        ? info.format?.format_name.includes("mp4")
+        : info.format?.format_name.includes("webm");
+    if (
+      !match ||
+      !info.streams?.some(
+        (s) =>
+          s.codec_type === "video" &&
+          ["h264", "hevc", "av1", "vp8", "vp9"].includes(s.codec_name),
+      )
+    )
+      throw new Error("Unsupported video");
+    return {
+      bytes,
+      mimeType: file.type,
+      extension: file.type === "video/mp4" ? "mp4" : "webm",
+    };
+  } catch {
+    throw new Error(
+      "Uploaded file video is malformed or unsupported; MP4/WebM validation requires ffprobe.",
+    );
+  }
+}
+export async function validateListingMedia(
+  photos: File[],
+  video: File | null,
+): Promise<string | null> {
+  if (!photos.length)
     return "Upload at least one item photo before publishing.";
-  }
-  if (photos.length > maxPhotos) {
-    return `Upload no more than ${maxPhotos} photos.`;
-  }
-  if (video && video.size > maxVideoSize) {
-    return "The optional video must be 30 MB or smaller.";
-  }
-
-  const files = [
-    ...photos.map((file) => ({ file, kind: "PHOTO" as const })),
-    ...(video ? [{ file: video, kind: "VIDEO" as const }] : []),
-  ];
-  if (files.reduce((total, entry) => total + entry.file.size, 0) > maxTotalSize) {
+  if (photos.length > 8) return "Upload no more than 8 photos.";
+  if (photos.some((f) => !f.size || f.size > 10 * 1024 * 1024))
+    return "Each photo must be between 1 byte and 10 MB.";
+  if (video && (!video.size || video.size > 30 * 1024 * 1024))
+    return "The optional video must be between 1 byte and 30 MB.";
+  if (photos.reduce((n, f) => n + f.size, video?.size ?? 0) > 60 * 1024 * 1024)
     return "The combined photo and video size must be 60 MB or smaller.";
+  try {
+    for (const f of photos) await sanitizePhoto(f);
+    if (video) await inspectVideo(video);
+  } catch (error) {
+    return error instanceof Error ? error.message : "Uploaded file is invalid.";
   }
-
-  for (const entry of files) {
-    if (entry.kind === "PHOTO" && entry.file.size > maxPhotoSize) {
-      return "Each photo must be 10 MB or smaller.";
-    }
-    const bytes = new Uint8Array(await entry.file.slice(0, 12).arrayBuffer());
-    const signature = identifyMedia(bytes, entry.kind);
-    if (!signature || (entry.file.type && entry.file.type !== signature.mimeType)) {
-      return "Upload valid JPEG, PNG, or WebP photos and an optional MP4 or WebM video.";
-    }
-  }
-
   return null;
 }
-
-export async function storeListingMedia(uploads: ListingMediaUpload[]): Promise<StoredListingMedia[]> {
-  const directory = path.join(process.cwd(), "public", "uploads", "listings");
+export async function storeListingMedia(
+  uploads: ListingMediaUpload[],
+): Promise<StoredListingMedia[]> {
+  const directory = path.join(process.cwd(), "storage", "listings");
   await mkdir(directory, { recursive: true });
-
   const stored: StoredListingMedia[] = [];
   try {
     for (const upload of uploads) {
-      const bytes = new Uint8Array(await upload.file.arrayBuffer());
-      const identified = identifyMedia(bytes, upload.kind);
-      if (!identified) {
-        throw new Error("Uploaded file content does not match an allowed media type.");
-      }
-      if (upload.file.type && upload.file.type !== identified.mimeType) {
-        throw new Error("Uploaded file content does not match its declared media type.");
-      }
-
-      const filename = `${randomUUID()}${identified.extension}`;
-      const filePath = path.join(directory, filename);
-      await writeFile(filePath, bytes, { flag: "wx" });
+      const media =
+          upload.kind === "PHOTO"
+            ? await sanitizePhoto(upload.file)
+            : await inspectVideo(upload.file),
+        filename = `${randomUUID()}.${media.extension}`,
+        filePath = path.join(directory, filename);
+      await writeFile(filePath, media.bytes, { flag: "wx" });
       stored.push({
         url: `/api/listing-media/${filename}`,
-        mimeType: identified.mimeType,
+        mimeType: media.mimeType,
         kind: upload.kind,
         filePath,
       });
@@ -110,7 +179,10 @@ export async function storeListingMedia(uploads: ListingMediaUpload[]): Promise<
     throw error;
   }
 }
-
-export async function deleteStoredListingMedia(media: StoredListingMedia[]): Promise<void> {
-  await Promise.all(media.map((entry) => unlink(entry.filePath).catch(() => undefined)));
+export async function deleteStoredListingMedia(
+  media: StoredListingMedia[],
+): Promise<void> {
+  await Promise.all(
+    media.map((m) => unlink(m.filePath).catch(() => undefined)),
+  );
 }

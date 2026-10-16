@@ -111,7 +111,7 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
           Price
           <input
             type="number"
-            min="1"
+            min="0.01"
             step="0.01"
             value={price}
             onChange={(event) => setPrice(event.target.value)}

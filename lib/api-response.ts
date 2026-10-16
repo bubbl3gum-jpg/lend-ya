@@ -1,3 +1,4 @@
+import { MarketplaceRestrictionError } from "@/lib/marketplace-permissions";
 export function apiError(message: string, status: number): Response {
   return Response.json({ error: message }, { status });
 }
@@ -6,7 +7,25 @@ export async function readJsonObject(
   request: Request,
 ): Promise<Record<string, unknown> | null> {
   try {
-    const body: unknown = await request.json();
+    const reader = request.body?.getReader();
+    if (!reader) return null;
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        size += value.byteLength;
+        if (size > 32768) {
+          await reader.cancel();
+          return null;
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+    const body: unknown = JSON.parse(Buffer.concat(chunks).toString("utf8"));
     if (body === null || typeof body !== "object" || Array.isArray(body)) {
       return null;
     }
@@ -38,6 +57,8 @@ export async function readOptionalJsonObject(
 }
 
 export function internalServerError(context: string, error: unknown): Response {
+  if (error instanceof MarketplaceRestrictionError)
+    return apiError(error.message, 403);
   console.error(`[${context}]`, error);
   return apiError("Internal server error", 500);
 }

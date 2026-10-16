@@ -1,0 +1,99 @@
+name: Verify MVP
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: lend_ya_booking_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 55433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d lend_ya_booking_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_booking_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install browser and media verification dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          npx playwright install --with-deps chromium
+          node -e 'const { chromium } = require("@playwright/test"); require("node:fs").appendFileSync(process.env.GITHUB_ENV, "CHROMIUM_PATH=" + chromium.executablePath() + "\n");'
+      - name: Prepare separate disposable databases
+        run: |
+          node <<'JS'
+          const {Pool}=require('pg');
+          const pool=new Pool({connectionString:process.env.DATABASE_URL});
+          (async()=>{for(const db of ['lend_ya_admin_test','lend_ya_moderation_test','lend_ya_migration_test','lend_ya_mvp_test'])await pool.query(`CREATE DATABASE "${db}"`);await pool.end();})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          JS
+      - run: npx prisma validate --config prisma7.config.ts
+      - run: npx prisma generate --config prisma7.config.ts
+      - run: npx prisma migrate deploy --config prisma7.config.ts
+      - run: npx next typegen
+      - run: npx tsc --noEmit
+      - run: npm run lint
+      - run: npm run test:unit
+      - run: npm run build
+      - name: Rental API and two-user browser/restart tests
+        env:
+          TEST_DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_booking_test
+        run: npm run test:integration
+      - name: Existing admin API and browser regression
+        env:
+          DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_admin_test
+          TEST_DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_admin_test
+        run: |
+          npx prisma migrate deploy --config prisma7.config.ts
+          npm run test:admin
+      - name: Moderation, evidence, audit and conflict scenarios
+        env:
+          DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_moderation_test
+          TEST_DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_moderation_test
+        run: |
+          npx prisma migrate deploy --config prisma7.config.ts
+          npm run test:moderation
+      - name: Populated database upgrade preservation
+        env:
+          TEST_DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_migration_test
+        run: npm run test:migration
+      - name: Marketplace, authentication and production-cookie security
+        env:
+          TEST_DATABASE_URL: postgresql://postgres@localhost:55433/lend_ya_mvp_test
+        run: npm run test:mvp
+      - name: Dependency advisory evidence
+        if: always()
+        run: |
+          npm audit --json > npm-audit.json || true
+          npm audit --omit=dev --json > npm-runtime-audit.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-evidence
+          path: |
+            npm-audit.json
+            npm-runtime-audit.json
+            /tmp/lend-ya-*.log
+            /tmp/lend-ya-*.png

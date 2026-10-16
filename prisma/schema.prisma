@@ -6,6 +6,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+}
+
 enum UserRole {
   USER
   ADMIN
@@ -37,6 +42,7 @@ enum BookingStatus {
   COMPLETED
   DISPUTED
   CANCELLED
+  ADMIN_CLOSED
 }
 
 enum DisputeStatus {
@@ -45,31 +51,34 @@ enum DisputeStatus {
 }
 
 model User {
-  id                Int      @id @default(autoincrement())
-  name              String
-  email             String   @unique
-  passwordHash      String
-  role              UserRole @default(USER)
+  id                 Int      @id @default(autoincrement())
+  name               String
+  email              String   @unique
+  passwordHash       String
+  role               UserRole @default(USER)
+  accountStatus      AccountStatus @default(ACTIVE)
+  adminAuditLogs     AdminAuditLog[]
   verificationStatus String   @default("UNVERIFIED")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  identityVerified Boolean @default(false)
-  trustScore Int?
+  identityVerified    Boolean          @default(false)
+  trustScore          Int?
   confidenceIndicator String?
-  reviewsWritten VerifiedReview[] @relation("ReviewAuthor")
-  reviewsReceived VerifiedReview[] @relation("ReviewSubject")
+  reviewsWritten      VerifiedReview[] @relation("ReviewAuthor")
+  reviewsReceived     VerifiedReview[] @relation("ReviewSubject")
 
-  listings        Listing[]
-  listingReports  ListingReport[]
-  bookingsAsOwner Booking[] @relation("BookingOwner")
-  bookingsAsRenter Booking[] @relation("BookingRenter")
-  authSessions    AuthSession[]
-  handoffsPerformed Handoff[] @relation("HandoffPerformer")
-  handoffsConfirmed Handoff[] @relation("HandoffConfirmer")
-  returnsInitiated Return[] @relation("ReturnInitiator")
-  returnsConfirmed Return[] @relation("ReturnConfirmer")
-  disputesOpened   Dispute[] @relation("DisputeOpener")
+  listings          Listing[]
+  listingReports    ListingReport[]
+  bookingsAsOwner   Booking[]              @relation("BookingOwner")
+  bookingsAsRenter  Booking[]              @relation("BookingRenter")
+  authSessions      AuthSession[]
+  handoffsPerformed Handoff[]              @relation("HandoffPerformer")
+  handoffsConfirmed Handoff[]              @relation("HandoffConfirmer")
+  returnsInitiated  Return[]               @relation("ReturnInitiator")
+  returnsConfirmed  Return[]               @relation("ReturnConfirmer")
+  disputesOpened    Dispute[]              @relation("DisputeOpener")
+  evidencePhotos    BookingEvidencePhoto[]
 }
 
 model AuthSession {
@@ -96,24 +105,25 @@ model MrtStation {
 }
 
 model Listing {
-  id          Int          @id @default(autoincrement())
-  ownerId     Int
-  title       String
-  description String
-  category    String
+  id              Int           @id @default(autoincrement())
+  ownerId         Int
+  title           String
+  description     String
+  category        String
   categoryDetails Json?
-  price       Decimal      @db.Decimal(12, 2)
-  deposit     Decimal?     @db.Decimal(12, 2)
-  condition   String
-  status      ListingStatus @default(ACTIVE)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  price           Decimal       @db.Decimal(12, 2)
+  deposit         Decimal?      @db.Decimal(12, 2)
+  condition       String
+  status          ListingStatus @default(ACTIVE)
+  adminRestricted Boolean @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
-  owner            User            @relation(fields: [ownerId], references: [id])
+  owner             User             @relation(fields: [ownerId], references: [id])
   supportedStations ListingStation[]
-  bookings         Booking[]
-  media            ListingMedia[]
-  reports          ListingReport[]
+  bookings          Booking[]
+  media             ListingMedia[]
+  reports           ListingReport[]
 }
 
 model ListingStation {
@@ -121,35 +131,40 @@ model ListingStation {
   listingId Int
   stationId Int
 
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listing Listing    @relation(fields: [listingId], references: [id], onDelete: Cascade)
   station MrtStation @relation(fields: [stationId], references: [id], onDelete: Restrict)
 
   @@unique([listingId, stationId])
 }
 
 model Booking {
-  id               Int          @id @default(autoincrement())
-  listingId        Int
-  ownerId          Int
-  renterId         Int
-  meetingStationId Int
-  startAt          DateTime
-  endAt            DateTime
-  status           BookingStatus @default(PENDING)
-  totalPrice       Decimal      @db.Decimal(12, 2)
-  deposit          Decimal?     @db.Decimal(12, 2)
-  notes            String?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  id                 Int           @id @default(autoincrement())
+  listingId          Int
+  ownerId            Int
+  renterId           Int
+  meetingStationId   Int
+  startAt            DateTime
+  endAt              DateTime
+  status             BookingStatus @default(PENDING)
+  dailyPrice         Decimal?      @db.Decimal(12, 2)
+  cancelledBy        Int?
+  cancelledAt        DateTime?
+  cancellationReason String?
+  totalPrice         Decimal       @db.Decimal(12, 2)
+  deposit            Decimal?      @db.Decimal(12, 2)
+  notes              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 
-  listing        Listing     @relation(fields: [listingId], references: [id])
-  owner          User        @relation("BookingOwner", fields: [ownerId], references: [id])
-  renter         User        @relation("BookingRenter", fields: [renterId], references: [id])
-  meetingStation MrtStation  @relation(fields: [meetingStationId], references: [id])
+  listing        Listing                @relation(fields: [listingId], references: [id])
+  owner          User                   @relation("BookingOwner", fields: [ownerId], references: [id])
+  renter         User                   @relation("BookingRenter", fields: [renterId], references: [id])
+  meetingStation MrtStation             @relation(fields: [meetingStationId], references: [id])
   handoff        Handoff?
   return         Return?
-  dispute        Dispute?
+  disputes       Dispute[]
   reviews        VerifiedReview[]
+  evidencePhotos BookingEvidencePhoto[]
 
   @@index([listingId, status])
   @@index([listingId, status, startAt, endAt])
@@ -158,67 +173,84 @@ model Booking {
 }
 
 model Handoff {
-  id                 Int      @id @default(autoincrement())
-  bookingId          Int      @unique
-  performedBy        Int
-  confirmedBy        Int?
-  timestamp          DateTime @default(now())
-  confirmedAt        DateTime?
-  photos             Json?
-  checklist          Json?
-  serialNumber       String?
-  conditionNotes     String?
-  conditionConfirmed Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  ownerConditionConfirmed Boolean   @default(false)
+  borrowerConditionNotes  String?
+  borrowerChecklist       Json?
+  borrowerPhotos          Json?
+  id                      Int       @id @default(autoincrement())
+  bookingId               Int       @unique
+  performedBy             Int
+  confirmedBy             Int?
+  timestamp               DateTime  @default(now())
+  confirmedAt             DateTime?
+  photos                  Json?
+  checklist               Json?
+  serialNumber            String?
+  conditionNotes          String?
+  conditionConfirmed      Boolean   @default(false)
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
-  booking     Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  performer   User    @relation("HandoffPerformer", fields: [performedBy], references: [id])
-  confirmer   User?   @relation("HandoffConfirmer", fields: [confirmedBy], references: [id])
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  performer User    @relation("HandoffPerformer", fields: [performedBy], references: [id])
+  confirmer User?   @relation("HandoffConfirmer", fields: [confirmedBy], references: [id])
 }
 
 model Return {
-  id                 Int      @id @default(autoincrement())
-  bookingId          Int      @unique
-  photos             Json?
-  checklist          Json?
-  initiatedBy        Int
-  confirmedBy        Int?
-  timestamp          DateTime @default(now())
-  confirmedAt        DateTime?
-  conditionNotes     String?
-  conditionConfirmed Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  returnConfirmed     Boolean   @default(false)
+  inspectedBy         Int?
+  inspectedAt         DateTime?
+  inspectionAccepted  Boolean?
+  inspectionNotes     String?
+  inspectionChecklist Json?
+  inspectionPhotos    Json?
+  id                  Int       @id @default(autoincrement())
+  bookingId           Int       @unique
+  photos              Json?
+  checklist           Json?
+  initiatedBy         Int
+  confirmedBy         Int?
+  timestamp           DateTime  @default(now())
+  confirmedAt         DateTime?
+  conditionNotes      String?
+  conditionConfirmed  Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
-  booking    Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  initiator  User    @relation("ReturnInitiator", fields: [initiatedBy], references: [id])
-  confirmer  User?   @relation("ReturnConfirmer", fields: [confirmedBy], references: [id])
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  initiator User    @relation("ReturnInitiator", fields: [initiatedBy], references: [id])
+  confirmer User?   @relation("ReturnConfirmer", fields: [confirmedBy], references: [id])
 }
 
 model Dispute {
   id          Int           @id @default(autoincrement())
-  bookingId   Int           @unique
+  bookingId   Int
   openedBy    Int
   reason      String
   description String
   status      DisputeStatus @default(OPEN)
   createdAt   DateTime      @default(now())
   resolvedAt  DateTime?
+  resolvedBy Int?
+  finding String?
+  decisionSummary String?
+  adminNotes String?
+  bookingOutcome String?
 
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Restrict)
   opener  User    @relation("DisputeOpener", fields: [openedBy], references: [id])
 
   @@index([status, createdAt])
+  @@index([bookingId, createdAt])
 }
 
 model ListingMedia {
-  id        Int             @id @default(autoincrement())
+  id        Int              @id @default(autoincrement())
   listingId Int
   url       String
   mimeType  String
   kind      ListingMediaKind
-  createdAt DateTime        @default(now())
+  createdAt DateTime         @default(now())
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
@@ -226,31 +258,73 @@ model ListingMedia {
 }
 
 model ListingReport {
-  id          Int                @id @default(autoincrement())
+  id          Int                 @id @default(autoincrement())
   listingId   Int
   reporterId  Int
   reason      String
   description String?
   status      ListingReportStatus @default(OPEN)
-  createdAt   DateTime           @default(now())
+  resolvedAt DateTime?
+  resolvedBy Int?
+  decisionReason String?
+  createdAt   DateTime            @default(now())
 
-  listing  Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  reporter User    @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  listing  Listing @relation(fields: [listingId], references: [id], onDelete: Restrict)
+  reporter User    @relation(fields: [reporterId], references: [id], onDelete: Restrict)
 
   @@unique([listingId, reporterId])
   @@index([status, createdAt])
 }
+
 model VerifiedReview {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   bookingId Int
-  authorId Int
+  authorId  Int
   subjectId Int
-  rating Int
-  comment String?
+  rating    Int
+  comment   String?
   createdAt DateTime @default(now())
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Restrict)
-  author User @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Restrict)
-  subject User @relation("ReviewSubject", fields: [subjectId], references: [id], onDelete: Restrict)
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  author    User     @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  subject   User     @relation("ReviewSubject", fields: [subjectId], references: [id], onDelete: Restrict)
+
   @@unique([bookingId, authorId])
   @@index([subjectId])
+}
+
+model BookingEvidencePhoto {
+  id         String   @id @default(uuid())
+  bookingId  Int
+  uploaderId Int
+  stage      String   @db.VarChar(24)
+  mimeType   String   @db.VarChar(32)
+  data       Bytes
+  createdAt  DateTime @default(now())
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  uploader   User     @relation(fields: [uploaderId], references: [id], onDelete: Restrict)
+
+  @@index([bookingId, stage])
+}
+
+model AdminAuditLog {
+  id Int @id @default(autoincrement())
+  adminId Int
+  action String @db.VarChar(64)
+  targetType String @db.VarChar(32)
+  targetId Int
+  reason String @db.VarChar(2000)
+  previousState Json
+  newState Json
+  createdAt DateTime @default(now())
+  admin User @relation(fields: [adminId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  @@index([createdAt, id])
+  @@index([targetType, targetId, createdAt])
+  @@index([adminId, createdAt])
+}
+
+model AuthRateLimit {
+  key String @id @db.VarChar(64)
+  attempts Int
+  expiresAt DateTime
+  @@index([expiresAt])
 }

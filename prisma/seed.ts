@@ -6,7 +6,9 @@ import { PrismaPg } from "@prisma/adapter-pg";
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL must be set before running the development seed.");
+  throw new Error(
+    "DATABASE_URL must be set before running the development seed.",
+  );
 }
 
 const databaseHost = new URL(databaseUrl).hostname;
@@ -37,12 +39,7 @@ function addDays(date: Date, days: number): Date {
 async function main(): Promise<void> {
   const alice = await prisma.user.upsert({
     where: { email: "alice@example.test" },
-    update: {
-      name: "Alice",
-      role: "USER",
-      verificationStatus: "VERIFIED",
-      passwordHash: developmentPasswordHash("alice@example.test"),
-    },
+    update: {},
     create: {
       name: "Alice",
       email: "alice@example.test",
@@ -54,11 +51,7 @@ async function main(): Promise<void> {
 
   const bob = await prisma.user.upsert({
     where: { email: "bob@example.test" },
-    update: {
-      name: "Bob",
-      role: "USER",
-      passwordHash: developmentPasswordHash("bob@example.test"),
-    },
+    update: {},
     create: {
       name: "Bob",
       email: "bob@example.test",
@@ -69,12 +62,7 @@ async function main(): Promise<void> {
 
   const charlie = await prisma.user.upsert({
     where: { email: "charlie@example.test" },
-    update: {
-      name: "Charlie",
-      role: "USER",
-      verificationStatus: "VERIFIED",
-      passwordHash: developmentPasswordHash("charlie@example.test"),
-    },
+    update: {},
     create: {
       name: "Charlie",
       email: "charlie@example.test",
@@ -85,14 +73,36 @@ async function main(): Promise<void> {
   });
 
   const stations = await Promise.all([
-    prisma.mrtStation.upsert({ where: { code: "TPE" }, update: { name: "Taipei Main Station" }, create: { code: "TPE", name: "Taipei Main Station" } }),
-    prisma.mrtStation.upsert({ where: { code: "ZSH" }, update: { name: "Zhongshan" }, create: { code: "ZSH", name: "Zhongshan" } }),
-    prisma.mrtStation.upsert({ where: { code: "XIM" }, update: { name: "Ximen" }, create: { code: "XIM", name: "Ximen" } }),
-    prisma.mrtStation.upsert({ where: { code: "JNT" }, update: { name: "Jiantan" }, create: { code: "JNT", name: "Jiantan" } }),
-    prisma.mrtStation.upsert({ where: { code: "SSH" }, update: { name: "Songshan" }, create: { code: "SSH", name: "Songshan" } }),
+    prisma.mrtStation.upsert({
+      where: { code: "TPE" },
+      update: { name: "Taipei Main Station" },
+      create: { code: "TPE", name: "Taipei Main Station" },
+    }),
+    prisma.mrtStation.upsert({
+      where: { code: "ZSH" },
+      update: { name: "Zhongshan" },
+      create: { code: "ZSH", name: "Zhongshan" },
+    }),
+    prisma.mrtStation.upsert({
+      where: { code: "XIM" },
+      update: { name: "Ximen" },
+      create: { code: "XIM", name: "Ximen" },
+    }),
+    prisma.mrtStation.upsert({
+      where: { code: "JNT" },
+      update: { name: "Jiantan" },
+      create: { code: "JNT", name: "Jiantan" },
+    }),
+    prisma.mrtStation.upsert({
+      where: { code: "SSH" },
+      update: { name: "Songshan" },
+      create: { code: "SSH", name: "Songshan" },
+    }),
   ]);
 
-  const stationByCode = Object.fromEntries(stations.map((station) => [station.code, station]));
+  const stationByCode = Object.fromEntries(
+    stations.map((station) => [station.code, station]),
+  );
 
   const ensureListing = async (input: {
     ownerId: number;
@@ -109,33 +119,24 @@ async function main(): Promise<void> {
       where: { ownerId: input.ownerId, title: input.title },
     });
 
-    const listing = existing
-      ? await prisma.listing.update({
-          where: { id: existing.id },
-          data: {
-            description: input.description,
-            category: input.category,
-            price: input.price,
-            deposit: input.deposit ?? null,
-            condition: input.condition,
-            status: input.status,
-          },
-        })
-      : await prisma.listing.create({
-          data: {
-            ownerId: input.ownerId,
-            title: input.title,
-            description: input.description,
-            category: input.category,
-            price: input.price,
-            deposit: input.deposit ?? null,
-            condition: input.condition,
-            status: input.status,
-          },
-        });
+    if (existing) return existing;
+    const listing = await prisma.listing.create({
+      data: {
+        ownerId: input.ownerId,
+        title: input.title,
+        description: input.description,
+        category: input.category,
+        price: input.price,
+        deposit: input.deposit ?? null,
+        condition: input.condition,
+        status: input.status,
+      },
+    });
 
     const stationIds = input.stationCodes.map((code) => stationByCode[code].id);
-    await prisma.listingStation.deleteMany({ where: { listingId: listing.id } });
+    await prisma.listingStation.deleteMany({
+      where: { listingId: listing.id },
+    });
     await Promise.all(
       stationIds.map((stationId) =>
         prisma.listingStation.create({
@@ -153,7 +154,8 @@ async function main(): Promise<void> {
   const camera = await ensureListing({
     ownerId: alice.id,
     title: "Sony A7 III Camera",
-    description: "Full-frame camera with body, charger, battery, and carry case. Great for travel, events, and portraits.",
+    description:
+      "Full-frame camera with body, charger, battery, and carry case. Great for travel, events, and portraits.",
     category: "Camera",
     price: "800.00",
     deposit: "10000.00",
@@ -165,7 +167,8 @@ async function main(): Promise<void> {
   await ensureListing({
     ownerId: alice.id,
     title: "Three-Person Camping Tent",
-    description: "Durable hiking tent with rainfly, poles, and groundsheet. Ready for a weekend trip.",
+    description:
+      "Durable hiking tent with rainfly, poles, and groundsheet. Ready for a weekend trip.",
     category: "Camping",
     price: "200.00",
     deposit: "1000.00",
@@ -177,7 +180,8 @@ async function main(): Promise<void> {
   const cordlessDrill = await ensureListing({
     ownerId: charlie.id,
     title: "Cordless Drill Driver",
-    description: "18 V drill driver with two batteries, charger, and compact carry case.",
+    description:
+      "18 V drill driver with two batteries, charger, and compact carry case.",
     category: "Tools",
     price: "150.00",
     deposit: "1000.00",
@@ -186,67 +190,55 @@ async function main(): Promise<void> {
     stationCodes: ["TPE", "SSH"],
   });
 
-  const startA = addDays(new Date(), 2);
-  const endA = addDays(new Date(), 4);
-  const startB = addDays(new Date(), 8);
+  const now = new Date();
+  const startA = addDays(now, 2);
+  const endA = addDays(now, 4);
+  const startB = addDays(now, 8);
 
-  await prisma.booking.upsert({
-    where: { id: 1 },
-    update: {
-      listingId: camera.id,
-      ownerId: alice.id,
-      renterId: bob.id,
-      meetingStationId: stationByCode.TPE.id,
-      startAt: startA,
-      endAt: endA,
-      status: "CONFIRMED",
-      totalPrice: "1600.00",
-      deposit: "10000.00",
-      notes: "Pickup at Taipei Main Station.",
-    },
-    create: {
-      listingId: camera.id,
-      ownerId: alice.id,
-      renterId: bob.id,
-      meetingStationId: stationByCode.TPE.id,
-      startAt: startA,
-      endAt: endA,
-      status: "CONFIRMED",
-      totalPrice: "1600.00",
-      deposit: "10000.00",
-      notes: "Pickup at Taipei Main Station.",
-    },
-  });
+  if (
+    !(await prisma.booking.findFirst({
+      where: { listingId: camera.id, renterId: bob.id },
+    }))
+  )
+    await prisma.booking.create({
+      data: {
+        listingId: camera.id,
+        ownerId: alice.id,
+        renterId: bob.id,
+        meetingStationId: stationByCode.TPE.id,
+        startAt: startA,
+        endAt: endA,
+        status: "CONFIRMED",
+        totalPrice: "1600.00",
+        deposit: "10000.00",
+        notes: "Pickup at Taipei Main Station.",
+      },
+    });
 
-  await prisma.booking.upsert({
-    where: { id: 2 },
-    update: {
-      listingId: cordlessDrill.id,
-      ownerId: charlie.id,
-      renterId: bob.id,
-      meetingStationId: stationByCode.SSH.id,
-      startAt: startB,
-      endAt: addDays(startB, 1),
-      status: "PENDING",
-      totalPrice: "150.00",
-      deposit: "1000.00",
-      notes: "Pickup with both batteries and charger.",
-    },
-    create: {
-      listingId: cordlessDrill.id,
-      ownerId: charlie.id,
-      renterId: bob.id,
-      meetingStationId: stationByCode.SSH.id,
-      startAt: startB,
-      endAt: addDays(startB, 1),
-      status: "PENDING",
-      totalPrice: "150.00",
-      deposit: "1000.00",
-      notes: "Pickup with both batteries and charger.",
-    },
-  });
+  if (
+    !(await prisma.booking.findFirst({
+      where: { listingId: cordlessDrill.id, renterId: bob.id },
+    }))
+  )
+    await prisma.booking.create({
+      data: {
+        listingId: cordlessDrill.id,
+        ownerId: charlie.id,
+        renterId: bob.id,
+        meetingStationId: stationByCode.SSH.id,
+        startAt: startB,
+        endAt: addDays(startB, 1),
+        status: "PENDING",
+        totalPrice: "150.00",
+        deposit: "1000.00",
+        notes: "Pickup with both batteries and charger.",
+      },
+    });
 
-  console.log("Seeded demo users, MRT stations, listings, and sample bookings.");
+  console.log(
+    "Prepared missing local demo records without replacing existing users or rentals.",
+  );
+  await prisma.$disconnect();
 }
 
 main().catch((error) => {

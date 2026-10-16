@@ -7,7 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "admin:create": "tsx scripts/create-admin.ts"
+    "admin:create": "tsx scripts/create-admin.ts",
+    "test:unit": "tsx --test tests/booking-time.test.ts tests/rental-evidence.test.ts",
+    "test:integration": "bash scripts/test-rental.sh",
+    "test:admin": "tsx --test tests/admin.integration.test.ts",
+    "test:moderation": "tsx --test tests/moderation.integration.test.ts",
+    "test:migration": "tsx --test tests/moderation-migration.test.ts",
+    "test:mvp": "tsx --test tests/mvp-security.test.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
@@ -16,9 +22,11 @@
     "pg": "^8.23.1",
     "prisma": "^7.10.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pg": "^8.23.1",
@@ -29,5 +37,10 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "overrides": {
+    "prisma": {
+      "mysql2": "3.24.6"
+    }
   }
 }

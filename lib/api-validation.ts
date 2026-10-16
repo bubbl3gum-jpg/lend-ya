@@ -17,7 +17,7 @@ export function parsePathId(value: string): number | null {
   }
 
   const id = Number(value);
-  return Number.isSafeInteger(id) ? id : null;
+  return Number.isSafeInteger(id) && id <= 2147483647 ? id : null;
 }
 
 export function parseRequiredString(
