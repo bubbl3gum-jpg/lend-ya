@@ -7,7 +7,8 @@ import { EditListingForm } from "@/components/edit-listing-form";
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
  const user = await getCurrentUser(); if (!user) redirect("/login");
  const id = parsePathId((await params).id); if (id === null) notFound();
- const listing = await prisma.listing.findUnique({ where: { id } });
+ const listing = await prisma.listing.findUnique({ where: { id }, include: { supportedStations: true } });
  if (!listing || listing.ownerId !== user.id) notFound();
- return <main><SiteHeader /><div className="mx-auto max-w-2xl p-6"><h1 className="mb-6 text-3xl font-semibold">Edit listing</h1><EditListingForm listing={{ id, title: listing.title, description: listing.description, condition: listing.condition, status: listing.status, price: listing.price.toString(), deposit: listing.deposit?.toString() ?? "" }} /></div></main>;
+ const stations = await prisma.mrtStation.findMany({where:{operational:true,canonicalId:{not:null}},orderBy:{name:"asc"}});
+ return <main><SiteHeader /><div className="mx-auto max-w-2xl p-6"><h1 className="mb-6 text-3xl font-semibold">Edit listing</h1><EditListingForm stations={stations} listing={{ stationIds: listing.supportedStations.map(s => s.stationId), id, title: listing.title, description: listing.description, condition: listing.condition, status: listing.status, price: listing.price.toString(), deposit: listing.deposit?.toString() ?? "" }} /></div></main>;
 }

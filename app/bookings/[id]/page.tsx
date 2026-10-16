@@ -1,3 +1,4 @@
+import { stationSelect, stationLabel } from "@/lib/mrt/network";
 import { VerifiedReviewForm } from "@/components/verified-review-form";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -49,7 +50,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       },
       owner: { select: { id: true, name: true, email: true } },
       renter: { select: { id: true, name: true, email: true } },
-      meetingStation: { select: { code: true, name: true } },
+      meetingStation: { select: stationSelect },
       handoff: {
         select: {
           performedBy: true,
@@ -113,7 +114,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
             </div>
             <div>
               <p className="font-medium text-slate-900">Meeting station</p>
-              <p>{booking.meetingStation.code} · {booking.meetingStation.name}</p>
+              <p>{stationLabel(booking.meetingStation)}</p><p className="mt-2">This physical station is a meeting area. Agree on an exact exit or meeting point with the other participant; no exit has been confirmed here.</p>
             </div>
             <div>
               <p className="font-medium text-slate-900">Total price</p>
@@ -142,7 +143,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
         </div>
 
         <section className="mt-8 border-t border-slate-200 pt-6">
-          <h2 className="text-lg font-semibold text-slate-900">Handoff and return</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Handoff and return</h2><p className="mt-2 text-sm">Agreed handoff location: {stationLabel(booking.meetingStation)}</p>
           <div className="mt-3 grid gap-4 text-sm text-slate-600 md:grid-cols-2">
             <div>
               <p className="font-medium text-slate-900">Pickup handoff</p>

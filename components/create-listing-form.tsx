@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { categoryDetailFields, listingCategories, type ListingCategory } from "@/lib/listing-options";
 
-type Station = { id: number; code: string; name: string };
+import { MRTStationSelector } from "./mrt/MRTStationSelector";
+import type { DatabaseStation as Station } from "@/lib/mrt/network";
 
 type CreateListingFormProps = {
   stations: Station[];
@@ -24,14 +25,6 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
   const [video, setVideo] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  function toggleStation(stationId: number) {
-    setSelectedStations((current) =>
-      current.includes(stationId)
-        ? current.filter((id) => id !== stationId)
-        : [...current, stationId],
-    );
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -172,17 +165,7 @@ export function CreateListingForm({ stations }: CreateListingFormProps) {
         </label>
       </div>
 
-      <div>
-        <p className="mb-2 text-sm font-medium text-slate-700">Pickup stations</p>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {stations.map((station) => (
-            <label key={station.id} className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700">
-              <input type="checkbox" checked={selectedStations.includes(station.id)} onChange={() => toggleStation(station.id)} />
-              {station.name}
-            </label>
-          ))}
-        </div>
-      </div>
+      <MRTStationSelector mode="owner" stations={stations} selectedIds={selectedStations} onChange={setSelectedStations} />
 
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 

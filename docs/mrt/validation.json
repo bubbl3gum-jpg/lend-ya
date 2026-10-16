@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-16T08:02:01.253Z",
+  "listingId": 8,
+  "bookingId": 7,
+  "checks": [
+    "120 canonical mappings, idempotent import, five legacy IDs and historical booking foreign keys",
+    "Owner creates listing through map, multipart photo/video upload and PostgreSQL persistence",
+    "Owner edits availability; unauthorized and manipulated updates rejected",
+    "Borrower explicit selection, disabled stations, search/zoom/pan, bilingual booking and integer station FK",
+    "Removed or mismatched station requests rejected; historical meeting station unchanged",
+    "Concurrent station removal wins before blocked booking; no stale booking persisted",
+    "Mobile fullscreen modal, touch selection, zoom/reset, no horizontal overflow",
+    "Original accept → dual handoff → return → inspection → completed lifecycle and evidence",
+    "Existing dispute authorization, authentication, logout and login"
+  ],
+  "browserErrors": []
+}

@@ -1,3 +1,4 @@
+import { stationSelect } from "@/lib/mrt/network";
 import { apiError, internalServerError, readJsonObject } from "@/lib/api-response";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -31,7 +32,7 @@ const bookingSelect = {
   },
   owner: { select: { id: true, name: true, email: true } },
   renter: { select: { id: true, name: true, email: true } },
-  meetingStation: { select: { id: true, code: true, name: true } },
+  meetingStation: { select: stationSelect },
   handoff: {
     select: {
       id: true,

@@ -37,3 +37,7 @@ The original migrations are retained as immutable history. The forward migration
 A fresh database should use `prisma migrate deploy` to apply the complete history and arrive at the current Booking-based schema. This workspace's pre-existing local database had already been created with `db push`; after verifying that its schema exactly matched the current Prisma schema, its migration history was baselined with `prisma migrate resolve`. Do not replay the historical migrations against a `db push`-created database without first verifying and baselining that database.
 
 The `20261012120000_physical_listing_media_reports` migration deactivates legacy service listings, removes service listing types, and adds category details, listing media, and basic listing reports. Photo and video files are stored on local disk under `public/uploads/listings`; this MVP storage is not durable on ephemeral hosts and should be replaced with persistent object storage before production deployment. Uploaded files are excluded from Git.
+
+## Official MRT handoff map
+
+Listing creation/editing and booking now use the official 120-location MRT selector. Apply the forward migrations and run `npm run mrt:import`; see [migration, setup, and validation details](docs/mrt/INTEGRATION.md). Station availability remains per listing, and existing bookings retain their agreed meeting stations.
