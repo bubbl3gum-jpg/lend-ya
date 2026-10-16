@@ -10,6 +10,7 @@ export default async function NewListingPage() {
   }
 
   const stations = await prisma.mrtStation.findMany({
+    where: {operational:true,canonicalId:{not:null}},
     orderBy: { name: "asc" },
   });
 

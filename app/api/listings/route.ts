@@ -1,3 +1,4 @@
+import { parseStationIds, eligibleStationWhere, stationSelect } from "@/lib/mrt/network";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { apiError, internalServerError } from "@/lib/api-response";
@@ -35,22 +36,10 @@ const listingSelect = {
   },
   supportedStations: {
     select: {
-      station: { select: { id: true, code: true, name: true } },
+      station: { select: stationSelect },
     },
   },
 } satisfies Prisma.ListingSelect;
-
-function normalizeStationIds(value: unknown): number[] | null {
-  if (!Array.isArray(value)) {
-    return null;
-  }
-
-  const ids = value
-    .map((entry) => (typeof entry === "number" ? entry : Number(entry)))
-    .filter((entry) => Number.isInteger(entry) && entry > 0);
-
-  return ids.length ? [...new Set(ids)] : null;
-}
 
 export async function GET(): Promise<Response> {
   try {
@@ -98,7 +87,7 @@ export async function POST(request: Request): Promise<Response> {
     } catch {
       stationInput = null;
     }
-    const stationIds = normalizeStationIds(stationInput);
+    const stationIds = parseStationIds(stationInput);
 
     const photoEntries = formData.getAll("photos");
     const videoEntry = formData.get("video");
@@ -148,7 +137,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const validStations = await prisma.mrtStation.findMany({
-      where: { id: { in: stationIds } },
+      where: { id: { in: stationIds }, ...eligibleStationWhere },
       select: { id: true },
     });
     if (validStations.length !== stationIds.length) {

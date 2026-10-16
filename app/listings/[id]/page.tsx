@@ -1,3 +1,4 @@
+import { stationSelect } from "@/lib/mrt/network";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,7 +33,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
       condition: true,
       status: true,
       owner: { select: { id: true, name: true, email: true } },
-      supportedStations: { select: { station: { select: { id: true, code: true, name: true } } } },
+      supportedStations: { select: { station: { select: stationSelect } } },
       media: { orderBy: { createdAt: "asc" }, select: { id: true, url: true, mimeType: true, kind: true } },
       bookings: {
         where: { status: { in: ["HANDOFF_PENDING", "IN_USE", "RETURN_PENDING", "INSPECTION", "DISPUTED"] } },

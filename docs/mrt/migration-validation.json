@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-16T08:01:01.391Z",
+  "passed": [
+    "Historical migration chain",
+    "Forward migration preserves five legacy keys, listing relations, booked Jiantan station",
+    "120 canonical rows",
+    "Idempotent import twice",
+    "Prisma schema diff empty",
+    "Fresh empty-database migration chain"
+  ]
+}

@@ -42,3 +42,6 @@ next-env.d.ts
 
 /app/generated/prisma
 /public/uploads/
+
+# Isolated regression run builds, logs, screenshots and reports
+/.test-artifacts/
