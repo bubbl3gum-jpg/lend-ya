@@ -1,19 +1,12 @@
 import "dotenv/config";
-import { Client } from "pg";
+import { connectTestDatabase } from "./support/test-database";
+import path from "node:path";
 import assert from "node:assert/strict";
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 async function main() {
+  const client = await connectTestDatabase();
   const url = new URL(process.env.DATABASE_URL!);
-  if (!["localhost", "127.0.0.1"].includes(url.hostname))
-    throw Error("Local migration validation only");
-  const admin = new Client({ connectionString: url.toString() });
-  await admin.connect();
-  const database = `mrt_migration_test_${Date.now()}`;
-  await admin.query(`CREATE DATABASE "${database}"`);
-  url.pathname = "/" + database;
-  const client = new Client({ connectionString: url.toString() });
-  await client.connect();
   try {
     const migrations = (await readdir("prisma/migrations"))
       .filter((s) => s !== "migration_lock.toml")
@@ -115,14 +108,15 @@ async function main() {
       ],
     };
     await writeFile(
-      "docs/mrt/migration-validation.json",
+      path.join(
+        process.env.MRT_TEST_ARTIFACT_DIR!,
+        "migration-validation.json",
+      ),
       JSON.stringify(report, null, 2) + "\n",
     );
     console.log(report);
   } finally {
     await client.end();
-    await admin.query(`DROP DATABASE "${database}"`);
-    await admin.end();
   }
 }
 main().catch((e) => {

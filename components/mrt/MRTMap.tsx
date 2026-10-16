@@ -120,7 +120,7 @@ export function MRTMap({
         onPointerDown={(e) => {
           if (!(e.target as Element).closest('[role="button"]')) {
             const p = point(e.clientX, e.clientY);
-            drag.current = { ...p, px: pan.x, py: pan.y };
+            drag.current = { x: p.x, y: p.y, px: pan.x, py: pan.y };
             e.currentTarget.setPointerCapture(e.pointerId);
           }
         }}

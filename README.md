@@ -41,3 +41,5 @@ The `20261012120000_physical_listing_media_reports` migration deactivates legacy
 ## Official MRT handoff map
 
 Listing creation/editing and booking now use the official 120-location MRT selector. Apply the forward migrations and run `npm run mrt:import`; see [migration, setup, and validation details](docs/mrt/INTEGRATION.md). Station availability remains per listing, and existing bookings retain their agreed meeting stations.
+
+The documented development origin is `http://localhost:3000`. Database-backed tests now require an explicit **new** `MRT_TEST_DATABASE_URL` named `hustlen_test_*`; they never use the shared development database by default. See [test setup and isolation](docs/mrt/INTEGRATION.md) and [targeted repair results](docs/MRT_REPAIR_REPORT.md).

@@ -10,8 +10,8 @@
     "admin:create": "tsx scripts/create-admin.ts",
     "mrt:import": "tsx scripts/import-mrt.ts",
     "test": "tsx --test tests/*.test.ts",
-    "test:integration": "tsx tests/mrt-integration.ts",
-    "test:migration": "tsx tests/mrt-migration.ts"
+    "test:integration": "tsx tests/run-isolated.ts",
+    "test:migration": "tsx tests/run-isolated.ts --migration"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

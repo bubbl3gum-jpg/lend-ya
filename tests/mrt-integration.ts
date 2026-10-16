@@ -1,24 +1,26 @@
 import "dotenv/config";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
-import { chromium, type APIResponse } from "playwright";
+import { type APIResponse } from "playwright";
+import path from "node:path";
+import { connectTestDatabase } from "./support/test-database";
+import { launchBrowser, collectBrowserErrors } from "./support/browser";
+import { verifyApplicationDatabase } from "./support/application-database";
+import { removalRace } from "./support/concurrency";
 import { prisma } from "../lib/prisma";
 import { network } from "../lib/mrt/network";
 import { legacyCanonicalIds } from "../lib/mrt/station-mapping";
-import { importMrt } from "../lib/mrt/import";
-const baseURL = process.env.MRT_TEST_URL ?? "http://127.0.0.1:3000";
-if (
-  !["localhost", "127.0.0.1"].includes(new URL(baseURL).hostname) ||
-  !["localhost", "127.0.0.1"].includes(
-    new URL(process.env.DATABASE_URL!).hostname,
-  )
-)
-  throw Error("Integration test requires local development app/database");
+
+const baseURL = process.env.MRT_TEST_URL!;
 async function main() {
-  const browser = await chromium.launch({
-    executablePath: process.env.MRT_BROWSER_PATH ?? "/usr/bin/chromium",
-    args: ["--no-sandbox"],
-  });
+  const identity = await connectTestDatabase();
+  await identity.end();
+  const runId = process.env.MRT_TEST_RUN_ID!;
+  const artifactDir = process.env.MRT_TEST_ARTIFACT_DIR!;
+  if (!baseURL || new URL(baseURL).hostname !== "localhost" || !artifactDir)
+    throw Error("Use the isolated test runner with its localhost app.");
+  const browser = await launchBrowser();
+  const errors: string[] = [];
   const checks: string[] = [];
   async function check(response: APIResponse, status = 200) {
     assert.equal(response.status(), status, await response.text());
@@ -26,11 +28,12 @@ async function main() {
   }
   async function register(name: string) {
     const context = await browser.newContext({ baseURL });
+    collectBrowserErrors(context, errors);
     await check(
       await context.request.post("/api/auth/register", {
         data: {
           name,
-          email: `mrt-${name}-${Date.now()}@example.test`,
+          email: `mrt-${runId}-${name}@example.test`,
           password: "IntegrationTest123!",
         },
       }),
@@ -43,13 +46,17 @@ async function main() {
     "base64",
   );
   try {
-    await mkdir("docs/mrt/screenshots", { recursive: true });
+    await mkdir(path.join(artifactDir, "screenshots"), { recursive: true });
+    await verifyApplicationDatabase(browser, prisma, baseURL, runId);
+    checks.push(
+      "Random-session challenge verifies application and test client share the owned database",
+    );
     const before = await prisma.mrtStation.findMany();
     const history = await prisma.booking.findMany({
       select: { id: true, meetingStationId: true },
     });
-    await importMrt();
-    await importMrt();
+    // Inventory is provisioned only by migration deploy on the runner-owned fresh database.
+    const stationSnapshot = JSON.stringify(before);
     for (const s of network.stations) {
       const db = await prisma.mrtStation.findUniqueOrThrow({
         where: { canonicalId: s.id },
@@ -69,19 +76,19 @@ async function main() {
         b.meetingStationId,
       );
     checks.push(
-      "120 canonical mappings, idempotent import, five legacy IDs and historical booking foreign keys",
+      "120 canonical mappings, five legacy IDs and historical booking foreign keys",
     );
     const owner = await register("owner"),
       borrower = await register("borrower"),
       other = await register("other");
     const page = await owner.newPage();
-    const errors: string[] = [];
-    page.on("pageerror", (e) => errors.push(e.message));
+
     await page.goto("/listings/new");
     await page
       .getByRole("button", { name: "Choose pickup stations", exact: true })
       .click();
     const dialog = page.getByRole("dialog");
+    await dialog.waitFor({ state: "visible" });
     assert.equal(await dialog.locator("[data-station-id]").count(), 120);
     await dialog
       .locator('[data-station-id="taipei-main"] .station-hit')
@@ -94,7 +101,7 @@ async function main() {
     await dialog.getByRole("button", { name: "Reset map view" }).click();
     assert.equal(await transform.getAttribute("transform"), initial);
     await page.screenshot({
-      path: "docs/mrt/screenshots/desktop-owner.png",
+      path: path.join(artifactDir, "screenshots", "desktop-owner.png"),
       fullPage: true,
     });
     await dialog.getByRole("button", { name: "Confirm availability" }).click();
@@ -252,10 +259,15 @@ async function main() {
       await bd.getByTestId("map-transform").getAttribute("transform"),
       oldPan,
     );
+    assert.doesNotMatch(
+      (await bd.getByTestId("map-transform").getAttribute("transform"))!,
+      /NaN|Infinity/,
+      "Pan must retain finite SVG coordinates",
+    );
     await bd.getByRole("button", { name: "Reset map view" }).click();
     await bd.locator('[data-station-id="taipei-main"] .station-hit').click();
     await bp.screenshot({
-      path: "docs/mrt/screenshots/desktop-borrower.png",
+      path: path.join(artifactDir, "screenshots", "desktop-borrower.png"),
       fullPage: true,
     });
     await bd.getByRole("button", { name: "Confirm meeting station" }).click();
@@ -277,7 +289,7 @@ async function main() {
     assert.match(await bp.locator("body").innerText(), /台北車站/);
     assert.match(await bp.locator("body").innerText(), /R10 \/ BL12/);
     await bp.screenshot({
-      path: "docs/mrt/screenshots/booking-confirmation.png",
+      path: path.join(artifactDir, "screenshots", "booking-confirmation.png"),
       fullPage: true,
     });
     await page.goto(`/bookings/${bookingId}`);
@@ -330,65 +342,51 @@ async function main() {
     checks.push(
       "Removed or mismatched station requests rejected; historical meeting station unchanged",
     );
-    // Force an availability edit to hold the same listing row while a booking is in flight.
-    await check(
-      await owner.request.patch(`/api/listings/${listingId}`, {
-        data: { stationIds: [taipei.id, ximen.id] },
-      }),
-    );
-    let unlock!: () => void;
-    let locked!: () => void;
-    const ready = new Promise<void>((r) => (locked = r));
-    const gate = new Promise<void>((r) => (unlock = r));
-    const edit = prisma.$transaction(
-      async (tx) => {
-        await tx.$queryRaw`SELECT "id" FROM "Listing" WHERE "id"=${listingId} FOR UPDATE`;
-        await tx.listingStation.deleteMany({
-          where: { listingId, stationId: taipei.id },
-        });
-        await tx.listing.update({
-          where: { id: listingId },
-          data: { updatedAt: new Date() },
-        });
-        locked();
-        await gate;
-      },
-      { timeout: 10000 },
-    );
-    await ready;
-    const pending = borrower.request.post("/api/bookings", {
-      data: bookingData,
-    });
-    let waiting = false;
-    try {
-      for (let i = 0; i < 100; i++) {
-        const locks = await prisma.$queryRaw<
-          Array<{ waiting: boolean }>
-        >`SELECT EXISTS (SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query LIKE '%FOR UPDATE%') AS waiting`;
-        if (locks[0].waiting) {
-          waiting = true;
-          break;
-        }
-        await new Promise((r) => setTimeout(r, 30));
-      }
-    } finally {
-      unlock();
+    for (const fullForm of [false, true]) {
+      await check(
+        await owner.request.patch(`/api/listings/${listingId}`, {
+          data: { stationIds: [taipei.id, ximen.id] },
+        }),
+      );
+      await removalRace({
+        owner: owner.request,
+        borrower: borrower.request,
+        prisma,
+        listingId,
+        removedStationId: taipei.id,
+        keptStationId: ximen.id,
+        startAt: fullForm ? "2027-03-02T10:00:00Z" : "2027-02-02T10:00:00Z",
+        endAt: fullForm ? "2027-03-03T10:00:00Z" : "2027-02-03T10:00:00Z",
+        fullForm,
+      });
     }
-    await edit;
     assert.equal(
-      waiting,
-      true,
-      "Booking must actually wait on availability edit lock",
+      (await prisma.booking.findUniqueOrThrow({ where: { id: bookingId } }))
+        .meetingStationId,
+      taipei.id,
     );
-    await check(await pending, 409);
+    const overlapData = {
+      listingId,
+      meetingStationId: ximen.id,
+      startAt: "2027-05-02T10:00:00Z",
+      endAt: "2027-05-03T10:00:00Z",
+    };
+    const overlapResponses = await Promise.all([
+      borrower.request.post("/api/bookings", { data: overlapData }),
+      other.request.post("/api/bookings", { data: overlapData }),
+    ]);
+    assert.deepEqual(
+      overlapResponses.map((response) => response.status()).sort(),
+      [201, 409],
+    );
     assert.equal(
       await prisma.booking.count({
-        where: { listingId, startAt: new Date(bookingData.startAt) },
+        where: { listingId, startAt: new Date(overlapData.startAt) },
       }),
-      0,
+      1,
     );
     checks.push(
-      "Concurrent station removal wins before blocked booking; no stale booking persisted",
+      "Real station-only and full-form PATCH races reject waiting stale bookings; historical locations and concurrent overlap protection preserved",
     );
     const mobile = await browser.newContext({
       baseURL,
@@ -397,6 +395,7 @@ async function main() {
       hasTouch: true,
       storageState: await borrower.storageState(),
     });
+    collectBrowserErrors(mobile, errors);
     const mp = await mobile.newPage();
     await mp.goto(`/listings/${listingId}`);
     await mp
@@ -418,7 +417,7 @@ async function main() {
       ),
     );
     await mp.screenshot({
-      path: "docs/mrt/screenshots/mobile-borrower.png",
+      path: path.join(artifactDir, "screenshots", "mobile-borrower.png"),
       fullPage: false,
     });
     await md.getByRole("button", { name: "Confirm meeting station" }).tap();
@@ -561,6 +560,11 @@ async function main() {
     checks.push(
       "Existing dispute authorization, authentication, logout and login",
     );
+    assert.equal(
+      JSON.stringify(await prisma.mrtStation.findMany()),
+      stationSnapshot,
+      "Regression tests changed shared station metadata",
+    );
     assert.deepEqual(errors, []);
     const report = {
       at: new Date().toISOString(),
@@ -570,7 +574,7 @@ async function main() {
       browserErrors: errors,
     };
     await writeFile(
-      "docs/mrt/validation.json",
+      path.join(artifactDir, "validation.json"),
       JSON.stringify(report, null, 2) + "\n",
     );
     console.log(JSON.stringify(report, null, 2));

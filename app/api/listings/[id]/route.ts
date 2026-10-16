@@ -177,7 +177,9 @@ export async function PATCH(
         }
         return tx.listing.update({
           where: { id },
-          data,
+          // A row lock alone does not invalidate an already-waiting Serializable
+          // snapshot. Even station-only edits must write this shared parent row.
+          data: stationIds ? { ...data, updatedAt: new Date() } : data,
           select: listingSelect,
         });
       },

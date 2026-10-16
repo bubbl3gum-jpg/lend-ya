@@ -24,15 +24,22 @@ npm run dev
 npm run lint
 npx tsc --noEmit
 npm test
-npm run test:migration
 npm run build
-# Keep Next.js dev server running on port 3000 in another terminal:
-npm run test:integration
 ```
 
-The migration test creates and drops its own uniquely named local test database and requires local PostgreSQL database-creation permission. It applies the old migration chain, installs historical listing and booking fixtures, then applies the new forward migration. It also validates an empty station database, repeated imports, and an empty Prisma schema diff.
+The integration and migration runners **refuse the shared development DATABASE_URL**. Explicitly designate a *new, non-existing*, local PostgreSQL database named `hustlen_test_*` using `MRT_TEST_DATABASE_URL`, for example (substitute your local test credentials securely):
 
-The integration test uses local app/database URLs only, creates uniquely named test users/listings/bookings through the API and browser, records a real WebM video in Chromium, and uploads it alongside a PNG. These development records and uploaded files are retained for inspection. It rewrites the screenshots and validation report only when relevant steps pass. It uses `/usr/bin/chromium` by default; override `MRT_BROWSER_PATH` if necessary, or install a supported Chromium. `MRT_TEST_URL` can override the local app address.
+```sh
+export MRT_TEST_DATABASE_URL='postgresql://USER:PASSWORD@localhost:55433/hustlen_test_mrt'
+npm run test:integration
+npm run test:migration
+```
+
+Both commands create and mark their own database; they never adopt or reset an existing one. The PostgreSQL role must have CREATE DATABASE permission on the designated local test instance. The integration runner deploys migrations only into that new database, starts its own temporary Next.js server on `http://localhost:<free-port>`, and verifies a random session written directly by the test client is recognized by the app before any mutating API tests. No debug endpoint is exposed. The normal development server and database are not test targets. Development URLs consistently use **localhost**, without changing production origin checks.
+
+The migration runner applies historical/fresh migration fixtures and checks repeat imports only inside its owned test database. The ordinary browser regression does **not** call the station importer. Both runners verify the database ownership marker before teardown, stop their app process, remove recorded test upload files by exact generated filename, then drop only the database they created. Test users include a unique run identifier. Existing databases are refused, including an already-existing `hustlen_test_*` database. `MRT_TEST_KEEP_ON_FAILURE=1` preserves only a failed run's owned database/uploads for diagnosis; choose another new name on the next run. Logs, screenshots, run status and validation JSON always go to ignored `.test-artifacts/<run-id>/`, not the tracked historical reports.
+
+Chromium defaults to Playwright-managed Chromium on Linux/macOS (`npx playwright install chromium` if needed). To use an existing system installation, set `MRT_BROWSER_PATH` to its actual executable; on this cloud image `/usr/bin/chromium` was used explicitly. No browser or dependencies are installed automatically by the runner. The application itself does not need Chromium. See [targeted repair report](../MRT_REPAIR_REPORT.md) for the before/after real-endpoint concurrency evidence and the still-unresolved local Prisma diagnosis.
 
 ## Identity and migration
 
@@ -62,7 +69,7 @@ The idempotent `mrt:import` validates the retained network before writing. It us
 
 Create listing keeps the existing multipart media API and `ListingStation` relation. Edit listing PATCH accepts an optional strictly validated `stationIds` array; it updates relationships atomically and preserves fields omitted from the request. Only the owner can edit. At least one official operational location is required.
 
-Booking creation retains the existing integer `meetingStationId`, Serializable transaction, overlap predicate, pricing, participants, status and lifecycle. It locks the listing row before reading listing state and station approval. Availability edits take the same lock and update that row in their transaction, giving concurrent operations a shared serialization point. The booking transaction rechecks the listing, owner, reports/disputes, official station eligibility, listing membership, and optional canonical/integer identity consistency. Serialization conflicts and stale station choices return 409; the borrower UI clears the choice and refreshes availability. A booking committed before a later edit keeps its agreed station. A booking waiting behind a removal cannot persist a stale approval.
+Booking creation retains the existing integer `meetingStationId`, Serializable transaction, overlap predicate, pricing, participants, status and lifecycle. It locks the listing row before reading listing state and station approval. Availability edits take the same lock and explicitly update the parent row timestamp even for station-only request bodies, giving concurrent operations a shared serialization point. The booking transaction rechecks the listing, owner, reports/disputes, official station eligibility, listing membership, and optional canonical/integer identity consistency. Serialization conflicts and stale station choices return 409; the borrower UI clears the choice and refreshes availability. A booking committed before a later edit keeps its agreed station. A booking waiting behind a removal cannot persist a stale approval.
 
 Owner and borrower booking detail/confirmation show both names and all line codes. The handoff section repeats that agreed location. The station is a meeting area, not a specific exit; participants are reminded to agree on an exact point. Return, dispute, evidence, agreement and authorization workflows remain in the existing booking system.
 
@@ -71,9 +78,9 @@ Owner and borrower booking detail/confirmation show both names and all line code
 - `validation.json`: executed database/API/browser workflow and checks.
 - `migration-validation.json`: fresh and historical migration checks and schema diff.
 - `screenshots/desktop-owner.png`, `desktop-borrower.png`, `mobile-borrower.png`, `booking-confirmation.png`.
-- Six unit tests cover inventory, explicit legacy mappings, walking/interchange identities, strict input validation, bilingual search, and serialization error wrappers.
-- Browser/database tests cover owner create/edit, media persistence, unauthorized access, explicit borrower choice, manipulated station input, correct booking FK, bilingual details for both roles, preserved historical location after removal, an actually blocked concurrent booking, mobile touch navigation, and the original completed and disputed lifecycle paths with authentication/evidence.
+- Ten unit tests cover inventory, mappings, input/search/error handling, explicit test-target/ownership safeguards, app/database mismatch refusal, and browser executable selection.
+- Browser/database tests cover owner create/edit, media persistence, unauthorized access, explicit borrower choice, manipulated station input, correct booking FK, bilingual details for both roles, preserved historical location after removal, actual station-only and full-form PATCH requests blocking a concurrent booking, mobile touch navigation, and the original completed and disputed lifecycle paths with authentication/evidence.
 
 The dataset is a dated October 2026 snapshot, not live service status. Schematic label layout and the Y-line evidence qualifications from the standalone source report remain. No exits, GPS, route navigation, separate return station, global owner preferences, or production object storage were added. Media remains on the existing local disk storage. Chromium is the tested browser; Safari/Firefox and physical mobile devices have not been validated. Integration tests add regression coverage because this checkout had no pre-existing executable booking test suite. The tests exercise existing lifecycle/evidence APIs; they do not claim exhaustive coverage of every unrelated marketplace/admin screen.
 
-Final current-instance results: clean `npm ci`, Prisma generation/validation, migration deploy/status, lint, TypeScript checking, all six unit tests, historical/fresh migration validation, production build, and the database-backed Chromium workflow passed. The current database reports all eight migrations applied. This is local development validation; no remote deployment, merge, or environment publication was performed.
+The original integration results in the tracked JSON/screenshots are historical evidence. The targeted repairs were separately validated with ten unit tests, build/lint/type checks and fresh owned test databases; see the repair report for current results. No remote deployment, merge, or environment publication was performed.
