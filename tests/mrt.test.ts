@@ -79,3 +79,14 @@ test("recognizes raw lock and adapter serialization conflicts without masking ot
     false,
   );
 });
+
+test("deadlocks and wrapped PostgreSQL lock failures are retryable without masking unrelated errors", () => {
+  for (const error of [
+    { code: "40P01" },
+    { code: "P2010", meta: { driverAdapterError: { cause: { originalCode: "40P01" } } } },
+    { code: "P2034" },
+    { cause: { code: "40001" } },
+  ]) assert.equal(isSerializationConflict(error), true);
+  assert.equal(isSerializationConflict({ code: "P2003" }), false);
+  assert.equal(isSerializationConflict({ code: "23503" }), false);
+});

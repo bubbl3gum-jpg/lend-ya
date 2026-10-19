@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { isSerializationConflict } from "@/lib/database-conflicts";
 import { stationSelect, eligibleStationWhere } from "@/lib/mrt/network";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
@@ -75,6 +76,23 @@ export async function POST(request: Request): Promise<Response> {
     return apiError("Authentication required.", 401);
   }
 
+  const requestKey = request.headers.get("idempotency-key");
+  if (requestKey !== null && !/^[A-Za-z0-9_-]{8,128}$/.test(requestKey))
+    return apiError("Idempotency-Key must contain 8–128 letters, digits, underscores or hyphens.", 400);
+  let requestHash: string | undefined;
+  const replay = async () => {
+    if (!requestKey || !requestHash) return null;
+    const existing = await prisma.booking.findUnique({
+      where: { renterId_requestKey: { renterId: currentUser.id, requestKey } },
+      select: { ...bookingSelect, requestHash: true },
+    });
+    if (!existing) return null;
+    if (existing.requestHash !== requestHash)
+      return apiError("This idempotency key was already used for a different request.", 409);
+    const { requestHash: _hash, ...booking } = existing;
+    void _hash;
+    return Response.json({ booking }, { status: 201 });
+  };
   try {
     const body = await readJsonObject(request);
     if (!body) {
@@ -107,8 +125,6 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    if (startAt <= new Date())
-      return apiError("Start time must be in the future.", 400);
     if (endAt.getTime() - startAt.getTime() > MAX_RENTAL_DAYS * 86400000)
       return apiError("Maximum rental duration is 90 days.", 400);
     if (
@@ -116,6 +132,15 @@ export async function POST(request: Request): Promise<Response> {
       (typeof body.notes !== "string" || body.notes.length > 2000)
     )
       return apiError("Notes must be text of at most 2000 characters.", 400);
+    requestHash = body.quote === true ? undefined : createHash("sha256")
+      .update(JSON.stringify({ listingId, startAt: startAt.toISOString(), endAt: endAt.toISOString(), meetingStationId, canonicalStationId: body.canonicalStationId ?? null, notes: notes || null }))
+      .digest("hex");
+    // Replays return the original persisted request even after acceptance or price changes.
+    // No mutation is performed by replay; permission is still scoped to the authenticated actor.
+    const repeated = await replay();
+    if (repeated) return repeated;
+    if (startAt <= new Date())
+      return apiError("Start time must be in the future.", 400);
     return await prisma.$transaction(
       async (transaction) => {
         await requireActiveAccounts(transaction, [currentUser.id]);
@@ -262,6 +287,7 @@ export async function POST(request: Request): Promise<Response> {
         const booking = await transaction.booking.create({
           data: {
             listingId,
+            ...(requestKey && requestHash ? { requestKey, requestHash } : {}),
             ownerId: listing.ownerId,
             renterId: currentUser.id,
             meetingStationId,
@@ -281,6 +307,11 @@ export async function POST(request: Request): Promise<Response> {
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
   } catch (error) {
+    if (requestKey && (isSerializationConflict(error) ||
+      (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"))) {
+      const repeated = await replay();
+      if (repeated) return repeated;
+    }
     if (error instanceof Error && error.message === "BOOKING_OVERLAP") {
       return apiError(
         "This listing is already booked for part of the selected period.",

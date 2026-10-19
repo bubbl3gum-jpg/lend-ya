@@ -276,6 +276,15 @@ test(
           assert.ok(completedId);
           await stop();
           await start();
+          const original = (await pool.query('SELECT "requestKey","listingId","meetingStationId","startAt","endAt",notes FROM "Booking" WHERE id=$1', [completedId])).rows[0];
+          assert.ok(original.requestKey, "Browser creates a durable retry key");
+          const replay = await borrower.request.post(`${base}/api/bookings`, {
+            headers: { "Idempotency-Key": original.requestKey },
+            data: { listingId: original.listingId, meetingStationId: original.meetingStationId, canonicalStationId: "taipei-main", startAt: original.startAt.toISOString(), endAt: original.endAt.toISOString(), notes: original.notes ?? "" },
+          });
+          assert.equal(replay.status(), 201);
+          assert.equal((await replay.json()).booking.id, completedId);
+          assert.equal((await pool.query('SELECT count(*)::int n FROM "Booking" WHERE "listingId"=$1', [original.listingId])).rows[0].n, 1);
           for (const page of [owner, borrower]) {
             await page.goto(`${base}/bookings/${completedId}`);
             await expect(

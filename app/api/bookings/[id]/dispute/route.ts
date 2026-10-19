@@ -1,3 +1,4 @@
+import { isSerializationConflict } from "@/lib/database-conflicts";
 import { Prisma } from "@prisma/client";
 import {
   apiError,
@@ -106,6 +107,8 @@ export async function POST(
         409,
       );
     }
+    if (isSerializationConflict(error))
+      return apiError("The booking changed concurrently. Refresh and try again.", 409);
     return internalServerError("POST /api/bookings/[id]/dispute", error);
   }
 }

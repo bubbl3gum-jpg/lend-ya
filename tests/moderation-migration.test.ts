@@ -97,6 +97,7 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
     );
     const additions: Record<string, string[]> = {
       User: ["accountStatus"],
+      Booking: ["requestKey", "requestHash"],
       Listing: ["adminRestricted"],
       Dispute: [
         "resolvedBy",
@@ -110,8 +111,13 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
     for (const table of tables) {
       const after = (await pool.query(`SELECT * FROM "${table}" ORDER BY id`))
         .rows;
-      for (const row of after)
+      for (const row of after) {
+        if (table === "Booking") {
+          assert.equal(row.requestKey, null, "Existing bookings receive no invented request identity");
+          assert.equal(row.requestHash, null, "Existing bookings receive no invented request hash");
+        }
         for (const field of additions[table] ?? []) delete row[field];
+      }
       assert.deepEqual(
         after,
         before.get(table),

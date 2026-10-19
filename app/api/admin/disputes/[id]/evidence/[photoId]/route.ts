@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { readDisputeEvidence } from "@/lib/admin/evidence";
+import { AdminInputError } from "@/lib/admin/auth";
 import { parsePathId } from "@/lib/api-validation";
 import { apiError, internalServerError } from "@/lib/api-response";
 export async function GET(
@@ -21,16 +22,7 @@ export async function GET(
       )
         response = apiError("Evidence not found.", 404);
       else {
-        const dispute = await prisma.dispute.findUnique({
-          where: { id: caseId },
-          select: { bookingId: true },
-        });
-        const photo =
-          dispute &&
-          (await prisma.bookingEvidencePhoto.findFirst({
-            where: { id: photoId, bookingId: dispute.bookingId },
-            select: { data: true, mimeType: true },
-          }));
+        const photo = await readDisputeEvidence(user.id, caseId, photoId);
         if (!photo) response = apiError("Evidence not found.", 404);
         else
           response = new Response(new Uint8Array(photo.data), {
@@ -45,7 +37,7 @@ export async function GET(
       }
     }
   } catch (error) {
-    response = internalServerError("Administrative dispute evidence", error);
+    response = error instanceof AdminInputError ? apiError(error.message, error.status) : internalServerError("Administrative dispute evidence", error);
   }
   response.headers.set("Cache-Control", "private, no-store");
   response.headers.set("Vary", "Cookie");

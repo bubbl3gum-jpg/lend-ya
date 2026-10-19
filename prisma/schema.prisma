@@ -154,6 +154,8 @@ model Booking {
   endAt              DateTime
   status             BookingStatus @default(PENDING)
   dailyPrice         Decimal?      @db.Decimal(12, 2)
+  requestKey         String?       @db.VarChar(128)
+  requestHash        String?       @db.VarChar(64)
   cancelledBy        Int?
   cancelledAt        DateTime?
   cancellationReason String?
@@ -173,6 +175,7 @@ model Booking {
   reviews        VerifiedReview[]
   evidencePhotos BookingEvidencePhoto[]
 
+  @@unique([renterId, requestKey])
   @@index([listingId, status])
   @@index([listingId, status, startAt, endAt])
   @@index([ownerId, status])

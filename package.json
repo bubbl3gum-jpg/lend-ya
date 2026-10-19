@@ -16,6 +16,7 @@
     "test:mvp": "tsx tests/run-isolated.ts --mvp",
     "mrt:import": "tsx scripts/import-mrt.ts",
     "test": "npm run test:unit",
+    "test:stability": "tsx tests/run-isolated.ts --stability",
     "test:rental-api": "tsx tests/run-isolated.ts --rental-api",
     "test:rental-browser": "tsx tests/run-isolated.ts --rental-browser",
     "test:admin-migration": "tsx tests/run-isolated.ts --admin-migration",

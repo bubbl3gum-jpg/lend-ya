@@ -128,6 +128,7 @@ async function main() {
           "prisma7.config.ts",
         ]);
       if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
+        if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
         await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
       } else {
         const port = await freePort();
@@ -173,7 +174,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--rental-api"))
+        if (process.argv.includes("--stability"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/core-stability.integration.test.ts"]);
+        else if (process.argv.includes("--rental-api"))
           await run([
             "node_modules/tsx/dist/cli.mjs",
             "--test",

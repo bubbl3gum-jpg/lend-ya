@@ -123,6 +123,7 @@ export async function AdminCaseDirectory({
                   "LISTING_RESTORED",
                   "REPORT_RESOLVED",
                   "DISPUTE_RESOLVED",
+      "EVIDENCE_VIEWED",
                 ].map((v) => (
                   <option key={v}>{v}</option>
                 ))}

@@ -1,3 +1,4 @@
+import { authenticationRequestError } from "@/lib/auth-request";
 import { authenticationLimit } from "@/lib/auth-rate-limit";
 import {
   apiError,
@@ -18,6 +19,8 @@ const safeUserSelect = {
 } as const;
 
 export async function POST(request: Request): Promise<Response> {
+  const invalidRequest = authenticationRequestError(request);
+  if (invalidRequest) return invalidRequest;
   const body = await readJsonObject(request);
   if (!body) {
     return apiError("Request body must be a valid JSON object.", 400);

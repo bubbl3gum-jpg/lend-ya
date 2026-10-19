@@ -5,7 +5,9 @@ export function isSerializationConflict(error: unknown, depth = 0): boolean {
   if (
     value.code === "P2034" ||
     value.code === "40001" ||
-    value.originalCode === "40001"
+    value.code === "40P01" ||
+    value.originalCode === "40001" ||
+    value.originalCode === "40P01"
   )
     return true;
   return [value.cause, value.meta, value.driverAdapterError].some((cause) =>

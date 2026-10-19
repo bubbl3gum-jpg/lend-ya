@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { MRTStationSelector } from "./mrt/MRTStationSelector";
@@ -32,6 +32,7 @@ export function BookingForm({ listing }: BookingFormProps) {
   const [reviewed, setReviewed] = useState("");
   const selection = JSON.stringify({ startAt, endAt, meetingStationId, notes });
   const [loading, setLoading] = useState(false);
+  const requestIdentity = useRef<{ selection: string; key: string } | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,9 +42,11 @@ export function BookingForm({ listing }: BookingFormProps) {
     try {
       if (!meetingStationId)
         throw new Error("Choose and confirm a meeting station.");
+      if (requestIdentity.current?.selection !== selection)
+        requestIdentity.current = { selection, key: crypto.randomUUID() };
       const response = await fetch("/api/bookings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Idempotency-Key": requestIdentity.current.key },
         body: JSON.stringify({
           listingId: listing.id,
           startAt,

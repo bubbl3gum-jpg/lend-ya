@@ -1,3 +1,4 @@
+import { isSerializationConflict } from "@/lib/database-conflicts";
 import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
 import { parsePathId } from "@/lib/api-validation";
@@ -10,10 +11,9 @@ import { prisma } from "@/lib/prisma";
 export function rentalFailure(error: unknown, context: string): Response {
   if (error instanceof RentalError)
     return apiError(error.message, error.status);
-  if (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    ["P2002", "P2034"].includes(error.code)
-  )
+  if (isSerializationConflict(error) || (
+    error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"
+  ))
     return apiError("The rental record changed. Refresh and try again.", 409);
   return internalServerError(context, error);
 }

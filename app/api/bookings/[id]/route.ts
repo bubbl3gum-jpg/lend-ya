@@ -1,3 +1,4 @@
+import { isSerializationConflict } from "@/lib/database-conflicts";
 import { stationSelect } from "@/lib/mrt/network";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import { parseEvidence } from "@/lib/booking-evidence";
@@ -370,6 +371,8 @@ export async function PATCH(
         "This item is unavailable or already reserved. Refresh and choose another period.",
         409,
       );
+    if (isSerializationConflict(error))
+      return apiError("The booking changed concurrently. Refresh and try again.", 409);
     return internalServerError("PATCH /api/bookings/[id]", error);
   }
 }

@@ -101,6 +101,7 @@ export function caseQuery(kind: CaseKind, params: URLSearchParams) {
       "LISTING_RESTORED",
       "REPORT_RESOLVED",
       "DISPUTE_RESOLVED",
+      "EVIDENCE_VIEWED",
     ].includes(action)
   )
     throw new AdminInputError("Invalid audit action.");
