@@ -169,3 +169,16 @@ All database suites created distinct new owned `hustlen_test_m2_m21verified_*` d
 New migration SHA-256: `85f230192eee6c04855c769cec3e14a3a61db262fe2dcc7cb2b4b2937d9c506a`. All pre-existing migrations remain unchanged.
 
 The final retained-demo browser workflow and fresh-login server-restart check passed on the finished scripts. Both restarted moderator mutation routes returned 401 without a session, and an active-server teardown attempt was refused before cleanup. Screenshots above show actual synthetic browser pages. These are local execution results, not human product-policy approval or GitHub CI results.
+
+### Remote review handover
+
+Implementation commit: `04d69173eddcbf87d9e829ead22ca96148eeb1e9`, pushed successfully to [feature/chat-demo-acceptance](https://github.com/bubbl3gum-jpg/lend-ya/tree/feature/chat-demo-acceptance). Subsequent report-only commits do not change the tested implementation.
+
+Actual post-push attempts:
+
+- `gh pr create --base fix/milestone1-core-stability --head feature/chat-demo-acceptance --title "Add isolated chat demo and activity-ordered inbox" --body-file docs/milestone21/PR_DESCRIPTION.md` failed: `Post "https://api.github.com/graphql": Forbidden`. **No PR was created.**
+- `gh workflow run verify.yml --ref feature/chat-demo-acceptance` failed while looking up the workflow: `Get "https://api.github.com/repos/bubbl3gum-jpg/lend-ya/actions/workflows/verify.yml": Forbidden`. **No workflow was dispatched; CI status is NOT RUN.**
+
+Enable authenticated GitHub API access with repository PR-write and Actions-dispatch permissions to retry those exact commands. Do not paste credentials into chat. Alternatively, [open the prepared comparison against the requested stabilization base](https://github.com/bubbl3gum-jpg/lend-ya/compare/fix/milestone1-core-stability...feature/chat-demo-acceptance?expand=1) and create a review PR using `docs/milestone21/PR_DESCRIPTION.md`. PR creation should trigger the existing verification workflow; inspect its real result, or manually dispatch Verify combined Hustlen for this feature branch if needed. Do not merge.
+
+No merge, deployment, public chat enablement or live database migration occurred. Local acceptance is complete; remote PR/CI verification remains an external access blocker, and the policy decisions above remain unapproved.
