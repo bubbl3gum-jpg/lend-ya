@@ -51,6 +51,8 @@ jobs:
       - run: npm run test:unit
       - run: npm run test:stability
       - run: npm run test:chat
+      - run: npm run test:meetup
+      - run: npm run test:meetup-migration
       - run: npm run build:verify
       - run: npm run test:migration
       - run: npm run test:admin-migration

@@ -10,6 +10,11 @@ export function LogoutButton() {
       const response = await fetch("/api/auth/logout", { method: "POST" });
       if (!response.ok)
         throw new Error("Unable to sign out. Please try again.");
+      try {
+        for (const key of Object.keys(sessionStorage))
+          if (key.startsWith("hustlen:condition-draft:"))
+            sessionStorage.removeItem(key);
+      } catch {}
       // A full navigation discards the authenticated Next client router cache.
       window.location.replace("/login");
     } catch {

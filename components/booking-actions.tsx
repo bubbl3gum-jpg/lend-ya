@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MeetupVerification } from "@/components/meetup-verification";
 import { RentalEvidenceForm } from "@/components/rental-evidence-form";
 
 type BookingActionsProps = {
@@ -23,6 +24,12 @@ export function BookingActions({
   inspectionRecorded = false,
 }: BookingActionsProps) {
   const router = useRouter();
+  const [meetupEnabled, setMeetupEnabled] = useState(false),
+    [meetupProof, setMeetupProof] = useState<string | null>(null);
+  const onMeetup = useCallback((enabled: boolean, proof: string | null) => {
+    setMeetupEnabled(enabled);
+    setMeetupProof(proof);
+  }, []);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -81,6 +88,13 @@ export function BookingActions({
     "rounded-xl border border-slate-200 px-4 py-2 text-sm disabled:opacity-50";
   return (
     <div className="space-y-4">
+      <MeetupVerification
+        bookingId={bookingId}
+        userId={currentUserId}
+        isOwner={isOwner}
+        bookingStatus={status}
+        onState={onMeetup}
+      />
       {(status === "PENDING" || status === "CONFIRMED") && isParticipant ? (
         <>
           <label className="grid gap-1 text-sm">
@@ -125,6 +139,7 @@ export function BookingActions({
       {status === "CONFIRMED" && isOwner ? (
         <RentalEvidenceForm
           bookingId={bookingId}
+          actorId={currentUserId}
           action="handoff"
           title="Submit owner handoff"
           collectSerialNumber
@@ -139,8 +154,11 @@ export function BookingActions({
       {status === "HANDOFF_PENDING" && isBorrower ? (
         <RentalEvidenceForm
           bookingId={bookingId}
+          actorId={currentUserId}
           action="handoff"
           title="Confirm receipt as borrower"
+          meetupChallengeId={meetupEnabled ? meetupProof : undefined}
+          requirePhysicalReceipt={meetupEnabled}
           onSaved={saved}
         />
       ) : null}
@@ -153,12 +171,13 @@ export function BookingActions({
       {status === "IN_USE" && isBorrower ? (
         <RentalEvidenceForm
           bookingId={bookingId}
+          actorId={currentUserId}
           action="return"
           title="Submit item return"
           onSaved={saved}
         />
       ) : null}
-      {status === "RETURN_PENDING" && isOwner ? (
+      {status === "RETURN_PENDING" && isOwner && !meetupEnabled ? (
         <button
           disabled={busy}
           onClick={() => send("inspect")}
@@ -173,6 +192,7 @@ export function BookingActions({
       {status === "INSPECTION" && isOwner && !inspectionRecorded ? (
         <RentalEvidenceForm
           bookingId={bookingId}
+          actorId={currentUserId}
           action="inspection"
           title="Save owner inspection decision"
           onSaved={saved}

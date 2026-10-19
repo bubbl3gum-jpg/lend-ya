@@ -93,6 +93,8 @@ async function main() {
       ) + "\n",
     );
     const legacyGroup = [
+      "meetup-migration",
+      "meetup",
       "chat",
       "admin",
       "moderation",
@@ -102,6 +104,8 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "meetup-migration": "tests/meetup-migration.test.ts",
+          meetup: "tests/meetup.integration.test.ts",
           chat: "tests/chat.integration.test.ts",
           admin: "tests/admin.integration.test.ts",
           moderation: "tests/moderation.integration.test.ts",
@@ -112,6 +116,7 @@ async function main() {
       : undefined;
     const testPort = await freePort();
     for (const variable of [
+      "TEST_MEETUP_PORT",
       "TEST_CHAT_PORT",
       "TEST_ADMIN_PORT",
       "TEST_MODERATION_PORT",
@@ -122,7 +127,7 @@ async function main() {
     if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (legacyGroup !== "admin-migration")
+      if (!["admin-migration","meetup-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",

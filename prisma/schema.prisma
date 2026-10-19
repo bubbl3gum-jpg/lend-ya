@@ -183,6 +183,7 @@ model Booking {
   renter         User                   @relation("BookingRenter", fields: [renterId], references: [id])
   meetingStation MrtStation             @relation(fields: [meetingStationId], references: [id])
   chatMessages ChatMessage[]
+  meetup MeetupSession?
   handoff        Handoff?
   return         Return?
   disputes       Dispute[]
@@ -535,4 +536,107 @@ model ChatAnalysisJob {
   message ChatMessage @relation(fields: [messageId], references: [id], onDelete: Restrict)
   @@unique([messageId, analysisVersion])
   @@index([status, availableAt, id])
+}
+
+model MeetupSession {
+  bookingId Int @id
+  bookingVersion Int @default(0)
+  enabledBy Int
+  createdAt DateTime @default(now())
+  booking Booking @relation(fields:[bookingId], references:[id], onDelete:Restrict, onUpdate:NoAction)
+  checkIns MeetupCheckIn[]
+  fallbacks MeetupFallback[]
+  challenges MeetupChallenge[]
+  events MeetupEvent[]
+  rates MeetupRate[]
+}
+model MeetupCheckIn {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  userId Int
+  purpose String @db.VarChar(8)
+  role String @db.VarChar(8)
+  outcome String @db.VarChar(16)
+  reason String @db.VarChar(40)
+  accuracyMeters Int?
+  distanceBand Int?
+  policyVersion String @db.VarChar(32)
+  requestKey String @db.VarChar(128)
+  requestHash String @db.VarChar(64)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  session MeetupSession @relation(fields:[bookingId], references:[bookingId], onDelete:Restrict, onUpdate:NoAction)
+  ownerFallbacks MeetupFallback[] @relation("FallbackOwnerCheck")
+  borrowerFallbacks MeetupFallback[] @relation("FallbackBorrowerCheck")
+  ownerChallenges MeetupChallenge[] @relation("ChallengeOwnerCheck")
+  borrowerChallenges MeetupChallenge[] @relation("ChallengeBorrowerCheck")
+  @@unique([bookingId,userId,purpose,requestKey])
+  @@index([bookingId,purpose,userId,id])
+}
+model MeetupFallback {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  purpose String @db.VarChar(8)
+  ownerCheckId Int
+  borrowerCheckId Int
+  ownerReason String? @db.VarChar(500)
+  borrowerReason String? @db.VarChar(500)
+  ownerAckAt DateTime?
+  borrowerAckAt DateTime?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  session MeetupSession @relation(fields:[bookingId], references:[bookingId], onDelete:Restrict, onUpdate:NoAction)
+  ownerCheck MeetupCheckIn @relation("FallbackOwnerCheck",fields:[ownerCheckId],references:[id],onDelete:NoAction,onUpdate:NoAction)
+  borrowerCheck MeetupCheckIn @relation("FallbackBorrowerCheck",fields:[borrowerCheckId],references:[id],onDelete:NoAction,onUpdate:NoAction)
+  challenges MeetupChallenge[]
+  @@unique([bookingId,purpose,ownerCheckId,borrowerCheckId], map:"MeetupFallback_check_pair_key")
+}
+model MeetupChallenge {
+  id String @id @db.VarChar(36)
+  bookingId Int
+  purpose String @db.VarChar(8)
+  issuerId Int
+  issueKey String @db.VarChar(128)
+  verifierId Int
+  bookingState String @db.VarChar(32)
+  bookingVersion Int
+  bookingUpdatedAt DateTime
+  ownerCheckId Int
+  borrowerCheckId Int
+  fallbackId Int?
+  tokenHash String @db.VarChar(64)
+  codeHash String @db.VarChar(64)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+  consumedAt DateTime?
+  verificationKey String? @db.VarChar(128)
+  verificationHash String? @db.VarChar(64)
+  completedAt DateTime?
+  completionHash String? @db.VarChar(64)
+  attempts Int @default(0)
+  session MeetupSession @relation(fields:[bookingId], references:[bookingId], onDelete:Restrict, onUpdate:NoAction)
+  ownerCheck MeetupCheckIn @relation("ChallengeOwnerCheck",fields:[ownerCheckId],references:[id],onDelete:NoAction,onUpdate:NoAction)
+  borrowerCheck MeetupCheckIn @relation("ChallengeBorrowerCheck",fields:[borrowerCheckId],references:[id],onDelete:NoAction,onUpdate:NoAction)
+  fallback MeetupFallback? @relation(fields:[fallbackId],references:[id],onDelete:NoAction,onUpdate:NoAction)
+  @@unique([bookingId,purpose,issueKey])
+  @@index([bookingId,purpose,createdAt])
+}
+model MeetupEvent {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  actorId Int
+  purpose String @db.VarChar(8)
+  kind String @db.VarChar(40)
+  challengeId String? @db.VarChar(36)
+  createdAt DateTime @default(now())
+  session MeetupSession @relation(fields:[bookingId], references:[bookingId], onDelete:Restrict, onUpdate:NoAction)
+  @@index([bookingId,id])
+}
+model MeetupRate {
+  key String @id @db.VarChar(160)
+  bookingId Int
+  attempts Int @default(0)
+  expiresAt DateTime
+  session MeetupSession @relation(fields:[bookingId], references:[bookingId], onDelete:Restrict, onUpdate:NoAction)
 }

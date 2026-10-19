@@ -1,3 +1,4 @@
+import { digest, requireMeetupReceipt, replayReceipt } from "@/lib/meetup/service";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -24,6 +25,8 @@ export async function submitRentalStage(
     if (!booking) throw new RentalError("Booking not found.", 404);
     if (userId !== booking.ownerId && userId !== booking.renterId)
       throw new RentalError("Participants only.", 403);
+    const completionHash=digest(JSON.stringify({...submission,photos:submission.photos.map(p=>({mimeType:p.mimeType,hash:digest(Buffer.from(p.data).toString("base64"))}))}));
+    if(action==="handoff"&&await replayReceipt(transaction,booking,userId,"PICKUP",submission.meetupChallengeId,completionHash))return {status:booking.status,replayed:true};
     const savePhotos = async (stage: string) => {
       const urls: string[] = [];
       for (const photo of submission.photos) {
@@ -103,6 +106,7 @@ export async function submitRentalStage(
         throw new RentalError(
           "The handoff is missing a valid owner confirmation or is already confirmed.",
         );
+      await requireMeetupReceipt(transaction,booking,userId,"PICKUP",submission,completionHash);
       const photos = await savePhotos("HANDOFF_BORROWER");
       await transaction.handoff.update({
         where: { bookingId },

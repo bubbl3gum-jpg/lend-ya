@@ -1,9 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { checklistItems, checklistAnswers } from "@/lib/rental-checklist";
 
 type Props = {
   bookingId: number;
+  actorId?: number;
+  meetupChallengeId?: string | null;
+  requirePhysicalReceipt?: boolean;
   action: "handoff" | "return" | "inspection";
   title: string;
   onSaved: (message: string) => void;
@@ -15,7 +18,14 @@ export function RentalEvidenceForm({
   title,
   onSaved,
   collectSerialNumber = false,
+  actorId,
+  meetupChallengeId,
+  requirePhysicalReceipt = false,
 }: Props) {
+  const notesId = useId();
+  const [physicalReceipt, setPhysicalReceipt] = useState(false);
+  const draftKey = `hustlen:condition-draft:${bookingId}:${action}:${actorId ?? "participant"}`;
+  const initialized = useRef(false);
   const [notes, setNotes] = useState("");
   const [serial, setSerial] = useState("");
   const [checklist, setChecklist] = useState<Record<string, string>>({});
@@ -24,6 +34,37 @@ export function RentalEvidenceForm({
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  useEffect(() => {
+    let cancelled = false;
+    initialized.current = false;
+    void Promise.resolve().then(() => {
+      if (cancelled) return;
+      try {
+        const saved = sessionStorage.getItem(draftKey);
+        if (saved) {
+          const draft = JSON.parse(saved);
+          if (typeof draft.notes === "string") setNotes(draft.notes);
+          if (typeof draft.serial === "string") setSerial(draft.serial);
+          if (draft.checklist && typeof draft.checklist === "object")
+            setChecklist(draft.checklist);
+        }
+      } catch {}
+      initialized.current = true;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [draftKey]);
+  useEffect(() => {
+    if (initialized.current) {
+      try {
+        sessionStorage.setItem(
+          draftKey,
+          JSON.stringify({ notes, serial, checklist }),
+        );
+      } catch {}
+    }
+  }, [draftKey, notes, serial, checklist]);
   return (
     <form
       className="space-y-4 rounded-2xl border border-slate-200 p-4"
@@ -43,6 +84,9 @@ export function RentalEvidenceForm({
             "payload",
             JSON.stringify({
               conditionNotes: notes,
+              ...(requirePhysicalReceipt
+                ? { meetupChallengeId, physicalReceipt }
+                : {}),
               ...(collectSerialNumber ? { serialNumber: serial } : {}),
               checklist,
               conditionConfirmed: confirmed,
@@ -62,6 +106,9 @@ export function RentalEvidenceForm({
             throw new Error(
               result.error || "Unable to save condition evidence.",
             );
+          try {
+            sessionStorage.removeItem(draftKey);
+          } catch {}
           onSaved(
             result.inspectionAccepted === false
               ? "Inspection concern saved. The booking remains under inspection; open a dispute for administrative review."
@@ -81,6 +128,27 @@ export function RentalEvidenceForm({
         Review the saved evidence above. Record defects and uncertainty
         honestly; confirmation acknowledges this record, not a claim that the
         item is perfect.
+      </p>
+      {requirePhysicalReceipt && (
+        <>
+          <p>
+            Verify the pickup QR or one-time code first. Your own checklist and
+            acknowledgement are still required.
+          </p>
+          <label className="flex gap-2">
+            <input
+              type="checkbox"
+              checked={physicalReceipt}
+              onChange={(e) => setPhysicalReceipt(e.target.checked)}
+            />
+            I have physically received the equipment after inspecting it.
+          </label>
+        </>
+      )}
+      <p className="text-sm">
+        Draft notes and checklist stay in this tab until saved; close the tab on
+        shared devices. Photos must be reselected after refresh. Photograph
+        equipment only, not participants or strangers.
       </p>
       <fieldset disabled={busy} className="space-y-3">
         <legend className="font-medium">Condition checklist</legend>
@@ -110,9 +178,10 @@ export function RentalEvidenceForm({
             </select>
           </label>
         ))}
-        <label className="grid gap-1 text-sm">
-          Condition notes
+        <div className="grid gap-1 text-sm">
+          <label htmlFor={notesId}>Condition notes</label>
           <textarea
+            id={notesId}
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
             maxLength={2000}
@@ -120,7 +189,7 @@ export function RentalEvidenceForm({
             className="rounded-xl border p-2"
             placeholder="Describe visible damage, missing accessories or anything that could not be checked."
           />
-        </label>
+        </div>
         {collectSerialNumber ? (
           <label className="grid gap-1 text-sm">
             Serial number (optional)
@@ -185,7 +254,13 @@ export function RentalEvidenceForm({
         </p>
       ) : null}
       <button
-        disabled={busy || !confirmed || (action === "inspection" && !decision)}
+        disabled={
+          busy ||
+          !confirmed ||
+          (requirePhysicalReceipt &&
+            (!meetupChallengeId || !physicalReceipt)) ||
+          (action === "inspection" && !decision)
+        }
         className="rounded-xl bg-emerald-700 px-4 py-2 text-white disabled:opacity-50"
       >
         {busy ? "Saving evidence…" : title}

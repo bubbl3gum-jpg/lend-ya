@@ -1,0 +1,1260 @@
+import "dotenv/config";
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { randomBytes, randomUUID } from "node:crypto";
+import { spawn, execFileSync, type ChildProcess } from "node:child_process";
+import { once } from "node:events";
+import { openSync, closeSync, readFileSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import sharp from "sharp";
+import QRCode from "qrcode";
+import { chromium, expect, type Page } from "@playwright/test";
+import { connectTestDatabase } from "./support/test-database";
+import { stationCoordinates } from "../lib/meetup/location";
+import { checklistItems } from "../lib/rental-checklist";
+type Actor = { id: number; cookie: string; email: string };
+type Payload = {
+  user: { id: number };
+  listing: { id: number };
+  booking: {
+    id: number;
+    status: string;
+    return: { confirmedBy: number | null; inspectionAccepted: boolean | null };
+  };
+  status: string;
+  error: string;
+  enabled: boolean;
+  checkIn: { id: number; outcome: string };
+  challengeId: string;
+  expiresAt: string;
+  qrPayload: string;
+  manualCode: string;
+  verified: boolean;
+  replayed: boolean;
+  challenge: { id: string; consumedAt: string | null } | null;
+  checks: {
+    owner: { outcome: string } | null;
+    borrower: { outcome: string } | null;
+  };
+};
+test(
+  "Milestone 3: isolated MRT pickup/return, secrets, custody, two-browser acceptance and restart",
+  { timeout: 600000 },
+  async (t) => {
+    const db = await connectTestDatabase(),
+      port = process.env.TEST_MEETUP_PORT!,
+      base = `http://localhost:${port}`,
+      tag = randomUUID(),
+      password = "MeetupFixture123!",
+      serverSecret = randomBytes(32).toString("hex"),
+      artifact = process.env.MRT_TEST_ARTIFACT_DIR!;
+    const logPath = path.join(artifact, "meetup-server.log"),
+      log = openSync(logPath, "a");
+    let server: ChildProcess | undefined,
+      browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+    async function stop() {
+      if (server && server.exitCode === null && server.signalCode === null) {
+        const exited = once(server, "exit");
+        server.kill("SIGTERM");
+        const timeout = setTimeout(() => server?.kill("SIGKILL"), 5000);
+        await exited;
+        clearTimeout(timeout);
+      }
+    }
+    async function start(ids: number[] = [], ttl = 180) {
+      server = spawn(
+        process.execPath,
+        [
+          "node_modules/next/dist/bin/next",
+          "dev",
+          "--hostname",
+          "localhost",
+          "--port",
+          port,
+        ],
+        {
+          env: {
+            ...process.env,
+            NODE_ENV: "development",
+            MEETUP_PREVIEW_USER_IDS: ids.join(","),
+            MEETUP_CODE_SECRET: serverSecret,
+            MEETUP_CHALLENGE_TTL_SECONDS: String(ttl),
+            CHAT_ENABLED: "false",
+            CHAT_PREVIEW_USER_IDS: "",
+          },
+          stdio: ["ignore", log, log],
+        },
+      );
+      for (let n = 0; n < 150; n++) {
+        if (server.exitCode !== null) throw Error("Meetup server stopped");
+        try {
+          if (
+            (
+              await fetch(base + "/api/listings", {
+                signal: AbortSignal.timeout(2000),
+              })
+            ).ok
+          )
+            return;
+        } catch {}
+        await new Promise((r) => setTimeout(r, 200));
+      }
+      throw Error("Meetup server failed readiness");
+    }
+    async function api(
+      url: string,
+      actor?: Actor,
+      method = "GET",
+      body?: object | FormData,
+      headers: Record<string, string> = {},
+    ) {
+      const r = await fetch(base + url, {
+        method,
+        headers: {
+          Cookie: actor?.cookie ?? "",
+          ...(body instanceof FormData
+            ? {}
+            : { "Content-Type": "application/json" }),
+          ...headers,
+        },
+        ...(body
+          ? { body: body instanceof FormData ? body : JSON.stringify(body) }
+          : {}),
+      });
+      const raw = await r.text();
+      let json = {} as Payload;
+      try {
+        json = JSON.parse(raw);
+      } catch {}
+      return {
+        status: r.status,
+        json,
+        raw,
+        cookie: r.headers.get("set-cookie")?.split(";")[0] ?? "",
+        cache: r.headers.get("cache-control"),
+      };
+    }
+    async function register(name: string) {
+      const email = `${name}-${tag}@example.test`,
+        r = await api("/api/auth/register", undefined, "POST", {
+          name,
+          email,
+          password,
+        });
+      assert.equal(r.status, 201);
+      return { id: r.json.user.id, email, cookie: r.cookie };
+    }
+    let owner: Actor,
+      borrower: Actor,
+      outsider: Actor,
+      stationId: number,
+      point: { latitude: number; longitude: number },
+      listingCounter = 0;
+    const checklist = Object.fromEntries(
+      Object.keys(checklistItems).map((k) => [k, "yes"]),
+    );
+    const evidence = {
+      checklist,
+      conditionConfirmed: true,
+      returnConfirmed: true,
+    };
+    const photo = await sharp({
+      create: { width: 32, height: 24, channels: 3, background: "#435f85" },
+    })
+      .png()
+      .toBuffer();
+    const op = (id: number, name: string, actor: Actor, body: object = {}) =>
+      api(
+        `/api/bookings/${id}/meetup/${name}`,
+        actor,
+        "POST",
+        name === "issue" ? { requestKey: randomUUID(), ...body } : body,
+      );
+    const detail = (id: number) => api(`/api/bookings/${id}`, owner);
+    const check = (
+      id: number,
+      actor: Actor,
+      purpose = "PICKUP",
+      extra: object = {},
+    ) =>
+      op(id, "checkin", actor, {
+        purpose,
+        requestKey: randomUUID(),
+        mode: "location",
+        ...point,
+        accuracy: 10,
+        timestamp: Date.now(),
+        ...extra,
+      });
+    async function rental() {
+      listingCounter++;
+      const form = new FormData();
+      for (const [k, v] of Object.entries({
+        title: `QR camera ${listingCounter} ${tag}`,
+        description: "Synthetic isolated equipment fixture",
+        category: "Cameras",
+        condition: "Good",
+        price: "10",
+        stationIds: JSON.stringify([stationId]),
+      }))
+        form.set(k, v);
+      form.append(
+        "photos",
+        new File([new Uint8Array(photo)], "camera.png", { type: "image/png" }),
+      );
+      const l = await api("/api/listings", owner, "POST", form);
+      assert.equal(l.status, 201);
+      const b = await api("/api/bookings", borrower, "POST", {
+        listingId: l.json.listing.id,
+        meetingStationId: stationId,
+        startAt: "2038-01-01T10:00",
+        endAt: "2038-01-02T10:00",
+      });
+      assert.equal(b.status, 201);
+      assert.equal(
+        (
+          await api(`/api/bookings/${b.json.booking.id}`, owner, "PATCH", {
+            action: "accept",
+          })
+        ).status,
+        200,
+      );
+      return { id: b.json.booking.id, listingId: l.json.listing.id };
+    }
+    async function prepare(id: number) {
+      assert.equal((await op(id, "enroll", owner)).status, 200);
+      assert.equal((await check(id, owner)).status, 200);
+      assert.equal((await check(id, borrower)).status, 200);
+      assert.equal(
+        (await api(`/api/bookings/${id}/handoff`, owner, "POST", evidence))
+          .status,
+        200,
+      );
+    }
+    try {
+      await start();
+      owner = await register("QROwner");
+      borrower = await register("QRBorrower");
+      outsider = await register("QROutsider");
+      const station = (
+        await db.query(
+          'SELECT id,"canonicalId" FROM "MrtStation" WHERE code=\'TPE\'',
+        )
+      ).rows[0];
+      stationId = station.id;
+      const coords = stationCoordinates.find(
+        (s) => s.id === station.canonicalId,
+      )!;
+      point = { latitude: coords.latitude!, longitude: coords.longitude! };
+      const first = await rental(),
+        ids = [owner.id, borrower.id];
+      await t.test(
+        "preview defaults off, explicit enrollment and participant/CSRF guards",
+        async () => {
+          assert.equal((await op(first.id, "enroll", owner)).status, 403);
+          assert.equal(
+            (await api(`/api/bookings/${first.id}/meetup/status`, owner)).json
+              .enabled,
+            false,
+          );
+          assert.equal(
+            (await api(`/api/bookings/${first.id}/meetup/status`)).status,
+            401,
+          );
+          assert.equal((await op(first.id, "enroll", outsider)).status, 403);
+          await stop();
+          await start(ids);
+          assert.equal((await op(first.id, "enroll", borrower)).status, 403);
+          assert.equal((await op(first.id, "enroll", owner)).status, 200);
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${first.id}/meetup/checkin`,
+                owner,
+                "POST",
+                { purpose: "PICKUP" },
+                { Origin: "https://evil.test", "Sec-Fetch-Site": "cross-site" },
+              )
+            ).status,
+            403,
+          );
+        },
+      );
+      await t.test(
+        "freshness, inaccurate/denied/outside readings, forged claims and independently acknowledged fallback",
+        async () => {
+          const support = await op(first.id, "assistance", owner, {
+            reason: "LOCATION_PROBLEM",
+          });
+          assert.equal(support.status, 200);
+          assert.equal((await api("/api/conversations", borrower)).status, 503);
+          assert.match(support.raw, /caseId/);
+          assert.equal(
+            (
+              await op(first.id, "assistance", outsider, {
+                reason: "LOCATION_PROBLEM",
+              })
+            ).status,
+            403,
+          );
+          assert.equal(
+            (await detail(first.id)).json.booking.status,
+            "CONFIRMED",
+          );
+          assert.equal(
+            (await check(first.id, owner, "PICKUP", { verified: true })).status,
+            400,
+          );
+          assert.equal(
+            (
+              await check(first.id, owner, "PICKUP", {
+                timestamp: Date.now() - 121000,
+              })
+            ).status,
+            400,
+          );
+          assert.equal(
+            (await check(first.id, owner, "PICKUP", { accuracy: 900 })).json
+              .checkIn.outcome,
+            "INACCURATE",
+          );
+          assert.equal(
+            (await check(first.id, borrower, "PICKUP", { latitude: 24 })).json
+              .checkIn.outcome,
+            "OUTSIDE",
+          );
+          assert.equal(
+            (
+              await op(first.id, "fallback", owner, {
+                purpose: "PICKUP",
+                reason: "Underground GPS unavailable",
+                acknowledged: true,
+              })
+            ).status,
+            409,
+          );
+          const unavailable = {
+            purpose: "PICKUP",
+            requestKey: randomUUID(),
+            mode: "unavailable",
+            reason: "DENIED",
+          };
+          const a = await op(first.id, "checkin", borrower, unavailable),
+            b = await op(first.id, "checkin", borrower, unavailable);
+          assert.equal(a.json.checkIn.id, b.json.checkIn.id);
+          assert.equal(b.json.replayed, true);
+          assert.equal(
+            (
+              await op(first.id, "fallback", owner, {
+                purpose: "PICKUP",
+                reason: "GPS is unreliable at the agreed exit",
+                acknowledged: false,
+              })
+            ).status,
+            400,
+          );
+          assert.equal(
+            (
+              await op(first.id, "fallback", owner, {
+                purpose: "PICKUP",
+                reason: "GPS is unreliable at the agreed exit",
+                acknowledged: true,
+              })
+            ).status,
+            200,
+          );
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${first.id}/handoff`,
+                owner,
+                "POST",
+                evidence,
+              )
+            ).status,
+            200,
+          );
+          assert.equal(
+            (await op(first.id, "issue", owner, { purpose: "PICKUP" })).status,
+            409,
+          );
+          assert.equal(
+            (
+              await op(first.id, "fallback", borrower, {
+                purpose: "PICKUP",
+                reason: "Permission denied; I agree to reduced assurance",
+                acknowledged: true,
+              })
+            ).status,
+            200,
+          );
+          // Valid numeric coordinates can be fabricated: browser GPS is not attested. Never claim spoof prevention.
+          assert.equal(
+            (await check(first.id, owner)).json.checkIn.outcome,
+            "VERIFIED",
+          );
+          assert.equal(
+            (await op(first.id, "issue", owner, { purpose: "PICKUP" })).status,
+            409,
+            "New checks invalidate old fallback acknowledgements",
+          );
+          for (const actor of [owner, borrower])
+            assert.equal(
+              (
+                await op(first.id, "fallback", actor, {
+                  purpose: "PICKUP",
+                  reason:
+                    "I acknowledge GPS is not verified for both participants",
+                  acknowledged: true,
+                })
+              ).status,
+              200,
+            );
+          const columns = (
+            await db.query(
+              "SELECT column_name FROM information_schema.columns WHERE table_name='MeetupCheckIn'",
+            )
+          ).rows.map((r) => r.column_name);
+          assert.ok(
+            !columns.includes("latitude") && !columns.includes("longitude"),
+          );
+        },
+      );
+      let pickup: Payload;
+      await t.test(
+        "random hashed challenge, correct role/stage, rotation, concurrent single consumption and evidence gates",
+        async () => {
+          assert.equal(
+            (await op(first.id, "issue", borrower, { purpose: "PICKUP" }))
+              .status,
+            403,
+          );
+          const issuanceKey = randomUUID(),
+            oldResponse = await op(first.id, "issue", owner, {
+              purpose: "PICKUP",
+              requestKey: issuanceKey,
+            }),
+            old = oldResponse.json;
+          const retried = await op(first.id, "issue", owner, {
+            purpose: "PICKUP",
+            requestKey: issuanceKey,
+          });
+          assert.equal(retried.json.challengeId, old.challengeId);
+          assert.equal(retried.json.replayed, true);
+          assert.equal(
+            retried.json.qrPayload,
+            undefined,
+            "Lost raw secret is never recovered from storage",
+          );
+          // Even an identical timestamp cannot revive a challenge after another Booking write.
+          await db.query(
+            "UPDATE \"Booking\" SET notes='Version changed while timestamp retained' WHERE id=$1",
+            [first.id],
+          );
+          assert.equal(
+            (
+              await op(first.id, "verify", borrower, {
+                purpose: "PICKUP",
+                challengeId: old.challengeId,
+                qrPayload: old.qrPayload,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            409,
+          );
+          pickup = (await op(first.id, "issue", owner, { purpose: "PICKUP" }))
+            .json;
+          const verify = (actor: Actor, c: Payload, extra: object = {}) =>
+            op(first.id, "verify", actor, {
+              purpose: "PICKUP",
+              challengeId: c.challengeId,
+              qrPayload: c.qrPayload,
+              requestKey: randomUUID(),
+              ...extra,
+            });
+          assert.equal((await verify(borrower, old)).status, 409);
+          assert.equal((await verify(outsider, pickup)).status, 403);
+          assert.equal((await verify(owner, pickup)).status, 403);
+          assert.equal(
+            (await verify(borrower, pickup, { purpose: "RETURN" })).status,
+            409,
+          );
+          const otherBooking = await rental();
+          assert.equal(
+            (await op(otherBooking.id, "enroll", owner)).status,
+            200,
+          );
+          assert.equal(
+            (
+              await op(otherBooking.id, "verify", borrower, {
+                purpose: "PICKUP",
+                challengeId: pickup.challengeId,
+                qrPayload: pickup.qrPayload,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            404,
+          );
+          const key = randomUUID();
+          const results = await Promise.all([
+            verify(borrower, pickup, { requestKey: key }),
+            verify(borrower, pickup, { requestKey: key }),
+          ]);
+          results.forEach((r) => assert.equal(r.status, 200));
+          assert.ok(results.some((r) => r.json.replayed));
+          assert.equal((await verify(borrower, pickup)).status, 409);
+          assert.equal(
+            (await detail(first.id)).json.booking.status,
+            "HANDOFF_PENDING",
+          );
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${first.id}/handoff`,
+                borrower,
+                "POST",
+                evidence,
+              )
+            ).status,
+            409,
+          );
+          assert.equal(
+            (
+              await api(`/api/bookings/${first.id}/handoff`, borrower, "POST", {
+                ...evidence,
+                meetupChallengeId: pickup.challengeId,
+                physicalReceipt: false,
+              })
+            ).status,
+            409,
+          );
+          assert.equal(
+            (
+              await api(`/api/bookings/${first.id}/handoff`, borrower, "POST", {
+                conditionConfirmed: true,
+                meetupChallengeId: pickup.challengeId,
+                physicalReceipt: true,
+              })
+            ).status,
+            400,
+          );
+          const submission = {
+            ...evidence,
+            meetupChallengeId: pickup.challengeId,
+            physicalReceipt: true,
+          };
+          assert.equal(
+            (
+              await api(`/api/bookings/${first.id}/handoff`, borrower, "POST", {
+                ...submission,
+                conditionConfirmed: false,
+              })
+            ).status,
+            400,
+          );
+          const completed = await Promise.all([
+            api(
+              `/api/bookings/${first.id}/handoff`,
+              borrower,
+              "POST",
+              submission,
+            ),
+            api(
+              `/api/bookings/${first.id}/handoff`,
+              borrower,
+              "POST",
+              submission,
+            ),
+          ]);
+          completed.forEach((r) => assert.equal(r.status, 200));
+          assert.ok(completed.some((r) => r.json.replayed));
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${first.id}/handoff`,
+                borrower,
+                "POST",
+                submission,
+              )
+            ).json.replayed,
+            true,
+          );
+          assert.equal(
+            (
+              await api(`/api/bookings/${first.id}/handoff`, borrower, "POST", {
+                ...submission,
+                conditionNotes: "changed payload",
+              })
+            ).status,
+            409,
+          );
+          const row = (
+            await db.query('SELECT * FROM "MeetupChallenge" WHERE id=$1', [
+              pickup.challengeId,
+            ])
+          ).rows[0];
+          assert.equal(row.tokenHash.length, 64);
+          assert.equal(row.codeHash.length, 64);
+          assert.notEqual(row.tokenHash, pickup.qrPayload.split(":").at(-1));
+          assert.ok(row.completedAt);
+          assert.equal(
+            (
+              await db.query(
+                'SELECT count(*)::int n FROM "MeetupEvent" WHERE "challengeId"=$1 AND kind=\'CHALLENGE_VERIFIED\'',
+                [pickup.challengeId],
+              )
+            ).rows[0].n,
+            1,
+          );
+          await assert.rejects(
+            db.query(
+              'UPDATE "MeetupChallenge" SET "tokenHash"=\'rewritten\' WHERE id=$1',
+              [pickup.challengeId],
+            ),
+            /immutable/,
+          );
+        },
+      );
+      await t.test(
+        "fresh return checks, suspended custody obligations, independent receipt, inspection and completion",
+        async () => {
+          await db.query(
+            'UPDATE "User" SET "accountStatus"=\'SUSPENDED\' WHERE id=$1',
+            [borrower.id],
+          );
+          await db.query(
+            'UPDATE "Listing" SET "adminRestricted"=true WHERE id=$1',
+            [first.listingId],
+          );
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${first.id}/return`,
+                borrower,
+                "POST",
+                evidence,
+              )
+            ).status,
+            200,
+          );
+          assert.equal(
+            (await op(first.id, "issue", borrower, { purpose: "RETURN" }))
+              .status,
+            409,
+          );
+          for (const actor of [owner, borrower])
+            assert.equal(
+              (await check(first.id, actor, "RETURN")).json.checkIn.outcome,
+              "VERIFIED",
+            );
+          const issued = (
+            await op(first.id, "issue", borrower, { purpose: "RETURN" })
+          ).json;
+          assert.equal(
+            (
+              await api(`/api/bookings/${first.id}`, owner, "PATCH", {
+                action: "inspect",
+              })
+            ).status,
+            400,
+          );
+          assert.equal(
+            (
+              await op(first.id, "verify", owner, {
+                purpose: "RETURN",
+                challengeId: issued.challengeId,
+                manualCode: issued.manualCode,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            200,
+          );
+          assert.equal(
+            (await detail(first.id)).json.booking.status,
+            "RETURN_PENDING",
+          );
+          const receipt = {
+            action: "inspect",
+            meetupChallengeId: issued.challengeId,
+            physicalReceipt: true,
+          };
+          assert.equal(
+            (await api(`/api/bookings/${first.id}`, owner, "PATCH", receipt))
+              .status,
+            200,
+          );
+          assert.equal(
+            (await api(`/api/bookings/${first.id}`, owner, "PATCH", receipt))
+              .json.replayed,
+            true,
+          );
+          const returned = (await detail(first.id)).json.booking;
+          assert.equal(returned.status, "INSPECTION");
+          assert.equal(returned.return.inspectionAccepted, null);
+          assert.equal(returned.return.confirmedBy, null);
+          assert.equal(
+            (
+              await api(`/api/bookings/${first.id}/inspection`, owner, "POST", {
+                ...evidence,
+                acceptable: true,
+              })
+            ).status,
+            200,
+          );
+          assert.equal(
+            (await detail(first.id)).json.booking.status,
+            "COMPLETED",
+          );
+          await db.query(
+            'UPDATE "User" SET "accountStatus"=\'ACTIVE\' WHERE id=$1',
+            [borrower.id],
+          );
+        },
+      );
+      await t.test(
+        "manual guessing limits and audit survive rotation; expired/replayed and cancelled/disputed paths fail closed",
+        async () => {
+          const rental2 = await rental();
+          await prepare(rental2.id);
+          let c = (await op(rental2.id, "issue", owner, { purpose: "PICKUP" }))
+            .json;
+          const bad = c.manualCode === "000000" ? "111111" : "000000";
+          for (let n = 0; n < 5; n++)
+            assert.equal(
+              (
+                await op(rental2.id, "verify", borrower, {
+                  purpose: "PICKUP",
+                  challengeId: c.challengeId,
+                  manualCode: bad,
+                  requestKey: randomUUID(),
+                })
+              ).status,
+              400,
+            );
+          assert.equal(
+            (
+              await op(rental2.id, "verify", borrower, {
+                purpose: "PICKUP",
+                challengeId: c.challengeId,
+                manualCode: c.manualCode,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            429,
+          );
+          assert.equal(
+            (
+              await db.query(
+                'SELECT count(*)::int n FROM "MeetupEvent" WHERE "challengeId"=$1 AND kind=\'VERIFY_SECRET_FAILED\'',
+                [c.challengeId],
+              )
+            ).rows[0].n,
+            5,
+          );
+          c = (await op(rental2.id, "issue", owner, { purpose: "PICKUP" }))
+            .json;
+          assert.equal(
+            (
+              await op(rental2.id, "verify", borrower, {
+                purpose: "PICKUP",
+                challengeId: c.challengeId,
+                manualCode: c.manualCode,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            200,
+          );
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${rental2.id}/handoff`,
+                borrower,
+                "POST",
+                {
+                  ...evidence,
+                  meetupChallengeId: c.challengeId,
+                  physicalReceipt: true,
+                },
+              )
+            ).status,
+            200,
+          );
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${rental2.id}/dispute`,
+                borrower,
+                "POST",
+                {
+                  reason: "Synthetic dispute",
+                  description: "Evidence must remain unchanged by verification",
+                },
+              )
+            ).status,
+            201,
+          );
+          const before = (
+            await db.query('SELECT * FROM "Booking" WHERE id=$1', [rental2.id])
+          ).rows[0];
+          for (const [name, body] of [
+            [
+              "checkin",
+              {
+                purpose: "RETURN",
+                requestKey: randomUUID(),
+                mode: "unavailable",
+                reason: "UNAVAILABLE",
+              },
+            ],
+            ["issue", { purpose: "RETURN" }],
+            [
+              "fallback",
+              {
+                purpose: "RETURN",
+                reason: "Location is unavailable",
+                acknowledged: true,
+              },
+            ],
+            [
+              "verify",
+              {
+                purpose: "PICKUP",
+                challengeId: c.challengeId,
+                manualCode: c.manualCode,
+                requestKey: randomUUID(),
+              },
+            ],
+          ] as [string, object][])
+            assert.equal((await op(rental2.id, name, owner, body)).status, 409);
+          assert.notEqual(
+            (
+              await op(rental2.id, "receipt", owner, {
+                meetupChallengeId: c.challengeId,
+                physicalReceipt: true,
+              })
+            ).status,
+            200,
+          );
+          assert.deepEqual(
+            (
+              await db.query('SELECT * FROM "Booking" WHERE id=$1', [
+                rental2.id,
+              ])
+            ).rows[0],
+            before,
+          );
+          const cancel = await rental();
+          await op(cancel.id, "enroll", owner);
+          assert.equal(
+            (
+              await api(`/api/bookings/${cancel.id}`, owner, "PATCH", {
+                action: "cancel",
+              })
+            ).status,
+            200,
+          );
+          assert.equal((await check(cancel.id, owner)).status, 409);
+          const expire = await rental();
+          await prepare(expire.id);
+          await stop();
+          await start(ids, 30);
+          const expired = (
+            await op(expire.id, "issue", owner, { purpose: "PICKUP" })
+          ).json;
+          await new Promise((r) => setTimeout(r, 31000));
+          assert.equal(
+            (
+              await op(expire.id, "verify", borrower, {
+                purpose: "PICKUP",
+                challengeId: expired.challengeId,
+                manualCode: expired.manualCode,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            409,
+          );
+          assert.equal(
+            (await detail(expire.id)).json.booking.status,
+            "HANDOFF_PENDING",
+          );
+          await stop();
+          await start(ids);
+        },
+      );
+      await t.test(
+        "two real mobile browser sessions: GPS permission, actual camera QR, drafts, reduced return, restart and screenshots",
+        async () => {
+          const browserRental = await rental(),
+            id = browserRental.id;
+          const media = path.join(artifact, "pickup.y4m");
+          // Initialize a valid fixture video; replace with this booking's QR before opening the camera.
+          await writeFile(
+            path.join(artifact, "qr.png"),
+            await QRCode.toBuffer("placeholder"),
+          );
+          const encodeVideo = () =>
+            execFileSync("ffmpeg", [
+              "-y",
+              "-loglevel",
+              "error",
+              "-loop",
+              "1",
+              "-i",
+              path.join(artifact, "qr.png"),
+              "-t",
+              "2",
+              "-vf",
+              "scale=480:480,pad=640:480:80:0:white",
+              "-r",
+              "10",
+              "-pix_fmt",
+              "yuv420p",
+              media,
+            ]);
+          encodeVideo();
+          browser = await chromium.launch({
+            executablePath: process.env.MRT_BROWSER_PATH ?? "/usr/bin/chromium",
+            headless: true,
+            args: [
+              "--use-fake-device-for-media-stream",
+              `--use-file-for-fake-video-capture=${media}`,
+              "--use-fake-ui-for-media-stream",
+            ],
+          });
+          const ownerContext = await browser.newContext({
+              timezoneId: "Asia/Taipei",
+              viewport: { width: 390, height: 844 },
+              geolocation: { ...point, accuracy: 10 },
+              permissions: ["geolocation", "camera"],
+            }),
+            borrowerContext = await browser.newContext({
+              timezoneId: "Asia/Taipei",
+              viewport: { width: 390, height: 844 },
+              geolocation: { ...point, accuracy: 10 },
+              permissions: ["geolocation", "camera"],
+            });
+          const opage = await ownerContext.newPage(),
+            bpage = await borrowerContext.newPage();
+          for (const [page, actor] of [
+            [opage, owner],
+            [bpage, borrower],
+          ] as [Page, Actor][]) {
+            await page.goto(base + "/login");
+            await page
+              .getByLabel("Email address", { exact: true })
+              .fill(actor.email);
+            await page.getByLabel("Password", { exact: true }).fill(password);
+            await page
+              .getByRole("button", { name: "Log in", exact: true })
+              .click();
+            await expect(page).not.toHaveURL(/\/login$/, { timeout: 15000 });
+            await page.goto(`${base}/bookings/${id}`);
+            page.on("dialog", (dialog) => void dialog.accept());
+          }
+          await opage
+            .getByRole("button", {
+              name: "Enable isolated meetup preview",
+              exact: true,
+            })
+            .click();
+          await expect(
+            bpage.getByRole("button", { name: "I've Arrived", exact: true }),
+          ).toBeVisible({ timeout: 15000 });
+          for (const page of [opage, bpage])
+            await page
+              .getByRole("button", { name: "I've Arrived", exact: true })
+              .click();
+          await expect(opage.getByText(/Owner: Location verified/)).toBeVisible(
+            { timeout: 15000 },
+          );
+          await expect(
+            opage.getByText(/Borrower: Location verified/),
+          ).toBeVisible({ timeout: 15000 });
+          async function fillEvidence(page: Page, title: string) {
+            const form = page.locator("form").filter({
+              has: page.getByRole("heading", { name: title, exact: true }),
+            });
+            for (const select of await form.locator("select").all())
+              await select.selectOption("yes");
+            await form
+              .getByLabel("Condition notes", { exact: true })
+              .fill("Synthetic equipment inspected independently");
+            await form.locator('input[type="file"]').setInputFiles({
+              name: "camera.png",
+              mimeType: "image/png",
+              buffer: photo,
+            });
+            await form.locator('input[type="checkbox"]').last().check();
+            return form;
+          }
+          await (await fillEvidence(opage, "Submit owner handoff"))
+            .getByRole("button", { name: "Submit owner handoff", exact: true })
+            .click();
+          await expect(
+            opage.getByText("HANDOFF_PENDING", { exact: true }),
+          ).toBeVisible({ timeout: 15000 });
+          const issuance = opage.waitForResponse(
+            (r) =>
+              r.url().endsWith(`/api/bookings/${id}/meetup/issue`) &&
+              r.request().method() === "POST",
+          );
+          await opage
+            .getByRole("button", { name: "Generate Pickup QR", exact: true })
+            .click();
+          const issued = (await (await issuance).json()) as Payload;
+          await writeFile(
+            path.join(artifact, "qr.png"),
+            await QRCode.toBuffer(issued.qrPayload, { width: 480, margin: 4 }),
+          );
+          encodeVideo();
+          const screenshots = path.join(artifact, "screenshots");
+          await mkdir(screenshots, { recursive: true });
+          await expect(
+            opage.getByAltText("Pickup one-time verification QR", {
+              exact: true,
+            }),
+          ).toBeVisible();
+          await opage.screenshot({
+            path: path.join(screenshots, "00-owner-pickup-qr.png"),
+            fullPage: true,
+          });
+          await bpage
+            .getByRole("button", { name: "Scan Pickup QR", exact: true })
+            .click();
+          await expect(bpage.getByText(/Verified booking/)).toBeVisible({
+            timeout: 20000,
+          });
+          assert.equal(
+            (await detail(id)).json.booking.status,
+            "HANDOFF_PENDING",
+          );
+          const borrowerForm = await fillEvidence(
+            bpage,
+            "Confirm receipt as borrower",
+          );
+          await borrowerForm
+            .getByLabel("Condition notes", { exact: true })
+            .fill("Recoverable equipment draft after refresh");
+          await bpage.reload();
+          await expect(
+            bpage.getByLabel("Condition notes", { exact: true }),
+          ).toHaveValue("Recoverable equipment draft after refresh");
+          const resumed = await fillEvidence(
+            bpage,
+            "Confirm receipt as borrower",
+          );
+          await resumed
+            .getByLabel(
+              "I have physically received the equipment after inspecting it.",
+            )
+            .check();
+          await bpage.screenshot({
+            path: path.join(screenshots, "01-pickup-verified.png"),
+            fullPage: true,
+          });
+          await resumed
+            .getByRole("button", {
+              name: "Confirm receipt as borrower",
+              exact: true,
+            })
+            .click();
+          await expect(bpage.getByText("IN_USE", { exact: true })).toBeVisible({
+            timeout: 15000,
+          });
+          await (await fillEvidence(bpage, "Submit item return"))
+            .getByRole("button", { name: "Submit item return", exact: true })
+            .click();
+          await expect(
+            bpage.getByText("RETURN_PENDING", { exact: true }),
+          ).toBeVisible({ timeout: 15000 });
+          await opage.reload();
+          // Actual denied browser geolocation (no grant); the explicit unavailable path also covers timeout/device failure.
+          await ownerContext.clearPermissions();
+          await opage
+            .getByRole("button", { name: "I've Arrived", exact: true })
+            .click();
+          await expect(
+            opage.getByText(/Owner: Location unavailable/),
+          ).toBeVisible({ timeout: 20000 });
+          await bpage
+            .getByRole("button", {
+              name: "Location unavailable — record this honestly",
+              exact: true,
+            })
+            .click();
+          for (const page of [opage, bpage]) {
+            await page
+              .getByLabel("Fallback reason", { exact: true })
+              .fill(
+                "Underground GPS unavailable; reduced assurance acknowledged",
+              );
+            await page
+              .getByLabel(
+                "I acknowledge that location is not verified and want to proceed at reduced assurance.",
+              )
+              .check();
+            await page
+              .getByRole("button", {
+                name: "Record my reduced-assurance acknowledgement",
+                exact: true,
+              })
+              .click();
+          }
+          await bpage
+            .getByRole("button", { name: "Generate Return QR", exact: true })
+            .click();
+          await expect(bpage.getByText(/One-time manual code:/)).toBeVisible();
+          await bpage.screenshot({
+            path: path.join(screenshots, "02-return-reduced-assurance.png"),
+            fullPage: true,
+          });
+          await opage.evaluate(() => {
+            navigator.mediaDevices.getUserMedia = async () => {
+              throw new DOMException(
+                "Test permission denial",
+                "NotAllowedError",
+              );
+            };
+          });
+          await opage
+            .getByRole("button", { name: "Scan Return QR", exact: true })
+            .click();
+          await expect(
+            opage.getByText(
+              "Camera unavailable or permission denied. Use the one-time manual code.",
+              { exact: true },
+            ),
+          ).toBeVisible();
+          const manual = (
+            await bpage.getByText(/One-time manual code:/).innerText()
+          ).match(/\d{6}/)![0];
+          await opage
+            .getByLabel("One-time return code", { exact: true })
+            .fill(manual);
+          // Lose the response after the real server commits. A retry must reuse the same browser request key.
+          let droppedResponse = false;
+          await opage.route(
+            `**/api/bookings/${id}/meetup/verify`,
+            async (route) => {
+              if (!droppedResponse) {
+                droppedResponse = true;
+                const response = await route.fetch();
+                assert.equal(response.status(), 200);
+                await route.abort("connectionreset");
+              } else await route.continue();
+            },
+          );
+          await opage
+            .getByRole("button", { name: "Verify return code", exact: true })
+            .click();
+          await expect(
+            opage
+              .getByRole("region", { name: "MRT meetup verification" })
+              .getByRole("alert"),
+          ).toContainText(/fetch|network|connection/i);
+          const retryResponse = opage.waitForResponse(
+            (r) =>
+              r.url().endsWith(`/api/bookings/${id}/meetup/verify`) &&
+              r.status() === 200,
+          );
+          await opage
+            .getByRole("button", { name: "Verify return code", exact: true })
+            .click();
+          assert.equal((await (await retryResponse).json()).replayed, true);
+          await opage.unroute(`**/api/bookings/${id}/meetup/verify`);
+          await expect(opage.getByText(/Verified booking/)).toBeVisible();
+          // Disconnect the dev-server HMR clients before restart; retain real authenticated browser contexts.
+          await opage.goto("about:blank");
+          await bpage.goto("about:blank");
+          await stop();
+          await start(ids);
+          await opage.goto(`${base}/bookings/${id}`);
+          await expect(
+            opage.getByLabel(
+              "I have physically received the returned equipment. This does not accept its condition.",
+            ),
+          ).toBeVisible();
+          await opage
+            .getByLabel(
+              "I have physically received the returned equipment. This does not accept its condition.",
+            )
+            .check();
+          await opage
+            .getByRole("button", {
+              name: "Acknowledge physical return and begin inspection",
+              exact: true,
+            })
+            .click();
+          await expect(
+            opage.getByText("INSPECTION", { exact: true }),
+          ).toBeVisible({ timeout: 15000 });
+          await opage.screenshot({
+            path: path.join(screenshots, "03-return-received-inspection.png"),
+            fullPage: true,
+          });
+          const inspection = opage.locator("form").filter({
+            has: opage.getByRole("heading", {
+              name: "Save owner inspection decision",
+              exact: true,
+            }),
+          });
+          for (const select of await inspection.locator("select").all()) {
+            const label = await select.locator("option").allTextContents();
+            await select.selectOption(
+              label.some((s) => s.includes("Acceptable"))
+                ? "acceptable"
+                : "yes",
+            );
+          }
+          await inspection.locator('input[type="checkbox"]').check();
+          await inspection
+            .getByRole("button", {
+              name: "Save owner inspection decision",
+              exact: true,
+            })
+            .click();
+          await expect(
+            opage.getByText("COMPLETED", { exact: true }),
+          ).toBeVisible({ timeout: 15000 });
+          await opage.screenshot({
+            path: path.join(screenshots, "04-rental-completed.png"),
+            fullPage: true,
+          });
+          const overflow = await opage.evaluate(
+            () => document.documentElement.scrollWidth > window.innerWidth,
+          );
+          assert.equal(overflow, false);
+          assert.equal((await detail(id)).json.booking.status, "COMPLETED");
+          await browser.close();
+          browser = undefined;
+        },
+      );
+      const logs = readFileSync(logPath, "utf8");
+      assert.ok(!logs.includes(pickup!.qrPayload));
+      assert.ok(!logs.includes(pickup!.qrPayload.split(":").at(-1)!));
+      assert.ok(!logs.includes(serverSecret));
+    } finally {
+      if (browser) {
+        let n = 0;
+        for (const context of browser.contexts())
+          for (const page of context.pages()) {
+            await page
+              .screenshot({
+                path: path.join(artifact, `browser-failure-${n}.png`),
+                fullPage: true,
+              })
+              .catch(() => {});
+            await writeFile(
+              path.join(artifact, `browser-failure-${n++}.html`),
+              await page.content(),
+            ).catch(() => {});
+          }
+      }
+      await browser?.close();
+      await stop();
+      closeSync(log);
+      await db.end();
+    }
+  },
+);

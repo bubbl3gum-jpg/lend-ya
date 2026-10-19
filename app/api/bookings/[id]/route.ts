@@ -1,3 +1,4 @@
+import { receiveReturn } from "@/lib/meetup/service";
 import { isSerializationConflict } from "@/lib/database-conflicts";
 import { stationSelect } from "@/lib/mrt/network";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
@@ -228,6 +229,9 @@ export async function PATCH(
     } else if (action === "inspect") {
       if (!isOwner) {
         return apiError("Only the listing owner can inspect a return.", 403);
+      }
+      if(await prisma.meetupSession.findUnique({where:{bookingId}})){
+        try{return Response.json(await receiveReturn(bookingId,currentUser.id,body));}catch(error){return rentalFailure(error,"PATCH meetup return receipt");}
       }
       if (booking.status !== "RETURN_PENDING" || !booking.return) {
         return apiError(

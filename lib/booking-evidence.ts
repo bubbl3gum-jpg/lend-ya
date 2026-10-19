@@ -13,6 +13,8 @@ export type RentalSubmission = {
   serialNumber: string | null;
   checklist: RentalChecklist;
   photos: PrivatePhoto[];
+  meetupChallengeId?: string;
+  physicalReceipt?: boolean;
 };
 
 export function parseEvidence(
@@ -47,7 +49,11 @@ export function parseEvidence(
       "Attach photos as image files; external photo URLs are not accepted.",
       400,
     );
+  if(body.meetupChallengeId!==undefined&&(typeof body.meetupChallengeId!=="string"||! /^[a-f0-9-]{36}$/.test(body.meetupChallengeId)))throw new RentalError("Invalid meetup challenge reference.",400);
+  if(body.physicalReceipt!==undefined&&typeof body.physicalReceipt!=="boolean")throw new RentalError("Provide an explicit physical receipt acknowledgement.",400);
   return {
+    ...(typeof body.meetupChallengeId==="string"?{meetupChallengeId:body.meetupChallengeId}:{}),
+    ...(typeof body.physicalReceipt==="boolean"?{physicalReceipt:body.physicalReceipt}:{}),
     checklist,
     conditionConfirmed: body.conditionConfirmed === true,
     returnConfirmed: body.returnConfirmed === true,

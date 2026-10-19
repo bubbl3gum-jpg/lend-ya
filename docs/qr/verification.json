@@ -1,0 +1,320 @@
+{
+  "baseCommit": "fcd369a35fbd07df9ef9f9092b394ab0298d20b2",
+  "branch": "feature/qr-mrt-handoff-return",
+  "date": "2026-10-19",
+  "environment": {
+    "node": "v24.19.0",
+    "npm": "11.9.0",
+    "chromium": "154.0.8037.57; mobile viewport 390x844; Asia/Taipei"
+  },
+  "checks": [
+    {
+      "name": "types",
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "seconds": 10.2,
+      "phase": "acceptance",
+      "status": "PASSED",
+      "nodeResults": null
+    },
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "seconds": 7.8,
+      "phase": "acceptance",
+      "status": "PASSED",
+      "nodeResults": null
+    },
+    {
+      "name": "test:unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "seconds": 4.8,
+      "phase": "review",
+      "status": "PASSED",
+      "nodeResults": 35
+    },
+    {
+      "name": "test:meetup",
+      "command": "npm run test:meetup",
+      "exit": 0,
+      "seconds": 95.7,
+      "phase": "acceptance",
+      "status": "PASSED",
+      "nodeResults": 7
+    },
+    {
+      "name": "test:meetup-migration",
+      "command": "npm run test:meetup-migration",
+      "exit": 0,
+      "seconds": 4.2,
+      "phase": "review",
+      "status": "PASSED",
+      "nodeResults": 1
+    },
+    {
+      "name": "test:chat",
+      "command": "npm run test:chat",
+      "exit": 0,
+      "seconds": 110.3,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 14
+    },
+    {
+      "name": "test:stability",
+      "command": "npm run test:stability",
+      "exit": 0,
+      "seconds": 21.8,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 8
+    },
+    {
+      "name": "test:rental-api",
+      "command": "npm run test:rental-api",
+      "exit": 0,
+      "seconds": 40.3,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 13
+    },
+    {
+      "name": "test:rental-browser",
+      "command": "npm run test:rental-browser",
+      "exit": 0,
+      "seconds": 64.5,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 4
+    },
+    {
+      "name": "test:integration",
+      "command": "npm run test:integration",
+      "exit": 0,
+      "seconds": 39.5,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": null
+    },
+    {
+      "name": "test:admin",
+      "command": "npm run test:admin",
+      "exit": 0,
+      "seconds": 41.1,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 7
+    },
+    {
+      "name": "test:moderation",
+      "command": "npm run test:moderation",
+      "exit": 0,
+      "seconds": 64.5,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 10
+    },
+    {
+      "name": "test:migration",
+      "command": "npm run test:migration",
+      "exit": 0,
+      "seconds": 7.0,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": null
+    },
+    {
+      "name": "test:admin-migration",
+      "command": "npm run test:admin-migration",
+      "exit": 0,
+      "seconds": 4.1,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 1
+    },
+    {
+      "name": "test:mvp",
+      "command": "npm run test:mvp",
+      "exit": 0,
+      "seconds": 83.6,
+      "phase": "final",
+      "status": "PASSED",
+      "nodeResults": 11
+    },
+    {
+      "name": "build:verify",
+      "command": "npm run build:verify",
+      "exit": 0,
+      "seconds": 10.7,
+      "phase": "review",
+      "status": "PASSED",
+      "nodeResults": null
+    }
+  ],
+  "nodeResultsTotal": 111,
+  "countCaveat": "Includes Node parent tests; functional MRT scripts and build are additional. Synthetic browser fixtures, not physical onsite acceptance.",
+  "schemaChecks": {
+    "prismaValidate": "PASSED",
+    "prismaGenerate": "PASSED",
+    "historicalMigrationFilesByteIdentical": 18,
+    "newMigration": "20261019210000_mrt_meetup_verification",
+    "migrationPreservation": "Every base table snapshot and prior applied checksum preserved; new tables empty; existing bookings unenrolled."
+  },
+  "browserAcceptance": {
+    "passed": true,
+    "actualAuthenticatedSessions": 2,
+    "pickup": "Actual UI-issued QR decoded from generated ffmpeg camera frames; scan alone did not start rental; independent evidence/photos and explicit receipt required.",
+    "return": "Fresh check-ins and bilateral reduced assurance; simulated camera denial; manual verification; independent receipt then inspection/completion.",
+    "lostResponseRetry": "Browser request committed successfully server-side then response aborted; browser retry returned replayed:true without another consumption.",
+    "restart": "Disconnected pages, retained authenticated browser contexts, restarted server with same ephemeral secret, reopened booking and recovered pending receipt.",
+    "drafts": "Condition text/checklist restored after refresh; photos reselected and acknowledgements explicitly rechecked.",
+    "purposeBookingRoleAndVersion": "Wrong role/purpose/booking rejected; timestamp-preserving Booking update invalidated old challenge through monotonic version.",
+    "expiry": "Actual 30-second configured challenge waited 31 seconds and was rejected without state advancement.",
+    "screenshots": [
+      "docs/qr/screenshots/00-owner-pickup-qr.png",
+      "docs/qr/screenshots/01-pickup-verified.png",
+      "docs/qr/screenshots/02-return-reduced-assurance.png",
+      "docs/qr/screenshots/03-return-received-inspection.png",
+      "docs/qr/screenshots/04-rental-completed.png"
+    ]
+  },
+  "databaseSafety": "Fresh owned local hustlen_test_* only, exact app/test URL and ownership marker; removed owned databases/uploads. No existing p2p_marketplace operation.",
+  "coordinateCoverage": {
+    "stations": 120,
+    "sourceDocumentedCoordinates": 109,
+    "missing": 11,
+    "newCoordinatesInvented": 0,
+    "officialFetchStatus": "BLOCKED: proxy CONNECT 403 Forbidden for www.ntmetro.com.tw and data.taipei.",
+    "networkSettingsChanged": false
+  },
+  "notExecuted": [
+    "Physical iOS Safari/Android Chrome and onsite/underground GPS calibration",
+    "GPS success at the 11 stations without authoritative coordinate pairs",
+    "GitHub Actions run/dispatch; workflow updated but no CI pass claimed",
+    "Public deployment, live migration, merge, new payment/AI/notification/native functionality"
+  ],
+  "earlierFailedRuns": [
+    {
+      "phase": "first",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "preservation",
+      "failedCommands": [
+        "test:meetup-migration"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "second",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "third",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "fourth",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "fifth",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "sixth",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    },
+    {
+      "phase": "final",
+      "failedCommands": [
+        "test:meetup"
+      ],
+      "supersededByPassingFinalResults": true
+    }
+  ],
+  "failureDiagnosis": [
+    "Initial photo input exact-label locator did not include its help text; selector corrected.",
+    "Status polling did not refresh server-rendered Booking actions after the other participant advanced a state; UI refreshed on mismatch.",
+    "Wrapped controlled textarea label changed on entry; explicit stable label/field ID added and draft recovery passed.",
+    "Cold dashboard compilation exceeded a five-second login assertion (HTTP login succeeded); bounded assertion increased to 15 seconds.",
+    "Dev HMR restart aborted navigation; disconnected pages before restart and reopened real authenticated contexts.",
+    "Manual-code submission raced metadata polling; submit now fetches current challenge first.",
+    "Migration fixture assertion initially forgot its additional historical station; replaced fixed count with exact before/after snapshot."
+  ],
+  "codeFingerprintAtFinalImplementation": "31f7e05a47766f0cad1968517a320cd002df5bcdd6339b0184f070987dedf43c",
+  "changedFiles": [
+    ".github/workflows/verify.yml",
+    "app/api/bookings/[id]/meetup/[operation]/route.ts",
+    "app/api/bookings/[id]/route.ts",
+    "components/booking-actions.tsx",
+    "components/logout-button.tsx",
+    "components/meetup-verification.tsx",
+    "components/rental-evidence-form.tsx",
+    "docs/MILESTONE3_MRT_VERIFICATION.md",
+    "docs/qr/SCREENSHOTS.md",
+    "docs/qr/coordinate-coverage.json",
+    "docs/qr/screenshots/00-owner-pickup-qr.png",
+    "docs/qr/screenshots/01-pickup-verified.png",
+    "docs/qr/screenshots/02-return-reduced-assurance.png",
+    "docs/qr/screenshots/03-return-received-inspection.png",
+    "docs/qr/screenshots/04-rental-completed.png",
+    "docs/qr/verification.json",
+    "lib/booking-evidence.ts",
+    "lib/meetup/config.ts",
+    "lib/meetup/location.ts",
+    "lib/meetup/service.ts",
+    "lib/rental-lifecycle.ts",
+    "package-lock.json",
+    "package.json",
+    "prisma/migrations/20261019210000_mrt_meetup_verification/migration.sql",
+    "prisma/schema.prisma",
+    "tests/meetup-location.test.ts",
+    "tests/meetup-migration.test.ts",
+    "tests/meetup.integration.test.ts",
+    "tests/run-isolated.ts"
+  ],
+  "changedImplementationSha256": {
+    ".github/workflows/verify.yml": "da2faab23b86c70078cbdca10961c64aaa966ffe2b169ca8b2aa58a7518fb730",
+    "app/api/bookings/[id]/meetup/[operation]/route.ts": "431ec684f2ba7426fdc5b93f4d2a9065bf9dc3ceb500224b78f0c43b893ed494",
+    "app/api/bookings/[id]/route.ts": "315147ca3134b42169ff2caeacaf79d11ed842c46793cc04c65b65a92886c56a",
+    "components/booking-actions.tsx": "4e9526ced39df878055fe69755ce29bd026403c36137b82d444c82c405abb677",
+    "components/logout-button.tsx": "444ca106faf2021902e274e072d90d5c45fbac9c5b90ffb033130a02b4d1c0a9",
+    "components/meetup-verification.tsx": "604d2c31a786fdbf3efc99d37066591a633908a2f93afcdc3ccca1e8847e9c8e",
+    "components/rental-evidence-form.tsx": "c207a1006be6f36cbae850f1d3d53de8727d877c3b547c85aabe2113647e37e8",
+    "lib/booking-evidence.ts": "cc086fdf0c6dd835784080d3cb6448bf68ee3838f2f2a6a5e25e6cd586a0f27b",
+    "lib/meetup/config.ts": "5e845c22b618496b2212be6ac58d05128c67c73d4c9efecd4464af2a5515fc23",
+    "lib/meetup/location.ts": "c9cdf29a063a1c5837822a123dc228c69b2acd97926df556a77ff5e9fc1ed3a1",
+    "lib/meetup/service.ts": "33f990e46f28eea3b226f07ca56ba253d2cf4cd9bb0653c954c6d616e1540002",
+    "lib/rental-lifecycle.ts": "b6bdd899441a4b0b6c3ce9094436d80619ffe6f4b3fc9a39f12dddd7b8f9a14c",
+    "package-lock.json": "ccd4ef3725765e410c00c51baa3ec8e67f5ee51c095d0e4bee0ccbb81d8f22e6",
+    "package.json": "a7a1d69eae6447cef177e16556ecd1a4492a187052e909455b915da624de22f7",
+    "prisma/migrations/20261019210000_mrt_meetup_verification/migration.sql": "719f53fbb9f537d2d94889623983441775eda9d95fe102e334b37059ca04b8e5",
+    "prisma/schema.prisma": "7b441d4c13f451c58b63a3784d3771096383cdff595cc41a0c239aec75bdd59a",
+    "tests/meetup-location.test.ts": "f1f28221c4f163d843b107337807e12ae1efc57b969da53aa0e45f242e68f206",
+    "tests/meetup-migration.test.ts": "eeeb636a845d192986a203f08decf8af307e3de5c2898c47c8a74e4952d6c5e7",
+    "tests/meetup.integration.test.ts": "7a95413cb3540be8aa1a2a01679bab1495668344e4b80d528d0887dca1e84bd0",
+    "tests/run-isolated.ts": "9e6696ee1d7e7c5ef62349a57790cf5565ed1765957ae088c77c5d247f6b4b50"
+  },
+  "reviewScope": "No unrelated existing dependency versions/integrities changed. New fixtures/coverage/screenshots are intentional evidence; no generated client, build/cache, uploads, raw logs, real credentials or database state committed."
+}
