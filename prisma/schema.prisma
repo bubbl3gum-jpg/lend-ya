@@ -68,6 +68,18 @@ model User {
   reviewsWritten      VerifiedReview[] @relation("ReviewAuthor")
   reviewsReceived     VerifiedReview[] @relation("ReviewSubject")
 
+  chatOwned Conversation[] @relation("ChatOwner")
+  chatBorrowed Conversation[] @relation("ChatBorrower")
+  chatParticipants ConversationParticipant[]
+  chatMessages ChatMessage[]
+  chatBlocks UserBlock[] @relation("ChatBlocker")
+  chatBlockedBy UserBlock[] @relation("ChatBlocked")
+  chatReviewer ChatReviewer?
+  chatCasesTarget ChatModerationCase[] @relation("ChatCaseTarget")
+  chatCasesReported ChatModerationCase[] @relation("ChatCaseReporter")
+  chatCasesAssigned ChatModerationCase[] @relation("ChatCaseReviewer")
+  chatReports MessageReport[]
+  chatWarnings ChatWarning[]
   listings          Listing[]
   listingReports    ListingReport[]
   bookingsAsOwner   Booking[]              @relation("BookingOwner")
@@ -127,6 +139,7 @@ model Listing {
   updatedAt       DateTime      @updatedAt
 
   owner             User             @relation(fields: [ownerId], references: [id])
+  conversations Conversation[]
   supportedStations ListingStation[]
   bookings          Booking[]
   media             ListingMedia[]
@@ -169,6 +182,7 @@ model Booking {
   owner          User                   @relation("BookingOwner", fields: [ownerId], references: [id])
   renter         User                   @relation("BookingRenter", fields: [renterId], references: [id])
   meetingStation MrtStation             @relation(fields: [meetingStationId], references: [id])
+  chatMessages ChatMessage[]
   handoff        Handoff?
   return         Return?
   disputes       Dispute[]
@@ -337,4 +351,164 @@ model AuthRateLimit {
   attempts Int
   expiresAt DateTime
   @@index([expiresAt])
+}
+
+enum ChatMessageStatus {
+  ALLOWED
+  FLAGGED
+  HELD
+  REJECTED
+}
+
+model Conversation {
+  id Int @id @default(autoincrement())
+  listingId Int
+  ownerId Int
+  borrowerId Int
+  version Int @default(0)
+  createdAt DateTime @default(now())
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Restrict)
+  owner User @relation("ChatOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  borrower User @relation("ChatBorrower", fields: [borrowerId], references: [id], onDelete: Restrict)
+  participants ConversationParticipant[]
+  messages ChatMessage[]
+  reports MessageReport[]
+  cases ChatModerationCase[]
+  @@unique([listingId, ownerId, borrowerId])
+  @@index([ownerId, id])
+  @@index([borrowerId, id])
+}
+
+model ConversationParticipant {
+  conversationId Int
+  userId Int
+  lastReadSequence Int @default(0)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Restrict)
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+  @@id([conversationId, userId])
+  @@index([userId, conversationId])
+}
+
+model ChatMessage {
+  id Int @id @default(autoincrement())
+  conversationId Int
+  senderId Int
+  clientMessageId String @db.VarChar(128)
+  requestHash String @db.VarChar(64)
+  contentHash String @db.VarChar(64)
+  normalizedHash String @db.VarChar(64)
+  body String @db.VarChar(4000)
+  sequence Int
+  updatedSequence Int
+  deliverySequence Int?
+  status ChatMessageStatus
+  categories String[]
+  ruleCodes String[]
+  policyVersion String @db.VarChar(32)
+  bookingId Int?
+  createdAt DateTime @default(now())
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Restrict)
+  sender User @relation(fields: [senderId], references: [id], onDelete: Restrict)
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  cases ChatModerationCase[]
+  reports MessageReport[]
+  @@unique([senderId, clientMessageId])
+  @@unique([conversationId, sequence])
+  @@index([conversationId, updatedSequence])
+  @@index([conversationId, deliverySequence])
+  @@index([senderId, createdAt])
+}
+
+model UserBlock {
+  blockerId Int
+  blockedId Int
+  createdAt DateTime @default(now())
+  blocker User @relation("ChatBlocker", fields: [blockerId], references: [id], onDelete: Restrict)
+  blocked User @relation("ChatBlocked", fields: [blockedId], references: [id], onDelete: Restrict)
+  @@id([blockerId, blockedId])
+}
+
+model ChatReviewer {
+  userId Int @id
+  enabled Boolean @default(true)
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+}
+
+model ChatModerationCase {
+  id Int @id @default(autoincrement())
+  conversationId Int
+  messageId Int?
+  targetUserId Int
+  kind String @db.VarChar(24)
+  status String @default("OPEN") @db.VarChar(16)
+  category String @db.VarChar(40)
+  reporterId Int?
+  reportReason String? @db.VarChar(1000)
+  evidence Json
+  assignedTo Int?
+  decision String? @db.VarChar(24)
+  decisionReason String? @db.VarChar(2000)
+  decisionCategory String? @db.VarChar(40)
+  version Int @default(0)
+  parentId Int? @unique
+  dedupKey String? @unique @db.VarChar(160)
+  createdAt DateTime @default(now())
+  decidedAt DateTime?
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Restrict)
+  message ChatMessage? @relation(fields: [messageId], references: [id], onDelete: Restrict)
+  target User @relation("ChatCaseTarget", fields: [targetUserId], references: [id], onDelete: Restrict)
+  reporter User? @relation("ChatCaseReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  reviewer User? @relation("ChatCaseReviewer", fields: [assignedTo], references: [id], onDelete: Restrict)
+  parent ChatModerationCase? @relation("ChatAppeal", fields: [parentId], references: [id], onDelete: Restrict)
+  appeal ChatModerationCase? @relation("ChatAppeal")
+  reports MessageReport[]
+  warnings ChatWarning[]
+  @@index([status, id])
+  @@index([assignedTo, status, id])
+  @@index([targetUserId, id])
+  @@index([reporterId, id])
+}
+
+model MessageReport {
+  id Int @id @default(autoincrement())
+  conversationId Int
+  messageId Int?
+  reporterId Int
+  caseId Int
+  dedupKey String @unique @db.VarChar(160)
+  createdAt DateTime @default(now())
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Restrict)
+  message ChatMessage? @relation(fields: [messageId], references: [id], onDelete: Restrict)
+  reporter User @relation(fields: [reporterId], references: [id], onDelete: Restrict)
+  moderationCase ChatModerationCase @relation(fields: [caseId], references: [id], onDelete: Restrict)
+  @@index([reporterId, createdAt])
+}
+
+model ChatWarning {
+  id Int @id @default(autoincrement())
+  caseId Int
+  userId Int
+  reason String @db.VarChar(2000)
+  createdAt DateTime @default(now())
+  moderationCase ChatModerationCase @relation(fields: [caseId], references: [id], onDelete: Restrict)
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+  @@index([userId, id])
+}
+
+model ChatRateLimit {
+  key String @id @db.VarChar(100)
+  attempts Int
+  expiresAt DateTime
+  @@index([expiresAt])
+}
+
+model ChatOutboxEvent {
+  id Int @id @default(autoincrement())
+  kind String @db.VarChar(40)
+  dedupKey String @unique @db.VarChar(160)
+  payload Json
+  createdAt DateTime @default(now())
+  processedAt DateTime?
+  @@index([processedAt, id])
 }

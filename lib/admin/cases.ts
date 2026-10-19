@@ -89,7 +89,7 @@ export function caseQuery(kind: CaseKind, params: URLSearchParams) {
     action = params.get("action") || undefined;
   if (
     targetType &&
-    !["USER", "LISTING", "REPORT", "DISPUTE"].includes(targetType)
+    !["USER", "LISTING", "REPORT", "DISPUTE", "CHAT_CASE"].includes(targetType)
   )
     throw new AdminInputError("Invalid target type.");
   if (
@@ -102,6 +102,7 @@ export function caseQuery(kind: CaseKind, params: URLSearchParams) {
       "REPORT_RESOLVED",
       "DISPUTE_RESOLVED",
       "EVIDENCE_VIEWED",
+      "CHAT_CASE_CLAIMED", "CHAT_EVIDENCE_VIEWED", "CHAT_CASE_DECIDED", "CHAT_WARNING", "CHAT_REVIEWER_GRANT",
     ].includes(action)
   )
     throw new AdminInputError("Invalid audit action.");

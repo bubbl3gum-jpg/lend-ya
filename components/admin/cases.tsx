@@ -103,7 +103,7 @@ export async function AdminCaseDirectory({
                 className="min-w-0 rounded-lg border p-2"
               >
                 <option value="">All targets</option>
-                {["USER", "LISTING", "REPORT", "DISPUTE"].map((v) => (
+                {["USER", "LISTING", "REPORT", "DISPUTE", "CHAT_CASE"].map((v) => (
                   <option key={v}>{v}</option>
                 ))}
               </select>
@@ -124,6 +124,7 @@ export async function AdminCaseDirectory({
                   "REPORT_RESOLVED",
                   "DISPUTE_RESOLVED",
       "EVIDENCE_VIEWED",
+      "CHAT_CASE_CLAIMED", "CHAT_EVIDENCE_VIEWED", "CHAT_CASE_DECIDED", "CHAT_WARNING", "CHAT_REVIEWER_GRANT",
                 ].map((v) => (
                   <option key={v}>{v}</option>
                 ))}

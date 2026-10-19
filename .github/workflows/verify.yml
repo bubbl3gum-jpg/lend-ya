@@ -49,6 +49,8 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: npm run test:unit
+      - run: npm run test:stability
+      - run: npm run test:chat
       - run: npm run build:verify
       - run: npm run test:migration
       - run: npm run test:admin-migration

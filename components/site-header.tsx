@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { chatAvailable } from "@/lib/chat/config";
 import { getCurrentUser } from "@/lib/auth";
 import { LogoutButton } from "@/components/logout-button";
 
@@ -37,6 +38,7 @@ export async function SiteHeader() {
                     <Link href="/admin">Admin Desktop</Link>
                   ) : null}
                   <Link href="/dashboard">Dashboard</Link>
+                  {chatAvailable(currentUser.id) && <Link href="/messages">Messages</Link>}
                   <Link href="/account">Account settings</Link>
                   <Link href={`/profile/${currentUser.id}`}>
                     Public profile view

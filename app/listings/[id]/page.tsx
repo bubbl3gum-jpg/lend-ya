@@ -1,3 +1,5 @@
+import { StartConversation } from "@/components/chat/participant";
+import { chatAvailable } from "@/lib/chat/config";
 import { stationSelect } from "@/lib/mrt/network";
 import Image from "next/image";
 import Link from "next/link";
@@ -105,6 +107,7 @@ export default async function ListingDetailPage({
 
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(19rem,0.65fr)]">
           <article className="min-w-0">
+            {currentUser && currentUser.id !== listing.owner.id && chatAvailable(currentUser.id) && <StartConversation listingId={listing.id}/>}
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-slate-100">
               {photos[0] ? (
                 <Image

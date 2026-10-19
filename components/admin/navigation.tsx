@@ -8,6 +8,7 @@ export const adminLinks = [
   { href: "/admin/bookings", label: "Bookings" },
   { href: "/admin/reports", label: "Reports" },
   { href: "/admin/disputes", label: "Disputes" },
+  { href: "/admin/chat", label: "Chat moderation" },
   { href: "/admin/audit-logs", label: "Audit Logs" },
 ];
 export function AdminNavigation() {

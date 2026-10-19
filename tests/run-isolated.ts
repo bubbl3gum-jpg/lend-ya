@@ -93,6 +93,7 @@ async function main() {
       ) + "\n",
     );
     const legacyGroup = [
+      "chat",
       "admin",
       "moderation",
       "mvp",
@@ -101,6 +102,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          chat: "tests/chat.integration.test.ts",
           admin: "tests/admin.integration.test.ts",
           moderation: "tests/moderation.integration.test.ts",
           mvp: "tests/mvp-security.test.ts",
@@ -110,6 +112,7 @@ async function main() {
       : undefined;
     const testPort = await freePort();
     for (const variable of [
+      "TEST_CHAT_PORT",
       "TEST_ADMIN_PORT",
       "TEST_MODERATION_PORT",
       "TEST_MVP_PORT",
