@@ -1,0 +1,284 @@
+{
+  "baseCommit": "59bbf07a3db4206dd068be885bee7bae7a5a5ef4",
+  "branch": "feature/intelligent-chat-moderation",
+  "date": "2026-10-19",
+  "environment": {
+    "node": "v24.19.0",
+    "npm": "11.9.0",
+    "chromium": "154.0.8037.57 (Debian 13)"
+  },
+  "codeFingerprint": "fed3c0e1b2ee3fa835fcd20312253b1fb022fe4769ccccc18b60dd70746005af",
+  "fingerprintAlgorithm": "sha256 of sorted path/content-sha256 mapping, excluding documentation",
+  "codeUnchangedDuringFinalAffectedRecheck": true,
+  "checks": [
+    {
+      "name": "types",
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "seconds": 9.0,
+      "phase": "final-affected-recheck",
+      "nodeResults": null,
+      "status": "PASSED"
+    },
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "seconds": 8.1,
+      "phase": "final-affected-recheck",
+      "nodeResults": null,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "seconds": 3.7,
+      "phase": "final-affected-recheck",
+      "nodeResults": 32,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:chat",
+      "command": "npm run test:chat",
+      "exit": 0,
+      "seconds": 84.5,
+      "phase": "final-affected-recheck",
+      "nodeResults": 14,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:stability",
+      "command": "npm run test:stability",
+      "exit": 0,
+      "seconds": 20.8,
+      "phase": "full-regression",
+      "nodeResults": 8,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:rental-api",
+      "command": "npm run test:rental-api",
+      "exit": 0,
+      "seconds": 56.2,
+      "phase": "full-regression",
+      "nodeResults": 13,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:rental-browser",
+      "command": "npm run test:rental-browser",
+      "exit": 0,
+      "seconds": 58.2,
+      "phase": "full-regression",
+      "nodeResults": 4,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:integration",
+      "command": "npm run test:integration",
+      "exit": 0,
+      "seconds": 40.5,
+      "phase": "full-regression",
+      "nodeResults": null,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:admin",
+      "command": "npm run test:admin",
+      "exit": 0,
+      "seconds": 43.3,
+      "phase": "full-regression",
+      "nodeResults": 7,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:moderation",
+      "command": "npm run test:moderation",
+      "exit": 0,
+      "seconds": 69.5,
+      "phase": "full-regression",
+      "nodeResults": 10,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:migration",
+      "command": "npm run test:migration",
+      "exit": 0,
+      "seconds": 8.5,
+      "phase": "full-regression",
+      "nodeResults": null,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:admin-migration",
+      "command": "npm run test:admin-migration",
+      "exit": 0,
+      "seconds": 4.8,
+      "phase": "full-regression",
+      "nodeResults": 1,
+      "status": "PASSED"
+    },
+    {
+      "name": "test:mvp",
+      "command": "npm run test:mvp",
+      "exit": 0,
+      "seconds": 73.6,
+      "phase": "full-regression",
+      "nodeResults": 11,
+      "status": "PASSED"
+    },
+    {
+      "name": "build:verify",
+      "command": "npm run build:verify",
+      "exit": 0,
+      "seconds": 11.4,
+      "phase": "final-affected-recheck",
+      "nodeResults": null,
+      "status": "PASSED"
+    }
+  ],
+  "nodeResultsTotal": 100,
+  "countCaveat": "Includes Node parent-test results; not 100 independently blinded acceptance cases. MRT functional scripts/build checks are additional and not counted as Node tests.",
+  "schemaChecks": {
+    "prismaValidate": "PASSED",
+    "prismaGenerate": "PASSED",
+    "historicalMigrationFilesByteIdenticalToBase": 17,
+    "newMigration": "20261019180000_chat_shadow_analysis",
+    "databaseSafety": "New locally owned hustlen_test_* databases only; runner removed its databases/uploads. No existing p2p_marketplace operation."
+  },
+  "stageA": {
+    "policyVersion": "deterministic-2.2-1",
+    "dataset": "synthetic-proposed-v1",
+    "developmentCount": 36,
+    "heldOutCount": 58,
+    "labelStatus": "ASSISTANT_PROPOSED_NOT_HUMAN_VALIDATED",
+    "evaluator": "npm run moderation:evaluate -- --output docs/intelligent-moderation/evaluation",
+    "evaluatorExit": 0,
+    "originalDefectsOverActualAPI": "PASSED"
+  },
+  "stageB": {
+    "externalRequests": 0,
+    "mode": "mock-only",
+    "syntheticPilot": [
+      {
+        "command": "npm run analysis:synthetic -- development-001",
+        "exit": 0,
+        "metadata": {
+          "fixtureId": "development-001",
+          "provider": "deterministic-mock-v1",
+          "model": "rules-mock-v1",
+          "category": "NO_VIOLATION",
+          "suggestedOutcome": "ALLOWED",
+          "requiresHumanReview": true
+        }
+      },
+      {
+        "command": "npm run analysis:synthetic -- development-011",
+        "exit": 0,
+        "metadata": {
+          "fixtureId": "development-011",
+          "provider": "deterministic-mock-v1",
+          "model": "rules-mock-v1",
+          "category": "THREATS",
+          "suggestedOutcome": "HELD",
+          "requiresHumanReview": true
+        }
+      },
+      {
+        "command": "npm run analysis:synthetic -- development-020",
+        "exit": 0,
+        "metadata": {
+          "fixtureId": "development-020",
+          "provider": "deterministic-mock-v1",
+          "model": "rules-mock-v1",
+          "category": "THREATS",
+          "suggestedOutcome": "HELD",
+          "requiresHumanReview": true
+        }
+      },
+      {
+        "command": "npm run analysis:synthetic -- held-out-090",
+        "exit": 0,
+        "metadata": {
+          "fixtureId": "held-out-090",
+          "provider": "deterministic-mock-v1",
+          "model": "rules-mock-v1",
+          "category": "ILLEGAL_GOODS",
+          "suggestedOutcome": "HELD",
+          "requiresHumanReview": true
+        }
+      },
+      {
+        "command": "npm run analysis:synthetic -- held-out-057",
+        "exit": 0,
+        "metadata": {
+          "fixtureId": "held-out-057",
+          "provider": "deterministic-mock-v1",
+          "model": "rules-mock-v1",
+          "category": "ILLEGAL_GOODS",
+          "suggestedOutcome": "HELD",
+          "requiresHumanReview": true
+        }
+      }
+    ],
+    "protectedDatabaseWorkerGuard": {
+      "exit": 1,
+      "passed": true,
+      "note": "Rejected protected prefix before connecting; placeholder localhost:1 URLs, no actual database accessed."
+    }
+  },
+  "notExecuted": {
+    "realCloudProvider": "No approved provider/credentials; mocked HTTP only, no network provider calls.",
+    "humanLabelsAndAcceptance": "Proposed synthetic labels await human review; browser checks were automated.",
+    "githubActions": "Not run/verified in this task. Feature push alone does not trigger the configured branch push workflow.",
+    "freshDemoAcceptanceScript": "Updated expected classifications; standalone demo script not re-executed. Equivalent fixed examples and reviewer flows verified in isolated chat API/browser suite."
+  },
+  "changedFiles": [
+    "components/chat/reviewer.tsx",
+    "docs/INTELLIGENT_CHAT_MODERATION.md",
+    "docs/MILESTONE21_CHAT_DEMO.md",
+    "docs/intelligent-moderation/evaluation/LABEL_REVIEW.md",
+    "docs/intelligent-moderation/evaluation/evaluation.json",
+    "docs/intelligent-moderation/verification.json",
+    "lib/chat/analysis/cloud.ts",
+    "lib/chat/analysis/jobs.ts",
+    "lib/chat/analysis/provider.ts",
+    "lib/chat/evaluation.ts",
+    "lib/chat/moderation.ts",
+    "lib/chat/policy.ts",
+    "lib/chat/service.ts",
+    "package.json",
+    "prisma/migrations/20261019180000_chat_shadow_analysis/migration.sql",
+    "prisma/schema.prisma",
+    "scripts/analyze-synthetic.ts",
+    "scripts/chat-analysis-worker.ts",
+    "scripts/chat-demo-acceptance.ts",
+    "scripts/evaluate-moderation.ts",
+    "tests/chat-analysis.test.ts",
+    "tests/chat-policy.test.ts",
+    "tests/chat.integration.test.ts",
+    "tests/fixtures/moderation/v1.json"
+  ],
+  "changedImplementationSha256": {
+    "components/chat/reviewer.tsx": "23ef90c0ee9ea38fb1863ee7eb459d5c879cf0eb9a3bb04420f79f730b6eaa37",
+    "lib/chat/analysis/cloud.ts": "788dce8fc960ad05ec592dcea496b7cd74a01e9dfbc280637be2407e13ef4fcd",
+    "lib/chat/analysis/jobs.ts": "f903d46ef708af678c1739af868a68cb12dd08d380294f99bedb661941c45032",
+    "lib/chat/analysis/provider.ts": "9d72e463ecd083f817a1f2a8a952da24a597d0e5e94f2d3a6898e2c8089decba",
+    "lib/chat/evaluation.ts": "f4b5f7e79ec700b4d56c787a94552e0d23cedd0cd74682561216e1cc1954a72c",
+    "lib/chat/moderation.ts": "3752b9414fc4ff65e07071129e38d8862d4a5f227bfa94c14657c8747ad6314e",
+    "lib/chat/policy.ts": "664e3ff811c2e931a749317a2bb65301e1b471d1c83172ff29c1b5f3b81a7d59",
+    "lib/chat/service.ts": "83038619a1b6dab43517ec912a7c9a7fee18ffe6e2d8b4c0024a02e2347fd595",
+    "package.json": "714f6d684e7b0b1576936b1fb3903874a15ef98a91df4a4bf470681544da074c",
+    "prisma/migrations/20261019180000_chat_shadow_analysis/migration.sql": "0a4efe6f568c0a126eb7d2f2432e896698f9f813782f88a67857f377d6fd5328",
+    "prisma/schema.prisma": "80040cc78a4c75cc9b9f35a042b81729f05325670e357545b53bdb6886997dbc",
+    "scripts/analyze-synthetic.ts": "d8ecb65923fceeeb3a276eef0991e14cc4f5c6154992113c23151f5df391d3dd",
+    "scripts/chat-analysis-worker.ts": "59ae4736b991969ef04b82105ce8b5e725db4d6c98c39beeebffbd94da6c444f",
+    "scripts/chat-demo-acceptance.ts": "c3334bdcfdd8664440b02b3ae87a7a0aaa44b2a2b51e5947b5070e5dfa472df4",
+    "scripts/evaluate-moderation.ts": "bf857bb8be4f7922c4663da7d6d1ccf0f2fa37a1191570f0905cbe6d7115b161",
+    "tests/chat-analysis.test.ts": "f57c16541b2c384f5380c81711de8986ed0e093f99b1d3add2fd561b78c7d5aa",
+    "tests/chat-policy.test.ts": "5414bef9e1497264b75762b8bc78093e8e90a5865a4095dc19ddc1d9aaeb941b",
+    "tests/chat.integration.test.ts": "247f249d3a9521418f80490f4e227c8ad2897e03b778b718d6f38e1f614db8f5",
+    "tests/fixtures/moderation/v1.json": "aace9d025c91b095d921e31c6a0cc5c7d795ceb13168ceea7ca34a9767187ed6"
+  }
+}

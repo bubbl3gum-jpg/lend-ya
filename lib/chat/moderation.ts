@@ -1,6 +1,7 @@
 import "server-only";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { ANALYSIS_VERSION } from "./analysis/provider";
 import { fail, fields, integer, text, explanation } from "./http";
 import { locked, permitted, event, hash } from "./service";
 type Tx = Prisma.TransactionClient;
@@ -50,8 +51,12 @@ export async function readCase(userId: number, caseId: number) {
     if (!Array.isArray(snapshot.messages) || snapshot.messages.length > 5) fail(500,"EVIDENCE_INVALID","Evidence snapshot is invalid.");
     const messages = await tx.chatMessage.findMany({ where: { conversationId: c.conversationId, id: { in: snapshot.messages.map((m) => m.id) } }, orderBy: { sequence: "asc" }, select: { id: true, senderId: true, body: true, contentHash: true, status: true, sequence: true, categories: true, ruleCodes: true, policyVersion: true, createdAt: true, bookingId: true } });
     if (messages.length !== snapshot.messages.length || messages.some((m) => hash(m.body) !== snapshot.messages!.find((ref) => ref.id === m.id)?.contentHash)) fail(500,"EVIDENCE_INVALID","Evidence integrity check failed.");
-    await audit(tx,userId,caseId,"CHAT_EVIDENCE_VIEWED",{}, { messageIds: messages.map((m) => m.id) });
-    return { case: { id: c.id, kind: c.kind, status: c.status, category: c.category, version: c.version, targetUserId: c.targetUserId, messageId: c.messageId, reportReason: c.reportReason, decision: c.decision, decisionReason: c.decisionReason, parentId: c.parentId, bookingId: snapshot.bookingId ?? null }, messages };
+    const messageIds=messages.map(m=>m.id);
+    const jobs=await tx.chatAnalysisJob.findMany({where:{messageId:{in:messageIds},analysisVersion:ANALYSIS_VERSION},orderBy:{id:"asc"},take:5});
+    // Do not reveal a recommendation influenced by text outside this immutable evidence grant.
+    const analysis=jobs.filter(j=>j.contextMessageIds.every(id=>messageIds.includes(id))).map(j=>({id:j.id,messageId:j.messageId,status:j.status,recommendation:j.recommendation}));
+    await audit(tx,userId,caseId,"CHAT_EVIDENCE_VIEWED",{}, { messageIds, analysisJobIds:analysis.map(j=>j.id) });
+    return { case: { id: c.id, kind: c.kind, status: c.status, category: c.category, version: c.version, targetUserId: c.targetUserId, messageId: c.messageId, reportReason: c.reportReason, decision: c.decision, decisionReason: c.decisionReason, parentId: c.parentId, bookingId: snapshot.bookingId ?? null }, messages, analysis };
   });
 }
 const classifications = ["NO_VIOLATION","ILLEGAL_GOODS","PROHIBITED_SOLICITATION","SCAMS","THREATS","HARASSMENT","SPAM","OTHER"];

@@ -1,5 +1,7 @@
 # Milestone 2.1 — isolated chat acceptance and safe local demo
 
+> Historical Milestone 2.1 evidence is preserved below. For the repaired classifications, proposed-label evaluation and optional shadow analysis, see [Milestones 2.2/2.3](INTELLIGENT_CHAT_MODERATION.md). Retained older demo databases are not automatically upgraded.
+
 Base: `feature/chat-moderation-mvp` (`f9ae3a6f71daccaf6777f859be5fc723f62e4613`). Review branch: `feature/chat-demo-acceptance`. Intended PR target: `fix/milestone1-core-stability`, as requested. The PR therefore includes Milestone 2 as well as this follow-up. Do not merge or deploy during review.
 
 This guide supersedes the Milestone 2 report's manual-fixture and inbox-ordering limitations. It does not approve production retention, moderation thresholds or public enablement. All screenshots and acceptance conversations use synthetic local fixtures. Browser acceptance below means an agent executed the manual workflow through real browser forms, not that a human reviewer has signed off.

@@ -9,18 +9,21 @@ import path from "node:path";
 import sharp from "sharp";
 import { chromium, expect, type Page } from "@playwright/test";
 import { connectTestDatabase } from "./support/test-database";
+import { prisma } from "../lib/prisma";
+import { claimAnalysis, finishAnalysis, processAnalysis } from "../lib/chat/analysis/jobs";
+import { MockProvider, type AnalysisProvider } from "../lib/chat/analysis/provider";
 import { checklistItems } from "../lib/rental-checklist";
 type Actor = {id:number;email:string;cookie:string};
 type Message = {id:number;body:string;status:string;sequence:number;updatedSequence:number;deliverySequence:number|null;senderId:number};
 type Case = {id:number;messageId:number|null;version:number;status:string;kind:string;targetUserId:number};
-type Payload = {user:{id:number};listing:{id:number};conversationId:number;message:Message;messages:Message[];cursor:number;hasMore:boolean;nextBefore:number|null;conversation:{unreadCount:number;lastReadSequence:number};cases:Case[];case:Case;caseId:number;booking:{id:number;status:string};notices:{corrected:boolean}[];quote:{dailyPrice:string;totalPrice:string;deposit:string};code:string;outcome:string;replayed:boolean;conversations:{id:number;lastActivityAt:string}[]};
+type Payload = {analysis:{id:number;messageId:number;status:string;recommendation:{suggestedOutcome:string;requiresHumanReview:boolean;providerVersion:string}|null}[];user:{id:number};listing:{id:number};conversationId:number;message:Message;messages:Message[];cursor:number;hasMore:boolean;nextBefore:number|null;conversation:{unreadCount:number;lastReadSequence:number};cases:Case[];case:Case;caseId:number;booking:{id:number;status:string};notices:{corrected:boolean}[];quote:{dailyPrice:string;totalPrice:string;deposit:string};code:string;outcome:string;replayed:boolean;conversations:{id:number;lastActivityAt:string}[]};
 test("Milestone 2: isolated chat, multilingual safety, scoped review, browser delivery and restart persistence",{timeout:300000},async(t)=>{
   const db=await connectTestDatabase();
   const base=`http://localhost:${process.env.TEST_CHAT_PORT}`,tag=randomUUID(),password="IsolatedChat123!";
   const logfile=path.join(process.env.MRT_TEST_ARTIFACT_DIR!,"chat-server.log"),log=openSync(logfile,"a");
   let server:ChildProcess|undefined,browser:Awaited<ReturnType<typeof chromium.launch>>|undefined;
   async function stop(){if(server&&server.exitCode===null&&server.signalCode===null){const done=once(server,"exit");server.kill("SIGTERM");const timer=setTimeout(()=>server?.kill("SIGKILL"),5000);await done;clearTimeout(timer);}}
-  async function start(enabled:boolean){server=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",String(process.env.TEST_CHAT_PORT)],{env:{...process.env,NODE_ENV:"development",CHAT_ENABLED:String(enabled),CHAT_PREVIEW_USER_IDS:""},stdio:["ignore",log,log]});for(let i=0;i<100;i++){if(server.exitCode!==null)throw Error("Chat server stopped; inspect owned artifact log.");try{if((await fetch(base+"/api/listings",{signal:AbortSignal.timeout(2000)})).ok)return;}catch{}await new Promise(r=>setTimeout(r,200));}throw Error("Chat server did not become ready.");}
+  async function start(enabled:boolean,analysisMode="mock-shadow"){server=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",String(process.env.TEST_CHAT_PORT)],{env:{...process.env,NODE_ENV:"development",CHAT_ENABLED:String(enabled),CHAT_PREVIEW_USER_IDS:"",CHAT_ANALYSIS_MODE:analysisMode},stdio:["ignore",log,log]});for(let i=0;i<100;i++){if(server.exitCode!==null)throw Error("Chat server stopped; inspect owned artifact log.");try{if((await fetch(base+"/api/listings",{signal:AbortSignal.timeout(2000)})).ok)return;}catch{}await new Promise(r=>setTimeout(r,200));}throw Error("Chat server did not become ready.");}
   const api=async(url:string,cookie="",method="GET",body?:object|FormData,headers:Record<string,string>={})=>{const r=await fetch(base+url,{method,headers:{Cookie:cookie,...(body instanceof FormData?{}:{"Content-Type":"application/json"}),...headers},...(body?{body:body instanceof FormData?body:JSON.stringify(body)}:{}),redirect:"manual"});const bytes=Buffer.from(await r.arrayBuffer());let json={} as Payload;try{json=JSON.parse(bytes.toString());}catch{}return {status:r.status,json,bytes,cookie:r.headers.get("set-cookie")?.split(";")[0]??""};};
   const register=async(name:string):Promise<Actor>=>{const email=`${name}-${tag}@example.test`;const r=await api("/api/auth/register","","POST",{name,email,password});assert.equal(r.status,201);return {id:r.json.user.id,email,cookie:r.cookie};};
   try{
@@ -109,6 +112,54 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       try{const denied=await read(admin,heldCase);assert.equal(denied.status,500);assert.ok(!denied.bytes.toString().includes(`I will kill you ${tag}`));}finally{await db.query('DROP TRIGGER chat_fail_audit ON "AdminAuditLog"; DROP FUNCTION chat_fail_audit()');}
       assert.ok(!readFileSync(logfile,"utf8").includes(`I will kill you ${tag}`),"Ordinary application logs must not contain private message bodies");
     });
+    await t.test("fixed classifications preserve original text and enqueue exactly one shadow job per idempotent message",async()=>{
+      await db.query('DELETE FROM "ChatRateLimit"');
+      const idiom=await send(owner,`I will kill you with kindness ${tag}`);assert.equal(idiom.json.message.status,"ALLOWED");
+      const body=`selling c0caine ${tag}`,key=randomUUID();const replies=await Promise.all([send(owner,body,{},key),send(owner,body,{},key)]);
+      replies.forEach(r=>assert.equal(r.status,200));assert.equal(replies[0].json.message.id,replies[1].json.message.id);const id=replies[0].json.message.id;
+      assert.equal(replies[0].json.message.status,"HELD");assert.equal(replies[0].json.message.body,body);
+      assert.equal((await db.query('SELECT count(*)::int n FROM "ChatAnalysisJob" WHERE "messageId"=$1',[id])).rows[0].n,1);
+      assert.equal((await db.query('SELECT count(*)::int n FROM "ChatModerationCase" WHERE "messageId"=$1',[id])).rows[0].n,1);
+      const job=(await db.query('SELECT * FROM "ChatAnalysisJob" WHERE "messageId"=$1',[id])).rows[0];assert.ok(job.contextMessageIds.length<=2);
+      const snapshot=(await db.query('SELECT evidence FROM "ChatModerationCase" WHERE "messageId"=$1',[id])).rows[0].evidence;
+      assert.ok(job.contextMessageIds.every((n:number)=>snapshot.messages.some((m:{id:number})=>m.id===n)));
+    });
+    await t.test("durable shadow timeout/outage recovery, scoped audited display and independent human disagreement",async()=>{
+      for(let n=0;n<100;n++){if(!(await processAnalysis(prisma)).processed)break;}
+      const held=await send(owner,`I will attack you shadow ${tag}`),id=held.json.message.id,caseId=await caseFor(id);
+      const before=(await db.query('SELECT * FROM "ChatMessage" WHERE id=$1',[id])).rows[0];
+      const conversationBefore=(await db.query('SELECT version FROM "Conversation" WHERE id=$1',[cid])).rows[0];
+      const provider:AnalysisProvider={providerVersion:"outage-test",modelVersion:"test",analyze:()=>new Promise(()=>{})};
+      assert.equal((await processAnalysis(prisma,provider,15)).errorCode,"TIMEOUT");
+      const job=(await db.query('SELECT * FROM "ChatAnalysisJob" WHERE "messageId"=$1',[id])).rows[0];assert.equal(job.status,"WAITING");assert.equal(job.attempts,1);assert.equal((await processAnalysis(prisma)).processed,false);
+      await stop();await start(true);assert.equal((await db.query('SELECT status FROM "ChatAnalysisJob" WHERE id=$1',[job.id])).rows[0].status,"WAITING");
+      assert.ok(!(await api(`/api/conversations/${cid}/messages`,borrower.cookie)).json.messages.some(m=>m.id===id));
+      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE id=$1',[job.id]);
+      assert.equal((await processAnalysis(prisma,{...provider,analyze:async()=>{throw Error("PRIVATE_PROVIDER_FAILURE_BODY");}})).errorCode,"PROVIDER_UNAVAILABLE");
+      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE id=$1',[job.id]);assert.equal((await processAnalysis(prisma)).status,"SUCCEEDED");
+      assert.deepEqual((await db.query('SELECT * FROM "ChatMessage" WHERE id=$1',[id])).rows[0],before);
+      assert.deepEqual((await db.query('SELECT version FROM "Conversation" WHERE id=$1',[cid])).rows[0],conversationBefore);
+      assert.equal((await read(plainAdmin,caseId)).status,403);assert.equal((await read(admin,caseId)).status,403);await claim(admin,caseId);assert.equal((await read(admin2,caseId)).status,403);
+      const detail=await read(admin,caseId),analysis=detail.json.analysis.find(a=>a.messageId===id);assert.equal(analysis?.recommendation?.suggestedOutcome,"HELD");assert.equal(analysis?.recommendation?.requiresHumanReview,true);
+      const narrow=await prisma.chatModerationCase.create({data:{conversationId:cid,messageId:id,targetUserId:owner.id,reporterId:borrower.id,kind:"REPORT",category:"USER_REPORT",reportReason:"Synthetic narrower evidence grant",evidence:{messages:[{id,contentHash:before.contentHash}]}}});
+      await claim(admin,narrow.id);const scoped=await read(admin,narrow.id);assert.equal(scoped.status,200);assert.equal(scoped.json.messages.length,1);assert.ok(!scoped.json.analysis.some(a=>a.messageId===id),"Recommendation influenced by out-of-snapshot context must be omitted");
+      const audit=(await db.query('SELECT "newState" FROM "AdminAuditLog" WHERE action=\'CHAT_EVIDENCE_VIEWED\' AND "targetId"=$1 ORDER BY id DESC LIMIT 1',[caseId])).rows[0].newState;assert.ok(audit.analysisJobIds.includes(job.id));
+      await assert.rejects(db.query('UPDATE "ChatAnalysisJob" SET recommendation=\'{}\' WHERE id=$1',[job.id]),/immutable/);
+      await assert.rejects(db.query('DELETE FROM "ChatAnalysisJob" WHERE id=$1',[job.id]),/immutable/);
+      assert.equal((await decide(admin,caseId,"RELEASE","Human reviewer disagrees with unverified mock recommendation")).status,200);
+      assert.ok((await api(`/api/conversations/${cid}/messages`,borrower.cookie)).json.messages.some(m=>m.id===id));
+      assert.ok(!JSON.stringify((await db.query('SELECT * FROM "ChatAnalysisJob" WHERE id=$1',[job.id])).rows).includes("PRIVATE_PROVIDER_FAILURE_BODY"));
+    });
+    await t.test("malformed responses exhaust at three attempts without releasing holds; leases fence stale workers",async()=>{
+      const held=await send(owner,`I will stab you invalid ${tag}`),id=held.json.message.id;
+      const malformed={...new MockProvider(),providerVersion:"malformed",modelVersion:"test",analyze:async()=>({banUser:true})};
+      for(let n=0;n<3;n++){await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE "messageId"=$1',[id]);const result=await processAnalysis(prisma,malformed);assert.equal(result.errorCode,"INVALID_RESPONSE");assert.equal(result.status,n===2?"FAILED":"WAITING");}
+      const job=(await db.query('SELECT * FROM "ChatAnalysisJob" WHERE "messageId"=$1',[id])).rows[0];assert.equal(job.attempts,3);assert.equal((await processAnalysis(prisma)).processed,false);assert.equal((await db.query('SELECT status FROM "ChatMessage" WHERE id=$1',[id])).rows[0].status,"HELD");
+      await send(owner,`Lease fixture ${tag}`);const claims=await Promise.all([claimAnalysis(prisma),claimAnalysis(prisma)]);assert.equal(claims.filter(Boolean).length,1);const first=claims.find(Boolean)!;
+      await db.query('UPDATE "ChatAnalysisJob" SET "leaseUntil"=NOW()-INTERVAL \'1 second\' WHERE id=$1',[first.id]);const second=await claimAnalysis(prisma);assert.equal(second?.id,first.id);assert.notEqual(second?.leaseToken,first.leaseToken);
+      assert.equal((await finishAnalysis(prisma,first,{errorCode:"TIMEOUT"})).count,0);assert.equal((await finishAnalysis(prisma,second!,{errorCode:"TIMEOUT"})).count,1);
+      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE id=$1',[first.id]);const last=await claimAnalysis(prisma);assert.equal(last?.attempts,3);await db.query('UPDATE "ChatAnalysisJob" SET "leaseUntil"=NOW()-INTERVAL \'1 second\' WHERE id=$1',[first.id]);assert.equal(await claimAnalysis(prisma),null);assert.equal((await db.query('SELECT status FROM "ChatAnalysisJob" WHERE id=$1',[first.id])).rows[0].status,"FAILED");
+    });
     await t.test("booking references, blocks, suspension and safe coordination preserve the complete rental lifecycle",async()=>{
       const input={listingId,meetingStationId:station,startAt:"2035-01-01T10:00",endAt:"2035-01-02T10:00"};const quote=await api("/api/bookings",borrower.cookie,"POST",{...input,quote:true});assert.equal(quote.status,200);
       const b=await api("/api/bookings",borrower.cookie,"POST",input),bid=b.json.booking.id;assert.equal(b.status,201);assert.equal((await send(borrower,`Related booking ${tag}`,{bookingId:bid})).status,200);assert.equal((await send(outsider,"Foreign booking",{bookingId:bid})).status,404);
@@ -160,7 +211,8 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       await pages[1].getByRole("listitem").filter({has:pages[1].getByText(hello,{exact:true})}).getByRole("button",{name:/Report message/}).click();await pages[1].getByLabel("Report reason").fill("Browser reporting flow");await pages[1].getByRole("button",{name:"Submit message report"}).click();await expect(pages[1].getByText(/Report saved as case/)).toBeVisible();
       await pages[1].getByRole("button",{name:"Block contact",exact:true}).click();await expect(pages[1].getByRole("button",{name:"Unblock contact",exact:true})).toBeVisible();await pages[1].getByRole("button",{name:"Unblock contact",exact:true}).click();
       const review=await send(owner,`Review this link https://bit.ly/${tag}`);const caseId=await caseFor(review.json.message.id);
-      await pages[2].goto(base+"/admin/chat");await pages[2].getByRole("button",{name:`Claim case #${caseId}`,exact:true}).click();await expect(pages[2].getByText(review.json.message.body,{exact:true})).toBeVisible();await pages[2].getByLabel("Decision",{exact:true}).selectOption("DISMISS");await pages[2].getByLabel("Decision explanation").fill("Harmless external link reviewed in context");await pages[2].getByRole("button",{name:"Save moderation decision"}).click();await expect(pages[2].getByText(/Decision: DISMISS/)).toBeVisible();
+      for(let n=0;n<100;n++){if(!(await processAnalysis(prisma)).processed)break;}
+      await pages[2].goto(base+"/admin/chat");await pages[2].getByRole("button",{name:`Claim case #${caseId}`,exact:true}).click();await expect(pages[2].getByText(review.json.message.body,{exact:true})).toBeVisible();await expect(pages[2].getByText(`Unverified shadow analysis · message #${review.json.message.id}`,{exact:true})).toBeVisible();await pages[2].getByLabel("Decision",{exact:true}).selectOption("DISMISS");await pages[2].getByLabel("Decision explanation").fill("Harmless external link reviewed in context");await pages[2].getByRole("button",{name:"Save moderation decision"}).click();await expect(pages[2].getByText(/Decision: DISMISS/)).toBeVisible();
       await pages[1].goto(base+"/messages");await expect(pages[1].getByRole("heading",{name:"Messages",exact:true})).toBeVisible();const reconnectContext=await browser.newContext();const reconnectPage=await reconnectContext.newPage();await login(reconnectPage,outsider);await reconnectPage.goto(`${base}/messages/${paginationConversationId}`);await expect(reconnectPage.getByText(paginationReleasedBody,{exact:true})).toBeVisible({timeout:20000});await reconnectContext.close();await browser.close();browser=undefined;
     });
     await t.test("logout/login and full server restart preserve messages, read state, cases, grants and outbox",async()=>{
@@ -170,7 +222,8 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       await stop();await start(true);const after=await api(`/api/conversations/${cid}/messages?limit=50`,borrower.cookie);assert.equal(after.status,200);assert.equal(after.json.conversation.lastReadSequence,before.conversation.lastReadSequence);assert.ok(after.json.messages.some(m=>m.id===firstId));assert.equal((await read(admin,heldCase)).status,200);
       execFileSync(process.execPath,["node_modules/tsx/dist/cli.mjs","scripts/chat-reviewer.ts",String(admin.id),"--revoke"],{env:process.env,stdio:"pipe"});assert.equal((await read(admin,heldCase)).status,403);
       assert.ok((await db.query('SELECT count(*)::int n FROM "ChatOutboxEvent"')).rows[0].n>0);
+      await stop();await start(true,"off");const disabled=await send(owner,`Analysis remains off ${tag}`);assert.equal(disabled.status,200);assert.equal((await db.query('SELECT count(*)::int n FROM "ChatAnalysisJob" WHERE "messageId"=$1',[disabled.json.message.id])).rows[0].n,0);
       await stop();await start(false);assert.equal((await api(`/api/conversations/${cid}/messages`,borrower.cookie)).status,503);assert.equal((await api("/api/bookings",borrower.cookie)).status,200);
     });
-  }finally{await browser?.close();await stop();closeSync(log);await db.end();}
+  }finally{await browser?.close();await stop();closeSync(log);await db.end();await prisma.$disconnect();}
 });

@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { fail, fields, integer, text, explanation } from "./http";
 import { moderateText, normalizeMessage, CHAT_POLICY_VERSION } from "./policy";
+import { enqueueAnalysis } from "./analysis/jobs";
 import { retentionSettings } from "./config";
 type Tx = Prisma.TransactionClient;
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
@@ -92,6 +93,7 @@ export async function sendMessage(userId: number, conversationId: number, body: 
     await tx.conversation.update({ where: { id: c.id }, data: { version: sequence, lastActivityAt: new Date() } });
     const m = await tx.chatMessage.create({ data: { conversationId: c.id, senderId: userId, clientMessageId: key, requestHash, contentHash: hash(content), normalizedHash, body: content, sequence, updatedSequence: sequence, deliverySequence: delivered ? sequence : null, status: decision.outcome, categories: decision.categories, ruleCodes: decision.ruleCodes, policyVersion: CHAT_POLICY_VERSION, bookingId } });
     if (decision.outcome !== "ALLOWED") await tx.chatModerationCase.create({ data: { conversationId: c.id, messageId: m.id, targetUserId: userId, kind: "SYSTEM", category: decision.categories[0], evidence: await evidence(tx, c.id, m.id), dedupKey: `system:${m.id}` } });
+    await enqueueAnalysis(tx, m.id, c.id, sequence, c.listing.title);
     if (delivered) await event(tx, "MESSAGE_VISIBLE", `message:${m.id}:visible`, { conversationId: c.id, messageId: m.id, deliverySequence: sequence });
     return { message: messageDto(m), replayed: false };
   });

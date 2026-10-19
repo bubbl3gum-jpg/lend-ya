@@ -414,6 +414,7 @@ model ChatMessage {
   booking Booking? @relation(fields: [bookingId], references: [id], onDelete: Restrict)
   cases ChatModerationCase[]
   reports MessageReport[]
+  analysisJobs ChatAnalysisJob[]
   @@unique([senderId, clientMessageId])
   @@unique([conversationId, sequence])
   @@index([conversationId, updatedSequence])
@@ -513,4 +514,25 @@ model ChatOutboxEvent {
   createdAt DateTime @default(now())
   processedAt DateTime?
   @@index([processedAt, id])
+}
+
+// Shadow recommendations never authorize enforcement or message delivery.
+model ChatAnalysisJob {
+  id Int @id @default(autoincrement())
+  messageId Int
+  analysisVersion String @db.VarChar(32)
+  contextMessageIds Int[]
+  listingTitle String @db.VarChar(120)
+  status String @default("WAITING") @db.VarChar(16)
+  attempts Int @default(0)
+  availableAt DateTime @default(now())
+  leaseUntil DateTime?
+  leaseToken String? @db.VarChar(36)
+  errorCode String? @db.VarChar(32)
+  recommendation Json?
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+  message ChatMessage @relation(fields: [messageId], references: [id], onDelete: Restrict)
+  @@unique([messageId, analysisVersion])
+  @@index([status, availableAt, id])
 }

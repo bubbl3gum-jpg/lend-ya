@@ -1,0 +1,2723 @@
+{
+  "datasetVersion": "synthetic-proposed-v1",
+  "labelStatus": "ASSISTANT_PROPOSED_NOT_HUMAN_VALIDATED",
+  "policyVersion": "deterministic-2.2-1",
+  "development": {
+    "overall": {
+      "technicalRejectionCount": 0,
+      "binaryEscalation": {
+        "count": 36,
+        "confusion": {
+          "TP": 29,
+          "FP": 0,
+          "TN": 7,
+          "FN": 0
+        },
+        "precision": 1,
+        "recall": 1,
+        "falsePositiveRate": 0,
+        "falseNegativeRate": 0
+      },
+      "outcomeConfusion": {
+        "ALLOWED": {
+          "ALLOWED": 7,
+          "FLAGGED": 0,
+          "HELD": 0,
+          "REJECTED": 0
+        },
+        "FLAGGED": {
+          "ALLOWED": 0,
+          "FLAGGED": 15,
+          "HELD": 0,
+          "REJECTED": 0
+        },
+        "HELD": {
+          "ALLOWED": 0,
+          "FLAGGED": 0,
+          "HELD": 14,
+          "REJECTED": 0
+        },
+        "REJECTED": {
+          "ALLOWED": 0,
+          "FLAGGED": 0,
+          "HELD": 0,
+          "REJECTED": 0
+        }
+      },
+      "categories": {
+        "HARASSMENT": {
+          "count": 36,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 33,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "ILLEGAL_GOODS": {
+          "count": 36,
+          "confusion": {
+            "TP": 9,
+            "FP": 0,
+            "TN": 27,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "LINK_RISK": {
+          "count": 36,
+          "confusion": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 35,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "PROHIBITED_SOLICITATION": {
+          "count": 36,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 33,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "SCAMS": {
+          "count": 36,
+          "confusion": {
+            "TP": 4,
+            "FP": 0,
+            "TN": 32,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "SPAM": {
+          "count": 36,
+          "confusion": {
+            "TP": 2,
+            "FP": 0,
+            "TN": 34,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "THREATS": {
+          "count": 36,
+          "confusion": {
+            "TP": 8,
+            "FP": 0,
+            "TN": 28,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        }
+      }
+    },
+    "byLanguage": {
+      "en": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 14,
+          "confusion": {
+            "TP": 12,
+            "FP": 0,
+            "TN": 2,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 2,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 6,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 6,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 14,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 13,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "ILLEGAL_GOODS": {
+            "count": 14,
+            "confusion": {
+              "TP": 4,
+              "FP": 0,
+              "TN": 10,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "LINK_RISK": {
+            "count": 14,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 13,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "PROHIBITED_SOLICITATION": {
+            "count": 14,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 13,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 14,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 13,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SPAM": {
+            "count": 14,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 12,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 14,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 11,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "id": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 9,
+          "confusion": {
+            "TP": 7,
+            "FP": 0,
+            "TN": 2,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 2,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 4,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 9,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "ILLEGAL_GOODS": {
+            "count": 9,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 7,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "PROHIBITED_SOLICITATION": {
+            "count": 9,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 9,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 9,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 7,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "mixed": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 4,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 1,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 1,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 1,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 2,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "zh-Hant": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 9,
+          "confusion": {
+            "TP": 7,
+            "FP": 0,
+            "TN": 2,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 2,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 4,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 9,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "ILLEGAL_GOODS": {
+            "count": 9,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 7,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "PROHIBITED_SOLICITATION": {
+            "count": 9,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 9,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 9,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 7,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      }
+    },
+    "byGroup": {
+      "context": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 4,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 1,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 1,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 1,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 2,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "goods": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "harassment": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 3,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "idiom": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 3,
+            "FN": 0
+          },
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": null
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 3,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {}
+      },
+      "obfuscation": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 3,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 1,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 3,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 2,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "rental": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 3,
+            "FN": 0
+          },
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": null
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 3,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {}
+      },
+      "report": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 3,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "THREATS": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "scam": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 3,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "SCAMS": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "solicitation": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "PROHIBITED_SOLICITATION": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "spam": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 2,
+          "confusion": {
+            "TP": 2,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 2,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "LINK_RISK": {
+            "count": 2,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 1,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SPAM": {
+            "count": 2,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "threat": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "THREATS": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "warning": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 3,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      }
+    },
+    "mismatches": []
+  },
+  "heldOut": {
+    "overall": {
+      "technicalRejectionCount": 0,
+      "binaryEscalation": {
+        "count": 58,
+        "confusion": {
+          "TP": 38,
+          "FP": 0,
+          "TN": 14,
+          "FN": 6
+        },
+        "precision": 1,
+        "recall": 0.8636363636363636,
+        "falsePositiveRate": 0,
+        "falseNegativeRate": 0.13636363636363635
+      },
+      "outcomeConfusion": {
+        "ALLOWED": {
+          "ALLOWED": 14,
+          "FLAGGED": 0,
+          "HELD": 0,
+          "REJECTED": 0
+        },
+        "FLAGGED": {
+          "ALLOWED": 3,
+          "FLAGGED": 19,
+          "HELD": 0,
+          "REJECTED": 0
+        },
+        "HELD": {
+          "ALLOWED": 3,
+          "FLAGGED": 0,
+          "HELD": 19,
+          "REJECTED": 0
+        },
+        "REJECTED": {
+          "ALLOWED": 0,
+          "FLAGGED": 0,
+          "HELD": 0,
+          "REJECTED": 0
+        }
+      },
+      "categories": {
+        "HARASSMENT": {
+          "count": 58,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 55,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "ILLEGAL_GOODS": {
+          "count": 58,
+          "confusion": {
+            "TP": 13,
+            "FP": 0,
+            "TN": 42,
+            "FN": 3
+          },
+          "precision": 1,
+          "recall": 0.8125,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0.1875
+        },
+        "LINK_RISK": {
+          "count": 58,
+          "confusion": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 57,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "PROHIBITED_SOLICITATION": {
+          "count": 58,
+          "confusion": {
+            "TP": 4,
+            "FP": 0,
+            "TN": 54,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "SCAMS": {
+          "count": 58,
+          "confusion": {
+            "TP": 7,
+            "FP": 0,
+            "TN": 51,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "THREATS": {
+          "count": 58,
+          "confusion": {
+            "TP": 12,
+            "FP": 0,
+            "TN": 43,
+            "FN": 3
+          },
+          "precision": 1,
+          "recall": 0.8,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0.2
+        }
+      }
+    },
+    "byLanguage": {
+      "en": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 22,
+          "confusion": {
+            "TP": 15,
+            "FP": 0,
+            "TN": 5,
+            "FN": 2
+          },
+          "precision": 1,
+          "recall": 0.8823529411764706,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0.11764705882352941
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 5,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 1,
+            "FLAGGED": 7,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 1,
+            "FLAGGED": 0,
+            "HELD": 8,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 22,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 21,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "ILLEGAL_GOODS": {
+            "count": 22,
+            "confusion": {
+              "TP": 5,
+              "FP": 0,
+              "TN": 16,
+              "FN": 1
+            },
+            "precision": 1,
+            "recall": 0.8333333333333334,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0.16666666666666666
+          },
+          "LINK_RISK": {
+            "count": 22,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 21,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "PROHIBITED_SOLICITATION": {
+            "count": 22,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 20,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 22,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 20,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 22,
+            "confusion": {
+              "TP": 4,
+              "FP": 0,
+              "TN": 17,
+              "FN": 1
+            },
+            "precision": 1,
+            "recall": 0.8,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0.2
+          }
+        }
+      },
+      "id": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 15,
+          "confusion": {
+            "TP": 9,
+            "FP": 0,
+            "TN": 4,
+            "FN": 2
+          },
+          "precision": 1,
+          "recall": 0.8181818181818182,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0.18181818181818182
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 4,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 1,
+            "FLAGGED": 5,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 1,
+            "FLAGGED": 0,
+            "HELD": 4,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 15,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 14,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "ILLEGAL_GOODS": {
+            "count": 15,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 11,
+              "FN": 1
+            },
+            "precision": 1,
+            "recall": 0.75,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0.25
+          },
+          "PROHIBITED_SOLICITATION": {
+            "count": 15,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 14,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 15,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 13,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 15,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 11,
+              "FN": 1
+            },
+            "precision": 1,
+            "recall": 0.75,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0.25
+          }
+        }
+      },
+      "mixed": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 6,
+          "confusion": {
+            "TP": 5,
+            "FP": 0,
+            "TN": 1,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 1,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 2,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 6,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 4,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 6,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 5,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 6,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 4,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "zh-Hant": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 15,
+          "confusion": {
+            "TP": 9,
+            "FP": 0,
+            "TN": 4,
+            "FN": 2
+          },
+          "precision": 1,
+          "recall": 0.8181818181818182,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0.18181818181818182
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 4,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 1,
+            "FLAGGED": 5,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 1,
+            "FLAGGED": 0,
+            "HELD": 4,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 15,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 14,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "ILLEGAL_GOODS": {
+            "count": 15,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 11,
+              "FN": 1
+            },
+            "precision": 1,
+            "recall": 0.75,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0.25
+          },
+          "PROHIBITED_SOLICITATION": {
+            "count": 15,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 14,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "SCAMS": {
+            "count": 15,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 13,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 15,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 11,
+              "FN": 1
+            },
+            "precision": 1,
+            "recall": 0.75,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0.25
+          }
+        }
+      }
+    },
+    "byGroup": {
+      "ambiguous": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 0,
+            "FN": 3
+          },
+          "precision": null,
+          "recall": 0,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 1
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 3,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 3,
+            "confusion": {
+              "TP": 0,
+              "FP": 0,
+              "TN": 0,
+              "FN": 3
+            },
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 1
+          }
+        }
+      },
+      "context": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 1,
+          "confusion": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 1,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "THREATS": {
+            "count": 1,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "education": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 4,
+          "confusion": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 3,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 3,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 1,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "PROHIBITED_SOLICITATION": {
+            "count": 4,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 3,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "goods": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 6,
+          "confusion": {
+            "TP": 6,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 6,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 6,
+            "confusion": {
+              "TP": 6,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "harassment": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 3,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "HARASSMENT": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "idiom": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 4,
+          "confusion": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 4,
+            "FN": 0
+          },
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": null
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 4,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {}
+      },
+      "injection": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 2,
+          "confusion": {
+            "TP": 2,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 2,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 2,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "rental": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 7,
+          "confusion": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 7,
+            "FN": 0
+          },
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": 0,
+          "falseNegativeRate": null
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 7,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {}
+      },
+      "report": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 4,
+          "confusion": {
+            "TP": 4,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 4,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "THREATS": {
+            "count": 4,
+            "confusion": {
+              "TP": 4,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "scam": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 7,
+          "confusion": {
+            "TP": 7,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 7,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "SCAMS": {
+            "count": 7,
+            "confusion": {
+              "TP": 7,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "solicitation": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 3,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "PROHIBITED_SOLICITATION": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "spam": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 1,
+          "confusion": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 1,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "LINK_RISK": {
+            "count": 1,
+            "confusion": {
+              "TP": 1,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      },
+      "threat": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 10,
+          "confusion": {
+            "TP": 7,
+            "FP": 0,
+            "TN": 0,
+            "FN": 3
+          },
+          "precision": 1,
+          "recall": 0.7,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0.3
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 3,
+            "FLAGGED": 0,
+            "HELD": 7,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 10,
+            "confusion": {
+              "TP": 2,
+              "FP": 0,
+              "TN": 8,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "falseNegativeRate": 0
+          },
+          "THREATS": {
+            "count": 10,
+            "confusion": {
+              "TP": 7,
+              "FP": 0,
+              "TN": 0,
+              "FN": 3
+            },
+            "precision": 1,
+            "recall": 0.7,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0.3
+          }
+        }
+      },
+      "warning": {
+        "technicalRejectionCount": 0,
+        "binaryEscalation": {
+          "count": 3,
+          "confusion": {
+            "TP": 3,
+            "FP": 0,
+            "TN": 0,
+            "FN": 0
+          },
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": null,
+          "falseNegativeRate": 0
+        },
+        "outcomeConfusion": {
+          "ALLOWED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "FLAGGED": {
+            "ALLOWED": 0,
+            "FLAGGED": 3,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "HELD": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          },
+          "REJECTED": {
+            "ALLOWED": 0,
+            "FLAGGED": 0,
+            "HELD": 0,
+            "REJECTED": 0
+          }
+        },
+        "categories": {
+          "ILLEGAL_GOODS": {
+            "count": 3,
+            "confusion": {
+              "TP": 3,
+              "FP": 0,
+              "TN": 0,
+              "FN": 0
+            },
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": null,
+            "falseNegativeRate": 0
+          }
+        }
+      }
+    },
+    "mismatches": [
+      {
+        "id": "held-out-055",
+        "split": "held-out",
+        "language": "en",
+        "group": "ambiguous",
+        "body": "My cousin has snow available tonight",
+        "expectedOutcome": "FLAGGED",
+        "expectedCategories": [
+          "ILLEGAL_GOODS"
+        ],
+        "actual": {
+          "outcome": "ALLOWED",
+          "categories": [],
+          "ruleCodes": []
+        }
+      },
+      {
+        "id": "held-out-056",
+        "split": "held-out",
+        "language": "en",
+        "group": "threat",
+        "body": "You will regret this; I know where you sleep",
+        "expectedOutcome": "HELD",
+        "expectedCategories": [
+          "THREATS"
+        ],
+        "actual": {
+          "outcome": "ALLOWED",
+          "categories": [],
+          "ruleCodes": []
+        }
+      },
+      {
+        "id": "held-out-072",
+        "split": "held-out",
+        "language": "zh-Hant",
+        "group": "threat",
+        "body": "我會讓你消失，等著看",
+        "expectedOutcome": "HELD",
+        "expectedCategories": [
+          "THREATS"
+        ],
+        "actual": {
+          "outcome": "ALLOWED",
+          "categories": [],
+          "ruleCodes": []
+        }
+      },
+      {
+        "id": "held-out-073",
+        "split": "held-out",
+        "language": "zh-Hant",
+        "group": "ambiguous",
+        "body": "今晚有白粉，要嗎？",
+        "expectedOutcome": "FLAGGED",
+        "expectedCategories": [
+          "ILLEGAL_GOODS"
+        ],
+        "actual": {
+          "outcome": "ALLOWED",
+          "categories": [],
+          "ruleCodes": []
+        }
+      },
+      {
+        "id": "held-out-087",
+        "split": "held-out",
+        "language": "id",
+        "group": "threat",
+        "body": "Awas, kamu tidak akan selamat malam ini",
+        "expectedOutcome": "HELD",
+        "expectedCategories": [
+          "THREATS"
+        ],
+        "actual": {
+          "outcome": "ALLOWED",
+          "categories": [],
+          "ruleCodes": []
+        }
+      },
+      {
+        "id": "held-out-088",
+        "split": "held-out",
+        "language": "id",
+        "group": "ambiguous",
+        "body": "Ada barang putih, mau beli?",
+        "expectedOutcome": "FLAGGED",
+        "expectedCategories": [
+          "ILLEGAL_GOODS"
+        ],
+        "actual": {
+          "outcome": "ALLOWED",
+          "categories": [],
+          "ruleCodes": []
+        }
+      }
+    ]
+  }
+}
