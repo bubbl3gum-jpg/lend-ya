@@ -71,7 +71,7 @@ export async function decide(userId: number, caseId: number, body: Record<string
       if (!m || (m.status !== "HELD" && !(action === "RELEASE" && c.kind === "APPEAL" && m.status === "REJECTED"))) fail(409,"MESSAGE_STATE","This decision requires a held message, or an appeal of a rejected message.");
       if (action === "RELEASE") await permitted(tx,conversation);
       const sequence = conversation.version+1;
-      await tx.conversation.update({ where: { id: conversation.id }, data: { version: sequence } });
+      await tx.conversation.update({ where: { id: conversation.id }, data: { version: sequence, ...(action === "RELEASE" ? {lastActivityAt: new Date()} : {}) } });
       await tx.chatMessage.update({ where: { id: m.id }, data: { status: action === "RELEASE" ? "ALLOWED" : "REJECTED", updatedSequence: sequence, deliverySequence: action === "RELEASE" ? sequence : null } });
       if (action === "RELEASE") await event(tx,"MESSAGE_VISIBLE",`message:${m.id}:visible`,{ conversationId: conversation.id, messageId: m.id, deliverySequence: sequence });
     } else if (m?.status === "HELD") fail(409,"HELD_DECISION_REQUIRED","Explicitly release or reject a held message.");

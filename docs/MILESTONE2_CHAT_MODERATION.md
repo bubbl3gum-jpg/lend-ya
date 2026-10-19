@@ -1,5 +1,7 @@
 # Milestone 2 — Private Chat and Trust & Safety MVP
 
+> For the current isolated demo, activity ordering and reconnect recovery, see [Milestone 2.1](MILESTONE21_CHAT_DEMO.md). This report preserves the original Milestone 2 evidence.
+
 ## Review scope and release status
 
 Base: `fix/milestone1-core-stability` (`0f5c9ddea4c091f9a073b768c20bad4134317e2e`). Feature: `feature/chat-moderation-mvp`.

@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "admin:create": "tsx scripts/create-admin.ts",
-    "test:unit": "tsx --test tests/chat-policy.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts",
+    "test:unit": "tsx --test tests/chat-policy.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts",
     "test:integration": "tsx tests/run-isolated.ts",
     "test:admin": "tsx tests/run-isolated.ts --admin",
     "test:moderation": "tsx tests/run-isolated.ts --moderation",
@@ -22,7 +22,9 @@
     "test:rental-browser": "tsx tests/run-isolated.ts --rental-browser",
     "test:admin-migration": "tsx tests/run-isolated.ts --admin-migration",
     "build:verify": "tsx tests/run-isolated.ts --build",
-    "db:preflight": "tsx scripts/db-preflight.ts"
+    "db:preflight": "tsx scripts/db-preflight.ts",
+    "demo:chat": "tsx scripts/chat-demo.ts",
+    "demo:chat:acceptance": "tsx scripts/chat-demo-acceptance.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

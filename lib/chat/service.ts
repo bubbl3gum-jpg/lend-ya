@@ -89,7 +89,7 @@ export async function sendMessage(userId: number, conversationId: number, body: 
     const duplicate = await tx.chatMessage.findFirst({ where: { senderId: userId, normalizedHash, createdAt: { gt: new Date(Date.now()-60000) } } });
     if (duplicate) fail(429, "DUPLICATE_CONTENT", "Repeated message content is temporarily limited. Retry the original message key after connection failure.");
     const sequence = c.version + 1, delivered = decision.outcome !== "HELD";
-    await tx.conversation.update({ where: { id: c.id }, data: { version: sequence } });
+    await tx.conversation.update({ where: { id: c.id }, data: { version: sequence, lastActivityAt: new Date() } });
     const m = await tx.chatMessage.create({ data: { conversationId: c.id, senderId: userId, clientMessageId: key, requestHash, contentHash: hash(content), normalizedHash, body: content, sequence, updatedSequence: sequence, deliverySequence: delivered ? sequence : null, status: decision.outcome, categories: decision.categories, ruleCodes: decision.ruleCodes, policyVersion: CHAT_POLICY_VERSION, bookingId } });
     if (decision.outcome !== "ALLOWED") await tx.chatModerationCase.create({ data: { conversationId: c.id, messageId: m.id, targetUserId: userId, kind: "SYSTEM", category: decision.categories[0], evidence: await evidence(tx, c.id, m.id), dedupKey: `system:${m.id}` } });
     if (delivered) await event(tx, "MESSAGE_VISIBLE", `message:${m.id}:visible`, { conversationId: c.id, messageId: m.id, deliverySequence: sequence });
@@ -105,15 +105,21 @@ export async function history(userId: number, conversationId: number, limit: num
     const own = c.participants.find((p) => p.userId === userId)!, other = c.participants.find((p) => p.userId !== userId)!;
     const unreadCount = await tx.chatMessage.count({ where: { conversationId, senderId: { not: userId }, status: { in: ["ALLOWED", "FLAGGED"] }, deliverySequence: { gt: own.lastReadSequence } } });
     const blocks = await tx.userBlock.findMany({ where: { OR: [{ blockerId: c.ownerId, blockedId: c.borrowerId }, { blockerId: c.borrowerId, blockedId: c.ownerId }] }, select: { blockerId: true } });
-    return { conversation: { id: c.id, listing: c.listing, owner: { id: c.ownerId, name: c.owner.name }, borrower: { id: c.borrowerId, name: c.borrower.name }, lastReadSequence: own.lastReadSequence, otherReadSequence: other.lastReadSequence, unreadCount, blockedByMe: blocks.some((b) => b.blockerId === userId), contactRestricted: blocks.length > 0 || c.owner.accountStatus !== "ACTIVE" || c.borrower.accountStatus !== "ACTIVE" }, messages: (after === undefined ? items.reverse() : items).map(messageDto), cursor: after !== undefined && more ? items[items.length-1].updatedSequence : c.version, nextBefore: after === undefined && more ? Math.min(...items.map((m) => m.sequence)) : null, hasMore: more };
+    return { conversation: { id: c.id, lastActivityAt: c.lastActivityAt.toISOString(), listing: c.listing, owner: { id: c.ownerId, name: c.owner.name }, borrower: { id: c.borrowerId, name: c.borrower.name }, lastReadSequence: own.lastReadSequence, otherReadSequence: other.lastReadSequence, unreadCount, blockedByMe: blocks.some((b) => b.blockerId === userId), contactRestricted: blocks.length > 0 || c.owner.accountStatus !== "ACTIVE" || c.borrower.accountStatus !== "ACTIVE" }, messages: (after === undefined ? items.reverse() : items).map(messageDto), cursor: after !== undefined && more ? items[items.length-1].updatedSequence : c.version, nextBefore: after === undefined && more ? Math.min(...items.map((m) => m.sequence)) : null, hasMore: more };
   }, { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
 }
-export async function inbox(userId: number, limit: number, before?: number) {
-  const rows = await prisma.conversation.findMany({ where: { OR: [{ ownerId: userId }, { borrowerId: userId }], ...(before ? { id: { lt: before } } : {}) }, orderBy: { id: "desc" }, take: limit+1, select: { id: true } });
+export async function inbox(userId: number, limit: number, before?: string) {
+  let boundary: {lastActivityAt: Date; id: number} | undefined;
+  if (before !== undefined) {
+    const match = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)_(\d+)$/.exec(before);
+    if (!match || !Number.isFinite(Date.parse(match[1]))) fail(400,"INVALID_CURSOR","Invalid inbox activity cursor.");
+    boundary = {lastActivityAt: new Date(match[1]), id: integer(match[2])};
+  }
+  const rows = await prisma.conversation.findMany({ where: { OR: [{ ownerId: userId }, { borrowerId: userId }], ...(boundary ? { AND: [{ OR: [{lastActivityAt: {lt: boundary.lastActivityAt}}, {lastActivityAt: boundary.lastActivityAt, id: {lt: boundary.id}}] }] } : {}) }, orderBy: [{ lastActivityAt: "desc" }, {id: "desc"}], take: limit+1, select: { id: true, lastActivityAt: true } });
   const conversations = await Promise.all(rows.slice(0,limit).map(async ({ id }) => { const h = await history(userId,id,1); return { ...h.conversation, latestMessage: h.messages[0] ?? null }; }));
   const notices = await prisma.chatWarning.findMany({ where: { userId }, orderBy: { id: "desc" }, take: 10, select: { id: true, reason: true, createdAt: true, moderationCase: { select: { id: true, appeal: { select: { decision: true } } } } } });
   const cases = await prisma.chatModerationCase.findMany({ where: { OR: [{ targetUserId: userId }, { reporterId: userId }] }, orderBy: { id: "desc" }, take: 20, select: { id: true, conversationId: true, status: true, decision: true, decisionReason: true, kind: true, parentId: true } });
-  return { conversations, notices: notices.map((n) => ({ id: n.id, caseId: n.moderationCase.id, reason: n.reason, corrected: n.moderationCase.appeal?.decision === "CORRECT", createdAt: n.createdAt })), cases, nextBefore: rows.length > limit ? rows[limit-1].id : null, retention: retentionSettings() };
+  return { conversations, notices: notices.map((n) => ({ id: n.id, caseId: n.moderationCase.id, reason: n.reason, corrected: n.moderationCase.appeal?.decision === "CORRECT", createdAt: n.createdAt })), cases, nextBefore: rows.length > limit ? `${rows[limit-1].lastActivityAt.toISOString()}_${rows[limit-1].id}` : null, retention: retentionSettings() };
 }
 export async function markRead(userId: number, id: number, body: Record<string, unknown>) {
   fields(body,["throughMessageId"]); const messageId = integer(body.throughMessageId);

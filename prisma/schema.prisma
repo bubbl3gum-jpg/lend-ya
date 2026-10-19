@@ -361,6 +361,8 @@ enum ChatMessageStatus {
 }
 
 model Conversation {
+  lastActivityAt DateTime @default(now())
+  @@index([lastActivityAt, id])
   id Int @id @default(autoincrement())
   listingId Int
   ownerId Int

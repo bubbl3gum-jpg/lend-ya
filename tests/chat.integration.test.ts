@@ -13,7 +13,7 @@ import { checklistItems } from "../lib/rental-checklist";
 type Actor = {id:number;email:string;cookie:string};
 type Message = {id:number;body:string;status:string;sequence:number;updatedSequence:number;deliverySequence:number|null;senderId:number};
 type Case = {id:number;messageId:number|null;version:number;status:string;kind:string;targetUserId:number};
-type Payload = {user:{id:number};listing:{id:number};conversationId:number;message:Message;messages:Message[];cursor:number;hasMore:boolean;nextBefore:number|null;conversation:{unreadCount:number;lastReadSequence:number};cases:Case[];case:Case;caseId:number;booking:{id:number;status:string};notices:{corrected:boolean}[];quote:{dailyPrice:string;totalPrice:string;deposit:string};code:string;outcome:string;replayed:boolean;conversations:unknown[]};
+type Payload = {user:{id:number};listing:{id:number};conversationId:number;message:Message;messages:Message[];cursor:number;hasMore:boolean;nextBefore:number|null;conversation:{unreadCount:number;lastReadSequence:number};cases:Case[];case:Case;caseId:number;booking:{id:number;status:string};notices:{corrected:boolean}[];quote:{dailyPrice:string;totalPrice:string;deposit:string};code:string;outcome:string;replayed:boolean;conversations:{id:number;lastActivityAt:string}[]};
 test("Milestone 2: isolated chat, multilingual safety, scoped review, browser delivery and restart persistence",{timeout:300000},async(t)=>{
   const db=await connectTestDatabase();
   const base=`http://localhost:${process.env.TEST_CHAT_PORT}`,tag=randomUUID(),password="IsolatedChat123!";
@@ -32,7 +32,7 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
     const image=await sharp({create:{width:8,height:8,channels:3,background:"blue"}}).png().toBuffer();
     const form=new FormData();for(const [k,v]of Object.entries({title:`Chat fixture ${tag}`,description:"Isolated item",category:"Cameras",condition:"Good",price:"10",stationIds:JSON.stringify([station])}))form.set(k,v);form.append("photos",new File([new Uint8Array(image)],"item.png",{type:"image/png"}));
     const listing=await api("/api/listings",owner.cookie,"POST",form);assert.equal(listing.status,201);const listingId=listing.json.listing.id;
-    let cid=0,firstId=0,heldCase=0,heldId=0;
+    let cid=0,firstId=0,heldCase=0,heldId=0,paginationConversationId=0,paginationReleasedBody="";
     const send=(actor:Actor,body:string,extra:object={},key=randomUUID())=>api(`/api/conversations/${cid}/messages`,actor.cookie,"POST",{body,clientMessageId:key,...extra});
     const caseFor=async(messageId:number)=>(await db.query('SELECT id FROM "ChatModerationCase" WHERE "messageId"=$1 AND kind=\'SYSTEM\'',[messageId])).rows[0].id as number;
     const claim=async(actor:Actor,id:number)=>api(`/api/admin/chat/cases/${id}/claim`,actor.cookie,"POST",{});
@@ -126,6 +126,29 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       const before=await api(`/api/bookings/${bid}`,owner.cookie);assert.equal(before.json.booking.status,"COMPLETED");assert.equal((await send(owner,`After completion ${tag}`,{bookingId:bid})).status,200);assert.equal((await api("/api/conversations",borrower.cookie,"POST",{listingId})).json.conversationId,cid);assert.equal((await api(`/api/bookings/${bid}`,owner.cookie)).json.booking.status,"COMPLETED");
       const second=await api("/api/bookings",borrower.cookie,"POST",{...input,startAt:"2036-01-01T10:00",endAt:"2036-01-02T10:00"});assert.equal(second.status,201);assert.equal((await send(borrower,`Second booking same thread ${tag}`,{bookingId:second.json.booking.id})).status,200);assert.equal((await api("/api/conversations",borrower.cookie,"POST",{listingId})).json.conversationId,cid);
     });
+    await t.test("activity ordered inbox and released old holds survive paginated reconnect",async()=>{
+      const other=(await db.query('SELECT id FROM "Conversation" WHERE "borrowerId"=$1',[outsider.id])).rows[0].id;
+      const post=(body:string)=>api(`/api/conversations/${other}/messages`,owner.cookie,"POST",{body,clientMessageId:randomUUID()});
+      await db.query('DELETE FROM "ChatRateLimit"');
+      const held=await post(`I will hurt you paginated ${tag}`);assert.equal(held.json.message.status,"HELD");paginationConversationId=other;paginationReleasedBody=held.json.message.body;
+      for(let n=0;n<53;n++){if(n%10===0)await db.query('DELETE FROM "ChatRateLimit"');assert.equal((await post(`Pagination fixture ${n} ${tag}`)).status,200);}
+      const cursor=(await api(`/api/conversations/${other}/messages?limit=50`,outsider.cookie)).json.cursor;
+      assert.equal((await send(borrower,`Revive older thread ${tag}`)).status,200);
+      let inbox=await api('/api/conversations?limit=1',owner.cookie);assert.equal(inbox.json.conversations[0].id,cid);assert.ok(inbox.json.nextBefore);
+      const page=await api(`/api/conversations?limit=1&before=${encodeURIComponent(String(inbox.json.nextBefore))}`,owner.cookie);assert.equal(page.json.conversations[0].id,other);
+      assert.equal((await api('/api/conversations?before=invalid',owner.cookie)).status,400);
+      await db.query('UPDATE "Conversation" SET "lastActivityAt"=\'2000-01-01\' WHERE id=ANY($1::int[])',[[cid,other]]);
+      const tied=await api('/api/conversations?limit=1',owner.cookie);assert.equal(tied.json.conversations[0].id,Math.max(cid,other));
+      const tiedPage=await api(`/api/conversations?limit=1&before=${encodeURIComponent(String(tied.json.nextBefore))}`,owner.cookie);assert.equal(tiedPage.json.conversations[0].id,Math.min(cid,other));
+
+      const id=await caseFor(held.json.message.id);await claim(admin,id);assert.equal((await decide(admin,id,"RELEASE")).status,200);
+      inbox=await api('/api/conversations?limit=1',owner.cookie);assert.equal(inbox.json.conversations[0].id,other);
+      const delta=await api(`/api/conversations/${other}/messages?after=${cursor}&limit=2`,outsider.cookie);assert.equal(delta.json.messages[0].id,held.json.message.id);
+      const seen=new Set<number>();let after=0;for(let n=0;n<30;n++){const p=await api(`/api/conversations/${other}/messages?after=${after}&limit=2`,outsider.cookie);p.json.messages.forEach(m=>seen.add(m.id));after=p.json.cursor;if(!p.json.hasMore)break;}assert.equal(seen.size,54);assert.ok(seen.has(held.json.message.id));
+      const latest=await api(`/api/conversations/${other}/messages?limit=50`,outsider.cookie);assert.ok(!latest.json.messages.some(m=>m.id===held.json.message.id));
+      const older=await api(`/api/conversations/${other}/messages?limit=50&before=${latest.json.nextBefore}`,outsider.cookie);assert.ok(older.json.messages.some(m=>m.id===held.json.message.id));
+      await db.query('DELETE FROM "ChatRateLimit"');
+    });
     await t.test("real two-user browser polling, read indicators, report/block controls and admin case UI",async()=>{
       browser=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true});
       const contexts=await Promise.all([browser.newContext(),browser.newContext(),browser.newContext()]);const pages=await Promise.all(contexts.map(c=>c.newPage()));
@@ -138,7 +161,7 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       await pages[1].getByRole("button",{name:"Block contact",exact:true}).click();await expect(pages[1].getByRole("button",{name:"Unblock contact",exact:true})).toBeVisible();await pages[1].getByRole("button",{name:"Unblock contact",exact:true}).click();
       const review=await send(owner,`Review this link https://bit.ly/${tag}`);const caseId=await caseFor(review.json.message.id);
       await pages[2].goto(base+"/admin/chat");await pages[2].getByRole("button",{name:`Claim case #${caseId}`,exact:true}).click();await expect(pages[2].getByText(review.json.message.body,{exact:true})).toBeVisible();await pages[2].getByLabel("Decision",{exact:true}).selectOption("DISMISS");await pages[2].getByLabel("Decision explanation").fill("Harmless external link reviewed in context");await pages[2].getByRole("button",{name:"Save moderation decision"}).click();await expect(pages[2].getByText(/Decision: DISMISS/)).toBeVisible();
-      await pages[1].goto(base+"/messages");await expect(pages[1].getByRole("heading",{name:"Messages",exact:true})).toBeVisible();await browser.close();browser=undefined;
+      await pages[1].goto(base+"/messages");await expect(pages[1].getByRole("heading",{name:"Messages",exact:true})).toBeVisible();const reconnectContext=await browser.newContext();const reconnectPage=await reconnectContext.newPage();await login(reconnectPage,outsider);await reconnectPage.goto(`${base}/messages/${paginationConversationId}`);await expect(reconnectPage.getByText(paginationReleasedBody,{exact:true})).toBeVisible({timeout:20000});await reconnectContext.close();await browser.close();browser=undefined;
     });
     await t.test("logout/login and full server restart preserve messages, read state, cases, grants and outbox",async()=>{
       const before=(await api(`/api/conversations/${cid}/messages?limit=50`,borrower.cookie)).json;assert.ok(before.messages.some(m=>m.id===firstId));
