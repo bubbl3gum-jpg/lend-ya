@@ -25,3 +25,13 @@ export function checkInTtlSeconds() {
     throw Error("Invalid check-in validity configuration");
   return n;
 }
+
+/** Explicit preview choice; 900 seconds is proposed, not a public policy default. */
+export function confirmationTtlSeconds() {
+  const n = Number(process.env.MEETUP_CONFIRMATION_TTL_SECONDS);
+  if (!Number.isInteger(n) || n < 60 || n > 1800)
+    throw Error(
+      "Set an explicitly approved preview confirmation period (60–1800 seconds)",
+    );
+  return n;
+}

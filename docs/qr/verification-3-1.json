@@ -1,0 +1,394 @@
+{
+  "date": "2026-10-20",
+  "timezone": "Asia/Taipei",
+  "baseCommit": "74c726e2fc04e8b568d3a7fc5f895d6feade57a8",
+  "branch": "fix/qr-meetup-acceptance-hardening",
+  "sourceFingerprint": "7627f6d59120be4e073d1700803776d4b36d8b904ce7a5033b90bd5da583648b",
+  "fingerprintAlgorithm": "sha256 of sorted path/content-sha256 mapping, excluding documentation",
+  "changedCodeHashes": {
+    "components/meetup-verification.tsx": "62aebe4e0dab5707faeadf35e67b038e2f5b680d3f7972c8ef47cdc8d148c6f9",
+    "lib/meetup/config.ts": "70e31caa95dc3696ed43f15ff6cc4a1f154107bb4beb378b1a6210f789f49753",
+    "lib/meetup/service.ts": "54b52dd802b357ff7046741efcf88be2956086e3b6d25be7c2e27183942405e6",
+    "prisma/migrations/20261020090000_meetup_confirmation_window/migration.sql": "02249b7a98c1aa9e356d81094967dceaa9ec32009503be81ec6a3b4a56b55e21",
+    "prisma/schema.prisma": "1a5dc7220a74143e80169827651eae5b0cfc86827c3a7d76e714761a2ae4ec3b",
+    "tests/meetup-location.test.ts": "906ea24f095dfc88db4f236b468bbc589279ae19289ace87f2bff90c394e973c",
+    "tests/meetup-migration.test.ts": "a64dc50f3e5fe72064fdcc278429c0ab816b596db7931885d45d20508314730e",
+    "tests/meetup.integration.test.ts": "20ee362cb25aacf583ba20b8710fe54251bbe804d859420018752dcfecc4914f"
+  },
+  "setup": [
+    {
+      "command": "node node_modules/prisma/build/index.js generate --config prisma7.config.ts",
+      "exit": 0
+    },
+    {
+      "command": "node node_modules/prisma/build/index.js validate --config prisma7.config.ts",
+      "exit": 0
+    }
+  ],
+  "selectedChecks": [
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "seconds": 9.8,
+      "phase": "qr31acceptance"
+    },
+    {
+      "name": "types",
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "seconds": 10.8,
+      "phase": "qr31acceptance"
+    },
+    {
+      "name": "test:unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "seconds": 6.0,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 36,
+        "pass": 36,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:meetup-migration",
+      "command": "npm run test:meetup-migration",
+      "exit": 0,
+      "seconds": 7.6,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:meetup",
+      "command": "npm run test:meetup",
+      "exit": 0,
+      "seconds": 269.1,
+      "phase": "qr31acceptance",
+      "nodeResults": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:chat",
+      "command": "npm run test:chat",
+      "exit": 0,
+      "seconds": 102.0,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 14,
+        "pass": 14,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:stability",
+      "command": "npm run test:stability",
+      "exit": 0,
+      "seconds": 20.9,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:rental-api",
+      "command": "npm run test:rental-api",
+      "exit": 0,
+      "seconds": 43.1,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 13,
+        "pass": 13,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:rental-browser",
+      "command": "npm run test:rental-browser",
+      "exit": 0,
+      "seconds": 71.5,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:admin",
+      "command": "npm run test:admin",
+      "exit": 0,
+      "seconds": 58.0,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:moderation",
+      "command": "npm run test:moderation",
+      "exit": 0,
+      "seconds": 87.2,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:integration",
+      "command": "npm run test:integration",
+      "exit": 0,
+      "seconds": 49.0,
+      "phase": "qr31final"
+    },
+    {
+      "name": "test:migration",
+      "command": "npm run test:migration",
+      "exit": 0,
+      "seconds": 8.8,
+      "phase": "qr31final"
+    },
+    {
+      "name": "test:admin-migration",
+      "command": "npm run test:admin-migration",
+      "exit": 0,
+      "seconds": 5.9,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "test:mvp",
+      "command": "npm run test:mvp",
+      "exit": 0,
+      "seconds": 83.7,
+      "phase": "qr31final",
+      "nodeResults": {
+        "tests": 11,
+        "pass": 11,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "build:verify",
+      "command": "npm run build:verify",
+      "exit": 0,
+      "seconds": 9.1,
+      "phase": "qr31final"
+    }
+  ],
+  "passingNodeResults": 113,
+  "countNote": "Includes parent/subtest results, not 113 independent experiments; repeated checks counted once. MRT functional scripts/build are additional.",
+  "fullRun": [
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "seconds": 16.3
+    },
+    {
+      "name": "types",
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "seconds": 5.2
+    },
+    {
+      "name": "test:unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "seconds": 6.0
+    },
+    {
+      "name": "test:meetup-migration",
+      "command": "npm run test:meetup-migration",
+      "exit": 0,
+      "seconds": 7.6
+    },
+    {
+      "name": "test:meetup",
+      "command": "npm run test:meetup",
+      "exit": 0,
+      "seconds": 244.3
+    },
+    {
+      "name": "test:chat",
+      "command": "npm run test:chat",
+      "exit": 0,
+      "seconds": 102.0
+    },
+    {
+      "name": "test:stability",
+      "command": "npm run test:stability",
+      "exit": 0,
+      "seconds": 20.9
+    },
+    {
+      "name": "test:rental-api",
+      "command": "npm run test:rental-api",
+      "exit": 0,
+      "seconds": 43.1
+    },
+    {
+      "name": "test:rental-browser",
+      "command": "npm run test:rental-browser",
+      "exit": 0,
+      "seconds": 71.5
+    },
+    {
+      "name": "test:admin",
+      "command": "npm run test:admin",
+      "exit": 0,
+      "seconds": 58.0
+    },
+    {
+      "name": "test:moderation",
+      "command": "npm run test:moderation",
+      "exit": 0,
+      "seconds": 87.2
+    },
+    {
+      "name": "test:integration",
+      "command": "npm run test:integration",
+      "exit": 0,
+      "seconds": 49.0
+    },
+    {
+      "name": "test:migration",
+      "command": "npm run test:migration",
+      "exit": 0,
+      "seconds": 8.8
+    },
+    {
+      "name": "test:admin-migration",
+      "command": "npm run test:admin-migration",
+      "exit": 0,
+      "seconds": 5.9
+    },
+    {
+      "name": "test:mvp",
+      "command": "npm run test:mvp",
+      "exit": 0,
+      "seconds": 83.7
+    },
+    {
+      "name": "build:verify",
+      "command": "npm run build:verify",
+      "exit": 0,
+      "seconds": 9.1
+    }
+  ],
+  "affectedRerun": [
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "seconds": 9.8
+    },
+    {
+      "name": "types",
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "seconds": 10.8
+    },
+    {
+      "name": "test:meetup",
+      "command": "npm run test:meetup",
+      "exit": 0,
+      "seconds": 269.1
+    }
+  ],
+  "postFullStartChanges": [
+    "components/meetup-verification.tsx",
+    "tests/meetup.integration.test.ts"
+  ],
+  "snapshotNote": "Only additional QR assertions and stage-specific return countdown wording changed after full run started. All API/config/schema/migration code stayed identical. QR/browser, lint and types were rerun on final snapshot; the full-run production build also executed after the final UI wording change.",
+  "historicalMigrationFilesUnchanged": 19,
+  "changedFiles": [
+    "components/meetup-verification.tsx",
+    "docs/MILESTONE3_1_QR_ACCEPTANCE.md",
+    "docs/MILESTONE3_MRT_VERIFICATION.md",
+    "docs/qr/COORDINATE_AUDIT_3_1.md",
+    "docs/qr/PHYSICAL_DEVICE_TESTING.md",
+    "docs/qr/verification-3-1.json",
+    "lib/meetup/config.ts",
+    "lib/meetup/service.ts",
+    "prisma/migrations/20261020090000_meetup_confirmation_window/migration.sql",
+    "prisma/schema.prisma",
+    "tests/meetup-location.test.ts",
+    "tests/meetup-migration.test.ts",
+    "tests/meetup.integration.test.ts"
+  ],
+  "earlierDevelopmentFailures": [
+    {
+      "check": "TypeScript",
+      "reason": "Initial conditional arrival union needed explicit nullable fallback; corrected before passing checks."
+    },
+    {
+      "phase": "qr31first",
+      "check": "test:meetup-migration",
+      "reason": "Checksum comparison initially counted the expected new migration as historical; forward-preservation fixture was expanded to cover both upgrade stages."
+    },
+    {
+      "phase": "qr31focus",
+      "check": "test:meetup",
+      "reason": "Timing/API cases passed; camera fixture never submitted verification. Start scanner browser only after real QR video exists; actual camera decode later passed. No assertion was removed."
+    }
+  ],
+  "unexecuted": [
+    "Physical iOS Safari and Android Chrome",
+    "Private HTTPS proxy/certificate/firewall setup",
+    "Onsite MRT positioning and exit/radius calibration",
+    "Actual 15-minute elapsed field test",
+    "GitHub Actions verification"
+  ],
+  "blockedOfficialSources": {
+    "status": "proxy CONNECT HTTP 403; curl exit 56; no source body",
+    "urls": [
+      "https://www.ntmetro.com.tw/basic/?node=10138",
+      "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=c77e91bf-067c-475e-917b-545ff62b7d76",
+      "https://data.ntpc.gov.tw/",
+      "https://data.gov.tw/"
+    ]
+  },
+  "databaseScope": "Only new owned disposable hustlen_test_* databases; never p2p_marketplace; no retained demo adopted",
+  "rollout": "Public preview stays off; 900 seconds is proposed explicit preview setting, not approved public policy; no merge/deployment"
+}

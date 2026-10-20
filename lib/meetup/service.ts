@@ -15,6 +15,7 @@ import {
   secret,
   ttlSeconds,
   checkInTtlSeconds,
+  confirmationTtlSeconds,
 } from "./config";
 import {
   evaluateLocation,
@@ -422,6 +423,7 @@ export async function issue(
   return prisma.$transaction(async (tx) => {
     const b = await locked(tx, id, userId);
     eligible(b, p);
+    confirmationTtlSeconds();
     const issuer = p === "PICKUP" ? b.ownerId : b.renterId,
       verifier = p === "PICKUP" ? b.renterId : b.ownerId;
     if (userId !== issuer)
@@ -530,17 +532,25 @@ async function validChallenge(
     c.bookingVersion !== b.meetup?.bookingVersion ||
     c.bookingUpdatedAt.getTime() !== b.updatedAt.getTime() ||
     c.revokedAt ||
-    c.expiresAt <= new Date() ||
+    (c.consumedAt
+      ? !c.confirmationExpiresAt || c.confirmationExpiresAt <= new Date()
+      : c.expiresAt <= new Date()) ||
     c.completedAt
   )
     throw new RentalError(
       "Challenge expired, replaced or no longer eligible. Ask for a new challenge.",
     );
-  const a = await arrivals(tx, b, p);
+  // Successful redemption snapshots fresh arrival assurance. Its later time expiry
+  // must not shorten the independent confirmation window. New readings still revoke it.
+  const a = c.consumedAt
+    ? { ...(await latestChecks(tx, b, p)), fallback: null }
+    : await arrivals(tx, b, p);
   if (
-    a.owner.id !== c.ownerCheckId ||
-    a.borrower.id !== c.borrowerCheckId ||
-    (a.fallback?.id ?? null) !== c.fallbackId
+    a.owner?.id !== c.ownerCheckId ||
+    a.borrower?.id !== c.borrowerCheckId ||
+    (!c.consumedAt && (a.fallback?.id ?? null) !== c.fallbackId) ||
+    c.issuerId !== (p === "PICKUP" ? b.ownerId : b.renterId) ||
+    c.verifierId !== (p === "PICKUP" ? b.renterId : b.ownerId)
   )
     throw new RentalError(
       "Arrival verification changed. Generate a new challenge.",
@@ -610,6 +620,7 @@ export async function verify(
           verified: true,
           challengeId: c.id,
           replayed: true,
+          confirmationExpiresAt: c.confirmationExpiresAt,
           itemTitle: (
             await tx.listing.findUniqueOrThrow({
               where: { id: b.listingId },
@@ -651,6 +662,10 @@ export async function verify(
       await meetupEvent(tx, id, userId, p, "VERIFY_SECRET_FAILED", c.id);
       return { failure: "Code or QR could not be verified.", status: 400 };
     }
+    const consumedAt = new Date();
+    const confirmationExpiresAt = new Date(
+      consumedAt.getTime() + confirmationTtlSeconds() * 1000,
+    );
     const changed = await tx.meetupChallenge.updateMany({
       where: {
         id: c.id,
@@ -659,7 +674,8 @@ export async function verify(
         expiresAt: { gt: new Date() },
       },
       data: {
-        consumedAt: new Date(),
+        consumedAt,
+        confirmationExpiresAt,
         verificationKey: key,
         verificationHash: fingerprint,
       },
@@ -677,6 +693,7 @@ export async function verify(
       itemTitle: item.title,
       bookingId: id,
       purpose: p,
+      confirmationExpiresAt,
       requiresPhysicalAcknowledgement: true,
     };
   });
@@ -714,6 +731,15 @@ export async function status(id: number, userId: number) {
       where: { bookingId: id, purpose: p, revokedAt: null },
       orderBy: { createdAt: "desc" },
     });
+    let confirmationEligible = false;
+    if (c?.consumedAt) {
+      try {
+        await validChallenge(tx, b, c, p);
+        confirmationEligible = true;
+      } catch (error) {
+        if (!(error instanceof RentalError)) throw error;
+      }
+    }
     const checkDto = (r: typeof checks.owner) =>
       r
         ? {
@@ -751,6 +777,8 @@ export async function status(id: number, userId: number) {
             id: c.id,
             expiresAt: c.expiresAt,
             consumedAt: c.consumedAt,
+            confirmationExpiresAt: c.confirmationExpiresAt,
+            confirmationEligible,
             completedAt: c.completedAt,
             verifierId: c.verifierId,
           }

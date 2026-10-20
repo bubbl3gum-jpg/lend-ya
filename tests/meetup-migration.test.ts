@@ -20,6 +20,10 @@ test("additive meetup migration preserves every populated pre-existing table and
     const migrations = path.join(dir, "migrations");
     await cp("prisma/migrations", migrations, { recursive: true });
     await rm(path.join(migrations, migration), { recursive: true });
+    await rm(
+      path.join(migrations, "20261020090000_meetup_confirmation_window"),
+      { recursive: true },
+    );
     const config = path.join(dir, "prisma.config.ts");
     await writeFile(
       config,
@@ -72,6 +76,11 @@ test("additive meetup migration preserves every populated pre-existing table and
         'SELECT migration_name,checksum FROM "_prisma_migrations" ORDER BY migration_name',
       )
     ).rows;
+    await cp(
+      path.join("prisma/migrations", migration),
+      path.join(migrations, migration),
+      { recursive: true },
+    );
     await run(
       process.execPath,
       [
@@ -79,7 +88,7 @@ test("additive meetup migration preserves every populated pre-existing table and
         "migrate",
         "deploy",
         "--config",
-        "prisma7.config.ts",
+        config,
       ],
       { env: process.env },
     );
@@ -96,8 +105,8 @@ test("additive meetup migration preserves every populated pre-existing table and
     assert.deepEqual(
       (
         await db.query(
-          'SELECT migration_name,checksum FROM "_prisma_migrations" WHERE migration_name<>$1 ORDER BY migration_name',
-          [migration],
+          'SELECT migration_name,checksum FROM "_prisma_migrations" WHERE migration_name<>$1 AND migration_name<>$2 ORDER BY migration_name',
+          [migration, "20261020090000_meetup_confirmation_window"],
         )
       ).rows,
       old,
@@ -119,6 +128,91 @@ test("additive meetup migration preserves every populated pre-existing table and
       snapshots.get("MrtStation")!.length,
       "Imported and historical station identities unchanged",
     );
+    // Upgrade a populated Milestone 3 database, including an already consumed QR.
+    await db.query(`INSERT INTO "MeetupSession" ("bookingId","enabledBy") VALUES (1,1);
+      INSERT INTO "MeetupCheckIn" (id,"bookingId","userId",purpose,role,outcome,reason,"policyVersion","requestKey","requestHash","expiresAt") VALUES
+      (1,1,1,'PICKUP','OWNER','VERIFIED','LOCATION','fixture','check-owner',repeat('a',64),NOW()+interval '10 minutes'),
+      (2,1,2,'PICKUP','BORROWER','VERIFIED','LOCATION','fixture','check-borrower',repeat('b',64),NOW()+interval '10 minutes');
+      INSERT INTO "MeetupChallenge" (id,"bookingId",purpose,"issuerId","issueKey","verifierId","bookingState","bookingVersion","bookingUpdatedAt","ownerCheckId","borrowerCheckId","tokenHash","codeHash","expiresAt","consumedAt","verificationKey","verificationHash") VALUES
+      ('00000000-0000-4000-8000-000000000099',1,'PICKUP',1,'old-consumed',2,'COMPLETED',0,NOW(),1,2,repeat('a',64),repeat('b',64),NOW()+interval '3 minutes',NOW(),'old-retry',repeat('c',64));`);
+    const beforeUpgrade = new Map<string, unknown[]>();
+    const allTables = (
+      await db.query(
+        "SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename<>'_prisma_migrations' ORDER BY tablename",
+      )
+    ).rows.map((r) => String(r.tablename));
+    for (const table of allTables)
+      beforeUpgrade.set(
+        table,
+        (
+          await db.query(
+            `SELECT to_jsonb(t) AS row FROM "${table}" t ORDER BY to_jsonb(t)::text`,
+          )
+        ).rows,
+      );
+    const checksums = (
+      await db.query(
+        'SELECT migration_name,checksum FROM "_prisma_migrations" ORDER BY migration_name',
+      )
+    ).rows;
+    await run(
+      process.execPath,
+      [
+        "node_modules/prisma/build/index.js",
+        "migrate",
+        "deploy",
+        "--config",
+        "prisma7.config.ts",
+      ],
+      { env: process.env },
+    );
+    for (const table of allTables) {
+      const projection =
+        table === "MeetupChallenge"
+          ? "to_jsonb(t)-'confirmationExpiresAt'"
+          : "to_jsonb(t)";
+      assert.deepEqual(
+        (
+          await db.query(
+            `SELECT ${projection} AS row FROM "${table}" t ORDER BY ${projection}::text`,
+          )
+        ).rows,
+        beforeUpgrade.get(table),
+        `${table} preserved across confirmation migration`,
+      );
+    }
+    assert.equal(
+      (await db.query('SELECT "confirmationExpiresAt" FROM "MeetupChallenge"'))
+        .rows[0].confirmationExpiresAt,
+      null,
+      "No retroactive confirmation authority is granted",
+    );
+    assert.deepEqual(
+      (
+        await db.query(
+          `SELECT migration_name,checksum FROM "_prisma_migrations" WHERE migration_name<>'20261020090000_meetup_confirmation_window' ORDER BY migration_name`,
+        )
+      ).rows,
+      checksums,
+    );
+    await assert.rejects(
+      db.query(
+        `UPDATE "MeetupChallenge" SET "confirmationExpiresAt"="consumedAt"+interval '15 minutes'`,
+      ),
+      /immutable/,
+    );
+    const repeat = await run(
+      process.execPath,
+      [
+        "node_modules/prisma/build/index.js",
+        "migrate",
+        "deploy",
+        "--config",
+        "prisma7.config.ts",
+      ],
+      { env: process.env },
+    );
+    assert.match(repeat.stdout, /No pending migrations/);
   } finally {
     await db.end();
     await rm(dir, { recursive: true, force: true });

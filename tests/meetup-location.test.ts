@@ -6,7 +6,11 @@ import {
   stationCoordinates,
   locationSettings,
 } from "../lib/meetup/location";
-import { previewParticipant, ttlSeconds } from "../lib/meetup/config";
+import {
+  previewParticipant,
+  ttlSeconds,
+  confirmationTtlSeconds,
+} from "../lib/meetup/config";
 test("MRT location coverage is explicit: 109 sourced points, 11 unavailable; no invented coordinates", () => {
   assert.equal(stationCoordinates.length, 120);
   assert.equal(new Set(stationCoordinates.map((s) => s.id)).size, 120);
@@ -79,5 +83,24 @@ test("preview defaults off and station overrides are validated and bounded", () 
       if (old[i] === undefined) delete process.env[n];
       else process.env[n] = old[i];
     });
+  }
+});
+
+test("confirmation window requires an explicit bounded preview choice", () => {
+  const old = process.env.MEETUP_CONFIRMATION_TTL_SECONDS;
+  try {
+    delete process.env.MEETUP_CONFIRMATION_TTL_SECONDS;
+    assert.throws(confirmationTtlSeconds);
+    for (const invalid of ["", "59", "1801", "900.5", "NaN"]) {
+      process.env.MEETUP_CONFIRMATION_TTL_SECONDS = invalid;
+      assert.throws(confirmationTtlSeconds);
+    }
+    for (const valid of [60, 900, 1800]) {
+      process.env.MEETUP_CONFIRMATION_TTL_SECONDS = String(valid);
+      assert.equal(confirmationTtlSeconds(), valid);
+    }
+  } finally {
+    if (old === undefined) delete process.env.MEETUP_CONFIRMATION_TTL_SECONDS;
+    else process.env.MEETUP_CONFIRMATION_TTL_SECONDS = old;
   }
 });

@@ -610,6 +610,7 @@ model MeetupChallenge {
   expiresAt DateTime
   revokedAt DateTime?
   consumedAt DateTime?
+  confirmationExpiresAt DateTime?
   verificationKey String? @db.VarChar(128)
   verificationHash String? @db.VarChar(64)
   completedAt DateTime?

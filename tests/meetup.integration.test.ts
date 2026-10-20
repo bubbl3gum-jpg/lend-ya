@@ -30,6 +30,7 @@ type Payload = {
   expiresAt: string;
   qrPayload: string;
   manualCode: string;
+  confirmationExpiresAt: string;
   verified: boolean;
   replayed: boolean;
   challenge: { id: string; consumedAt: string | null } | null;
@@ -52,7 +53,8 @@ test(
     const logPath = path.join(artifact, "meetup-server.log"),
       log = openSync(logPath, "a");
     let server: ChildProcess | undefined,
-      browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+      browser: Awaited<ReturnType<typeof chromium.launch>> | undefined,
+      cameraBrowser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
     async function stop() {
       if (server && server.exitCode === null && server.signalCode === null) {
         const exited = once(server, "exit");
@@ -62,7 +64,12 @@ test(
         clearTimeout(timeout);
       }
     }
-    async function start(ids: number[] = [], ttl = 180) {
+    async function start(
+      ids: number[] = [],
+      ttl = 180,
+      confirmation = 900,
+      checkTtl = 600,
+    ) {
       server = spawn(
         process.execPath,
         [
@@ -79,6 +86,8 @@ test(
             NODE_ENV: "development",
             MEETUP_PREVIEW_USER_IDS: ids.join(","),
             MEETUP_CODE_SECRET: serverSecret,
+            MEETUP_CONFIRMATION_TTL_SECONDS: String(confirmation),
+            MEETUP_CHECKIN_TTL_SECONDS: String(checkTtl),
             MEETUP_CHALLENGE_TTL_SECONDS: String(ttl),
             CHAT_ENABLED: "false",
             CHAT_PREVIEW_USER_IDS: "",
@@ -883,6 +892,263 @@ test(
         },
       );
       await t.test(
+        "separate scan and confirmation clocks: delayed pickup/return, lost response, expiry and invalidation",
+        async () => {
+          await stop();
+          await start(ids, 30, 120, 60);
+          const fixtures = [];
+          for (let n = 0; n < 8; n++) {
+            const r = await rental();
+            await prepare(r.id);
+            if (n === 0) {
+              assert.equal(
+                (
+                  await check(r.id, borrower, "PICKUP", {
+                    mode: "unavailable",
+                    reason: "DENIED",
+                    latitude: undefined,
+                    longitude: undefined,
+                    accuracy: undefined,
+                    timestamp: undefined,
+                  })
+                ).status,
+                200,
+              );
+              for (const actor of [owner, borrower])
+                assert.equal(
+                  (
+                    await op(r.id, "fallback", actor, {
+                      purpose: "PICKUP",
+                      reason: "Synthetic reduced-assurance timing test",
+                      acknowledged: true,
+                    })
+                  ).status,
+                  200,
+                );
+            }
+            const issued = await op(r.id, "issue", owner, {
+              purpose: "PICKUP",
+            });
+            assert.equal(issued.status, 200);
+            const payload = {
+              purpose: "PICKUP",
+              challengeId: issued.json.challengeId,
+              manualCode: issued.json.manualCode,
+              requestKey: randomUUID(),
+            };
+            const verified = await op(r.id, "verify", borrower, payload);
+            assert.equal(verified.status, 200);
+            fixtures.push({
+              r,
+              c: issued.json,
+              payload,
+              deadline: verified.json.confirmationExpiresAt,
+            });
+          }
+          const [
+            delayed,
+            timeout,
+            replaced,
+            changed,
+            participant,
+            recheck,
+            disputed,
+            returned,
+          ] = fixtures;
+          const submission = (f: typeof delayed) => ({
+            ...evidence,
+            meetupChallengeId: f.c.challengeId,
+            physicalReceipt: true,
+          });
+          const finish = (f: typeof delayed) =>
+            api(
+              `/api/bookings/${f.r.id}/handoff`,
+              borrower,
+              "POST",
+              submission(f),
+            );
+          // Create a return proof while the pickup proof is still valid.
+          assert.equal((await finish(returned)).status, 200);
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${returned.r.id}/return`,
+                borrower,
+                "POST",
+                evidence,
+              )
+            ).status,
+            200,
+          );
+          for (const actor of [owner, borrower])
+            assert.equal(
+              (await check(returned.r.id, actor, "RETURN")).status,
+              200,
+            );
+          const returnCode = (
+            await op(returned.r.id, "issue", borrower, { purpose: "RETURN" })
+          ).json;
+          const returnPayload = {
+            purpose: "RETURN",
+            challengeId: returnCode.challengeId,
+            manualCode: returnCode.manualCode,
+            requestKey: randomUUID(),
+          };
+          assert.equal(
+            (await op(returned.r.id, "verify", owner, returnPayload)).status,
+            200,
+          );
+          const returnReceipt = {
+            meetupChallengeId: returnCode.challengeId,
+            physicalReceipt: true,
+          };
+          // Replacement revokes even an already scanned challenge.
+          assert.equal(
+            (await op(replaced.r.id, "issue", owner, { purpose: "PICKUP" }))
+              .status,
+            200,
+          );
+          assert.equal((await finish(replaced)).status, 409);
+          // Same state and timestamp, new monotonic version: still invalidates proof.
+          await db.query(
+            `UPDATE "Booking" SET notes='changed after scan' WHERE id=$1`,
+            [changed.r.id],
+          );
+          assert.equal((await finish(changed)).status, 409);
+          await db.query('UPDATE "Booking" SET "renterId"=$1 WHERE id=$2', [
+            outsider.id,
+            participant.r.id,
+          ]);
+          assert.equal((await finish(participant)).status, 403);
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${participant.r.id}/handoff`,
+                outsider,
+                "POST",
+                submission(participant),
+              )
+            ).status,
+            409,
+          );
+          assert.equal((await check(recheck.r.id, borrower)).status, 200);
+          assert.equal((await finish(recheck)).status, 409);
+          await db.query(
+            `INSERT INTO "Dispute" ("bookingId","openedBy",reason,description,status) VALUES ($1,$2,'Test','After valid scan','OPEN')`,
+            [disputed.r.id, borrower.id],
+          );
+          assert.equal((await finish(disputed)).status, 409);
+          await db.query(
+            `UPDATE "Booking" SET status='CANCELLED' WHERE id=$1`,
+            [changed.r.id],
+          );
+          assert.equal((await finish(changed)).status, 409);
+          // Real elapsed time, no clock mocks or mutation of protected timestamps.
+          await new Promise((r) => setTimeout(r, 31000));
+          await new Promise((r) => setTimeout(r, 31000));
+          assert.ok(Date.parse(delayed.c.expiresAt) < Date.now());
+          assert.ok(Date.parse(delayed.deadline) > Date.now());
+          // The saved proof survives restart; a larger new setting cannot extend it.
+          await stop();
+          await start(ids, 30, 900, 60);
+          const checksExpired = await db.query(
+            'SELECT "expiresAt" FROM "MeetupCheckIn" WHERE "bookingId"=$1',
+            [delayed.r.id],
+          );
+          assert.ok(
+            checksExpired.rows.every((r) => r.expiresAt.getTime() < Date.now()),
+            "Saved arrival time expiry does not truncate confirmation",
+          );
+          const delayedStatus = await api(
+            `/api/bookings/${delayed.r.id}/meetup/status`,
+            borrower,
+          );
+          assert.equal(
+            (
+              delayedStatus.json.challenge as unknown as {
+                confirmationEligible: boolean;
+              }
+            ).confirmationEligible,
+            true,
+          );
+          const retry = await op(
+            delayed.r.id,
+            "verify",
+            borrower,
+            delayed.payload,
+          );
+          assert.equal(retry.status, 200);
+          assert.equal(retry.json.replayed, true);
+          assert.equal(
+            retry.json.confirmationExpiresAt,
+            delayed.deadline,
+            "Retry cannot extend the window",
+          );
+          const before = await db.query(
+            `SELECT count(*)::int n FROM "MeetupEvent" WHERE "challengeId"=$1 AND kind='CHALLENGE_VERIFIED'`,
+            [delayed.c.challengeId],
+          );
+          assert.equal(before.rows[0].n, 1);
+          assert.equal((await finish(delayed)).status, 200);
+          assert.equal((await finish(delayed)).json.replayed, true);
+          assert.equal(
+            (await op(returned.r.id, "verify", owner, returnPayload)).json
+              .replayed,
+            true,
+          );
+          assert.equal(
+            (await op(returned.r.id, "receipt", owner, returnReceipt)).status,
+            200,
+          );
+          assert.equal(
+            (await op(returned.r.id, "receipt", owner, returnReceipt)).json
+              .replayed,
+            true,
+          );
+          assert.equal(
+            (await detail(returned.r.id)).json.booking.status,
+            "INSPECTION",
+          );
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${returned.r.id}/inspection`,
+                owner,
+                "POST",
+                { ...evidence, acceptable: true },
+              )
+            ).status,
+            200,
+          );
+          assert.equal(
+            (await detail(returned.r.id)).json.booking.status,
+            "COMPLETED",
+          );
+          // Allow original check-ins AND the saved confirmation window to expire.
+          await new Promise((r) => setTimeout(r, 31000));
+          await new Promise((r) => setTimeout(r, 31000));
+          assert.equal((await finish(timeout)).status, 409);
+          assert.equal(
+            (await op(timeout.r.id, "verify", borrower, timeout.payload))
+              .status,
+            409,
+          );
+          assert.equal(
+            (await detail(timeout.r.id)).json.booking.status,
+            "HANDOFF_PENDING",
+          );
+          await assert.rejects(
+            db.query(
+              `UPDATE "MeetupChallenge" SET "confirmationExpiresAt"="confirmationExpiresAt"+interval '1 second' WHERE id=$1`,
+              [timeout.c.challengeId],
+            ),
+            /immutable/,
+          );
+          await stop();
+          await start(ids);
+        },
+      );
+      await t.test(
         "two real mobile browser sessions: GPS permission, actual camera QR, drafts, reduced return, restart and screenshots",
         async () => {
           const browserRental = await rental(),
@@ -923,19 +1189,19 @@ test(
             ],
           });
           const ownerContext = await browser.newContext({
-              timezoneId: "Asia/Taipei",
-              viewport: { width: 390, height: 844 },
-              geolocation: { ...point, accuracy: 10 },
-              permissions: ["geolocation", "camera"],
-            }),
-            borrowerContext = await browser.newContext({
-              timezoneId: "Asia/Taipei",
-              viewport: { width: 390, height: 844 },
-              geolocation: { ...point, accuracy: 10 },
-              permissions: ["geolocation", "camera"],
-            });
-          const opage = await ownerContext.newPage(),
-            bpage = await borrowerContext.newPage();
+            timezoneId: "Asia/Taipei",
+            viewport: { width: 390, height: 844 },
+            geolocation: { ...point, accuracy: 10 },
+            permissions: ["geolocation", "camera"],
+          });
+          let borrowerContext = await browser.newContext({
+            timezoneId: "Asia/Taipei",
+            viewport: { width: 390, height: 844 },
+            geolocation: { ...point, accuracy: 10 },
+            permissions: ["geolocation", "camera"],
+          });
+          const opage = await ownerContext.newPage();
+          let bpage = await borrowerContext.newPage();
           for (const [page, actor] of [
             [opage, owner],
             [bpage, borrower],
@@ -1019,6 +1285,29 @@ test(
             path: path.join(screenshots, "00-owner-pickup-qr.png"),
             fullPage: true,
           });
+          // Initialize the scanner process only after its real QR video exists.
+          // Chromium may initialize/cache fake capture sources before getUserMedia.
+          const borrowerLogin = await borrowerContext.storageState();
+          await borrowerContext.close();
+          cameraBrowser = await chromium.launch({
+            executablePath: process.env.MRT_BROWSER_PATH ?? "/usr/bin/chromium",
+            headless: true,
+            args: [
+              "--use-fake-device-for-media-stream",
+              `--use-file-for-fake-video-capture=${media}`,
+              "--use-fake-ui-for-media-stream",
+            ],
+          });
+          borrowerContext = await cameraBrowser.newContext({
+            storageState: borrowerLogin,
+            timezoneId: "Asia/Taipei",
+            viewport: { width: 390, height: 844 },
+            geolocation: { ...point, accuracy: 10 },
+            permissions: ["geolocation", "camera"],
+          });
+          bpage = await borrowerContext.newPage();
+          bpage.on("dialog", (dialog) => void dialog.accept());
+          await bpage.goto(`${base}/bookings/${id}`);
           await bpage
             .getByRole("button", { name: "Scan Pickup QR", exact: true })
             .click();
@@ -1049,6 +1338,12 @@ test(
               "I have physically received the equipment after inspecting it.",
             )
             .check();
+          await expect(bpage.getByText(/QR scanning deadline:/)).toBeVisible();
+          await expect(
+            bpage.getByText(
+              /Complete physical receipt and required checklist within/,
+            ),
+          ).toBeVisible();
           await bpage.screenshot({
             path: path.join(screenshots, "01-pickup-verified.png"),
             fullPage: true,
@@ -1226,6 +1521,8 @@ test(
           );
           assert.equal(overflow, false);
           assert.equal((await detail(id)).json.booking.status, "COMPLETED");
+          await cameraBrowser.close();
+          cameraBrowser = undefined;
           await browser.close();
           browser = undefined;
         },
@@ -1251,6 +1548,7 @@ test(
             ).catch(() => {});
           }
       }
+      await cameraBrowser?.close();
       await browser?.close();
       await stop();
       closeSync(log);

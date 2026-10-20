@@ -1,5 +1,6 @@
 # Milestone 3 — secure MRT pickup and return verification
 
+> Follow-up: [Milestone 3.1](MILESTONE3_1_QR_ACCEPTANCE.md) separates QR redemption from confirmation and adds an explicit confirmation-period configuration. Its migration and private HTTPS guide supersede the timing/setup instructions below. This original report records Milestone 3 evidence.
 Review branch: `feature/qr-mrt-handoff-return`. Base: `feature/intelligent-chat-moderation` at `fcd369a35fbd07df9ef9f9092b394ab0298d20b2`. Date: 2026-10-19 (Asia/Taipei).
 
 This branch adds an explicitly enrolled, participant-restricted preview. Public QR enforcement remains off. Existing bookings are not enrolled by migration or by setting preview IDs alone. No live database, merge, deployment, payment/deposit processing, external AI, notification service or native app is involved.

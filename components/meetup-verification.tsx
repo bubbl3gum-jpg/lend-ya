@@ -28,6 +28,8 @@ type State = {
     id: string;
     expiresAt: string;
     consumedAt: string | null;
+    confirmationExpiresAt: string | null;
+    confirmationEligible: boolean;
     completedAt: string | null;
     verifierId: number;
   } | null;
@@ -55,6 +57,7 @@ export function MeetupVerification({
     [physical, setPhysical] = useState(false),
     [code, setCode] = useState(""),
     [issued, setIssued] = useState<{
+      challengeId: string;
       image: string;
       code: string;
       expiresAt: string;
@@ -110,8 +113,9 @@ export function MeetupVerification({
       value.enabled,
       c?.verifierId === userId &&
         c.consumedAt &&
+        c.confirmationEligible &&
         !c.completedAt &&
-        Date.parse(c.expiresAt) > Date.now()
+        Date.parse(c.confirmationExpiresAt ?? "") > Date.now()
         ? c.id
         : null,
     );
@@ -295,8 +299,9 @@ export function MeetupVerification({
   const proof =
     data.challenge?.verifierId === userId &&
     data.challenge.consumedAt &&
+    data.challenge.confirmationEligible &&
     !data.challenge.completedAt &&
-    Date.parse(data.challenge.expiresAt) > clock
+    Date.parse(data.challenge.confirmationExpiresAt ?? "") > clock
       ? data.challenge.id
       : null;
   return (
@@ -344,7 +349,7 @@ export function MeetupVerification({
               <p key={n}>
                 {n === 0 ? "Owner" : "Borrower"}:{" "}
                 {c
-                  ? `${c.outcome === "VERIFIED" ? "Location verified" : c.outcome === "INACCURATE" ? "Location inaccurate" : c.outcome === "OUTSIDE" ? "Location outside accepted area" : "Location unavailable"} · ${Date.parse(c.expiresAt) <= clock ? "expired; check in again" : `valid until ${new Date(c.expiresAt).toLocaleTimeString()}`}`
+                  ? `${c.outcome === "VERIFIED" ? "Location verified" : c.outcome === "INACCURATE" ? "Location inaccurate" : c.outcome === "OUTSIDE" ? "Location outside accepted area" : "Location unavailable"} · ${Date.parse(c.expiresAt) <= clock ? "check-in validity elapsed; an existing valid scan keeps its separate confirmation window" : `valid until ${new Date(c.expiresAt).toLocaleTimeString()}`}`
                   : "Not checked in"}
               </p>
             ))}
@@ -450,6 +455,7 @@ export function MeetupVerification({
                         }
                         const QR = await import("qrcode");
                         setIssued({
+                          challengeId: r.challengeId,
                           image: await QR.toDataURL(r.qrPayload, {
                             width: 280,
                             margin: 3,
@@ -481,9 +487,12 @@ export function MeetupVerification({
                         One-time manual code: <strong>{issued.code}</strong>
                       </p>
                       <p>
-                        {Date.parse(issued.expiresAt) <= clock
-                          ? "Expired — renew the challenge. Your draft is preserved."
-                          : `Expires ${new Date(issued.expiresAt).toLocaleTimeString()}`}
+                        {data.challenge?.id === issued.challengeId &&
+                        data.challenge.consumedAt
+                          ? "QR redeemed. The recipient has a separate confirmation window; renewing revokes that proof."
+                          : Date.parse(issued.expiresAt) <= clock
+                            ? "Expired — renew the challenge. Your draft is preserved."
+                            : `QR scanning deadline ${new Date(issued.expiresAt).toLocaleTimeString()}`}
                       </p>
                       <p>
                         Show only to the intended participant. A screenshot can
@@ -555,10 +564,20 @@ export function MeetupVerification({
                   {data.challenge && (
                     <p>
                       {Date.parse(data.challenge.expiresAt) <= clock
-                        ? "Challenge expired. Ask for a new one; your condition draft remains recoverable."
-                        : `Challenge valid until ${new Date(data.challenge.expiresAt).toLocaleTimeString()}`}
+                        ? "QR scanning deadline expired. Unscanned codes need replacement; a valid scan has a separate confirmation window."
+                        : `QR scanning deadline: ${new Date(data.challenge.expiresAt).toLocaleTimeString()}`}
                     </p>
                   )}
+                  {data.challenge?.consumedAt &&
+                    data.challenge.confirmationExpiresAt && (
+                      <p role="status">
+                        {!data.challenge.confirmationEligible ||
+                        Date.parse(data.challenge.confirmationExpiresAt) <=
+                          clock
+                          ? "Confirmation window expired or verification changed. Request a new challenge; your condition draft is retained."
+                          : `${p === "PICKUP" ? "Complete physical receipt and required checklist" : "Acknowledge physical return receipt"} within ${Math.ceil((Date.parse(data.challenge.confirmationExpiresAt) - clock) / 1000)} seconds (until ${new Date(data.challenge.confirmationExpiresAt).toLocaleTimeString()}). ${p === "RETURN" ? "Condition inspection remains a separate required step. " : ""}Scanning alone does not confirm custody.`}
+                      </p>
+                    )}
                   {proof && p === "RETURN" && (
                     <>
                       <label className="flex gap-2">
