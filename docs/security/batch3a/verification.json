@@ -1,0 +1,250 @@
+{
+  "baseline": "1204aea00865643d1ef0723ca60111ffc3216fa4",
+  "branch": "feature/staff-identity-database-foundation-batch-3a",
+  "date": "2026-10-24 Asia/Taipei",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "databaseIsolation": "New owned disposable PostgreSQL databases only; every reported database removed by existing ownership harness. No real application database migrated or seeded.",
+  "browser": "/usr/bin/chromium; MRT_BROWSER_PATH and CHROMIUM_PATH",
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npx prisma validate",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "tests": 57,
+      "passed": 57,
+      "failed": 0
+    }
+  ],
+  "isolatedSuites": [
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-23T19:24:46.251Z",
+      "end": "2026-10-23T19:24:48.788Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/464933fa81a08435dedba8b5",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-schema",
+      "reportedTests": 8
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-23T19:19:45.193Z",
+      "end": "2026-10-23T19:19:54.600Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f8c9c9b632fe3fd82a255003",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-migration",
+      "reportedTests": 4
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-23T19:21:16.401Z",
+      "end": "2026-10-23T19:22:13.411Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a781a10e30f8fc7da8d32635",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:authorization",
+      "reportedTests": 8
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-23T19:19:45.197Z",
+      "end": "2026-10-23T19:20:33.563Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/fc62be16a8cd48af6ec09ff2",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:admin",
+      "reportedTests": 7
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-23T19:20:33.564Z",
+      "end": "2026-10-23T19:22:14.622Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ca1c3244996df7977292e3af",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:moderation",
+      "reportedTests": 10
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-23T19:20:33.565Z",
+      "end": "2026-10-23T19:22:39.955Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/edc8199e8121cc5cabb0dff1",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:chat",
+      "reportedTests": 14
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-23T19:20:33.568Z",
+      "end": "2026-10-23T19:21:31.926Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/6684f16e62a1da1cf78f9ad7",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:rental-api",
+      "reportedTests": 13
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-23T19:22:39.955Z",
+      "end": "2026-10-23T19:22:57.665Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a9b5418e2f61e0cd092511e7",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:stability",
+      "reportedTests": 8
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-23T19:22:57.702Z",
+      "end": "2026-10-23T19:26:54.046Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/51caa703116248d6385f8f70",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:meetup",
+      "reportedTests": 9
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-23T19:22:39.956Z",
+      "end": "2026-10-23T19:22:52.171Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b1a4149807386a6ee3371812",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "command": "npm run build:verify"
+    }
+  ],
+  "migration": {
+    "path": "prisma/migrations/20261024090000_staff_identity_foundation/migration.sql",
+    "sha256": "06b35cf9ef131285d5fc156efa4bd49f68b3a4b83044d9b54dba7ac8835f5b73",
+    "historicalFilesUnchanged": true,
+    "identityOrGrantRowsSeeded": 0,
+    "contractMetadataRows": 74
+  },
+  "initialFailures": [
+    {
+      "suite": "test:staff-schema",
+      "cause": "pg custom enum-array raw decoder returned text; assertion now explicitly selects text[].",
+      "resolved": true
+    },
+    {
+      "suite": "test:staff-migration",
+      "cause": "Old generated Prisma client returns Uint8Array; byte assertion now uses Buffer.from.",
+      "resolved": true
+    }
+  ],
+  "meetupReproducibility": "One complete run in this batch passed, including synthetic-camera two-browser flow. This does not prove historical flakiness eliminated. No camera/GPS/QR/evidence requirements changed.",
+  "limitations": [
+    "Synthetic preservation fixtures do not establish production backup/restore or lock-time behavior.",
+    "No actual staff provisioning, deployment, runtime role cutover or independent approval engine.",
+    "No claim of database-owner tamper resistance or implemented human proofing."
+  ]
+}

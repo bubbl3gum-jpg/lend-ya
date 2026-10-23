@@ -91,6 +91,7 @@ model User {
   returnsConfirmed  Return[]               @relation("ReturnConfirmer")
   disputesOpened    Dispute[]              @relation("DisputeOpener")
   evidencePhotos    BookingEvidencePhoto[]
+  staffAssociation StaffAccountAssociation?
 }
 
 model AuthSession {
@@ -640,4 +641,142 @@ model MeetupRate {
   attempts Int @default(0)
   expiresAt DateTime
   session MeetupSession @relation(fields:[bookingId], references:[bookingId], onDelete:Restrict, onUpdate:NoAction)
+}
+
+// Batch 3A foundation only. SQL constraints prohibit ACTIVE memberships/grants.
+// Human identity is deliberately separate from future nonhuman service principals.
+enum StaffHumanVerification {
+  UNVERIFIED
+  VERIFIED
+  REVOKED
+}
+enum StaffFixedRole {
+  SUPER_ADMIN
+  OPERATIONS
+  SUPPORT
+  MODERATOR
+}
+enum StaffMembershipState {
+  DRAFT
+  ACTIVE
+  SUSPENDED
+  REVOKED
+  EXPIRED
+}
+enum StaffGrantState {
+  DRAFT
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+enum StaffAssociationState {
+  PENDING
+  VERIFIED
+  REVOKED
+}
+enum StaffGrantScope {
+  RESOURCE
+  ASSIGNED_CASE
+  CASE_QUEUE
+  PRIVATE_CHANNEL
+  LAB
+}
+model StaffPerson {
+  id String @id @default(uuid()) @db.Uuid
+  verification StaffHumanVerification @default(UNVERIFIED)
+  verificationSubjectHash String? @unique @db.VarChar(64)
+  verificationRef String? @db.Uuid
+  verifiedAt DateTime? @db.Timestamp(3)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  associations StaffAccountAssociation[]
+  memberships StaffMembership[] @relation("StaffSubject")
+  proposedMemberships StaffMembership[] @relation("StaffProposer")
+  issuedGrants StaffCapabilityGrant[]
+  authorization StaffAuthorizationVersion?
+  history StaffAuthorizationEvent[]
+}
+model StaffAccountAssociation {
+  id String @id @default(uuid()) @db.Uuid
+  personId String @db.Uuid
+  userId Int @unique
+  state StaffAssociationState @default(PENDING)
+  provenanceRef String @db.Uuid
+  verifiedAt DateTime? @db.Timestamp(3)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  person StaffPerson @relation(fields: [personId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  @@index([personId])
+}
+model StaffMembership {
+  id String @id @default(uuid()) @db.Uuid
+  personId String @db.Uuid
+  role StaffFixedRole
+  state StaffMembershipState @default(DRAFT)
+  proposedByPersonId String @db.Uuid
+  provenanceRef String @db.Uuid
+  policyVersion String @db.VarChar(80)
+  validFrom DateTime @db.Timestamp(3)
+  expiresAt DateTime @db.Timestamp(3)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  person StaffPerson @relation("StaffSubject", fields: [personId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  proposedBy StaffPerson @relation("StaffProposer", fields: [proposedByPersonId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  grants StaffCapabilityGrant[]
+  @@index([personId, state])
+}
+model StaffAuthorizationVersion {
+  personId String @id @db.Uuid
+  version BigInt @default(1)
+  policyVersion String @db.VarChar(80)
+  updatedAt DateTime @default(now()) @db.Timestamp(3)
+  person StaffPerson @relation(fields: [personId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+}
+// Immutable catalogue of *shadow contracts*, not capability grants or activation.
+model StaffCapabilityContract {
+  action String @db.VarChar(100)
+  policyVersion String @db.VarChar(80)
+  resourceKind String @db.VarChar(32)
+  risk String @db.VarChar(16)
+  scope StaffGrantScope
+  eligibleRoles StaffFixedRole[]
+  blockedPolicy Boolean
+  evidence Boolean
+  grants StaffCapabilityGrant[]
+  @@id([action, policyVersion])
+}
+model StaffCapabilityGrant {
+  id String @id @default(uuid()) @db.Uuid
+  membershipId String @db.Uuid
+  action String @db.VarChar(100)
+  policyVersion String @db.VarChar(80)
+  state StaffGrantState @default(DRAFT)
+  scope StaffGrantScope
+  resourceKind String @db.VarChar(32)
+  resourceId String @db.VarChar(128)
+  caseId String? @db.VarChar(128)
+  channelAudience String? @db.VarChar(16)
+  purposeCode String @db.VarChar(32)
+  issuedByPersonId String @db.Uuid
+  provenanceRef String @db.Uuid
+  validFrom DateTime @db.Timestamp(3)
+  expiresAt DateTime @db.Timestamp(3)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  membership StaffMembership @relation(fields: [membershipId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  contract StaffCapabilityContract @relation(fields: [action, policyVersion], references: [action, policyVersion], onDelete: Restrict, onUpdate: Restrict)
+  issuedBy StaffPerson @relation(fields: [issuedByPersonId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  @@index([membershipId, state])
+}
+model StaffAuthorizationEvent {
+  id BigInt @id @default(autoincrement())
+  personId String @db.Uuid
+  authorizationVersion BigInt
+  entityKind String @db.VarChar(32)
+  entityId String @db.Uuid
+  operation String @db.VarChar(16)
+  databaseActor String @default(dbgenerated("CURRENT_USER")) @db.VarChar(63)
+  provenanceRef String? @db.Uuid
+  previousState Json
+  newState Json
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  person StaffPerson @relation(fields: [personId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  @@unique([personId, authorizationVersion])
 }

@@ -3,11 +3,12 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 import { connectTestDatabase } from "./support/test-database";
 import { createShadowPolicyService } from "../lib/authorization/server";
 import {
   CAPABILITIES,
+  POLICY_VERSION,
   STAFF_ROLES,
   type StaffRole,
 } from "../lib/authorization/registry";
@@ -187,10 +188,54 @@ test(
       }
       const ordinary = actors[4],
         legacyAdmin = actors[5];
-      // Only the normal legacy test administrator; no staff identities/grants exist.
+      // Only the normal legacy test administrator; future staff remain inert fixtures.
       await db.query(`UPDATE "User" SET role='ADMIN' WHERE id=$1`, [
         legacyAdmin.id,
       ]);
+      await t.test(
+        "persisted DRAFT staff identity cannot confer legacy or new staff authority",
+        async () => {
+          const subject = randomUUID(),
+            issuer = randomUUID();
+          for (const id of [subject, issuer])
+            await db.query(
+              `INSERT INTO "StaffPerson" (id,verification,"verificationSubjectHash","verificationRef","verifiedAt") VALUES ($1,'VERIFIED',$2,$3,NOW())`,
+              [id, createHash("sha256").update(id).digest("hex"), randomUUID()],
+            );
+          await db.query(
+            `INSERT INTO "StaffAccountAssociation" (id,"personId","userId",state,"provenanceRef","verifiedAt") VALUES ($1,$2,$3,'VERIFIED',$4,NOW())`,
+            [randomUUID(), subject, ordinary.id, randomUUID()],
+          );
+          await db.query(
+            `INSERT INTO "StaffMembership" (id,"personId",role,"proposedByPersonId","provenanceRef","policyVersion","validFrom","expiresAt") VALUES ($1,$2,'OPERATIONS',$3,$4,$5,NOW(),NOW()+interval '1 day')`,
+            [randomUUID(), subject, issuer, randomUUID(), POLICY_VERSION],
+          );
+          assert.equal(
+            (await api("/api/admin/overview", ordinary.cookie)).status,
+            403,
+          );
+          assert.equal(
+            (await shadow(ordinary, "overview.read")).candidate,
+            "DENY",
+          );
+          assert.equal(
+            (
+              await db.query('SELECT role FROM "User" WHERE id=$1', [
+                ordinary.id,
+              ])
+            ).rows[0].role,
+            "USER",
+          );
+          assert.equal(
+            (
+              await db.query(
+                `SELECT count(*)::int n FROM "StaffMembership" WHERE state='ACTIVE'`,
+              )
+            ).rows[0].n,
+            0,
+          );
+        },
+      );
       await t.test(
         "every contract/role is shadow evaluated over HTTP without trusting headers or body roles",
         async () => {

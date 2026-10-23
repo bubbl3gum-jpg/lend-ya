@@ -31,7 +31,9 @@
     "demo:meetup:local": "tsx scripts/local-meetup-demo.ts",
     "test:meetup": "tsx tests/run-isolated.ts --meetup",
     "test:meetup-migration": "tsx tests/run-isolated.ts --meetup-migration",
-    "test:authorization": "tsx tests/run-isolated.ts --authorization"
+    "test:authorization": "tsx tests/run-isolated.ts --authorization",
+    "test:staff-schema": "tsx tests/run-isolated.ts --staff-schema",
+    "test:staff-migration": "tsx tests/run-isolated.ts --staff-migration"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",
