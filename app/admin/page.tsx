@@ -5,62 +5,157 @@ import { AdminTitle, AdminPanel, adminDate } from "@/components/admin/ui";
 export default async function Overview() {
   await requireAdminPage();
   const data = await getAdminOverview();
-  const sections = [
+  const dashboard = data.dashboard;
+  const metrics = [
     [
-      "Users",
-      [
-        ["Total registered users", data.users.total],
-        ["New users · last 30 days", data.users.newLast30Days],
-        ["Administrators", data.users.admins],
-      ],
+      "Active rentals",
+      dashboard.activeRentals,
+      "Bookings in IN_USE: pickup confirmed; return not yet submitted.",
     ],
     [
-      "Listings",
-      [
-        ["Total listings", data.listings.total],
-        ["Active listings", data.listings.active],
-        ["Inactive listings", data.listings.inactive],
-        ["Listings with open reports", data.listings.withOpenReports],
-      ],
+      "Active users",
+      dashboard.activeUsers,
+      "Accounts with ACTIVE status, including administrators. Not online activity.",
     ],
     [
-      "Bookings",
-      [
-        ["Total bookings", data.bookings.total],
-        ["Pending bookings", data.bookings.pending],
-        ["Confirmed bookings", data.bookings.confirmed],
-        ["Active rentals", data.bookings.activeRentals],
-        ["Completed bookings", data.bookings.completed],
-        ["Cancelled bookings", data.bookings.cancelled],
-        ["Disputed bookings", data.bookings.disputed],
-        ["Administrative closures", data.bookings.byStatus.ADMIN_CLOSED ?? 0],
-      ],
+      "Open cases",
+      dashboard.openCases,
+      "Open listing reports and rental disputes. Chat reviews are separate.",
+    ],
+    [
+      "Needs attention",
+      dashboard.needsAttention,
+      "Distinct listings and bookings with open cases; each record counted once.",
     ],
   ] as const;
   return (
     <>
       <AdminTitle
-        title="Platform overview"
-        description="Current platform records. New users means registration in the last 30 elapsed days. Active rentals include handoff pending, in use, return pending and inspection; disputes are counted separately."
+        title="Overview"
+        description="Welcome to the Hustlen’ Control Center. Monitor current rentals and review the queues covered by your existing administrator access."
       />
-      {sections.map(([title, cards]) => (
-        <section key={title} className="mb-8">
-          <h2 className="mb-3 text-lg font-semibold">{title}</h2>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {cards.map(([label, value]) => (
-              <div
-                key={label}
-                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-              >
-                <p className="text-xs font-medium text-slate-500">{label}</p>
-                <p data-stat={label} className="mt-3 text-3xl font-semibold">
-                  {value.toLocaleString("en-US")}
+      <section
+        aria-label="Platform overview metrics"
+        className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+      >
+        {metrics.map(([label, value, definition]) => (
+          <article
+            key={label}
+            className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <h2 className="text-sm font-medium text-slate-600">{label}</h2>
+            <p
+              data-stat={label}
+              className="my-3 text-4xl font-semibold tracking-tight"
+            >
+              {value.toLocaleString("en-US")}
+            </p>
+            <p className="text-xs leading-5 text-slate-500">{definition}</p>
+          </article>
+        ))}
+      </section>
+      <section
+        aria-labelledby="attention-heading"
+        className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:p-6"
+      >
+        <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-amber-800">
+              Operational overview
+            </p>
+            <h2 id="attention-heading" className="text-xl font-semibold">
+              Requires Attention
+            </h2>
+          </div>
+          <span className="rounded-full border border-amber-200 bg-white px-3 py-1 text-sm font-medium">
+            {dashboard.needsAttention} affected records
+          </span>
+        </div>
+        <p className="mb-5 max-w-3xl text-sm leading-6 text-slate-700">
+          {dashboard.openCases
+            ? "Open cases are ready for investigation through the existing review workflows."
+            : "No open listing reports or rental disputes. These review queues are clear."}{" "}
+          Pending booking requests remain with the owner and are not
+          administrator tasks.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            [
+              "Listing reports",
+              dashboard.openReports,
+              `${dashboard.reportedListings} distinct listings`,
+              "/admin/reports?status=OPEN",
+            ],
+            [
+              "Rental disputes",
+              dashboard.openDisputes,
+              `${dashboard.disputedBookings} distinct bookings`,
+              "/admin/disputes?status=OPEN",
+            ],
+          ].map(([label, count, detail, href]) => (
+            <Link
+              key={label}
+              href={String(href)}
+              className="flex items-center justify-between gap-4 rounded-xl border border-amber-200 bg-white p-4 hover:border-amber-400"
+            >
+              <div>
+                <h3 className="text-sm font-semibold">{label}</h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  {detail} · Review open cases →
                 </p>
               </div>
-            ))}
-          </div>
-        </section>
-      ))}
+              <span className="text-2xl font-semibold">{count}</span>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-4 text-xs leading-5 text-slate-600">
+          Chat moderation retains its separate reviewer authorization. Case
+          messages, evidence and investigation notes are not shown here.
+        </p>
+      </section>
+      <div className="mb-8">
+        <AdminPanel title="Platform activity">
+          <p className="mb-4 text-sm text-slate-500">
+            Latest recorded administrative actions. Metadata only; the audit log
+            preserves the full authorized record.
+          </p>
+          {dashboard.activity.length ? (
+            <ol className="divide-y divide-slate-100">
+              {dashboard.activity.map((event) => (
+                <li
+                  key={event.id}
+                  className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm"
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium">
+                      {event.action.replaceAll("_", " ")}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {event.targetType.replaceAll("_", " ")} #{event.targetId}
+                    </p>
+                  </div>
+                  <time
+                    dateTime={event.createdAt.toISOString()}
+                    className="text-xs text-slate-500"
+                  >
+                    {adminDate(event.createdAt)}
+                  </time>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
+              No administrative activity has been recorded yet.
+            </p>
+          )}
+          <Link
+            href="/admin/audit-logs"
+            className="mt-4 inline-block text-sm font-semibold text-emerald-800 underline underline-offset-4"
+          >
+            View audit logs →
+          </Link>
+        </AdminPanel>
+      </div>
       <h2 className="mb-2 text-lg font-semibold">Recent records</h2>
       <p className="mb-4 text-sm text-slate-500">
         Latest registrations, listings and booking requests. This is not an

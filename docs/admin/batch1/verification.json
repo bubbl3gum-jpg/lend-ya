@@ -1,0 +1,132 @@
+{
+  "baseline": "cf215e0bdda92d7874329f16102c2a9ebd20a1be",
+  "branch": "feature/admin-control-center-batch-1",
+  "note": "Synthetic fixtures only. All database runs create and verify ownership of fresh disposable targets. Full logs remain local; no database URLs or credentials included. QR passed this run; no QR changes or claimed fix.",
+  "nonDatabaseChecks": {
+    "typescript": "npx tsc --noEmit: exit 0",
+    "lint": "npm run lint: exit 0",
+    "unit": "npm run test:unit: exit 0; 41 passed",
+    "diff": "git diff --check: exit 0"
+  },
+  "databaseRuns": [
+    {
+      "group": "test:admin",
+      "start": "2026-10-23T17:57:33.588Z",
+      "end": "2026-10-23T17:58:19.353Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/7e8f2b1719d3bdd5620c9014",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-23T17:55:13.154Z",
+      "end": "2026-10-23T17:56:50.185Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/4e79091afb80b64766a7fbd3",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-23T17:55:13.156Z",
+      "end": "2026-10-23T17:57:12.243Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/3fbe766888e3375b5a28ae3b",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-23T17:57:12.244Z",
+      "end": "2026-10-23T17:57:31.995Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/a6ffaa13814d1cd34160c9c1",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-23T17:57:12.246Z",
+      "end": "2026-10-23T17:57:28.792Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/f31078185388c914ddc92fe1",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-23T17:57:12.245Z",
+      "end": "2026-10-23T18:01:16.214Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/35f443d317c57e70ece896a6",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    }
+  ],
+  "initialAdminRun": {
+    "result": "6 subtests passed, parent failed during new fixture cleanup attempting immutable audit deletion; cleanup corrected without altering triggers, final run passes 7/7",
+    "ownedDatabaseCleaned": true,
+    "artifact": "bf3d4f0a2ca648cc88a6c1a1"
+  },
+  "screenshots": {
+    "runId": "7e8f2b1719d3bdd5620c9014",
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        820,
+        1180
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "fullPage": true
+  }
+}

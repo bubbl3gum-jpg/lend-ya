@@ -66,6 +66,11 @@ export async function getAdminOverview() {
         users,
         listings,
         bookings,
+        activeUsers,
+        openReports,
+        openDisputes,
+        disputedBookings,
+        activity,
       ] = await Promise.all([
         tx.user.count(),
         tx.user.count({
@@ -93,6 +98,22 @@ export async function getAdminOverview() {
             status: true,
             createdAt: true,
             listing: { select: { title: true } },
+          },
+        }),
+        tx.user.count({ where: { accountStatus: "ACTIVE" } }),
+        tx.listingReport.count({ where: { status: "OPEN" } }),
+        tx.dispute.count({ where: { status: "OPEN" } }),
+        tx.booking.count({ where: { disputes: { some: { status: "OPEN" } } } }),
+        // Metadata only: no case contents, evidence, actor details or audit snapshots.
+        tx.adminAuditLog.findMany({
+          take: 6,
+          orderBy: order,
+          select: {
+            id: true,
+            action: true,
+            targetType: true,
+            targetId: true,
+            createdAt: true,
           },
         }),
       ]);
@@ -124,6 +145,19 @@ export async function getAdminOverview() {
           disputed: byStatus.DISPUTED ?? 0,
         },
         recent: { users, listings, bookings },
+        // Additive read model. Keep legacy API statistics compatible; the dashboard
+        // deliberately excludes pending handoffs from its active-rental metric.
+        dashboard: {
+          activeRentals: byStatus.IN_USE ?? 0,
+          activeUsers,
+          openCases: openReports + openDisputes,
+          needsAttention: reportedListings + disputedBookings,
+          openReports,
+          openDisputes,
+          reportedListings,
+          disputedBookings,
+          activity,
+        },
       };
     },
     { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },

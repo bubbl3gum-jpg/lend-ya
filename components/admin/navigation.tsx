@@ -1,36 +1,60 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-export const adminLinks = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/users", label: "Users" },
-  { href: "/admin/listings", label: "Listings" },
-  { href: "/admin/bookings", label: "Bookings" },
-  { href: "/admin/reports", label: "Reports" },
-  { href: "/admin/disputes", label: "Disputes" },
-  { href: "/admin/chat", label: "Chat moderation" },
-  { href: "/admin/audit-logs", label: "Audit Logs" },
+export const adminNavigationGroups = [
+  { label: "General", links: [{ href: "/admin", label: "Overview" }] },
+  {
+    label: "Operations",
+    links: [
+      { href: "/admin/bookings", label: "Bookings" },
+      { href: "/admin/disputes", label: "Disputes" },
+      { href: "/admin/listings", label: "Listings" },
+      { href: "/admin/reports", label: "Reports" },
+    ],
+  },
+  {
+    label: "Community",
+    links: [
+      { href: "/admin/users", label: "Users" },
+      { href: "/admin/chat", label: "Chat moderation" },
+    ],
+  },
+  {
+    label: "System",
+    links: [{ href: "/admin/audit-logs", label: "Audit Logs" }],
+  },
 ];
+export const adminLinks = adminNavigationGroups.flatMap((group) => group.links);
 export function AdminNavigation() {
   const pathname = usePathname();
   return (
-    <nav aria-label="Administration" className="space-y-2">
-      {adminLinks.map((link) => {
-        const active =
-          link.href === "/admin"
-            ? pathname === "/admin"
-            : pathname.startsWith(link.href);
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            aria-current={active ? "page" : undefined}
-            className={`block rounded-xl px-4 py-3 text-sm font-medium ${active ? "bg-emerald-400 text-slate-950" : "text-slate-200 hover:bg-slate-800"}`}
-          >
-            {link.label}
-          </Link>
-        );
-      })}
+    <nav aria-label="Administration" className="space-y-6">
+      {adminNavigationGroups.map((group) => (
+        <div key={group.label}>
+          <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-widest text-slate-400">
+            {group.label}
+          </p>
+          <ul className="space-y-1">
+            {group.links.map((link) => {
+              const active =
+                pathname === link.href ||
+                (link.href !== "/admin" &&
+                  pathname.startsWith(`${link.href}/`));
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    className={`block rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 ${active ? "bg-emerald-400 text-slate-950" : "text-slate-200 hover:bg-slate-800"}`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
     </nav>
   );
 }

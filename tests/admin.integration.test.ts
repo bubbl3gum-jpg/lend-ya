@@ -7,7 +7,7 @@ import { promisify } from "node:util";
 import { once } from "node:events";
 import { randomUUID, createHash } from "node:crypto";
 import { openSync, closeSync } from "node:fs";
-import { unlink } from "node:fs/promises";
+import { unlink, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { Pool } from "pg";
 import sharp from "sharp";
@@ -16,7 +16,7 @@ import { chromium, expect } from "@playwright/test";
 const run = promisify(execFile);
 test(
   "Milestone 4A: admin provisioning, database reads, authorization and desktop/mobile browser",
-  { timeout: 120000 },
+  { timeout: 180000 },
   async (t) => {
     const ownedDatabase = await connectTestDatabase();
     await ownedDatabase.end();
@@ -81,6 +81,23 @@ test(
         byStatus: Record<string, number>;
         activeRentals: number;
       };
+      dashboard: {
+        activeRentals: number;
+        activeUsers: number;
+        openCases: number;
+        needsAttention: number;
+        openReports: number;
+        openDisputes: number;
+        reportedListings: number;
+        disputedBookings: number;
+        activity: Array<{
+          id: number;
+          action: string;
+          targetType: string;
+          targetId: number;
+          createdAt: string;
+        }>;
+      };
       listing: { id: number; media: Array<{ url: string }> };
     };
     const api = async (
@@ -135,7 +152,12 @@ test(
       return { id: result.json.user.id, cookie: result.cookie, email };
     };
     let overviewExpected:
-      | { users: number; admins: number; activeRentals: number }
+      | {
+          users: number;
+          admins: number;
+          activeRentals: number;
+          activeUsers: number;
+        }
       | undefined;
     try {
       server = spawn(
@@ -201,6 +223,11 @@ test(
           assert.equal(result.json.listings.total, 0);
           assert.equal(result.json.bookings.total, 0);
           assert.equal(result.json.bookings.activeRentals, 0);
+          assert.equal(result.json.dashboard.activeRentals, 0);
+          assert.equal(result.json.dashboard.activeUsers, 1);
+          assert.equal(result.json.dashboard.openCases, 0);
+          assert.equal(result.json.dashboard.needsAttention, 0);
+          assert.deepEqual(result.json.dashboard.activity, []);
           assert.ok(
             Object.values(result.json.bookings.byStatus).every(
               (count) => count === 0,
@@ -347,6 +374,17 @@ test(
           'INSERT INTO "ListingReport" ("listingId","reporterId",reason,status) VALUES ($1,$2,\'Admin view fixture\',$3::"ListingReportStatus")',
           [listingIds[0], reporter, status],
         );
+      await pool.query(
+        `INSERT INTO "Dispute" ("bookingId","openedBy",reason,description,status) VALUES ($1,$2,'Private reason sentinel','Private case sentinel','OPEN'),($1,$2,'Closed reason','Closed case','RESOLVED')`,
+        [bookingIds[8], borrower.id],
+      );
+      await pool.query(
+        `INSERT INTO "AdminAuditLog" ("adminId",action,"targetType","targetId",reason,"previousState","newState") VALUES ($1,'LISTING_RESTRICT','LISTING',$2,'Private audit sentinel','{"private":"snapshot sentinel"}','{}')`,
+        [admin.id, listingIds[0]],
+      );
+      await pool.query(
+        `UPDATE "User" SET "accountStatus"='SUSPENDED' WHERE email='charlie@example.test'`,
+      );
       const endpoints = [
         "/api/admin/overview",
         "/api/admin/users",
@@ -484,10 +522,49 @@ test(
           for (const row of groups)
             assert.equal(stats.bookings.byStatus[row.status], row.count);
           assert.equal(stats.bookings.activeRentals, 4);
+          const activeUsers = (
+            await pool.query(
+              `SELECT COUNT(*)::int AS count FROM "User" WHERE "accountStatus"='ACTIVE'`,
+            )
+          ).rows[0].count;
+          assert.equal(
+            stats.dashboard.activeRentals,
+            1,
+            "Only IN_USE; exclude pending handoff, return, inspection and disputes",
+          );
+          assert.equal(stats.dashboard.activeUsers, activeUsers);
+          assert.equal(
+            activeUsers,
+            users.total - 1,
+            "Suspended account excluded; registration age does not define activity",
+          );
+          assert.equal(
+            stats.dashboard.openCases,
+            3,
+            "Two open reports and one open dispute; closed cases excluded",
+          );
+          assert.equal(
+            stats.dashboard.needsAttention,
+            2,
+            "Repeated reports count as one affected listing, plus one booking",
+          );
+          assert.equal(stats.dashboard.openReports, 2);
+          assert.equal(stats.dashboard.openDisputes, 1);
+          assert.equal(stats.dashboard.reportedListings, 1);
+          assert.equal(stats.dashboard.disputedBookings, 1);
+          assert.deepEqual(
+            Object.keys(stats.dashboard.activity[0]).sort(),
+            ["id", "action", "targetType", "targetId", "createdAt"].sort(),
+          );
+          assert.ok(
+            !JSON.stringify(stats.dashboard).includes("sentinel"),
+            "No private case or audit snapshot contents in dashboard",
+          );
           overviewExpected = {
             users: users.total,
             admins: users.admins,
-            activeRentals: 4,
+            activeRentals: 1,
+            activeUsers,
           };
         },
       );
@@ -689,12 +766,98 @@ test(
             .getByRole("button", { name: "Log in", exact: true })
             .click();
           await page.waitForURL("**/admin");
-          await expect(
-            page.locator('[data-stat="Total registered users"]'),
-          ).toHaveText(String(overviewExpected?.users));
-          await expect(page.locator('[data-stat="Active rentals"]')).toHaveText(
-            "4",
+          await expect(page.locator('[data-stat="Active users"]')).toHaveText(
+            String(overviewExpected?.activeUsers),
           );
+          await expect(page.locator('[data-stat="Active rentals"]')).toHaveText(
+            String(overviewExpected?.activeRentals),
+          );
+          await expect(page.locator('[data-stat="Open cases"]')).toHaveText(
+            "3",
+          );
+          await expect(
+            page.locator('[data-stat="Needs attention"]'),
+          ).toHaveText("2");
+          await expect(
+            page.getByRole("heading", { name: "Requires Attention" }),
+          ).toBeVisible();
+          assert.ok(
+            !(await page.locator("main").innerText()).includes("sentinel"),
+          );
+          const screenshotDir = path.join(
+            process.env.MRT_TEST_ARTIFACT_DIR!,
+            "screenshots",
+          );
+          await mkdir(screenshotDir, { recursive: true });
+          const screenshot = async (name: string) =>
+            page.screenshot({
+              path: path.join(screenshotDir, `${name}.png`),
+              fullPage: true,
+              style: "nextjs-portal { display: none !important; }",
+            });
+          for (const viewport of [
+            { width: 1440, height: 1000 },
+            { width: 820, height: 1180 },
+            { width: 390, height: 844 },
+          ]) {
+            await page.setViewportSize(viewport);
+            if (viewport.width < 1024) {
+              await page.locator("summary").focus();
+              await page.keyboard.press("Enter");
+              await expect(page.locator("details")).toHaveAttribute("open", "");
+            }
+            const navigation = page
+              .getByRole("navigation", { name: "Administration", exact: true })
+              .filter({ visible: true });
+            for (const group of [
+              "General",
+              "Operations",
+              "Community",
+              "System",
+            ])
+              await expect(
+                navigation.getByText(group, { exact: true }),
+              ).toBeVisible();
+            assert.deepEqual(
+              await navigation
+                .getByRole("link")
+                .evaluateAll((links) =>
+                  links.map((link) => link.getAttribute("href")),
+                ),
+              [
+                "/admin",
+                "/admin/bookings",
+                "/admin/disputes",
+                "/admin/listings",
+                "/admin/reports",
+                "/admin/users",
+                "/admin/chat",
+                "/admin/audit-logs",
+              ],
+            );
+            await expect(
+              navigation.locator('[aria-current="page"]'),
+            ).toHaveText("Overview");
+            await navigation
+              .getByRole("link", { name: "Overview", exact: true })
+              .focus();
+            await expect(
+              navigation.getByRole("link", { name: "Overview", exact: true }),
+            ).toBeFocused();
+            assert.ok(
+              await page.evaluate(
+                () => document.documentElement.scrollWidth <= window.innerWidth,
+              ),
+              `Overview overflow at ${viewport.width}`,
+            );
+            await screenshot(`admin-${viewport.width}-navigation`);
+            if (viewport.width < 1024)
+              await page.locator("details").evaluate((element) => {
+                (element as HTMLDetailsElement).open = false;
+              });
+            await screenshot(`admin-${viewport.width}`);
+          }
+          await page.setViewportSize({ width: 1440, height: 1000 });
           await page.screenshot({
             path: "/tmp/lend-ya-admin-overview.png",
             fullPage: true,
@@ -781,23 +944,33 @@ test(
             ).status,
             200,
           );
-          await page.setViewportSize({ width: 390, height: 844 });
-          for (const target of [
-            "/admin",
-            "/admin/users",
-            `/admin/users/${viewer.id}`,
-            "/admin/listings",
-            `/admin/listings/${inactiveId}`,
-            "/admin/bookings",
-            `/admin/bookings/${bookingIds[3]}`,
+          for (const viewport of [
+            { width: 820, height: 1180 },
+            { width: 390, height: 844 },
           ]) {
-            await page.goto(`${base}${target}`);
-            assert.ok(
-              await page.evaluate(
-                () => document.documentElement.scrollWidth <= window.innerWidth,
-              ),
-              `Mobile overflow: ${target}`,
-            );
+            await page.setViewportSize(viewport);
+            for (const target of [
+              "/admin",
+              "/admin/users",
+              `/admin/users/${viewer.id}`,
+              "/admin/listings",
+              `/admin/listings/${inactiveId}`,
+              "/admin/bookings",
+              `/admin/bookings/${bookingIds[3]}`,
+              "/admin/reports",
+              "/admin/disputes",
+              "/admin/chat",
+              "/admin/audit-logs",
+            ]) {
+              await page.goto(`${base}${target}`);
+              assert.ok(
+                await page.evaluate(
+                  () =>
+                    document.documentElement.scrollWidth <= window.innerWidth,
+                ),
+                `Overflow at ${viewport.width}: ${target}`,
+              );
+            }
           }
           await page.getByText("Admin navigation", { exact: true }).click();
           await page
@@ -878,10 +1051,13 @@ test(
         ]);
       }
       await Promise.all(listingFiles.map((file) => unlink(file)));
+      // Preserve immutable audit fixtures and their actor until the owned database
+      // is dropped by run-isolated.ts. Never bypass evidence triggers for cleanup.
       if (userIds.length)
-        await pool.query('DELETE FROM "User" WHERE id=ANY($1::int[])', [
-          userIds,
-        ]);
+        await pool.query(
+          'DELETE FROM "User" WHERE id=ANY($1::int[]) AND NOT EXISTS (SELECT 1 FROM "AdminAuditLog" WHERE "adminId"="User".id)',
+          [userIds],
+        );
       if (stationIds.length)
         await pool.query('DELETE FROM "MrtStation" WHERE id=ANY($1::int[])', [
           stationIds,
