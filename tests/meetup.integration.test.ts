@@ -25,6 +25,8 @@ type Payload = {
   status: string;
   error: string;
   enabled: boolean;
+  assurance: string;
+  temporaryLocation: { active: { generation: string } | null } | null;
   checkIn: { id: number; outcome: string };
   challengeId: string;
   expiresAt: string;
@@ -69,6 +71,7 @@ test(
       ttl = 180,
       confirmation = 900,
       checkTtl = 600,
+      temporary = false,
     ) {
       server = spawn(
         process.execPath,
@@ -84,6 +87,8 @@ test(
           env: {
             ...process.env,
             NODE_ENV: "development",
+            MEETUP_TEST_LOCATION_ENABLED: temporary ? "true" : "false",
+            MEETUP_TEST_LOCATION_USER_IDS: temporary ? ids.join(",") : "",
             MEETUP_PREVIEW_USER_IDS: ids.join(","),
             MEETUP_CODE_SECRET: serverSecret,
             MEETUP_CONFIRMATION_TTL_SECONDS: String(confirmation),
@@ -288,6 +293,163 @@ test(
             ).status,
             403,
           );
+        },
+      );
+      await t.test(
+        "temporary local mode: guards, bilateral consent, TEST_LOCATION, revocation and restart",
+        async () => {
+          const r = await rental();
+          await op(r.id, "enroll", owner);
+          const simulated = { latitude: 0, longitude: 0 }; // synthetic ocean point, never a device reading
+          const proposal = () => ({
+            action: "create",
+            acknowledged: true,
+            ...simulated,
+            accuracy: 10,
+            timestamp: Date.now(),
+          });
+          assert.equal(
+            (await op(r.id, "test-location", owner, proposal())).status,
+            403,
+          );
+          await stop();
+          await start(ids, 180, 900, 600, true);
+          const originalStation = (
+            await db.query(
+              'SELECT "meetingStationId" FROM "Booking" WHERE id=$1',
+              [r.id],
+            )
+          ).rows[0].meetingStationId;
+          assert.equal(
+            (await op(r.id, "test-location", outsider, proposal())).status,
+            403,
+          );
+          assert.equal(
+            (
+              await op(r.id, "test-location", owner, {
+                ...proposal(),
+                acknowledged: false,
+              })
+            ).status,
+            400,
+          );
+          assert.equal(
+            (
+              await op(r.id, "test-location", owner, {
+                ...proposal(),
+                timestamp: Date.now() - 120001,
+              })
+            ).status,
+            400,
+          );
+          assert.equal(
+            (await op(r.id, "test-location", owner, proposal())).status,
+            200,
+          );
+          assert.equal(
+            (await check(r.id, owner, "PICKUP", simulated)).status,
+            409,
+          );
+          const state = await api(
+            `/api/bookings/${r.id}/meetup/status`,
+            borrower,
+          );
+          assert.doesNotMatch(state.raw, /"latitude"|"longitude"/);
+          const generation = state.json.temporaryLocation!.active!.generation;
+          assert.equal(
+            (
+              await op(r.id, "test-location", borrower, {
+                action: "acknowledge",
+                acknowledged: true,
+                generation: "wrong",
+              })
+            ).status,
+            409,
+          );
+          assert.equal(
+            (
+              await op(r.id, "test-location", borrower, {
+                action: "acknowledge",
+                acknowledged: true,
+                generation,
+              })
+            ).status,
+            200,
+          );
+          assert.equal(
+            (await check(r.id, owner, "PICKUP", simulated)).json.checkIn
+              .outcome,
+            "TEST_LOCATION",
+          );
+          assert.equal(
+            (await check(r.id, borrower, "PICKUP", simulated)).json.checkIn
+              .outcome,
+            "TEST_LOCATION",
+          );
+          assert.equal(
+            (await op(r.id, "issue", owner, { purpose: "PICKUP" })).status,
+            409,
+          ); // checklist remains required
+          assert.equal(
+            (
+              await api(
+                `/api/bookings/${r.id}/handoff`,
+                owner,
+                "POST",
+                evidence,
+              )
+            ).status,
+            200,
+          );
+          const issued = await op(r.id, "issue", owner, { purpose: "PICKUP" });
+          assert.equal(issued.status, 200);
+          assert.equal(issued.json.assurance, "TEST_LOCATION");
+          assert.equal(
+            (await op(r.id, "test-location", borrower, { action: "revoke" }))
+              .status,
+            200,
+          );
+          assert.equal(
+            (await op(r.id, "issue", owner, { purpose: "PICKUP" })).status,
+            409,
+          );
+          assert.equal(
+            (
+              await op(r.id, "verify", borrower, {
+                purpose: "PICKUP",
+                challengeId: issued.json.challengeId,
+                manualCode: issued.json.manualCode,
+                requestKey: randomUUID(),
+              })
+            ).status,
+            409,
+          );
+          assert.equal(
+            (await op(r.id, "test-location", owner, proposal())).status,
+            200,
+          );
+          await stop();
+          await start(ids, 180, 900, 600, true);
+          assert.equal(
+            (await api(`/api/bookings/${r.id}/meetup/status`, owner)).json
+              .temporaryLocation!.active,
+            null,
+          );
+          assert.equal(
+            (await op(r.id, "issue", owner, { purpose: "PICKUP" })).status,
+            409,
+          );
+          assert.equal(
+            (
+              await db.query(
+                'SELECT "meetingStationId" FROM "Booking" WHERE id=$1',
+                [r.id],
+              )
+            ).rows[0].meetingStationId,
+            originalStation,
+          );
+          await stop();
+          await start(ids);
         },
       );
       await t.test(

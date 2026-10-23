@@ -22,6 +22,139 @@ import {
   locationSettings,
   LOCATION_POLICY,
 } from "./location";
+import {
+  currentTestCentre,
+  createTestCentre,
+  revokeTestCentre,
+  testLocationEnvironment,
+  testLocationParticipant,
+  testChecksMatch,
+} from "./test-location";
+
+async function testAllowed(tx: Tx, b: Pick<Booking, "ownerId" | "renterId">) {
+  if (
+    !testLocationEnvironment() ||
+    ![b.ownerId, b.renterId].every(
+      (id) => previewParticipant(id) && testLocationParticipant(id),
+    )
+  )
+    return false;
+  const rows = await tx.$queryRaw<
+    Array<{ name: string; marker: string | null }>
+  >`
+    SELECT current_database() AS name, shobj_description(oid, 'pg_database') AS marker
+    FROM pg_database WHERE datname=current_database()`;
+  return (
+    rows[0]?.name === new URL(process.env.DATABASE_URL!).pathname.slice(1) &&
+    rows[0]?.marker === `hustlen-mrt-test:${process.env.MRT_TEST_RUN_ID}`
+  );
+}
+async function testCentre(
+  tx: Tx,
+  b: Pick<Booking, "id" | "ownerId" | "renterId">,
+) {
+  const centre = currentTestCentre(b.id);
+  if (!centre) return undefined;
+  if (!(await testAllowed(tx, b)))
+    throw new RentalError("Temporary test location is not available.", 403);
+  if (![b.ownerId, b.renterId].every((id) => centre.acknowledgements.has(id)))
+    throw new RentalError(
+      "Both participants must acknowledge this simulated meetup, not arrival at the real MRT station.",
+    );
+  return centre;
+}
+export async function temporaryLocation(
+  id: number,
+  userId: number,
+  body: Record<string, unknown>,
+) {
+  fields(body, [
+    "action",
+    "acknowledged",
+    "generation",
+    "latitude",
+    "longitude",
+    "accuracy",
+    "timestamp",
+  ]);
+  return prisma.$transaction(async (tx) => {
+    const b = await locked(tx, id, userId);
+    if (!(await testAllowed(tx, b)))
+      throw new RentalError(
+        "Temporary locations require allowlisted demo participants and an owned disposable test database.",
+        403,
+      );
+    if (body.action === "revoke") {
+      revokeTestCentre(id);
+    } else {
+      eligible(
+        b,
+        ["CONFIRMED", "HANDOFF_PENDING"].includes(b.status)
+          ? "PICKUP"
+          : "RETURN",
+      );
+      if (body.acknowledged !== true)
+        throw new RentalError(
+          "Acknowledge simulation, not real station arrival.",
+          400,
+        );
+      if (body.action === "create") {
+        if (currentTestCentre(id))
+          throw new RentalError(
+            "Revoke the existing test location before replacing it.",
+          );
+        if (
+          ![body.latitude, body.longitude, body.accuracy, body.timestamp].every(
+            (v) => typeof v === "number",
+          )
+        )
+          throw new RentalError("Request a fresh browser location.", 400);
+        try {
+          const result = evaluateLocation(
+            b.meetingStation.canonicalId ?? "",
+            {
+              latitude: body.latitude as number,
+              longitude: body.longitude as number,
+              accuracy: body.accuracy as number,
+              timestamp: body.timestamp as number,
+            },
+            Date.now(),
+            {
+              latitude: body.latitude as number,
+              longitude: body.longitude as number,
+            },
+          );
+          if (result.outcome !== "VERIFIED") throw Error();
+        } catch {
+          throw new RentalError(
+            "A fresh, accurate browser reading is required.",
+            400,
+          );
+        }
+        createTestCentre(
+          id,
+          userId,
+          body.latitude as number,
+          body.longitude as number,
+        );
+      } else if (body.action === "acknowledge") {
+        const centre = currentTestCentre(id);
+        if (!centre || body.generation !== centre.generation)
+          throw new RentalError("Test location changed or expired; refresh.");
+        centre.acknowledgements.add(userId);
+      } else throw new RentalError("Unknown temporary-location action.", 400);
+    }
+    await tx.meetupChallenge.updateMany({
+      where: { bookingId: id, completedAt: null, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+    return { testLocation: true };
+  });
+}
+const isTestSample = (c: { policyVersion: string }) =>
+  /^[a-f0-9]{32}$/.test(c.policyVersion);
+const isTestCheck = (c: { outcome: string; reason: string }) =>
+  c.outcome === "UNAVAILABLE" && c.reason === "TEST_LOCATION";
 export type Purpose = "PICKUP" | "RETURN";
 type Tx = Prisma.TransactionClient;
 export const digest = (s: string) =>
@@ -145,6 +278,14 @@ async function arrivals(
     throw new RentalError(
       "Both participants need fresh check-ins for this stage.",
     );
+  const centre = await testCentre(tx, b);
+  if (centre || [owner, borrower].some(isTestSample)) {
+    if (!testChecksMatch(centre, [owner, borrower]))
+      throw new RentalError(
+        "Both participants need fresh TEST_LOCATION check-ins for the active simulation.",
+      );
+    return { owner, borrower, fallback: null };
+  }
   if (owner.outcome === "VERIFIED" && borrower.outcome === "VERIFIED")
     return { owner, borrower, fallback: null };
   if ([owner, borrower].some((c) => c.outcome === "OUTSIDE"))
@@ -228,6 +369,7 @@ export async function checkIn(
   return prisma.$transaction(async (tx) => {
     const b = await locked(tx, id, userId);
     eligible(b, p);
+    const centre = await testCentre(tx, b);
     const old = await tx.meetupCheckIn.findUnique({
       where: {
         bookingId_userId_purpose_requestKey: {
@@ -244,7 +386,7 @@ export async function checkIn(
       return {
         checkIn: {
           id: old.id,
-          outcome: old.outcome,
+          outcome: isTestCheck(old) ? "TEST_LOCATION" : old.outcome,
           reason: old.reason,
           expiresAt: old.expiresAt,
         },
@@ -293,12 +435,23 @@ export async function checkIn(
           400,
         );
       try {
-        result = evaluateLocation(b.meetingStation.canonicalId ?? "", {
-          latitude: body.latitude as number,
-          longitude: body.longitude as number,
-          accuracy: body.accuracy as number,
-          timestamp: body.timestamp as number,
-        });
+        result = evaluateLocation(
+          b.meetingStation.canonicalId ?? "",
+          {
+            latitude: body.latitude as number,
+            longitude: body.longitude as number,
+            accuracy: body.accuracy as number,
+            timestamp: body.timestamp as number,
+          },
+          Date.now(),
+          centre,
+        );
+        if (centre && result.outcome === "VERIFIED")
+          result = {
+            ...result,
+            outcome: "TEST_LOCATION",
+            reason: "TEST_LOCATION",
+          };
       } catch {
         throw new RentalError(
           "Invalid/stale location reading. Request a fresh browser reading.",
@@ -317,17 +470,25 @@ export async function checkIn(
         purpose: p,
         role: userId === b.ownerId ? "OWNER" : "BORROWER",
         ...result,
-        policyVersion: LOCATION_POLICY,
+        // Historical DB constraint stays unchanged; never persist test arrival as VERIFIED.
+        outcome:
+          result.outcome === "TEST_LOCATION" ? "UNAVAILABLE" : result.outcome,
+        policyVersion: centre?.generation ?? LOCATION_POLICY,
         requestKey: key,
         requestHash: fingerprint,
-        expiresAt: new Date(Date.now() + 1000 * checkInTtlSeconds()),
+        expiresAt: new Date(
+          Math.min(
+            Date.now() + 1000 * checkInTtlSeconds(),
+            centre?.expiresAt ?? Infinity,
+          ),
+        ),
       },
     });
     await meetupEvent(tx, id, userId, p, `CHECKIN_${result.outcome}`);
     return {
       checkIn: {
         id: check.id,
-        outcome: check.outcome,
+        outcome: isTestCheck(check) ? "TEST_LOCATION" : check.outcome,
         reason: check.reason,
         expiresAt: check.expiresAt,
       },
@@ -357,6 +518,10 @@ export async function acknowledgeFallback(
   return prisma.$transaction(async (tx) => {
     const b = await locked(tx, id, userId);
     eligible(b, p);
+    if (currentTestCentre(id))
+      throw new RentalError(
+        "Fallback cannot replace simulated-location checks.",
+      );
     const { owner, borrower } = await latestChecks(tx, b, p),
       now = new Date();
     if (
@@ -364,6 +529,7 @@ export async function acknowledgeFallback(
       !borrower ||
       owner.expiresAt <= now ||
       borrower.expiresAt <= now ||
+      [owner, borrower].some(isTestSample) ||
       [owner, borrower].some((c) => c.outcome === "OUTSIDE") ||
       ![owner, borrower].some((c) =>
         ["UNAVAILABLE", "INACCURATE"].includes(c.outcome),
@@ -440,6 +606,7 @@ export async function issue(
         },
       },
     });
+    await testCentre(tx, b);
     if (old)
       return {
         challengeId: old.id,
@@ -507,9 +674,11 @@ export async function issue(
       expiresAt,
       qrPayload: `HUSTLEN1:${id}:${p}:${challengeId}:${token}`,
       manualCode: code,
-      assurance: checks.fallback
-        ? "REDUCED_LOCATION_UNVERIFIED"
-        : "LOCATION_SUPPORTING_SIGNAL",
+      assurance: isTestCheck(checks.owner)
+        ? "TEST_LOCATION"
+        : checks.fallback
+          ? "REDUCED_LOCATION_UNVERIFIED"
+          : "LOCATION_SUPPORTING_SIGNAL",
     };
   });
 }
@@ -540,6 +709,16 @@ async function validChallenge(
     throw new RentalError(
       "Challenge expired, replaced or no longer eligible. Ask for a new challenge.",
     );
+  const centre = await testCentre(tx, b);
+  const boundChecks = await tx.meetupCheckIn.findMany({
+    where: { id: { in: [c.ownerCheckId, c.borrowerCheckId] } },
+  });
+  if (centre || boundChecks.some(isTestSample)) {
+    if (!testChecksMatch(centre, boundChecks))
+      throw new RentalError(
+        "Temporary test location expired, revoked, or changed.",
+      );
+  }
   // Successful redemption snapshots fresh arrival assurance. Its later time expiry
   // must not shorten the independent confirmation window. New readings still revoke it.
   const a = c.consumedAt
@@ -618,6 +797,14 @@ export async function verify(
       if (c.verificationKey === key && c.verificationHash === fingerprint)
         return {
           verified: true,
+          assurance:
+            (
+              await tx.meetupCheckIn.findUnique({
+                where: { id: c.ownerCheckId },
+              })
+            )?.reason === "TEST_LOCATION"
+              ? "TEST_LOCATION"
+              : "LOCATION_SUPPORTING_SIGNAL",
           challengeId: c.id,
           replayed: true,
           confirmationExpiresAt: c.confirmationExpiresAt,
@@ -689,6 +876,11 @@ export async function verify(
     });
     return {
       verified: true,
+      assurance:
+        (await tx.meetupCheckIn.findUnique({ where: { id: c.ownerCheckId } }))
+          ?.reason === "TEST_LOCATION"
+          ? "TEST_LOCATION"
+          : "LOCATION_SUPPORTING_SIGNAL",
       challengeId: c.id,
       itemTitle: item.title,
       bookingId: id,
@@ -745,13 +937,31 @@ export async function status(id: number, userId: number) {
         ? {
             id: r.id,
             userId: r.userId,
-            outcome: r.outcome,
+            outcome: isTestCheck(r) ? "TEST_LOCATION" : r.outcome,
             reason: r.reason,
             expiresAt: r.expiresAt,
           }
         : null;
     return {
       enabled: true,
+      temporaryLocation: (await testAllowed(tx, b))
+        ? (() => {
+            const centre = currentTestCentre(id);
+            return {
+              allowed: true,
+              active: centre
+                ? {
+                    generation: centre.generation,
+                    expiresAt: new Date(centre.expiresAt),
+                    acknowledged: centre.acknowledgements.has(userId),
+                    bothAcknowledged: [b.ownerId, b.renterId].every((uid) =>
+                      centre.acknowledgements.has(uid),
+                    ),
+                  }
+                : null,
+            };
+          })()
+        : null,
       purpose: p,
       bookingStatus: b.status,
       station: {
@@ -826,6 +1036,7 @@ export async function requireMeetupReceipt(
     data: { completedAt: new Date(), completionHash },
   });
   await meetupEvent(tx, b.id, userId, p, "PHYSICAL_RECEIPT_ACK", c.id);
+  revokeTestCentre(b.id);
   return c;
 }
 export async function replayReceipt(

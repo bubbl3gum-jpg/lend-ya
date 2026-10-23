@@ -80,6 +80,7 @@ export function evaluateLocation(
     timestamp: number;
   },
   now = Date.now(),
+  temporaryCentre?: { latitude: number; longitude: number },
 ) {
   const { latitude, longitude, accuracy, timestamp } = input;
   if (
@@ -92,7 +93,8 @@ export function evaluateLocation(
     timestamp < now - 120000
   )
     throw Error("Invalid or stale location sample; request a new reading.");
-  const station = stationCoordinates.find((s) => s.id === canonicalId),
+  const station =
+      temporaryCentre ?? stationCoordinates.find((s) => s.id === canonicalId),
     settings = locationSettings(canonicalId);
   if (
     !station ||

@@ -14,6 +14,15 @@ type Check = {
 type State = {
   enabled: boolean;
   canEnroll?: boolean;
+  temporaryLocation?: {
+    allowed: boolean;
+    active: {
+      generation: string;
+      expiresAt: string;
+      acknowledged: boolean;
+      bothAcknowledged: boolean;
+    } | null;
+  } | null;
   purpose?: "PICKUP" | "RETURN";
   bookingStatus?: string;
   station?: { name: string; radiusMeters: number };
@@ -54,6 +63,7 @@ export function MeetupVerification({
     [busy, setBusy] = useState(false),
     [reason, setReason] = useState(""),
     [fallbackAck, setFallbackAck] = useState(false),
+    [simulationAck, setSimulationAck] = useState(false),
     [physical, setPhysical] = useState(false),
     [code, setCode] = useState(""),
     [issued, setIssued] = useState<{
@@ -171,8 +181,39 @@ export function MeetupVerification({
     await api("checkin", { purpose: p, ...retry.body, requestKey: retry.key });
     arrivalRetry.current = null;
     setFeedback(
-      "Arrival reading saved. This is a supporting signal, not proof against spoofing.",
+      data?.temporaryLocation?.active
+        ? "TEST_LOCATION reading saved: simulated meetup, not arrival at the real MRT station."
+        : "Arrival reading saved. This is a supporting signal, not proof against spoofing.",
     );
+  }
+  async function setTemporaryLocation() {
+    await perform(async () => {
+      if (!simulationAck)
+        throw Error("Acknowledge the simulated meetup first.");
+      if (!window.isSecureContext || !navigator.geolocation)
+        throw Error("Browser geolocation requires HTTPS or localhost.");
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+            () =>
+              reject(
+                Error("Location permission denied or reading unavailable."),
+              ),
+            { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 },
+          ),
+      );
+      await api("test-location", {
+        action: "create",
+        acknowledged: true,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy,
+        timestamp: position.timestamp,
+      });
+      setSimulationAck(false);
+      setIssued(null);
+    });
   }
   async function arrive() {
     await perform(async () => {
@@ -231,7 +272,7 @@ export function MeetupVerification({
     });
     verifyRetry.current = null;
     setFeedback(
-      `Verified booking #${bookingId}: ${result.itemTitle}. Inspect the equipment and record your own condition and physical receipt acknowledgement.`,
+      `${result.assurance === "TEST_LOCATION" ? "TEST_LOCATION — simulated meetup, not real station arrival." : "Verified"} booking #${bookingId}: ${result.itemTitle}. Inspect the equipment and record your own condition and physical receipt acknowledgement.`,
     );
     await load();
   }
@@ -344,12 +385,88 @@ export function MeetupVerification({
             spoofed; this is not proof of presence. No shared Wi-Fi or network
             is required.
           </p>
+          {active && data.temporaryLocation?.allowed && (
+            <fieldset className="space-y-2 rounded border border-amber-500 p-3">
+              <legend>Temporary local meetup · TEST_LOCATION</legend>
+              <p>
+                This is a simulated meetup, not arrival at the real MRT station.
+                The agreed station stays unchanged. Both participants must
+                acknowledge and then check in using fresh device locations.
+                Existing checklists and physical receipt confirmations remain
+                mandatory.
+              </p>
+              {data.temporaryLocation.active ? (
+                <>
+                  <p>
+                    Expires{" "}
+                    {new Date(
+                      data.temporaryLocation.active.expiresAt,
+                    ).toLocaleTimeString()}
+                    .{" "}
+                    {data.temporaryLocation.active.bothAcknowledged
+                      ? "Both participants acknowledged."
+                      : "Waiting for both participants to acknowledge."}
+                  </p>
+                  {!data.temporaryLocation.active.acknowledged && (
+                    <button
+                      className={button}
+                      disabled={busy}
+                      onClick={() =>
+                        void perform(async () => {
+                          await api("test-location", {
+                            action: "acknowledge",
+                            acknowledged: true,
+                            generation:
+                              data.temporaryLocation!.active!.generation,
+                          });
+                        })
+                      }
+                    >
+                      I acknowledge this simulated meetup, not arrival at the
+                      real MRT station
+                    </button>
+                  )}
+                  <button
+                    className={button}
+                    disabled={busy}
+                    onClick={() =>
+                      void perform(async () => {
+                        await api("test-location", { action: "revoke" });
+                        setIssued(null);
+                      })
+                    }
+                  >
+                    Revoke temporary test location and erase centre
+                  </button>
+                </>
+              ) : (
+                <>
+                  <label className="block">
+                    <input
+                      type="checkbox"
+                      checked={simulationAck}
+                      onChange={(e) => setSimulationAck(e.target.checked)}
+                    />{" "}
+                    I acknowledge this is a simulated meetup, not arrival at the
+                    real MRT station.
+                  </label>
+                  <button
+                    className={button}
+                    disabled={busy || !simulationAck}
+                    onClick={() => void setTemporaryLocation()}
+                  >
+                    Use my current location as a temporary test meetup
+                  </button>
+                </>
+              )}
+            </fieldset>
+          )}
           {data.checks &&
             [data.checks.owner, data.checks.borrower].map((c, n) => (
               <p key={n}>
                 {n === 0 ? "Owner" : "Borrower"}:{" "}
                 {c
-                  ? `${c.outcome === "VERIFIED" ? "Location verified" : c.outcome === "INACCURATE" ? "Location inaccurate" : c.outcome === "OUTSIDE" ? "Location outside accepted area" : "Location unavailable"} · ${Date.parse(c.expiresAt) <= clock ? "check-in validity elapsed; an existing valid scan keeps its separate confirmation window" : `valid until ${new Date(c.expiresAt).toLocaleTimeString()}`}`
+                  ? `${c.outcome === "TEST_LOCATION" ? "TEST_LOCATION — simulated meetup, not real station arrival" : c.outcome === "VERIFIED" ? "Location verified" : c.outcome === "INACCURATE" ? "Location inaccurate" : c.outcome === "OUTSIDE" ? "Location outside accepted area" : "Location unavailable"} · ${Date.parse(c.expiresAt) <= clock ? "check-in validity elapsed; an existing valid scan keeps its separate confirmation window" : `valid until ${new Date(c.expiresAt).toLocaleTimeString()}`}`
                   : "Not checked in"}
               </p>
             ))}

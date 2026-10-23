@@ -12,6 +12,7 @@ import {
   verify,
   receiveReturn,
   assistance,
+  temporaryLocation,
 } from "@/lib/meetup/service";
 async function route(
   request: Request,
@@ -45,6 +46,7 @@ async function route(
           body: Record<string, unknown>,
         ) => Promise<object>
       > = {
+        "test-location": temporaryLocation,
         assistance,
         enroll,
         checkin: checkIn,

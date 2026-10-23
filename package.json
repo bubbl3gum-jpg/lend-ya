@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "admin:create": "tsx scripts/create-admin.ts",
-    "test:unit": "tsx --test tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts",
+    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts",
     "test:integration": "tsx tests/run-isolated.ts",
     "test:admin": "tsx tests/run-isolated.ts --admin",
     "test:moderation": "tsx tests/run-isolated.ts --moderation",
@@ -28,6 +28,7 @@
     "moderation:evaluate": "tsx scripts/evaluate-moderation.ts",
     "analysis:synthetic": "tsx scripts/analyze-synthetic.ts",
     "analysis:worker": "tsx scripts/chat-analysis-worker.ts",
+    "demo:meetup:local": "tsx scripts/local-meetup-demo.ts",
     "test:meetup": "tsx tests/run-isolated.ts --meetup",
     "test:meetup-migration": "tsx tests/run-isolated.ts --meetup-migration"
   },
