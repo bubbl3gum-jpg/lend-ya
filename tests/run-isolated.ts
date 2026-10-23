@@ -186,7 +186,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--stability"))
+        if (process.argv.includes("--authorization"))
+          await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", "tests/authorization.integration.test.ts"]);
+        else if (process.argv.includes("--stability"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/core-stability.integration.test.ts"]);
         else if (process.argv.includes("--rental-api"))
           await run([

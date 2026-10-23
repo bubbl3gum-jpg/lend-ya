@@ -1,0 +1,248 @@
+{
+  "baseline": "9b58969351fa091a969f7bca094f7a47c639fe5c",
+  "branch": "feature/admin-authorization-foundation-batch-2b",
+  "dateContext": "24 October 2026 Asia/Taipei; per-run timestamps below are UTC",
+  "policy": {
+    "version": "hustlen-admin-shadow-v1",
+    "capabilities": 74,
+    "fixedHumanRoles": 4,
+    "mode": "SHADOW_ONLY",
+    "readyForActivation": false,
+    "productionCallers": 0,
+    "persistentStaffModelsCreated": 0
+  },
+  "nonDatabaseChecks": {
+    "typescript": {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    "lint": {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    "unit": {
+      "command": "npm run test:unit",
+      "tests": 57,
+      "passed": 57,
+      "failed": 0,
+      "exit": 0
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "exit": 0
+    },
+    "lockfileUnchanged": true
+  },
+  "databaseRuns": [
+    {
+      "group": "test:authorization",
+      "start": "2026-10-23T18:57:22.402Z",
+      "end": "2026-10-23T18:57:52.467Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/099305d40510cacd99551466",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-23T18:44:21.367Z",
+      "end": "2026-10-23T18:45:17.896Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/351d12455eb4d476de19a342",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-23T18:44:21.369Z",
+      "end": "2026-10-23T18:45:28.685Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/52b4e5d07f9b084279835c7a",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-23T18:45:28.685Z",
+      "end": "2026-10-23T18:47:00.215Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/df60a974e486ae9b7e1ddf86",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-23T18:45:28.688Z",
+      "end": "2026-10-23T18:46:11.435Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/fd86ad0fd1764d0622dd48df",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-23T18:45:28.687Z",
+      "end": "2026-10-23T18:45:50.048Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/442144504757203e13d3154b",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-23T18:47:08.155Z",
+      "end": "2026-10-23T18:51:01.826Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/d18b495f17cc3c2090a71d98",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-23T18:57:22.405Z",
+      "end": "2026-10-23T18:57:32.040Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/5066a961f792deefc8f235f5",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    }
+  ],
+  "initialSetupRuns": [
+    {
+      "group": "test:authorization",
+      "start": "2026-10-23T18:44:21.364Z",
+      "end": "2026-10-23T18:44:31.500Z",
+      "exit": 1,
+      "artifact": ".test-artifacts/6d85a53b68469897f100c940",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-23T18:45:35.853Z",
+      "end": "2026-10-23T18:45:47.594Z",
+      "exit": 1,
+      "artifact": ".test-artifacts/263ff657a1d17eb63402b6ad",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-23T18:46:06.682Z",
+      "end": "2026-10-23T18:46:16.290Z",
+      "exit": 1,
+      "artifact": ".test-artifacts/1c2429681a3a7eeff0cd4d03",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-23T18:47:40.071Z",
+      "end": "2026-10-23T18:47:48.733Z",
+      "exit": 1,
+      "artifact": ".test-artifacts/1360afb46825dbdc6ed0e226",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  ],
+  "setupRootCauses": [
+    "Missing Node resolution of Next bundler marker",
+    "SQL test-string quoting",
+    "tsx child did not preserve intended server condition",
+    "Global react-server condition breaks Node next/navigation React context imports"
+  ],
+  "setupResolution": "Owned-test-only Node 24 marker loader; no authentication, actor, reviewer, transaction or evidence check mocked/removed. No new dependencies.",
+  "unitAuthoringFailure": "One negative proposal fixture reused the valid resource kind for user actions; corrected to a different kind without changing authorization requirements.",
+  "privacy": "No connection URLs, credentials, participant records, tokens, GPS coordinates or case bodies are stored in this manifest. Role memberships are in-memory fixtures only, all four labelled users remain database USER.",
+  "historicalFlakes": "Chat and synthetic-camera scenarios passed in this run; no root cause/fix for earlier intermittence established."
+}

@@ -1,0 +1,173 @@
+{
+  "baseline": "9b58969351fa091a969f7bca094f7a47c639fe5c",
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/audit-logs/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "1037699930f017a478822c9f129daea28949b3757fa9b56a7503bde92a31f31b"
+    },
+    {
+      "file": "app/api/admin/bookings/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "9102bba65826365631d73408be5daee3caa8e8bbf18b4c723f7037e8336db794"
+    },
+    {
+      "file": "app/api/admin/bookings/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "af00c149c8fe64e3876b3a493dbd767478f8e6f92032283ccfa60f267912e4dc"
+    },
+    {
+      "file": "app/api/admin/chat/cases/[id]/claim/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "guard": "chatApi(..., true) + transactional reviewer/case checks",
+      "sha256": "c56513278b8265fc9454de24a4d76a64b9d329fe0dac02f067c18916aaf34aee"
+    },
+    {
+      "file": "app/api/admin/chat/cases/[id]/decision/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "guard": "chatApi(..., true) + transactional reviewer/case checks",
+      "sha256": "c30433990cddf03d534c8411a948f6b4b7b2160c65b253cd7bbf0a6fee155063"
+    },
+    {
+      "file": "app/api/admin/chat/cases/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "chatApi(..., true) + transactional reviewer/case checks",
+      "sha256": "2beb9ab401ea563737f1b035a1fab70e36105a6edb3613dfa5687b3a7d5e2831"
+    },
+    {
+      "file": "app/api/admin/chat/cases/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "chatApi(..., true) + transactional reviewer/case checks",
+      "sha256": "d410082ab026986c37e94b30cef288a72b52b9154865780c62fe87986a7b3437"
+    },
+    {
+      "file": "app/api/admin/disputes/[id]/evidence/[photoId]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "inline active ADMIN + readDisputeEvidence",
+      "sha256": "e4f85e341964e553c3c911fee81d6ce366f819a4f90e2f472f220b825a512d55"
+    },
+    {
+      "file": "app/api/admin/disputes/[id]/resolve/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "guard": "adminMutation + transactional actor",
+      "sha256": "941144b6a9f34c0dfc3c989a81eed729d2d336a5fdac188edd6fe41ded78181c"
+    },
+    {
+      "file": "app/api/admin/disputes/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "dbe4414c659b5ff808965653f70a84e9a273a2cac7e40fddf9e23ecad71e4365"
+    },
+    {
+      "file": "app/api/admin/disputes/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "e9ad25a7ecbe2b9c992805c1e0cc6e812bc7d19f3b11e5350d3ea0f13f190310"
+    },
+    {
+      "file": "app/api/admin/listings/[id]/moderation/route.ts",
+      "methods": [
+        "PATCH"
+      ],
+      "guard": "adminMutation + transactional actor",
+      "sha256": "0c8eb3b8ceaf202c8f09b5b955b2ebf630333261be0fb9e826a758e84f7970be"
+    },
+    {
+      "file": "app/api/admin/listings/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "dc5662007257489ce9109ee847e8b2bcfc89c3b4be8bd228bd6d59750bdbeb94"
+    },
+    {
+      "file": "app/api/admin/listings/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "436791894618844b911988c2cff74f464b724cd4b38ab2bf2f56a9ec5824ac58"
+    },
+    {
+      "file": "app/api/admin/overview/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "835e9d28df514f02892dcac3537bdbd08ec3c2c2307560369d4a3fe7a74b851f"
+    },
+    {
+      "file": "app/api/admin/reports/[id]/resolve/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "guard": "adminMutation + transactional actor",
+      "sha256": "6080cbb307e34c357431864d32c548f9829fe42621aa7b4b7c686e60ffdb1620"
+    },
+    {
+      "file": "app/api/admin/reports/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "a176824f167e28666faef64d526b2fd004fec4833e686fc6e279d6ec105cff61"
+    },
+    {
+      "file": "app/api/admin/reports/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "24baf09cdffa0bebb751df0dc9b45652720e56829278576c44719dc58e7b0b66"
+    },
+    {
+      "file": "app/api/admin/users/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "15e5bf52a829054a327a613ac3e70e70e61db01c3446045114c1f0bfbbf85471"
+    },
+    {
+      "file": "app/api/admin/users/[id]/status/route.ts",
+      "methods": [
+        "PATCH"
+      ],
+      "guard": "adminMutation + transactional actor",
+      "sha256": "77976f38696e2a0565f415be1aef4dae8c7be83d1ef1b1734319764139c0b35a"
+    },
+    {
+      "file": "app/api/admin/users/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi",
+      "sha256": "01cb6f42a42e894d89f530a05cd8b4617e328dec2b352c691903d45c46a4df83"
+    }
+  ]
+}
