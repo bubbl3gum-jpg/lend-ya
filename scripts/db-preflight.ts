@@ -1,3 +1,4 @@
+import { logOperationalError } from "../lib/operational-error";
 import "dotenv/config";
 import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
@@ -105,8 +106,6 @@ async function main() {
   }
 }
 main().catch((error) => {
-  console.error(
-    error instanceof Error ? error.message : "Migration preflight failed",
-  );
+  logOperationalError("database.preflight", error);
   process.exitCode = 1;
 });

@@ -1,0 +1,45 @@
+{
+  "version": "0.1.0",
+  "name": "p2p-marketplace",
+  "dependencies": {
+    "@prisma/adapter-pg": {
+      "version": "7.10.1",
+      "resolved": "https://registry.npmjs.org/@prisma/adapter-pg/-/adapter-pg-7.10.1.tgz",
+      "overridden": false
+    },
+    "@prisma/client": {
+      "version": "7.10.1",
+      "resolved": "https://registry.npmjs.org/@prisma/client/-/client-7.10.1.tgz",
+      "overridden": false,
+      "dependencies": {
+        "prisma": {
+          "version": "7.10.1"
+        }
+      }
+    },
+    "next": {
+      "version": "16.4.3",
+      "resolved": "https://registry.npmjs.org/next/-/next-16.4.3.tgz",
+      "overridden": false
+    },
+    "prisma": {
+      "version": "7.10.1",
+      "resolved": "https://registry.npmjs.org/prisma/-/prisma-7.10.1.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@prisma/config": {
+          "version": "7.10.1",
+          "resolved": "https://registry.npmjs.org/@prisma/config/-/config-7.10.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "deepmerge-ts": {
+              "version": "8.0.2",
+              "resolved": "https://registry.npmjs.org/deepmerge-ts/-/deepmerge-ts-8.0.2.tgz",
+              "overridden": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,13 +1,14 @@
+import { logOperationalError } from "../lib/operational-error";
 import "dotenv/config";
 import { spawn, type ChildProcess } from "node:child_process";
 import { mkdir, appendFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import net from "node:net";
-import { Client } from "pg";
 import {
   testDatabaseUrl,
   testRunId,
   assertOwnedDatabase,
+  connectTestDatabaseTarget,
 } from "./support/test-database";
 
 async function freePort(): Promise<number> {
@@ -29,11 +30,7 @@ async function main() {
     runId = testRunId();
   const artifactDir = path.resolve(".test-artifacts", runId);
   await mkdir(artifactDir, { recursive: true });
-  const adminUrl = new URL(url);
-  adminUrl.pathname = "/postgres";
-  adminUrl.searchParams.delete("schema");
-  const admin = new Client({ connectionString: adminUrl.toString() });
-  await admin.connect();
+  const admin = await connectTestDatabaseTarget(url, true);
   let owned = false,
     failed = true,
     app: ChildProcess | undefined;
@@ -46,7 +43,10 @@ async function main() {
     TEST_DATABASE_URL: url.toString(),
     CHROMIUM_PATH: process.env.MRT_BROWSER_PATH ?? process.env.CHROMIUM_PATH,
   };
-  function run(args: string[]): Promise<void> {
+  async function run(args: string[]): Promise<void> {
+    const verified = await connectTestDatabaseTarget(url);
+    try { await assertOwnedDatabase(verified, url, runId); }
+    finally { await verified.end(); }
     return new Promise((resolve, reject) => {
       const child = spawn(process.execPath, args, {
         env,
@@ -71,6 +71,10 @@ async function main() {
     await admin.query(
       `COMMENT ON DATABASE "${database}" IS 'hustlen-mrt-test:${runId}'`,
     );
+    const verified = await connectTestDatabaseTarget(url);
+    try { await assertOwnedDatabase(verified, url, runId); }
+    finally { await verified.end(); }
+
     console.log(
       `Isolated database: ${database}; artifacts: ${path.relative(process.cwd(), artifactDir)}`,
     );
@@ -217,8 +221,7 @@ async function main() {
         }
       }
       if (owned && !(failed && process.env.MRT_TEST_KEEP_ON_FAILURE === "1")) {
-        const client = new Client({ connectionString: url.toString() });
-        await client.connect();
+        const client = await connectTestDatabaseTarget(url);
         try {
           await assertOwnedDatabase(client, url, runId);
           const table = await client.query(
@@ -273,8 +276,6 @@ async function main() {
   }
 }
 main().catch((error) => {
-  console.error(
-    error instanceof Error ? error.message : "Isolated tests failed.",
-  );
+  logOperationalError("test.isolated", error);
   process.exitCode = 1;
 });

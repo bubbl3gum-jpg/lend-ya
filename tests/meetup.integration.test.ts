@@ -1696,8 +1696,14 @@ test(
     } finally {
       if (browser) {
         let n = 0;
-        for (const context of browser.contexts())
+        // Include the separate synthetic-camera browser: otherwise a failed
+        // borrower scan only preserves the owner's screen and hides the failure.
+        for (const context of [browser, cameraBrowser].flatMap((instance) => instance?.contexts() ?? []))
           for (const page of context.pages()) {
+            await writeFile(path.join(artifact, `browser-diagnostics-${n}.json`), JSON.stringify(await page.evaluate(() => {
+              const video = document.querySelector("video");
+              return { video: video ? { readyState: video.readyState, networkState: video.networkState, width: video.videoWidth, height: video.videoHeight, paused: video.paused } : null };
+            }).catch(() => ({ pageUnavailable: true })), null, 2), { mode: 0o600 });
             await page
               .screenshot({
                 path: path.join(artifact, `browser-failure-${n}.png`),

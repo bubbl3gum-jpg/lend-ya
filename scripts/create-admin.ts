@@ -1,3 +1,4 @@
+import { logOperationalError } from "../lib/operational-error";
 import "dotenv/config";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
@@ -56,7 +57,9 @@ async function main(): Promise<void> {
 
   const prisma = new PrismaClient({
     adapter: new PrismaPg({ connectionString: databaseUrl }),
+    log: [{ emit: "event", level: "error" }],
   });
+  prisma.$on("error", () => logOperationalError("admin.create.query", undefined));
 
   try {
     const user = await prisma.user.findUnique({
@@ -83,6 +86,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : "Admin creation failed.");
+  logOperationalError("admin.create", error);
   process.exitCode = 1;
 });

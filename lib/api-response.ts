@@ -1,3 +1,4 @@
+import { logOperationalError } from "./operational-error";
 import { MarketplaceRestrictionError } from "@/lib/marketplace-permissions";
 export function apiError(message: string, status: number): Response {
   return Response.json({ error: message }, { status });
@@ -59,6 +60,8 @@ export async function readOptionalJsonObject(
 export function internalServerError(context: string, error: unknown): Response {
   if (error instanceof MarketplaceRestrictionError)
     return apiError(error.message, 403);
-  console.error(`[${context}]`, error);
-  return apiError("Internal server error", 500);
+  const errorId = logOperationalError(context, error);
+  const response = apiError("Internal server error", 500);
+  response.headers.set("X-Error-Id", errorId);
+  return response;
 }

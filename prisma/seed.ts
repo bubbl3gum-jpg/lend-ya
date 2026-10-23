@@ -1,3 +1,4 @@
+import { logOperationalError } from "../lib/operational-error";
 import "dotenv/config";
 import { importMrt } from "../lib/mrt/import";
 import { scryptSync } from "node:crypto";
@@ -13,7 +14,7 @@ if (!databaseUrl) {
 
 const databaseHost = new URL(databaseUrl).hostname;
 if (!["localhost", "127.0.0.1", "[::1]"].includes(databaseHost)) {
-  throw new Error(`Refusing to seed non-local database host: ${databaseHost}`);
+  throw new Error("Refusing to seed a non-local database.");
 }
 
 if (process.env.NODE_ENV === "production") {
@@ -239,6 +240,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error) => {
-  console.error(error);
+  logOperationalError("database.seed", error);
   process.exit(1);
 });

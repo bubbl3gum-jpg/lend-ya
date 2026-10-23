@@ -1,0 +1,8 @@
+Batch 1 unchanged screenshot evidence
+Implementation commit: 98d24a918be7ce391c201cfd1822eb6ed84bbc36
+Synthetic fixture run: 7e8f2b1719d3bdd5620c9014
+SHA-256:
+1aebb85a728c79ffbae91bd8a07eafe295efe95ac01f865f0f53711fceab742b  admin-1440.png
+405605317278f2296684c994b58d4f8a0c2c824cbea22c6192b932bcb5f72df6  admin-390-navigation.png
+7b0bf6970cb4e4438587b8400ffaf15ee7786c30c59d4b8a0da6c1003a0952ef  admin-390.png
+6464076a4d2d5a4c07b23f11faf3ffed4ef3a8d6b202fc38f90016a04803c785  admin-820.png

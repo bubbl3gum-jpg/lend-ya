@@ -4,9 +4,9 @@ import { randomBytes } from "node:crypto";
 import { mkdir, writeFile, unlink } from "node:fs/promises";
 import { once } from "node:events";
 import path from "node:path";
-import { Client } from "pg";
 import {
   assertOwnedDatabase,
+  connectTestDatabaseTarget,
   testDatabaseUrl,
   testRunId,
 } from "../tests/support/test-database";
@@ -19,10 +19,7 @@ async function main() {
   );
   const database = url.pathname.slice(1),
     runId = testRunId();
-  const adminUrl = new URL(url);
-  adminUrl.pathname = "/postgres";
-  const admin = new Client({ connectionString: adminUrl.toString() });
-  await admin.connect();
+  const admin = await connectTestDatabaseTarget(url, true);
   let owned = false,
     app: ChildProcess | undefined;
   const env: NodeJS.ProcessEnv = {
@@ -36,6 +33,9 @@ async function main() {
     MEETUP_CONFIRMATION_TTL_SECONDS: "900",
   };
   async function run(args: string[]) {
+    const verified = await connectTestDatabaseTarget(url);
+    try { await assertOwnedDatabase(verified, url, runId); }
+    finally { await verified.end(); }
     const child = spawn(process.execPath, args, { env, stdio: "inherit" });
     const [code] = await once(child, "exit");
     if (code !== 0) throw Error("Demo setup subprocess failed.");
@@ -47,6 +47,10 @@ async function main() {
     await admin.query(
       `COMMENT ON DATABASE "${database}" IS 'hustlen-mrt-test:${runId}'`,
     );
+    const verified = await connectTestDatabaseTarget(url);
+    try { await assertOwnedDatabase(verified, url, runId); }
+    finally { await verified.end(); }
+
     await mkdir(`.test-artifacts/${runId}`, { recursive: true });
     await writeFile(
       `.test-artifacts/${runId}/tsconfig.json`,
@@ -76,8 +80,7 @@ async function main() {
       "--config",
       "prisma7.config.ts",
     ]);
-    const db = new Client({ connectionString: url.toString() });
-    await db.connect();
+    const db = await connectTestDatabaseTarget(url);
     let ids: string;
     try {
       await assertOwnedDatabase(db, url, runId);
@@ -132,8 +135,7 @@ async function main() {
       await once(app!, "exit");
     }
     if (owned) {
-      const db = new Client({ connectionString: url.toString() });
-      await db.connect();
+      const db = await connectTestDatabaseTarget(url);
       try {
         await assertOwnedDatabase(db, url, runId);
         const table = await db.query(

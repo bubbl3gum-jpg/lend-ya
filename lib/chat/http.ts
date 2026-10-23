@@ -1,3 +1,4 @@
+import { logOperationalError } from "../operational-error";
 import { getCurrentUser } from "@/lib/auth";
 import { readJsonObject } from "@/lib/api-response";
 import { isSerializationConflict } from "@/lib/database-conflicts";
@@ -49,7 +50,7 @@ export async function chatApi(run: (user: NonNullable<Awaited<ReturnType<typeof 
     else if (isSerializationConflict(error) || (error && typeof error === "object" && "code" in error && ["P2002", "P2003"].includes(String(error.code)))) response = Response.json({ error: "Record changed concurrently. Retry with the same request key.", code: "RETRY_CONFLICT" }, { status: 409 });
     else {
       // Prisma error objects may contain query parameters/private text. Never log them here.
-      console.error("[chat] request failed; private parameters omitted");
+      logOperationalError("chat.request", error);
       response = Response.json({ error: "Chat request could not be completed.", code: "INTERNAL_ERROR" }, { status: 500 });
     }
   }

@@ -1,0 +1,209 @@
+{
+  "baseline": "98d24a918be7ce391c201cfd1822eb6ed84bbc36",
+  "branch": "security/admin-readiness-batch-2a",
+  "nonDatabaseChecks": {
+    "typecheck": {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    "lint": {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    "unit": {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "tests": 45,
+      "passed": 45
+    },
+    "generation": {
+      "command": "npx prisma generate --config prisma7.config.ts",
+      "exit": 0,
+      "databaseOperation": false
+    },
+    "audit": {
+      "beforeAffectedPackageEntries": 4,
+      "afterAffectedPackageEntries": 0
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  },
+  "databaseRuns": [
+    {
+      "group": "test:admin",
+      "start": "2026-10-23T18:12:44.885Z",
+      "end": "2026-10-23T18:14:05.438Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/e4c0172ffcb8a4381533461e",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "test:admin.json"
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-23T18:12:44.888Z",
+      "end": "2026-10-23T18:14:19.659Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/9cd413da12c696d681041f59",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "test:moderation.json"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-23T18:12:44.889Z",
+      "end": "2026-10-23T18:14:23.009Z",
+      "exit": 1,
+      "artifact": ".test-artifacts/bffee7d682099b124c2c0611",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 12"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true,
+      "evidence": "chat-initial.json"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-23T18:15:01.986Z",
+      "end": "2026-10-23T18:16:24.148Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/33315bfd00d9091399fe088b",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "test:chat.json"
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-23T18:14:23.009Z",
+      "end": "2026-10-23T18:14:45.063Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/ed55c5b7873382a85f314e10",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "test:stability.json"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-23T18:14:23.011Z",
+      "end": "2026-10-23T18:15:01.660Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/66f44a62921c5c4b2cd74ea6",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "test:rental-api.json"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-23T18:22:56.155Z",
+      "end": "2026-10-23T18:23:06.013Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/4db5b9b7d14ec85817a8f110",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "evidence": "build:verify.json"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-23T18:15:01.700Z",
+      "end": "2026-10-23T18:19:06.751Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/b4a788b4be5b6b0b1f2adebd",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "meetup-1.json"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-23T18:19:06.807Z",
+      "end": "2026-10-23T18:23:06.899Z",
+      "exit": 0,
+      "artifact": ".test-artifacts/d79c7c1618c18b222774d017",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "evidence": "meetup-2.json"
+    }
+  ],
+  "constraints": "All targets freshly created and ownership-verified, never an existing application database. Unsafe-option CLI trap opened zero connections. URL/credentials, raw failures, screenshots, QR payloads and private case data are intentionally excluded from this manifest. Counts include Node parent tests.",
+  "meetupReproducibility": {
+    "boundedRuns": 2,
+    "serial": true,
+    "successful": 2,
+    "claim": "No reproduction in this bounded sample; no fix or root cause for previous intermittence established.",
+    "resourceConditions": "First API phase overlapped chat rerun; camera phase had no concurrent suite. Second run overlapped isolated build rechecks, including its later browser phase."
+  },
+  "initialChatFailure": "Second browser login redirect exceeded unchanged 5-second assertion despite login API 200. Unchanged rerun passed. Root cause unconfirmed.",
+  "batch1Screenshots": {
+    "unchangedFromBaseline": true,
+    "sha256": {
+      "admin-390-navigation.png": "405605317278f2296684c994b58d4f8a0c2c824cbea22c6192b932bcb5f72df6",
+      "admin-820.png": "6464076a4d2d5a4c07b23f11faf3ffed4ef3a8d6b202fc38f90016a04803c785",
+      "admin-1440.png": "1aebb85a728c79ffbae91bd8a07eafe295efe95ac01f865f0f53711fceab742b",
+      "admin-390.png": "7b0bf6970cb4e4438587b8400ffaf15ee7786c30c59d4b8a0da6c1003a0952ef"
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { disposableDatabaseUrl } from "../disposable-database-url";
 import { randomBytes } from "node:crypto";
 
 export const TEST_LOCATION_TTL = 60 * 60 * 1000;
@@ -46,16 +47,12 @@ export function testLocationEnvironment(
   env: Record<string, string | undefined> = process.env,
 ) {
   try {
-    const url = new URL(env.DATABASE_URL ?? "");
+    disposableDatabaseUrl(env.DATABASE_URL, undefined, env);
     return (
       env.NODE_ENV === "development" &&
       env.MEETUP_TEST_LOCATION_ENABLED === "true" &&
       env.DATABASE_URL === env.MRT_TEST_DATABASE_URL &&
-      /^[a-f0-9]{24}$/.test(env.MRT_TEST_RUN_ID ?? "") &&
-      ["postgres:", "postgresql:"].includes(url.protocol) &&
-      ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) &&
-      /^hustlen_test_[a-z0-9_]+$/.test(url.pathname.slice(1)) &&
-      url.pathname.length <= 64
+      /^[a-f0-9]{24}$/.test(env.MRT_TEST_RUN_ID ?? "")
     );
   } catch {
     return false;

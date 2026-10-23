@@ -21,6 +21,10 @@ test("temporary mode fails closed outside an explicitly designated local disposa
     MRT_TEST_RUN_ID: "a".repeat(24),
   };
   assert.equal(testLocationEnvironment(env), true);
+  for (const query of ["host=remote.invalid", "database=production", "options=-c%20search_path%3Dprivate", "schema=private"]) {
+    assert.equal(testLocationEnvironment({ ...env, DATABASE_URL: url + "?" + query, MRT_TEST_DATABASE_URL: url + "?" + query }), false);
+  }
+  assert.equal(testLocationEnvironment({ ...env, PGHOST: "remote.invalid" }), false);
   for (const patch of [
     { NODE_ENV: "production" },
     { NODE_ENV: "test" },

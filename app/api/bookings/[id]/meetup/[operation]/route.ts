@@ -1,3 +1,4 @@
+import { logOperationalError } from "@/lib/operational-error";
 import { getCurrentUser } from "@/lib/auth";
 import { parsePathId } from "@/lib/api-validation";
 import { readJsonObject } from "@/lib/api-response";
@@ -83,7 +84,7 @@ async function route(
         { status: 409 },
       );
     else {
-      console.error("[meetup] request failed; private details omitted");
+      logOperationalError("meetup.request", error);
       response = Response.json(
         {
           error:

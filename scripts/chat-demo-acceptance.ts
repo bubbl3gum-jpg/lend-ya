@@ -1,15 +1,15 @@
+import { logOperationalError } from "../lib/operational-error";
 /** Browser-driven execution of the documented manual demo, using synthetic local fixtures only. */
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { chromium, expect as baseExpect, type Page } from "@playwright/test";
-import { Client } from "pg";
-import { assertOwnedDatabase, testDatabaseUrl } from "../tests/support/test-database";
+import { assertOwnedDatabase, connectTestDatabaseTarget, testDatabaseUrl } from "../tests/support/test-database";
 const expect=baseExpect.configure({timeout:20000});
 async function main(){
  const s=JSON.parse(await readFile('.test-artifacts/chat-demo/state.json','utf8'));
  const lock=JSON.parse(await readFile('.test-artifacts/chat-demo/server.lock','utf8'));
  if(lock.runId!==s.runId||!Number.isSafeInteger(lock.pid)||lock.pid<1)throw Error('Start the owned local demo before browser acceptance.');process.kill(lock.pid,0);
- const url=testDatabaseUrl(s.url);const db=new Client({connectionString:url.toString()});await db.connect();try{await assertOwnedDatabase(db,url,s.runId);}finally{await db.end();}
+ const url=testDatabaseUrl(s.url);const db=await connectTestDatabaseTarget(url);try{await assertOwnedDatabase(db,url,s.runId);}finally{await db.end();}
  const browser=await chromium.launch({headless:!process.argv.includes('--headed'),executablePath:process.env.MRT_BROWSER_PATH??'/usr/bin/chromium'});
  const base=`http://localhost:${s.port}`,tag=randomUUID().slice(0,8),dir='.test-artifacts/chat-demo/screenshots';await mkdir(dir,{recursive:true});
  const results:{step:string;outcome:string}[]=[];
@@ -44,4 +44,4 @@ async function main(){
   await writeFile('.test-artifacts/chat-demo/acceptance.json',JSON.stringify({conversationId,releasedBody,results},null,2),{mode:0o600});console.log(JSON.stringify(results,null,2));
  }finally{await browser.close();}
 }
-main().catch(e=>{console.error(e instanceof Error?e.message:'Browser demo acceptance failed');process.exitCode=1;});
+main().catch(e=>{console.error("Check the running owned demo and ignored server.lock before retrying acceptance.");logOperationalError("demo.chat.acceptance", e);process.exitCode=1;});
