@@ -34,7 +34,9 @@ test(
           });
           assert.equal(r.status, 404);
         }
-      const security = await fetch(base + "/admin/security", {
+      assert.equal((await fetch(base+"/api/dev/staff-listing-read",{method:"POST",headers:{Origin:base,"Content-Type":"application/json",Cookie:cookie},body:JSON.stringify({action:"read",listingId:"1",bindingId:"11111111-1111-4111-8111-111111111111"})})).status,404);
+    assert.equal((await fetch(base+"/dev/staff-listing-inspection",{headers:{Cookie:cookie}})).status,404);
+    const security = await fetch(base + "/admin/security", {
         headers: { Cookie: cookie },
       });
       assert.equal(security.status, 404);

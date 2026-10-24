@@ -97,6 +97,7 @@ async function main() {
       ) + "\n",
     );
     const legacyGroup = [
+      "staff-read-pilot",
       "database-principals",
       "mfa-migration",
       "mfa",
@@ -119,6 +120,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "staff-read-pilot": "tests/staff-read-pilot.integration.test.ts",
           "database-principals": "tests/database-principals.test.ts",
           "mfa-migration": "tests/mfa-migration.test.ts",
           "mfa": "tests/mfa.test.ts",
@@ -172,6 +174,8 @@ async function main() {
         env.TEST_BASE_URL = env.MRT_TEST_URL;
         if (process.argv.some(flag => ["--mfa-pilot","--mfa-pilot-production"].includes(flag))) {
           env.HUSTLEN_PASSKEY_PILOT = "owned-development-only";
+          env.HUSTLEN_STAFF_READ_PILOT = "owned-synthetic-only";
+          env.HUSTLEN_STAFF_READ_ORIGIN = env.TEST_BASE_URL;
           env.HUSTLEN_PASSKEY_PILOT_ORIGIN = env.TEST_BASE_URL;
         }
         if (process.argv.includes("--mfa-pilot-disabled")) env.HUSTLEN_PASSKEY_PILOT = "disabled";

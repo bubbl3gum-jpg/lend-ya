@@ -1,5 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname === "/api/dev/staff-listing-read" || request.nextUrl.pathname === "/dev/staff-listing-inspection") &&
+    (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_STAFF_READ_PILOT !== "owned-synthetic-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   // Refuse unfinished pilot surfaces before rendering/streaming or database access.
   if ((request.nextUrl.pathname === "/api/auth/admin-passkeys" ||
     request.nextUrl.pathname === "/admin/security" || request.nextUrl.pathname.startsWith("/admin/security/")) &&
@@ -39,4 +42,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/api/:path*", "/uploads/listings/:path*", "/admin/security/:path*"] };
+export const config = { matcher: ["/api/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/dev/staff-listing-inspection"] };

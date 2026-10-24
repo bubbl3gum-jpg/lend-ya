@@ -1,0 +1,47 @@
+{
+  "label": "chat-0",
+  "outcome": "failed",
+  "path": "/login",
+  "events": [
+    {
+      "ms": 65,
+      "event": "request",
+      "path": "/login",
+      "method": "GET"
+    },
+    {
+      "ms": 6875,
+      "event": "response",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "ms": 7833,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST"
+    },
+    {
+      "ms": 9055,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "true",
+    "submitDisabled": false,
+    "inputValidity": [
+      true,
+      true
+    ],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 4,
+    "lock_waiters": 0
+  }
+}
