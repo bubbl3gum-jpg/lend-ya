@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+const subscribeHydration = () => () => {};
+const clientReady = () => true;
+const serverNotReady = () => false;
 
 type AuthFormProps = {
   mode: "login" | "register";
@@ -10,6 +15,11 @@ type AuthFormProps = {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
+  const ready = useSyncExternalStore(
+    subscribeHydration,
+    clientReady,
+    serverNotReady,
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,6 +92,8 @@ export function AuthForm({ mode }: AuthFormProps) {
     <>
       <form
         onSubmit={handleSubmit}
+        data-auth-ready={String(ready)}
+        aria-busy={!ready || loading}
         className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
       >
         <h2 className="text-2xl font-semibold text-slate-900">
@@ -92,6 +104,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           <label className="block text-sm font-medium text-slate-700">
             Full name
             <input
+              disabled={!ready}
               value={name}
               onChange={(event) => setName(event.target.value)}
               className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
@@ -104,6 +117,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <label className="block text-sm font-medium text-slate-700">
           Email address
           <input
+            disabled={!ready}
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
@@ -116,6 +130,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <label className="block text-sm font-medium text-slate-700">
           Password
           <input
+            disabled={!ready}
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -131,7 +146,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={!ready || loading}
           className="w-full rounded-xl bg-slate-900 px-4 py-3 font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading

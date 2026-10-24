@@ -1,0 +1,33 @@
+# Controlled staff identity and onboarding readiness — Batch 5C
+
+24 October 2026 (Asia/Taipei). **Design only. No staff provisioned, role activated, existing ADMIN converted or identity-proofing provider selected.** The four human roles remain Super Admin, Operations Staff, Support Agent and Moderator; current database activation restrictions remain in force.
+
+## Proposed controlled lifecycle
+
+1. An approved human identity-proofing authority verifies the actual human under an explicitly approved evidence/retention policy. StaffPerson is canonical human identity, not a login, passkey or claim from email ownership. An operator reconciles all known accounts before establishing VERIFIED StaffAccountAssociation rows. Resolve ambiguous duplicates privately; no automated name/email matching proves identity. Revoked canonical links cannot be silently rebound.
+2. A distinct authorized sponsor requests one fixed-role membership with purpose, scope, bounded validity and a reason reference. An independent authorized human reviews exact person, sponsorship, conflicts, proposed role and grants. Two accounts for the same StaffPerson cannot satisfy independence. A bootstrap proposal cannot self-authorize because no independent membership exists; execute only a separately approved offline bootstrap runbook with independent witnesses and immutable evidence. Never temporarily give a lower role ADMIN or map all current ADMIN users to Super Admin.
+3. Conduct assisted initial passkey enrollment using a separately approved identity/sponsorship gate. Existing password plus session and a prewritten VERIFIED flag is insufficient operational proof of initial staff onboarding. Require server-pinned RP/origin, current session and verified account link, actual user verification and signed assertion. Advise two independently available passkeys, including loss/sync considerations. No key/private secret is collected centrally. Backup metadata is not proof of recovery eligibility or a unique human.
+4. Membership and each explicit resource/case capability grant have approved valid-from/expiry, policy version and independent issuer. One active fixed-role membership per canonical human; no unrestricted grant or general status editor. Deny unknown/expired/revoked assignments. The approved first pilot role/action allocation still needs explicit sign-off where the matrix marked it proposed.
+5. A future staff-session issuer resolves actual AuthSession ID **and birth**, canonical person/account association, current persisted epoch, exact valid membership/grants and real fresh passkey assurance. It may issue only a bounded scoped binding after durable attribution. PENDING step-up/session records, DRAFT memberships, client MFA flags, opaque proof IDs and shadow MATCH results never authorize. Bigint versions must remain lossless. No issuer is activated in Batch 5C.
+6. Each read/action checks current scope, case assignment, participant/investigator conflicts, versions and evidence invariants. A person alias cannot vote twice, investigate their own dispute or borrow a private support channel. MFA authenticates a factor; it does not grant a role or independent approval power.
+7. On expiration, offboarding, compromise or approved recovery, invalidate affected membership/grants, canonical authorization epoch, factor epoch, staff bindings and sessions as required by the approved incident scope. Coordinate lock ordering with verification and in-flight data reads. Preserve immutable history; do not delete grant or decision records. Offboarding must not remove ordinary custody/return/inspection/support obligations or erase accounts/evidence. Restore ordinary account access through its separate policy, not by restoring staff privileges.
+
+## Record and evidence boundaries
+
+Use StaffPerson / StaffAccountAssociation for canonical-human association, StaffMembership / StaffCapabilityGrant for explicit expiring authority, StaffAuthorizationVersion/Event for revocation/history and future StaffSessionBinding tied to an actually verified StaffMfaAssurance. Existing StaffStepUpRecord and StaffSecurityEvent remain pending/shadow foundations. Approval records remain inactive. No new model/migration or identity-provider adapter is introduced.
+
+Keep identity proof in a separately approved restricted system; store only bounded immutable references to proofing authority, findings, sponsor/reviewer decisions, policy, scope, expiry and reasons. Do not log government-ID images, biometrics, raw passkey proofs, session tokens, private chats or unrestricted evidence snapshots. Audit identity-proof access separately. Define correction/alias reconciliation, retention and legal deletion handling without rewriting historical human attribution.
+
+## Decisions required before implementation
+
+| Decision | Required owner / consequence |
+| --- | --- |
+| Canonical identity authority, acceptable evidence and reviewers | Product/security/organization must approve. No provider is inferred; no collection workflow ships. |
+| Role allocations, first read capability, sponsorship and bootstrap | Product owner approves proposed matrix allocations and independent human capacity; no self-promoting bootstrap. |
+| Initial enrollment assurance, acceptable key/device assurance | Security/product approve assisted enrollment, additional-key guidance and compromised-session treatment. UV with a device PIN/synced passkey is not certified hardware identity. |
+| Membership/grant/session/step-up lifetimes and offboarding scope | Approve bounded values, renewal/review owner and revocation SLA; current 299-second pilot proof is not automatically permanent product policy. |
+| Recovery eligibility, independent reviewers and notifications | Approve the Batch 5C refined recovery design before reset/enforcement. |
+| Writer/process/DB privilege separation and durable read audit | Approve architecture and restricted credentials before issuing real staff contexts. Current pilot's common connection is not the production boundary. |
+| Production origins, retention and physical device coverage | Explicit deployment approval and device/recovery drill required; no production hostname chosen. |
+
+These unresolved choices block production onboarding and mandatory MFA, not this completed documentation/fixture batch. Implementation should proceed in separate small reviewed batches: trusted identity/onboarding policy; isolated verifier and audit boundary; typed first read route; controlled voluntary human pilot; recovery drills; only then independently reviewed enforcement/cutover. The [first-read plan](FIRST_STAFF_READ_CUTOVER_PLAN_BATCH_5C.md) and [recovery refinement](ASSISTED_PASSKEY_RECOVERY_REVIEW_BATCH_5C.md) define the next gates.

@@ -1,0 +1,32 @@
+{
+  "label": "delayed-hydration",
+  "outcome": "baseline-native-reload-without-login-post",
+  "path": "/login",
+  "events": [
+    {
+      "ms": 11,
+      "event": "request",
+      "path": "/login",
+      "method": "GET"
+    },
+    {
+      "ms": 2238,
+      "event": "response",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "ms": 2388,
+      "event": "request",
+      "path": "/login",
+      "method": "GET"
+    }
+  ],
+  "browser": null,
+  "cookiePresent": false,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 2,
+    "lock_waiters": 0
+  }
+}

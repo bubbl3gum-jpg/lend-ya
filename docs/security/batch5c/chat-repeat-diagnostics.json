@@ -1,0 +1,606 @@
+{
+  "runs": [
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T11:13:11.226Z",
+      "end": "2026-10-24T11:15:09.581Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/577e9e8bb6d3b5f34d8f4b4e",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T11:15:32.629Z",
+      "end": "2026-10-24T11:17:09.243Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/91ada4801f282f18cf7cb4fc",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T11:17:09.291Z",
+      "end": "2026-10-24T11:18:29.335Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2062560c5b0fd173a96eeda4",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    }
+  ],
+  "diagnostics": [
+    {
+      "run": 1,
+      "logins": [
+        {
+          "label": "chat-0",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 114,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 5983,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 7011,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 7288,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 4,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-1",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 31,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 191,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 1400,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 1711,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 9,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-2",
+          "outcome": "passed",
+          "path": "/admin",
+          "events": [
+            {
+              "ms": 18,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 302,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 1015,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 1214,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 9,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-3",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 14,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 88,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 642,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 721,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 6,
+            "lock_waiters": 0
+          }
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "logins": [
+        {
+          "label": "chat-0",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 39,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 2487,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 2870,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 3137,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 9,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-1",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 11,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 62,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 604,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 686,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 10,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-2",
+          "outcome": "passed",
+          "path": "/admin",
+          "events": [
+            {
+              "ms": 10,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 63,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 507,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 591,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 10,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-3",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 25,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 87,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 822,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 909,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 6,
+            "lock_waiters": 0
+          }
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "logins": [
+        {
+          "label": "chat-0",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 31,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 2796,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 3289,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 3510,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 4,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-1",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 19,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 102,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 943,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 1111,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 7,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-2",
+          "outcome": "passed",
+          "path": "/admin",
+          "events": [
+            {
+              "ms": 9,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 50,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 464,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 549,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 7,
+            "lock_waiters": 0
+          }
+        },
+        {
+          "label": "chat-3",
+          "outcome": "passed",
+          "path": "/dashboard",
+          "events": [
+            {
+              "ms": 16,
+              "event": "request",
+              "path": "/login",
+              "method": "GET"
+            },
+            {
+              "ms": 140,
+              "event": "response",
+              "path": "/login",
+              "status": 200
+            },
+            {
+              "ms": 643,
+              "event": "request",
+              "path": "/api/auth/login",
+              "method": "POST"
+            },
+            {
+              "ms": 730,
+              "event": "response",
+              "path": "/api/auth/login",
+              "status": 200
+            }
+          ],
+          "browser": {
+            "readyState": "complete",
+            "authReady": "unmarked",
+            "submitDisabled": null,
+            "inputValidity": [],
+            "navigationEntries": 1
+          },
+          "cookiePresent": true,
+          "cookieHttpOnly": true,
+          "database": {
+            "sessions": 5,
+            "lock_waiters": 0
+          }
+        }
+      ]
+    }
+  ],
+  "originalLoginAssertionMs": 5000,
+  "changedTimeout": false,
+  "historicalFailuresFullyAttributed": false
+}

@@ -1,0 +1,177 @@
+{
+  "principals": [
+    "migration",
+    "runtime",
+    "mfa",
+    "authorization",
+    "inspection"
+  ],
+  "separateLoginConnections": true,
+  "denials": [
+    {
+      "label": "runtime cannot become migrator",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "mfa cannot become migrator",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "authorization cannot become migrator",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection cannot become migrator",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "schema DDL",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "database schema DDL",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "temporary schema bypass",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "disable trigger",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "replication bypass",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "truncate audit",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "rewrite audit",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "legacy role promotion",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "forge MFA assurance",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "forge passkey",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "forge staff membership",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "forge approval",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "epoch bypass",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "trigger-depth spoofing helper",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "runtime cannot become verifier",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "runtime cannot become protected writer",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "runtime MRT catalogue read-only",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "insert privileged account",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "rewrite assurance history",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "verifier cannot grant role",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "verifier cannot change marketplace role",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "verifier lock-only User",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "verifier lock-only AuthSession",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "verifier lock-only StaffPerson",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "verifier lock-only StaffAccountAssociation",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "ACTIVE remains blocked",
+      "sqlstate": "23514"
+    },
+    {
+      "label": "COMMITTED remains blocked",
+      "sqlstate": "23514"
+    },
+    {
+      "label": "direct epoch mutation blocked",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "history insertion blocked",
+      "sqlstate": "P0001"
+    },
+    {
+      "label": "writer append-only",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection no User",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection no Booking",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection no StaffMfaCredential",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection no StaffMfaAssurance",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection no AdminAuditLog",
+      "sqlstate": "42501"
+    },
+    {
+      "label": "inspection no writes",
+      "sqlstate": "42501"
+    }
+  ],
+  "migrationRowsPreserved": 23,
+  "actualCryptography": true,
+  "actualRuntimeApplication": true,
+  "roleCredentialsPublished": false,
+  "productionProfileActivated": false
+}

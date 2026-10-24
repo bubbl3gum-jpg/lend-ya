@@ -8,6 +8,7 @@ import { openSync, closeSync, readFileSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { chromium, expect, type Page } from "@playwright/test";
+import { loginDiagnostics } from "./support/login-diagnostics";
 import { connectTestDatabase } from "./support/test-database";
 import { prisma } from "../lib/prisma";
 import { claimAnalysis, finishAnalysis, processAnalysis } from "../lib/chat/analysis/jobs";
@@ -203,7 +204,8 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
     await t.test("real two-user browser polling, read indicators, report/block controls and admin case UI",async()=>{
       browser=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true});
       const contexts=await Promise.all([browser.newContext(),browser.newContext(),browser.newContext()]);const pages=await Promise.all(contexts.map(c=>c.newPage()));
-      const login=async(page:Page,actor:Actor)=>{await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(actor.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click();await expect(page).not.toHaveURL(/\/login$/);};
+      let loginNumber=0;
+      const login=async(page:Page,actor:Actor)=>{const save=await loginDiagnostics(page,db,"chat-"+loginNumber++);try{await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(actor.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click();await expect(page).not.toHaveURL(/\/login$/);await save("passed");}catch(error){await save("failed");throw error;}};
       await login(pages[0],owner);await login(pages[1],borrower);await login(pages[2],admin);
       await pages[1].goto(`${base}/listings/${listingId}`);await pages[1].getByRole("button",{name:"Chat with Owner",exact:true}).click();await expect(pages[1]).toHaveURL(`${base}/messages/${cid}`);await pages[0].goto(`${base}/messages/${cid}`);
       const hello=`Browser message ${tag}`;await pages[0].getByLabel("Message",{exact:true}).fill(hello);await pages[0].getByRole("button",{name:"Send message",exact:true}).click();await expect(pages[1].getByText(hello,{exact:true})).toBeVisible({timeout:15000});await pages[1].getByRole("button",{name:"Mark loaded messages read"}).click();

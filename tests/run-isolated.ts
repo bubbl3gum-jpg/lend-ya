@@ -97,6 +97,7 @@ async function main() {
       ) + "\n",
     );
     const legacyGroup = [
+      "database-principals",
       "mfa-migration",
       "mfa",
       "execution-rehearsal",
@@ -118,6 +119,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "database-principals": "tests/database-principals.test.ts",
           "mfa-migration": "tests/mfa-migration.test.ts",
           "mfa": "tests/mfa.test.ts",
           "execution-rehearsal": "tests/execution-rehearsal.test.ts",
@@ -161,7 +163,7 @@ async function main() {
         ]);
       if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
         if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
-        if (["scoped-reads","staff-session","approval","execution-rehearsal","mfa"].includes(legacyGroup??""))
+        if (["scoped-reads","staff-session","approval","execution-rehearsal","mfa","database-principals"].includes(legacyGroup??""))
           await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", standalone]);
         else await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
       } else {
@@ -220,6 +222,8 @@ async function main() {
           throw Error("Isolated app did not become ready; inspect server.log.");
         if (process.argv.includes("--mfa-pilot") || process.argv.includes("--mfa-pilot-disabled") || productionPilot)
           await run(["node_modules/tsx/dist/cli.mjs", "--test", (productionPilot || process.argv.includes("--mfa-pilot-disabled")) ? "tests/mfa-pilot-production.test.ts" : "tests/mfa-pilot.integration.test.ts"]);
+        else if (process.argv.includes("--auth-login-readiness"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/auth-login-readiness.integration.test.ts"]);
         else if (process.argv.includes("--authorization"))
           await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", "tests/authorization.integration.test.ts"]);
         else if (process.argv.includes("--stability"))
