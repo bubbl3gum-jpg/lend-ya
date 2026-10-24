@@ -34,7 +34,9 @@
     "test:authorization": "tsx tests/run-isolated.ts --authorization",
     "test:staff-schema": "tsx tests/run-isolated.ts --staff-schema",
     "test:staff-migration": "tsx tests/run-isolated.ts --staff-migration",
-    "test:scoped-reads": "tsx tests/run-isolated.ts --scoped-reads"
+    "test:scoped-reads": "tsx tests/run-isolated.ts --scoped-reads",
+    "test:staff-session": "tsx tests/run-isolated.ts --staff-session",
+    "test:staff-session-migration": "tsx tests/run-isolated.ts --staff-session-migration"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

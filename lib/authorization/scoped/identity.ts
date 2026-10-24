@@ -78,6 +78,7 @@ export async function inspectPersistedStaffIdentity(
   )
     return deny("NO_ACTIVE_MEMBERSHIP");
   // Even a database with incorrectly relaxed constraints cannot bootstrap access.
-  // StaffSessionBinding, step-up, scoped assignments and audit provenance are absent.
+  // Batch 3C adds pending-only bindings. Verified live session/step-up issuance,
+  // scoped assignments and production audit provenance remain unavailable.
   return deny("STAFF_SESSION_ATTESTATION_NOT_IMPLEMENTED");
 }

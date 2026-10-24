@@ -34,6 +34,7 @@ test(
       );
       await cp("prisma/migrations", migrations, { recursive: true });
       await rm(path.join(migrations, migration), { recursive: true });
+      await rm(path.join(migrations, "20261024140000_staff_session_audit_foundation"), {recursive:true});
       await writeFile(
         config,
         `import {defineConfig} from ${JSON.stringify(path.join(process.cwd(), "node_modules/prisma/config.js"))};export default defineConfig({schema:${JSON.stringify(path.join(process.cwd(), "prisma/schema.prisma"))},migrations:{path:${JSON.stringify(migrations)}},datasource:{url:process.env.DATABASE_URL}});`,

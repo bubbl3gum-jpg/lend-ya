@@ -1,0 +1,362 @@
+{
+  "baseline": "208e297a4ea2bfe337e029d2b5ca88a6436ad2bb",
+  "branch": "feature/trusted-staff-sessions-audit-batch-3c",
+  "date": "2026-10-24 Asia/Taipei",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npx prisma validate",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "tests": 57,
+      "passed": 57,
+      "failed": 0
+    }
+  ],
+  "finalReportedTests": 165,
+  "isolatedSuites": [
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-24T06:09:55.133Z",
+      "end": "2026-10-24T06:09:59.094Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/551caf7cd02b7938e6d56047",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-session"
+    },
+    {
+      "group": "test:staff-session-migration",
+      "start": "2026-10-24T05:58:30.489Z",
+      "end": "2026-10-24T05:58:38.230Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9b34c57a432fe8f2a8757745",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-session-migration"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-24T05:52:27.043Z",
+      "end": "2026-10-24T05:52:54.142Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f086cf0ea63d8c4fffc7c05a",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:authorization"
+    },
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-24T05:52:19.729Z",
+      "end": "2026-10-24T05:52:22.673Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/19b12d896f0eaa8483ed40ad",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-schema"
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-24T05:52:27.040Z",
+      "end": "2026-10-24T05:52:34.511Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/980dca9c47da43343d87480e",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-migration"
+    },
+    {
+      "group": "test:scoped-reads",
+      "start": "2026-10-24T05:52:27.041Z",
+      "end": "2026-10-24T05:52:30.106Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b3c1f502ed23a41fa186c023",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:scoped-reads"
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-24T05:52:54.143Z",
+      "end": "2026-10-24T05:54:05.880Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/858ab4253f09e8669b1db37a",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:admin"
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-24T05:52:54.144Z",
+      "end": "2026-10-24T05:54:16.569Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/fe0b777c1c33b04b39680d4d",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:moderation"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T05:52:54.145Z",
+      "end": "2026-10-24T05:54:41.537Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/cc0a84e0080df35e7c1c3d26",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:chat"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-24T05:54:41.537Z",
+      "end": "2026-10-24T05:55:14.023Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9c0b56d8c724c0cdd2329eb8",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:rental-api"
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-24T05:54:41.538Z",
+      "end": "2026-10-24T05:55:01.175Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b22e7457598badd810c0dddf",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:stability"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-24T05:55:14.057Z",
+      "end": "2026-10-24T05:59:10.859Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f315ebb9c3cc658079117e23",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:meetup"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-24T05:58:30.489Z",
+      "end": "2026-10-24T05:58:42.404Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d42fc11f6633d52610abc7ea",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "command": "npm run build:verify"
+    }
+  ],
+  "databaseSafety": {
+    "newOwnedDisposableOnly": true,
+    "allFinalRunsRemoved": true,
+    "remainingBatch3cDatabases": 0,
+    "historicalMigrationsUnchanged": 20,
+    "newMigrations": 1,
+    "staffProvisionedOutsideOwnedFixtures": 0,
+    "roleActivation": false,
+    "productionDatabaseModified": false
+  },
+  "developmentFailures": [
+    {
+      "stage": "Initial session run",
+      "result": {
+        "group": "test:staff-session",
+        "start": "2026-10-24T05:49:41.258Z",
+        "end": "2026-10-24T05:49:44.243Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/935998cf7a7220aa7df4ef80",
+        "tests": [
+          "\u2139 tests 11"
+        ],
+        "passes": [
+          "\u2139 pass 2"
+        ],
+        "fails": [
+          "\u2139 fail 9"
+        ],
+        "cleanup": true
+      },
+      "cause": "PL/pgSQL session_user variable collided with built-in SESSION_USER name type; renamed bound_account_id.",
+      "resolved": true
+    },
+    {
+      "stage": "Intermediate scope-guard trial",
+      "exit": 1,
+      "artifact": ".test-artifacts/0aca39f0824bec5c4a669c68",
+      "cause": "An incomplete case-scope guard edit left needsCase undefined. Read failed and pause stalled; worker terminated. Added failure-aware pause and a 30-second test bound.",
+      "cleanupVerified": true,
+      "countsReliable": false,
+      "loggingNote": "An overlapping filename mixed this terminated trial with later output. Aggregate counts from that shared log are not used.",
+      "resolved": true
+    },
+    {
+      "stage": "Expiry fixture retry",
+      "result": {
+        "group": "test:staff-session",
+        "start": "2026-10-24T05:50:41.859Z",
+        "end": "2026-10-24T05:50:45.642Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/f246d75224370d50022c196e",
+        "tests": [
+          "\u2139 tests 11"
+        ],
+        "passes": [
+          "\u2139 pass 9"
+        ],
+        "fails": [
+          "\u2139 fail 2"
+        ],
+        "cleanup": true
+      },
+      "cause": "Raw SELECT pg_sleep returned void unsupported by Prisma decoder; now selects integer constant from pg_sleep.",
+      "resolved": true
+    },
+    {
+      "stage": "Type check of production-refusal fixture",
+      "command": "npx tsc --noEmit",
+      "exit": 2,
+      "cause": "Next declares NODE_ENV readonly; fixture uses Reflect to mutate/restore its own environment.",
+      "resolved": true
+    }
+  ],
+  "retryPolicy": "Targeted session/migration/build runs repeated after SQL constraints, attribution, session-birth and isolated-ownership changes; all final results above passed. Final application regression suites and unit tests passed.",
+  "cleanupEvidence": {
+    "abortedRunArtifact": ".test-artifacts/0aca39f0824bec5c4a669c68/run.json",
+    "abortedRunPreserved": false,
+    "maintenanceCatalogCount": 0
+  },
+  "meetupAssessment": "One complete final run passed all 9 reported tests, including synthetic camera/two mobile browser sessions; historical flakiness is not claimed eliminated. No validation weakened.",
+  "confirmedRemainingBlockers": [
+    "No production MFA verifier or live staff-session issuer.",
+    "No complete production assignment/alias/conflict/evidence-purpose adapters.",
+    "No independently protected production human-attributable audit writer or runtime/migration privilege separation.",
+    "DB owners/superusers can bypass triggers and forge structurally matching inserts.",
+    "Global writer lock ordering, deadlock/load/cache/transport review, retention and account correction remain activation prerequisites."
+  ],
+  "scope": "Pending records and isolated shadow transactions only; no operational powers, approvals, UI wiring, AI, payments, release push, merge or deployment."
+}
