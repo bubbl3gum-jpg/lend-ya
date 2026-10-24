@@ -812,6 +812,8 @@ model StaffStepUpRecord {
   bindings StaffSessionBinding[]
 }
 model StaffSessionBinding {
+  changeRequests StaffChangeRequest[]
+  reviewDecisions StaffApprovalDecision[]
   id String @id @default(uuid()) @db.Uuid
   authSessionId Int
   authSessionCreatedAt DateTime @db.Timestamp(3)
@@ -853,4 +855,95 @@ model StaffSecurityEvent {
   binding StaffSessionBinding? @relation(fields:[bindingId],references:[id],onDelete:Restrict,onUpdate:Restrict)
   @@index([correlationId])
   @@index([personId,createdAt])
+}
+
+// Batch 4A: inactive proposal/decision history. No execution receipt or executor.
+enum StaffChangeState {
+  DRAFT
+  SUBMITTED
+  REJECTED
+  CANCELLED
+  EXPIRED
+  STALE
+  APPROVED
+  EXECUTED
+}
+enum StaffReviewRuling {
+  REJECT
+  SHADOW_ELIGIBLE
+  APPROVE
+}
+model StaffChangeRequest {
+  id String @id @default(uuid()) @db.Uuid
+  requesterBindingId String @db.Uuid
+  requesterPersonId String @db.Uuid
+  requesterUserId Int
+  action String @db.VarChar(100)
+  approvalAction String @db.VarChar(100)
+  risk String @default("HIGH") @db.VarChar(16)
+  resourceKind String @db.VarChar(32)
+  idempotencyKey String @db.Uuid
+  correlationId String @unique @db.Uuid
+  currentRevision Int @default(0)
+  state StaffChangeState @default(DRAFT)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  requesterBinding StaffSessionBinding @relation(fields:[requesterBindingId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  revisions StaffChangeRevision[]
+  decisions StaffApprovalDecision[]
+  transitions StaffChangeTransition[]
+  @@unique([requesterPersonId,idempotencyKey])
+}
+model StaffChangeRevision {
+  requestId String @db.Uuid
+  revision Int
+  resourceId String @db.VarChar(128)
+  audience String @db.VarChar(16)
+  resourceVersion BigInt
+  evidenceVersion BigInt
+  policyVersion String @db.VarChar(80)
+  approvalPolicyVersion String @db.VarChar(80)
+  requesterAuthorizationVersion BigInt
+  payloadRef String @db.Uuid
+  payloadDigest String @db.VarChar(64)
+  payloadHash String @db.VarChar(64)
+  canonicalManifest String @db.VarChar(4096)
+  reasonRef String @db.Uuid
+  reasonCode String @db.VarChar(32)
+  evidenceRefs String[] @db.Uuid
+  expiresAt DateTime @db.Timestamp(3)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  request StaffChangeRequest @relation(fields:[requestId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  decisions StaffApprovalDecision[]
+  @@id([requestId,revision])
+  @@unique([requestId,revision,payloadHash])
+}
+model StaffApprovalDecision {
+  id String @id @default(uuid()) @db.Uuid
+  requestId String @db.Uuid
+  revision Int
+  payloadHash String @db.VarChar(64)
+  reviewerBindingId String @db.Uuid
+  reviewerPersonId String @db.Uuid
+  reviewerUserId Int
+  reviewerAuthorizationVersion BigInt
+  ruling StaffReviewRuling
+  rationaleRef String @db.Uuid
+  rationaleCode String @db.VarChar(32)
+  idempotencyKey String @unique @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  request StaffChangeRequest @relation(fields:[requestId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  evaluatedRevision StaffChangeRevision @relation(fields:[requestId,revision,payloadHash],references:[requestId,revision,payloadHash],onDelete:Restrict,onUpdate:Restrict)
+  reviewerBinding StaffSessionBinding @relation(fields:[reviewerBindingId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  @@unique([requestId,revision])
+}
+model StaffChangeTransition {
+  id BigInt @id @default(autoincrement())
+  requestId String @db.Uuid
+  previousState String @db.VarChar(16)
+  newState String @db.VarChar(16)
+  previousRevision Int
+  newRevision Int
+  databaseActor String @default(dbgenerated("CURRENT_USER")) @db.VarChar(63)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  request StaffChangeRequest @relation(fields:[requestId],references:[id],onDelete:Restrict,onUpdate:Restrict)
 }

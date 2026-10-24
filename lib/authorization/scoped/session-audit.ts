@@ -253,6 +253,7 @@ async function lock(
   tx: Prisma.TransactionClient,
   actor: PendingActor,
   target: Selection,
+  allGrants = false,
 ) {
   // Follow legacy grant -> membership -> association -> person -> epoch order;
   // keep mutable session/attestation/binding rows shared-locked until commit too.
@@ -260,7 +261,7 @@ async function lock(
   await tx.$queryRaw`SELECT id FROM "User" WHERE id=${actor.session.userId} FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffSessionBinding" WHERE id=${actor.binding.id}::uuid FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffStepUpRecord" WHERE id=${actor.binding.stepUpId}::uuid FOR SHARE`;
-  await tx.$queryRaw`SELECT id FROM "StaffCapabilityGrant" WHERE "membershipId"=${actor.binding.membershipId}::uuid AND action=${target.action} AND "resourceId"=${target.resourceId} ORDER BY id FOR SHARE`;
+  await tx.$queryRaw`SELECT id FROM "StaffCapabilityGrant" WHERE "membershipId"=${actor.binding.membershipId}::uuid AND (${allGrants} OR (action=${target.action} AND "resourceId"=${target.resourceId})) ORDER BY id FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffMembership" WHERE id=${actor.binding.membershipId}::uuid FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffAccountAssociation" WHERE id=${actor.binding.associationId}::uuid FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffPerson" WHERE id=${actor.personId}::uuid FOR SHARE`;
@@ -389,4 +390,51 @@ export function createPendingSessionAudit(
       }
     },
   });
+}
+
+/** Attribution-only seam for later inactive foundations. Not a staff permit,
+ * validated MFA credential, or authorization to use any grant. */
+export async function resolvePendingFoundationActor(
+  tx: Prisma.TransactionClient,
+  credential: string | null,
+  lockForFoundation = false,
+) {
+  let actor = await load(tx, credential);
+  if (actor && lockForFoundation) {
+    await lock(
+      tx,
+      actor,
+      {
+        action: "",
+        resourceId: null,
+        resourceKind: "UNKNOWN",
+        caseId: null,
+        evidenceId: null,
+      },
+      true,
+    );
+    actor = await load(tx, credential);
+  }
+  if (!actor) return null;
+  return Object.freeze({
+    authorized: false as const,
+    personId: actor.personId,
+    userId: actor.session.userId,
+    bindingId: actor.binding.id,
+    membershipId: actor.binding.membershipId,
+    role: actor.binding.membership.role,
+    authorizationVersion: actor.epoch,
+    policyVersion: actor.binding.policyVersion,
+    expiresAt: Math.min(
+      actor.session.expiresAt.getTime(),
+      actor.binding.expiresAt.getTime(),
+      actor.binding.membership.expiresAt.getTime(),
+    ),
+    grants: actor.binding.membership.grants,
+  });
+}
+export async function assertOwnedFoundationFixture(
+  tx: Prisma.TransactionClient,
+) {
+  await ownedShadowFixture(tx);
 }

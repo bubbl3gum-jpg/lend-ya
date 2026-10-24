@@ -97,6 +97,8 @@ async function main() {
       ) + "\n",
     );
     const legacyGroup = [
+      "approval-migration",
+      "approval",
       "staff-session-migration",
       "staff-session",
       "scoped-reads",
@@ -113,6 +115,8 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "approval-migration": "tests/approval-migration.test.ts",
+          "approval": "tests/approval.test.ts",
           "staff-session-migration": "tests/staff-session-migration.test.ts",
           "staff-session": "tests/staff-session.test.ts",
           "scoped-reads": "tests/scoped-reads.test.ts",
@@ -141,7 +145,7 @@ async function main() {
     if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (!["admin-migration","meetup-migration","staff-migration","staff-session-migration"].includes(legacyGroup??""))
+      if (!["admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",
@@ -151,7 +155,7 @@ async function main() {
         ]);
       if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
         if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
-        if (["scoped-reads","staff-session"].includes(legacyGroup??""))
+        if (["scoped-reads","staff-session","approval"].includes(legacyGroup??""))
           await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", standalone]);
         else await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
       } else {

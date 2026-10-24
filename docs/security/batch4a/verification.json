@@ -1,0 +1,367 @@
+{
+  "baseline": "9998e5be836b79530cabf32bb75981e4daf6223e",
+  "branch": "feature/independent-approval-foundation-batch-4a",
+  "date": "2026-10-24 Asia/Taipei",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "postgres": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npx prisma validate",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "tests": 57,
+      "passed": 57,
+      "failed": 0
+    }
+  ],
+  "finalReportedTests": 187,
+  "isolatedSuites": [
+    {
+      "group": "test:approval",
+      "start": "2026-10-24T08:32:42.545Z",
+      "end": "2026-10-24T08:32:51.911Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3186694ec5cfcfaddf24761d",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:approval"
+    },
+    {
+      "group": "test:approval-migration",
+      "start": "2026-10-24T08:24:16.762Z",
+      "end": "2026-10-24T08:24:24.423Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c1c733e9abe82c1213a347fc",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:approval-migration"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-24T08:20:39.044Z",
+      "end": "2026-10-24T08:21:24.288Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/92c29c29730cd993bcfd4db0",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:authorization"
+    },
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-24T08:20:22.230Z",
+      "end": "2026-10-24T08:20:25.275Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/12d028483a133866df89c5b4",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-schema"
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-24T08:20:22.232Z",
+      "end": "2026-10-24T08:20:30.175Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ded66e7c5e8895b7606f201d",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-migration"
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-24T08:20:30.313Z",
+      "end": "2026-10-24T08:20:35.610Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7dbc0ee46d68cda412099d65",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-session"
+    },
+    {
+      "group": "test:staff-session-migration",
+      "start": "2026-10-24T08:20:30.314Z",
+      "end": "2026-10-24T08:20:39.044Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/355585498dbc8ae3535ba2eb",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-session-migration"
+    },
+    {
+      "group": "test:scoped-reads",
+      "start": "2026-10-24T08:20:30.315Z",
+      "end": "2026-10-24T08:20:34.191Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/96e1281bbb41afeb69710d66",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:scoped-reads"
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-24T08:20:39.045Z",
+      "end": "2026-10-24T08:21:47.856Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2c1698d20b577222220ab4a3",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:admin"
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-24T08:20:39.046Z",
+      "end": "2026-10-24T08:21:56.840Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/49f3b3b14de7065a72cd0cb1",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:moderation"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T08:21:56.840Z",
+      "end": "2026-10-24T08:23:26.855Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b0520c3b4708f76f88beba50",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:chat"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-24T08:21:56.841Z",
+      "end": "2026-10-24T08:22:34.891Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/39405cab7254649b26b46b79",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:rental-api"
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-24T08:21:56.842Z",
+      "end": "2026-10-24T08:22:16.691Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/10c13e707a136f633c4acdb7",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:stability"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-24T08:23:38.854Z",
+      "end": "2026-10-24T08:27:32.530Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7b200b93b72a88bb30234877",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:meetup"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-24T08:32:42.547Z",
+      "end": "2026-10-24T08:32:54.179Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/fe7ad3d8e12875111e0c8c38",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "command": "npm run build:verify"
+    }
+  ],
+  "databaseSafety": {
+    "newOwnedDisposableOnly": true,
+    "allFinalRunsRemoved": true,
+    "remainingBatch4aDatabases": 0,
+    "historicalMigrationsUnchanged": 21,
+    "newMigrations": 1,
+    "newStaffOrApprovalRowsSeededByMigration": 0,
+    "productionPolicyActivation": false,
+    "executorImplemented": false,
+    "realApplicationDatabaseModified": false
+  },
+  "developmentFailures": [
+    {
+      "stage": "Content-digest fixture DDL",
+      "result": {
+        "group": "test:approval",
+        "start": "2026-10-24T08:24:16.760Z",
+        "end": "2026-10-24T08:24:20.092Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/c5862f25d245c3c449ebcaa3",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 0"
+        ],
+        "fails": [
+          "\u2139 fail 1"
+        ],
+        "cleanup": true
+      },
+      "cause": "Generated digest expression was not accepted as immutable. Test-only store now computes digest on insertion, verifies via CHECK and forbids mutation.",
+      "resolved": true
+    },
+    {
+      "stage": "Build after content-digest extension",
+      "command": "npm run build:verify",
+      "exit": 1,
+      "start": "2026-10-24T08:24:16.763Z",
+      "end": "2026-10-24T08:24:27.186Z",
+      "artifact": ".test-artifacts/f258fd6a6fa461b510290120",
+      "cleanup": true,
+      "cause": "ApprovalFixtureBoundary.resource return type omitted payloadDigest. Interface corrected; final TypeScript and build passed.",
+      "resolved": true
+    }
+  ],
+  "retries": "Initial proposal run passed 15 tests; expanded runs passed 18. Targeted approval/migration/build checks repeated after digest, prior-reviewer and final-check changes. Final application suites all passed; no camera retry or weakened validation.",
+  "meetupAssessment": "One complete run passed 9 reported tests including two mobile browser sessions and synthetic-camera QR. Historical flakiness is not claimed eliminated.",
+  "productionReadiness": "Every action is denied pending product-approved policies. PENDING step-up and VERIFIED_FIXTURE assurance are not live MFA. APPROVED/EXECUTED/APPROVE remain database-blocked; no receipt/executor.",
+  "limitations": [
+    "Legacy direct Admin operations remain outside approval enforcement.",
+    "Production payload/reason/evidence storage, assignments/conflict lineage, live human assurance and protected audit writer remain absent.",
+    "Database-owner bypass and global lock/revocation/external-store consistency need independent review before activation.",
+    "Retention, quorum/TTL/prior-reviewer taxonomy and role/executor allocations remain product decisions."
+  ]
+}
