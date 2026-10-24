@@ -1,0 +1,124 @@
+{
+  "label": "own-session-mobile",
+  "outcome": "passed-admin-login-security-reload",
+  "path": "OTHER",
+  "events": [
+    {
+      "ms": 97,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 440,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 451,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 1468,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 1785,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 1939,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 1953,
+      "event": "request",
+      "path": "/admin",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2181,
+      "event": "response",
+      "path": "/admin",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2244,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 3003,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 3552,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 3772,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 4195,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 4236,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 4861,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 4941,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "unmarked",
+    "submitDisabled": null,
+    "inputValidity": [],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 2,
+    "lock_waiters": 0
+  }
+}

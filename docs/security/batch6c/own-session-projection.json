@@ -1,0 +1,13 @@
+{
+  "fields": [
+    "status",
+    "createdAt",
+    "expiresAt",
+    "passkeyStatus"
+  ],
+  "status": "AUTHENTICATED",
+  "passkeyStatus": "UNAVAILABLE",
+  "foreignCanariesAbsent": true,
+  "sessionUnmodified": true,
+  "cachePrivateNoStore": true
+}

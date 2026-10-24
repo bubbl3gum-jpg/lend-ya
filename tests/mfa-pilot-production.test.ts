@@ -45,6 +45,18 @@ test(
       });
       assert.equal(overview.status, 200);
       assert.ok(!(await overview.text()).includes('href="/admin/security"'));
+      // The production-safe read route is separate from every pilot surface.
+      const own = await fetch(base + "/api/admin/account-security", { headers: { Cookie: cookie } });
+      assert.equal(own.status, 200);
+      assert.match(own.headers.get("cache-control") ?? "", /private, no-store/);
+      const ownSummary = await own.json();
+      assert.deepEqual(Object.keys(ownSummary).sort(), ["createdAt", "expiresAt", "passkeyStatus", "status"]);
+      assert.equal(ownSummary.passkeyStatus, "UNAVAILABLE");
+      const ownPage = await fetch(base + "/admin/account-security", { headers: { Cookie: cookie } });
+      assert.equal(ownPage.status, 200);
+      assert.match(ownPage.headers.get("cache-control") ?? "", /no-store/);
+      if (process.env.NODE_ENV === "production") assert.match(ownPage.headers.get("cache-control") ?? "", /private/);
+      assert.ok((await ownPage.text()).includes("Passkey status unavailable here"));
       for (const table of [
         "StaffMfaCredential",
         "StaffMfaChallenge",

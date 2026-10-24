@@ -1,0 +1,13 @@
+{
+  "baseline": "d9bac9c0d6f5d867ba2a365874b9e3ea64246e62",
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/account-security/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "readOwnAdminSession (cookie-derived valid session, ACTIVE legacy ADMIN)",
+      "sha256": "d1676c77028e17fcd6a2c06ab2f9620e3d0cadde93e173078ab99a0e6c0a8cd4"
+    }
+  ]
+}

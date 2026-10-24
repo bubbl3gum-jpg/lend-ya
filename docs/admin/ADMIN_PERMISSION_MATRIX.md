@@ -3,6 +3,8 @@
 Date: 24 October 2026 (Asia/Taipei). Proposed policy; not implemented.
 Baseline: `feature/temporary-local-meetup-testing`, `cf215e0bdda92d7874329f16102c2a9ebd20a1be` (local and remote match).
 
+**Batch 6C product approval:** Operations Staff may use `listings.read` only for exactly granted listing IDs, limited to `id`, `status`, `category`, and `adminRestricted`, under authenticated and audited access. This narrow policy is approved; runtime staff activation is not. All other allocations retain their existing approval status.
+
 Related: [blueprint](ADMIN_CONTROL_CENTER_BLUEPRINT_V1.md), [gaps](ADMIN_GAP_ANALYSIS.md), [roadmap](ADMIN_IMPLEMENTATION_ROADMAP.md).
 
 ## 1. Policy vocabulary
@@ -20,7 +22,7 @@ A value with S also applies to SA. Case access is not automatic just because sta
 
 ## 2. Action matrix
 
-Every identifier below is a proposed server-side action/capability, not a route or permission that exists today. P/A rights must be split into separate `.request` and `.approve` checks in implementation; D never implies approval rights.
+Except for the explicitly approved OPS read scope above, every identifier below is a proposed server-side action/capability, not a route or permission that exists today. P/A rights must be split into separate `.request` and `.approve` checks in implementation; D never implies approval rights.
 
 | Capability / action | SA | OPS | SUP | MOD | Scope / risk / condition |
 |---|---|---|---|---|---|
@@ -35,7 +37,7 @@ Every identifier below is a proposed server-side action/capability, not a route 
 | `disputes.resolution` | P/A | — | P | — | SUP recommendation; distinct SA approval; original domain evidence gates remain |
 | `custody_incidents.recommend` | P | P | P | — | Requires separately approved pending-handoff recovery policy |
 | `custody_incidents.resolution` | P/A | — | P | — | No fabricated party consent, checklist, location or return record |
-| `listings.read` | D | D | S | S | Private data projection separately scoped |
+| `listings.read` | D | S | S | S | OPS: approved exact-ID grants and four-field projection only, authenticated and audited; other allocations remain proposed |
 | `listings.restrict` | D | D | P | D | Approved safety/report policy, documented reason, version and audit; MOD case-scoped |
 | `listings.restore` | D | D | — | D | Within policy/case; cannot remove other effective restrictions |
 | `listing_reports.review` | S | S | — | S | Claim/assignment and original evidence; no blanket private-chat access |

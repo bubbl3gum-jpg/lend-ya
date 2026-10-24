@@ -21,7 +21,10 @@ export const adminNavigationGroups = [
   },
   {
     label: "System",
-    links: [{ href: "/admin/audit-logs", label: "Audit Logs" }],
+    links: [
+      { href: "/admin/account-security", label: "Security overview" },
+      { href: "/admin/audit-logs", label: "Audit Logs" },
+    ],
   },
 ];
 export const adminLinks = adminNavigationGroups.flatMap((group) => group.links);
@@ -36,7 +39,7 @@ export function AdminNavigation({ passkeyPilot = false }: { passkeyPilot?: boole
           </p>
           <ul className="space-y-1">
             {(group.label === "System" && passkeyPilot
-              ? [{ href: "/admin/security", label: "Security" }, ...group.links] : group.links).map((link) => {
+              ? [{ href: "/admin/security", label: "Passkey pilot" }, ...group.links] : group.links).map((link) => {
               const active =
                 pathname === link.href ||
                 (link.href !== "/admin" &&
@@ -78,7 +81,7 @@ export function AdminBreadcrumbs() {
               ? "Administration"
               : /^\d+$/.test(part)
                 ? `#${part}`
-                : part[0].toUpperCase() + part.slice(1)}
+                : part === "account-security" ? "Security overview" : part[0].toUpperCase() + part.slice(1)}
           </Link>
         </span>
       ))}

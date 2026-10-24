@@ -347,7 +347,9 @@ test("production source never imports shadow policy and all Admin API routes rem
       );
   const inventory = JSON.parse(
     readFileSync("docs/admin/LEGACY_ADMIN_ENTRYPOINTS_BATCH_2B.json", "utf8"),
-  ).adminApiRoutes as { file: string; sha256: string }[];
+  ).adminApiRoutes.concat(JSON.parse(
+    readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_6C.json", "utf8"),
+  ).adminApiRoutes) as { file: string; sha256: string }[];
   assert.deepEqual(
     files("app/api/admin")
       .filter((file) => file.endsWith("route.ts"))
@@ -365,7 +367,7 @@ test("production source never imports shadow policy and all Admin API routes rem
   ))
     assert.match(
       readFileSync(file, "utf8"),
-      /adminApi|adminMutation|chatApi|readDisputeEvidence/,
+      /adminApi|adminMutation|chatApi|readDisputeEvidence|readOwnAdminSession/,
       file,
     );
 });

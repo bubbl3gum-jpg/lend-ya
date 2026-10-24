@@ -1,0 +1,21 @@
+{
+  "unit": {
+    "exit": 1,
+    "tests": 60,
+    "passed": 59,
+    "failed": 1,
+    "cause": "New route absent from frozen route inventory; original historical hashes retained and supplemental inventory added."
+  },
+  "ownSessionHeaderAssumptions": [
+    "Development HTML is framework-owned no-store, not private, no-store.",
+    "Framework HTML Vary contains RSC keys, not Cookie; API still requires Cookie variation and private/no-store. Production HTML is checked for private/no-store."
+  ],
+  "executionRehearsal": {
+    "sqlstate": "40P01",
+    "cause": "Existing deadlock test observed peer transaction aborted; victim-selection intermittence, unchanged fixture."
+  },
+  "adminColdNavigation": {
+    "timeoutMs": 12000,
+    "phase": "Initial page.goto(/login), before credential submission; no successful-login failure inferred."
+  }
+}

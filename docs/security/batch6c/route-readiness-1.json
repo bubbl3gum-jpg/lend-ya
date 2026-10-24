@@ -1,0 +1,17 @@
+[
+  {
+    "path": "/login",
+    "status": 200,
+    "ms": 1390
+  },
+  {
+    "path": "/dashboard",
+    "status": 200,
+    "ms": 5228
+  },
+  {
+    "path": "/admin",
+    "status": 307,
+    "ms": 3209
+  }
+]

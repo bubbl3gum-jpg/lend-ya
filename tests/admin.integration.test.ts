@@ -832,6 +832,7 @@ test(
                 "/admin/reports",
                 "/admin/users",
                 "/admin/chat",
+                "/admin/account-security",
                 "/admin/audit-logs",
               ],
             );

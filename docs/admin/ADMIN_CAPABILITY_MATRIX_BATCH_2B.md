@@ -1,5 +1,8 @@
 # Batch 2B capability-to-role contract matrix
 
+**Batch 6C approval overlay (documentation only):** Product approved Operations `listings.read` for exactly granted listing IDs and only `id`, `status`, `category`, `adminRestricted`, with authenticated and audited access. The historical shadow registry/table below is unchanged; its proposed label is not the current decision status for this narrow allocation. No staff activation is authorized; all other unresolved policy decisions remain unresolved.
+
+
 24 October 2026 (Asia/Taipei). **Inactive candidate policy, not staff grants.** Source: `lib/authorization/registry.ts`; earlier broad planning matrix remains historical proposed input.
 
 C = role-level authority expressly confirmed by product rules, still inactive and requiring approved domain policy plus exact scope. P = proposed allocation requiring product approval before activation. B = blocked for every role until product policy/allocation is approved. — = denied. A MATCH in shadow is never permission, proposal approval or execution. All rows require active verified human membership, current session/version and exact server-loaded resource grants.
