@@ -1,0 +1,269 @@
+{
+  "baseline": "c017ca878da65d44059988067ef6263448bd9875",
+  "historicalMigrations": [
+    {
+      "path": "prisma/migrations/20261002105848_init/migration.sql",
+      "sha256": "10d15eda85c796155df0213be9f6916d5b8b044b7d6079a0475c3cb3e8325f12",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261002110330_set_currency_precision/migration.sql",
+      "sha256": "2a46f73e2b0025bf252ef9e1f24f1b55ec72bf7fa426d8416db989822ed5bee6",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261002112754_add_auth_sessions/migration.sql",
+      "sha256": "3ee297957335154d7bf9f080a23ebfa3013e7120747869fa9bbda20f4d4bd5d9",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261002130231_add_transaction_handoffs/migration.sql",
+      "sha256": "5289b9110c3270feaaab010a965c351bc0904758aa70457d8eabb02941c9d2c5",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261006150000_booking_lifecycle_backbone/migration.sql",
+      "sha256": "80262e1a4bd4eb60fd97b582cf260bbadf97ca3e21870f498a5d4b61b14032b9",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261012120000_physical_listing_media_reports/migration.sql",
+      "sha256": "f13e3e6ab87d263196913ac9fc641f4dba9577625d1e5db8c89bc3ffddc7e031",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261012150000_trust_profiles/migration.sql",
+      "sha256": "5473ab2ad6b4f2721f1cd74cb61627dd83b8828eea24dfeecccf2f05f688a992",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261013080000_booking_cancellation/migration.sql",
+      "sha256": "854951df0c137141ddc190e606cffc992454057d7f28067503bc9643f067c050",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261013100000_private_rental_evidence/migration.sql",
+      "sha256": "0cacf72d9e91589c37f50a0342d004c8112177aed62c42193359fc175db0dc90",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261014010000_admin_moderation/migration.sql",
+      "sha256": "a5e0281f999bf62a7f061808dad02f935c4cdf68e4db974e1b51ff11d128be60",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261014020000_dispute_case_history/migration.sql",
+      "sha256": "488af1cc7cc05398c282abf6a621b21ae16810361a4b7326d240bf87171e9cde",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261014030000_mvp_security/migration.sql",
+      "sha256": "741a48d67c33158a127ac9ff13122330a04cb32fba105e62bde252c03d77e00f",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261016100000_official_mrt_stations/migration.sql",
+      "sha256": "944d20a67d5fc19b31a36fc144d147d5b86b509abef376d1ec4ba596f4f374d1",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261019090000_booking_request_idempotency/migration.sql",
+      "sha256": "2b025ecdf2aeae96c43fa8b498ed839be74b869e3e89faade5ce6c6546b751e0",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261019120000_private_chat_safety/migration.sql",
+      "sha256": "935358d65c8db5af17acd2236dc6579accd673a9bf03aad9454ca71849eb20f2",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261019150000_chat_activity_order/migration.sql",
+      "sha256": "85f230192eee6c04855c769cec3e14a3a61db262fe2dcc7cb2b4b2937d9c506a",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261019180000_chat_shadow_analysis/migration.sql",
+      "sha256": "0a4efe6f568c0a126eb7d2f2432e896698f9f813782f88a67857f377d6fd5328",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261019210000_mrt_meetup_verification/migration.sql",
+      "sha256": "719f53fbb9f537d2d94889623983441775eda9d95fe102e334b37059ca04b8e5",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261020090000_meetup_confirmation_window/migration.sql",
+      "sha256": "02249b7a98c1aa9e356d81094967dceaa9ec32009503be81ec6a3b4a56b55e21",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261024090000_staff_identity_foundation/migration.sql",
+      "sha256": "06b35cf9ef131285d5fc156efa4bd49f68b3a4b83044d9b54dba7ac8835f5b73",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261024140000_staff_session_audit_foundation/migration.sql",
+      "sha256": "cb6687e3718c3afb6f804e2b8d2f2050550fb6625757e0b0d955560525f9ed87",
+      "unchanged": true
+    },
+    {
+      "path": "prisma/migrations/20261024160000_independent_approval_foundation/migration.sql",
+      "sha256": "b3a19f7bc03e7859988e991cab868575b9fe5b5b726eca55fd8443442f5a2231",
+      "unchanged": true
+    }
+  ],
+  "unchangedApplicationFiles": [
+    "app/account/activity/page.tsx",
+    "app/account/layout.tsx",
+    "app/account/page.tsx",
+    "app/account/verification/page.tsx",
+    "app/admin/audit-logs/page.tsx",
+    "app/admin/bookings/[id]/page.tsx",
+    "app/admin/bookings/page.tsx",
+    "app/admin/chat/[id]/page.tsx",
+    "app/admin/chat/page.tsx",
+    "app/admin/disputes/[id]/page.tsx",
+    "app/admin/disputes/page.tsx",
+    "app/admin/error.tsx",
+    "app/admin/layout.tsx",
+    "app/admin/listings/[id]/page.tsx",
+    "app/admin/listings/page.tsx",
+    "app/admin/loading.tsx",
+    "app/admin/page.tsx",
+    "app/admin/reports/[id]/page.tsx",
+    "app/admin/reports/page.tsx",
+    "app/admin/users/[id]/page.tsx",
+    "app/admin/users/page.tsx",
+    "app/api/account/route.ts",
+    "app/api/admin/audit-logs/route.ts",
+    "app/api/admin/bookings/[id]/route.ts",
+    "app/api/admin/bookings/route.ts",
+    "app/api/admin/chat/cases/[id]/claim/route.ts",
+    "app/api/admin/chat/cases/[id]/decision/route.ts",
+    "app/api/admin/chat/cases/[id]/route.ts",
+    "app/api/admin/chat/cases/route.ts",
+    "app/api/admin/disputes/[id]/evidence/[photoId]/route.ts",
+    "app/api/admin/disputes/[id]/resolve/route.ts",
+    "app/api/admin/disputes/[id]/route.ts",
+    "app/api/admin/disputes/route.ts",
+    "app/api/admin/listings/[id]/moderation/route.ts",
+    "app/api/admin/listings/[id]/route.ts",
+    "app/api/admin/listings/route.ts",
+    "app/api/admin/overview/route.ts",
+    "app/api/admin/reports/[id]/resolve/route.ts",
+    "app/api/admin/reports/[id]/route.ts",
+    "app/api/admin/reports/route.ts",
+    "app/api/admin/users/[id]/route.ts",
+    "app/api/admin/users/[id]/status/route.ts",
+    "app/api/admin/users/route.ts",
+    "app/api/auth/forgot-password/route.ts",
+    "app/api/auth/login/route.ts",
+    "app/api/auth/logout/route.ts",
+    "app/api/auth/me/route.ts",
+    "app/api/auth/register/route.ts",
+    "app/api/bookings/[id]/dispute/route.ts",
+    "app/api/bookings/[id]/evidence/[photoId]/route.ts",
+    "app/api/bookings/[id]/handoff/route.ts",
+    "app/api/bookings/[id]/inspection/route.ts",
+    "app/api/bookings/[id]/meetup/[operation]/route.ts",
+    "app/api/bookings/[id]/return/route.ts",
+    "app/api/bookings/[id]/reviews/route.ts",
+    "app/api/bookings/[id]/route.ts",
+    "app/api/bookings/route.ts",
+    "app/api/chat/cases/[id]/appeal/route.ts",
+    "app/api/chat/cases/route.ts",
+    "app/api/conversations/[id]/block/route.ts",
+    "app/api/conversations/[id]/coordination/route.ts",
+    "app/api/conversations/[id]/messages/route.ts",
+    "app/api/conversations/[id]/read/route.ts",
+    "app/api/conversations/[id]/report/route.ts",
+    "app/api/conversations/route.ts",
+    "app/api/listing-media/[filename]/route.ts",
+    "app/api/listings/[id]/report/route.ts",
+    "app/api/listings/[id]/route.ts",
+    "app/api/listings/route.ts",
+    "app/bookings/[id]/error.tsx",
+    "app/bookings/[id]/loading.tsx",
+    "app/bookings/[id]/page.tsx",
+    "app/customer-service/page.tsx",
+    "app/dashboard/error.tsx",
+    "app/dashboard/loading.tsx",
+    "app/dashboard/page.tsx",
+    "app/favicon.ico",
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/listings/[id]/edit/page.tsx",
+    "app/listings/[id]/page.tsx",
+    "app/listings/new/page.tsx",
+    "app/listings/page.tsx",
+    "app/login/page.tsx",
+    "app/messages/[id]/page.tsx",
+    "app/messages/page.tsx",
+    "app/page.tsx",
+    "app/profile/[userId]/page.tsx",
+    "app/register/page.tsx",
+    "lib/admin/auth.ts",
+    "lib/admin/cases.ts",
+    "lib/admin/data.ts",
+    "lib/admin/evidence.ts",
+    "lib/admin/mutations.ts",
+    "lib/admin/query.ts",
+    "lib/api-response.ts",
+    "lib/api-validation.ts",
+    "lib/auth-rate-limit.ts",
+    "lib/auth-request.ts",
+    "lib/auth.ts",
+    "lib/authorization/approvals/candidate.ts",
+    "lib/authorization/approvals/execution-contracts.ts",
+    "lib/authorization/approvals/service.ts",
+    "lib/authorization/policy.ts",
+    "lib/authorization/registry.ts",
+    "lib/authorization/scoped/identity.ts",
+    "lib/authorization/scoped/reads.ts",
+    "lib/authorization/scoped/session-audit.ts",
+    "lib/authorization/server.ts",
+    "lib/booking-evidence.ts",
+    "lib/booking-time.ts",
+    "lib/chat/analysis/cloud.ts",
+    "lib/chat/analysis/jobs.ts",
+    "lib/chat/analysis/provider.ts",
+    "lib/chat/config.ts",
+    "lib/chat/evaluation.ts",
+    "lib/chat/http.ts",
+    "lib/chat/moderation.ts",
+    "lib/chat/policy.ts",
+    "lib/chat/service.ts",
+    "lib/database-conflicts.ts",
+    "lib/disposable-database-url.ts",
+    "lib/listing-input.ts",
+    "lib/listing-media.ts",
+    "lib/listing-options.ts",
+    "lib/listing-status.ts",
+    "lib/marketplace-permissions.ts",
+    "lib/meetup/config.ts",
+    "lib/meetup/location.ts",
+    "lib/meetup/service.ts",
+    "lib/meetup/test-location.ts",
+    "lib/migration-history.ts",
+    "lib/mrt/import.ts",
+    "lib/mrt/lines.ts",
+    "lib/mrt/map-labels.ts",
+    "lib/mrt/network.ts",
+    "lib/mrt/station-mapping.ts",
+    "lib/mrt/station-validation.ts",
+    "lib/mrt/types.ts",
+    "lib/operational-error.ts",
+    "lib/prisma.ts",
+    "lib/rental-checklist.ts",
+    "lib/rental-errors.ts",
+    "lib/rental-lifecycle.ts",
+    "lib/rental-route.ts",
+    "lib/trust-profile.ts",
+    "proxy.ts"
+  ],
+  "newMigration": {
+    "path": "prisma/migrations/20261024180000_staff_webauthn_foundation/migration.sql",
+    "sha256": "4053d08a15b49c92033b53bbea6d8d45a1646300f00da56e731d2644abccb26c"
+  },
+  "noProductionRouteImportsMfa": true
+}

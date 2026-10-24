@@ -1,0 +1,371 @@
+{
+  "baseline": "c017ca878da65d44059988067ef6263448bd9875",
+  "branch": "feature/staff-authentication-mfa-foundation-batch-5a",
+  "date": "2026-10-24 Asia/Taipei",
+  "node": "v24.19.0",
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0
+    },
+    {
+      "command": "npx prisma validate --config prisma7.config.ts",
+      "exit": 0
+    }
+  ],
+  "unitTests": 57,
+  "finalReportedTests": 225,
+  "isolatedSuites": [
+    {
+      "group": "test:mfa",
+      "start": "2026-10-24T10:10:36.239Z",
+      "end": "2026-10-24T10:10:45.402Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/6639b9b603f6976ddf230304",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa-migration",
+      "start": "2026-10-24T10:03:35.676Z",
+      "end": "2026-10-24T10:03:44.193Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/86f9705081ee677817e3009e",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-24T10:03:43.450Z",
+      "end": "2026-10-24T10:04:16.677Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1703310ffc5c8a5120bcfd54",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-24T10:04:16.680Z",
+      "end": "2026-10-24T10:04:19.940Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d8f18d43e0b454d734b3106f",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-24T10:04:16.681Z",
+      "end": "2026-10-24T10:04:24.637Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d6eca7b2b11e79cdd88a9989",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-24T10:04:25.275Z",
+      "end": "2026-10-24T10:04:30.002Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0832ea2a12b0ff27f950afdc",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-session-migration",
+      "start": "2026-10-24T10:04:25.276Z",
+      "end": "2026-10-24T10:04:32.957Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/5a66fa81a32a69990596ff7c",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:scoped-reads",
+      "start": "2026-10-24T10:04:25.276Z",
+      "end": "2026-10-24T10:04:28.613Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8abfd98b681077cf91fc6cb3",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:approval",
+      "start": "2026-10-24T10:03:43.452Z",
+      "end": "2026-10-24T10:03:54.360Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b5613114df74c7a690677b0e",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:approval-migration",
+      "start": "2026-10-24T10:03:43.453Z",
+      "end": "2026-10-24T10:03:54.987Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d7ef99cf438296d2017ff8d8",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:execution-rehearsal",
+      "start": "2026-10-24T10:04:16.678Z",
+      "end": "2026-10-24T10:04:25.274Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c5c305db5680a680792e303f",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-24T10:04:32.957Z",
+      "end": "2026-10-24T10:05:56.659Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a01fbe79ad845323666909cb",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-24T10:04:32.958Z",
+      "end": "2026-10-24T10:06:17.566Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/df7e2c130225a3f60d587d50",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T10:08:53.487Z",
+      "end": "2026-10-24T10:10:15.984Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ea55b058e795fe63fa034e79",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-24T10:06:19.534Z",
+      "end": "2026-10-24T10:06:59.715Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7dfe12c2643a1823dba7fd19",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-24T10:06:19.536Z",
+      "end": "2026-10-24T10:06:41.572Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/605f1e90c680fde7fdbe3039",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-24T10:06:19.537Z",
+      "end": "2026-10-24T10:10:28.975Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/185842ec383e1c85556be576",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-24T10:10:28.976Z",
+      "end": "2026-10-24T10:10:43.379Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8c16cbdc213eb4299190062d",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    }
+  ],
+  "initialChatFailure": {
+    "group": "test:chat",
+    "start": "2026-10-24T10:04:32.959Z",
+    "end": "2026-10-24T10:06:19.534Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/94a338112a4686270acdccb6",
+    "tests": [
+      "\u2139 tests 14"
+    ],
+    "passes": [
+      "\u2139 pass 12"
+    ],
+    "fails": [
+      "\u2139 fail 2"
+    ],
+    "cleanup": true
+  },
+  "chatFailureDescription": "Browser login remained at /login past its existing 5-second assertion timeout; parent and child fail (12/14 passed). Fresh isolated retry passes 14/14; root cause unconfirmed. No legacy test/timeout/guard changed.",
+  "initialImplementationDefects": [
+    "New PostgreSQL credential-ID regex repetition bound exceeded PostgreSQL limit; replaced with independent length and character constraints before final migration/MFA passes.",
+    "Test-only browser binding prefer-const lint failure corrected."
+  ],
+  "mfaMechanism": "Actual WebAuthn signed assertions with required UV; no TOTP fallback; no live staff authority",
+  "productionRollout": "Blocked pending RP/origin, identity proofing, recovery, writer isolation, retention and enforcement review"
+}

@@ -696,6 +696,11 @@ model StaffPerson {
   history StaffAuthorizationEvent[]
 }
 model StaffAccountAssociation {
+  mfaVersion StaffMfaVersion?
+  mfaCredentials StaffMfaCredential[]
+  mfaChallenges StaffMfaChallenge[]
+  mfaAssurances StaffMfaAssurance[]
+  mfaEvents StaffMfaEvent[]
   stepUps StaffStepUpRecord[]
   sessionBindings StaffSessionBinding[]
   id String @id @default(uuid()) @db.Uuid
@@ -946,4 +951,96 @@ model StaffChangeTransition {
   databaseActor String @default(dbgenerated("CURRENT_USER")) @db.VarChar(63)
   createdAt DateTime @default(now()) @db.Timestamp(3)
   request StaffChangeRequest @relation(fields:[requestId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+}
+
+// Batch 5A: cryptographic factor state; never staff-role authorization.
+enum StaffMfaPurpose {
+  ENROLL
+  STEP_UP
+}
+enum StaffMfaChallengeState {
+  PENDING
+  CONSUMED
+  CANCELLED
+}
+enum StaffMfaEventKind {
+  ENROLLMENT_STARTED
+  ENROLLED
+  CHALLENGE_CANCELLED
+  AUTHENTICATION_STARTED
+  VERIFIED
+  DENIED
+  CREDENTIAL_REVOKED
+  RECOVERY_BLOCKED
+}
+model StaffMfaVersion {
+  associationId String @id @db.Uuid
+  version BigInt @default(1)
+  association StaffAccountAssociation @relation(fields:[associationId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+}
+model StaffMfaCredential {
+  id String @id @default(uuid()) @db.Uuid
+  associationId String @db.Uuid
+  credentialId String @unique @db.VarChar(1400)
+  publicKey Bytes
+  counter BigInt @default(0)
+  rpId String @db.VarChar(253)
+  deviceType String @db.VarChar(16)
+  backedUp Boolean
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  revokedAt DateTime? @db.Timestamp(3)
+  association StaffAccountAssociation @relation(fields:[associationId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  assurances StaffMfaAssurance[]
+  @@index([associationId,revokedAt])
+}
+model StaffMfaChallenge {
+  id String @id @default(uuid()) @db.Uuid
+  associationId String @db.Uuid
+  authSessionId Int
+  authSessionCreatedAt DateTime @db.Timestamp(3)
+  authorizationVersion BigInt
+  mfaVersion BigInt
+  challengeHash String @unique @db.VarChar(64)
+  configHash String @db.VarChar(64)
+  purpose StaffMfaPurpose
+  state StaffMfaChallengeState @default(PENDING)
+  attempts Int @default(0)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  expiresAt DateTime @db.Timestamp(3)
+  association StaffAccountAssociation @relation(fields:[associationId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  @@index([associationId,expiresAt])
+}
+model StaffMfaAssurance {
+  id String @id @default(uuid()) @db.Uuid
+  associationId String @db.Uuid
+  credentialKey String @db.Uuid
+  authSessionId Int
+  authSessionCreatedAt DateTime @db.Timestamp(3)
+  authorizationVersion BigInt
+  mfaVersion BigInt
+  policyVersion String @db.VarChar(80)
+  configHash String @db.VarChar(64)
+  assertionDigest String @unique @db.VarChar(64)
+  assurance String @default("WEBAUTHN_UV") @db.VarChar(16)
+  verifiedAt DateTime @default(now()) @db.Timestamp(3)
+  expiresAt DateTime @db.Timestamp(3)
+  credential StaffMfaCredential @relation(fields:[credentialKey],references:[id],onDelete:Restrict,onUpdate:Restrict)
+  association StaffAccountAssociation @relation(fields:[associationId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+}
+model StaffMfaEvent {
+  id BigInt @id @default(autoincrement())
+  correlationId String @db.Uuid
+  associationId String @db.Uuid
+  authSessionId Int
+  authSessionCreatedAt DateTime @db.Timestamp(3)
+  kind StaffMfaEventKind
+  challengeId String? @db.Uuid
+  credentialKey String? @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  association StaffAccountAssociation @relation(fields:[associationId],references:[id],onDelete:Restrict,onUpdate:Restrict)
+}
+model StaffMfaRateLimit {
+  key String @id @db.VarChar(64)
+  attempts Int
+  expiresAt DateTime @db.Timestamp(3)
 }

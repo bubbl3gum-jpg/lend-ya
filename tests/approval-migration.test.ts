@@ -33,6 +33,7 @@ test(
         "Runner must supply an empty owned database",
       );
       await cp("prisma/migrations", migrations, { recursive: true });
+      await rm(path.join(migrations,"20261024180000_staff_webauthn_foundation"),{recursive:true});
 
       await rm(path.join(migrations, migration), { recursive: true });
 
