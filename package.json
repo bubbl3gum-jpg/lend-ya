@@ -49,7 +49,8 @@
     "test:database-principals": "tsx tests/run-isolated.ts --database-principals",
     "test:staff-read-pilot": "tsx tests/run-isolated.ts --staff-read-pilot",
     "test:login-navigation": "tsx tests/run-isolated.ts --login-navigation",
-    "test:admin-own-session": "tsx tests/run-isolated.ts --admin-own-session"
+    "test:admin-own-session": "tsx tests/run-isolated.ts --admin-own-session",
+    "test:workbench": "tsx tests/run-isolated.ts --workbench"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

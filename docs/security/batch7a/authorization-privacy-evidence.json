@@ -1,0 +1,21 @@
+{
+  "source": "tests/admin-workbench.integration.test.ts",
+  "artifact": ".test-artifacts/4977a5fffdd02d68c25089e1",
+  "exit": 0,
+  "completedAssertions": {
+    "anonymousApi": 401,
+    "ordinaryUserApi": 403,
+    "suspendedAdminApi": 403,
+    "unauthorizedPages": "redirect/not-found with no queue data",
+    "unknownRepeatedForgedSqlShapedFilters": 400,
+    "unsupportedPost": 405,
+    "privateNoStoreApi": true,
+    "exactNineEntryFields": true,
+    "privateNarrativeContactEvidenceCanariesAbsent": true,
+    "stableTieSortingExactCountsAndEmptyBoundedPage": true,
+    "ownedDataOutageApi": 500,
+    "visibleErrorAndRetryRecovery": true,
+    "bookingHandoffReturnDigestsAndEvidenceAuditCountsUnchangedByWorkbench": true
+  },
+  "interpretation": "Assertion summary from the successful actual HTTP/browser/PostgreSQL suite, not raw HTTP transcript."
+}

@@ -1,0 +1,157 @@
+{
+  "label": "workbench-mobile",
+  "outcome": "passed-workbench-login-filter-detail",
+  "path": "OTHER",
+  "events": [
+    {
+      "ms": 26,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 79,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 98,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 504,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 594,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 650,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 654,
+      "event": "request",
+      "path": "/admin",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 715,
+      "event": "response",
+      "path": "/admin",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 722,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 928,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 1047,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1216,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1286,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1294,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1446,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1818,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1845,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1917,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1929,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 2157,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 2401,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "unmarked",
+    "submitDisabled": false,
+    "inputValidity": [
+      true
+    ],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 3,
+    "lock_waiters": 0
+  }
+}

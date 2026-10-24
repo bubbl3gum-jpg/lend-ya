@@ -57,6 +57,17 @@ test(
       assert.match(ownPage.headers.get("cache-control") ?? "", /no-store/);
       if (process.env.NODE_ENV === "production") assert.match(ownPage.headers.get("cache-control") ?? "", /private/);
       assert.ok((await ownPage.text()).includes("Passkey status unavailable here"));
+      const workbench = await fetch(base + "/api/admin/workbench", { headers: { Cookie: cookie } });
+      assert.equal(workbench.status, 200);
+      assert.match(workbench.headers.get("cache-control") ?? "", /private, no-store/);
+      const workbenchData = await workbench.json();
+      assert.equal(workbenchData.queues.length, 6);
+      assert.ok(workbenchData.queues.every((q: {count:number}) => q.count === 0));
+      const workbenchPage = await fetch(base + "/admin/workbench", { headers: { Cookie: cookie } });
+      assert.equal(workbenchPage.status, 200);
+      assert.match(workbenchPage.headers.get("cache-control") ?? "", /no-store/);
+      if (process.env.NODE_ENV === "production") assert.match(workbenchPage.headers.get("cache-control") ?? "", /private/);
+      assert.ok((await workbenchPage.text()).includes("No records match this queue and filter."));
       for (const table of [
         "StaffMfaCredential",
         "StaffMfaChallenge",

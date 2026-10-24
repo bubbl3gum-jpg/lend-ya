@@ -826,6 +826,7 @@ test(
                 ),
               [
                 "/admin",
+                "/admin/workbench",
                 "/admin/bookings",
                 "/admin/disputes",
                 "/admin/listings",

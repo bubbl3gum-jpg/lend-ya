@@ -1,0 +1,13 @@
+{
+  "baseline": "ca2d374b07b0346241318002bf786ef7ce6a0b91",
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/workbench/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi and service-level ACTIVE legacy ADMIN check",
+      "sha256": "7819e2ec3111c86322e42c475a4df170577f7827154a235a8a6d222b644cac7a"
+    }
+  ]
+}

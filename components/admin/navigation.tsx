@@ -6,6 +6,7 @@ export const adminNavigationGroups = [
   {
     label: "Operations",
     links: [
+      { href: "/admin/workbench", label: "Workbench" },
       { href: "/admin/bookings", label: "Bookings" },
       { href: "/admin/disputes", label: "Disputes" },
       { href: "/admin/listings", label: "Listings" },

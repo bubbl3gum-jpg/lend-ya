@@ -1,0 +1,17 @@
+{
+  "expectedCounts": {
+    "BOOKING_CASES": 2,
+    "RENTAL_END_PASSED": 1,
+    "CUSTODY_REVIEW": 2,
+    "LISTING_REVIEW": 2,
+    "OPEN_REPORTS": 2,
+    "OPEN_DISPUTES": 2
+  },
+  "pendingExcluded": true,
+  "normalInspectionExcluded": true,
+  "completedWithRealParticipantEvidenceExcluded": true,
+  "resolvedCaseDoesNotCloseCustody": true,
+  "optionalHandoffMissingFlagged": true,
+  "privateCanariesAbsent": true,
+  "categoryOverlapExplicit": true
+}
