@@ -97,7 +97,9 @@ async function main() {
       ) + "\n",
     );
     if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
+    if(process.argv.includes("--meetup-camera")) env.MRT_TEST_CAMERA_ONLY="1";
     const legacyGroup = [
+      "meetup-camera",
       "investigation-receipt",
       "staff-read-pilot",
       "database-principals",
@@ -122,6 +124,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "meetup-camera": "tests/meetup.integration.test.ts",
           "investigation-receipt": "tests/meetup.integration.test.ts",
           "staff-read-pilot": "tests/staff-read-pilot.integration.test.ts",
           "database-principals": "tests/database-principals.test.ts",

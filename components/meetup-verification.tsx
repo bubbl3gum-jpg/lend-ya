@@ -3,6 +3,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  cameraDiagnostic,
+  cameraErrorCategory,
+} from "@/lib/camera-diagnostics";
 import type { IScannerControls } from "@zxing/browser";
 type Check = {
   id: number;
@@ -77,6 +81,8 @@ export function MeetupVerification({
     [assistanceReason, setAssistanceReason] = useState("LOCATION_PROBLEM");
   const phaseRef = useRef<string | undefined>(undefined);
   const cameraGeneration = useRef(0);
+  const cameraStream = useRef<MediaStream | null>(null);
+  const trackCleanup = useRef<(() => void) | null>(null);
   const issueRetry = useRef<string | null>(null);
   const video = useRef<HTMLVideoElement>(null),
     controls = useRef<IScannerControls | null>(null),
@@ -131,8 +137,14 @@ export function MeetupVerification({
     );
   }, [api, onState, userId, bookingStatus, router]);
   const invalidateCamera = useCallback(() => {
+    cameraDiagnostic("invalidated");
     cameraGeneration.current++;
+    trackCleanup.current?.();
+    trackCleanup.current = null;
+    cameraStream.current?.getTracks().forEach((track) => track.stop());
+    cameraStream.current = null;
     controls.current?.stop();
+    controls.current = null;
   }, []);
   useEffect(() => {
     void Promise.resolve()
@@ -282,43 +294,106 @@ export function MeetupVerification({
         throw Error(
           "Camera scanning needs HTTPS or localhost and a supported browser. Use the one-time manual code.",
         );
+      cameraDiagnostic("start");
       const generation = ++cameraGeneration.current;
       setCamera(true);
       await new Promise((r) => setTimeout(r, 0));
-      const { BrowserQRCodeReader } = await import("@zxing/browser");
+      let stream: MediaStream | null = null;
       try {
-        controls.current =
-          await new BrowserQRCodeReader().decodeFromConstraints(
-            { video: { facingMode: "environment" }, audio: false },
-            video.current!,
-            (result, _error, scanner) => {
-              if (generation !== cameraGeneration.current) {
-                scanner.stop();
-                return;
-              }
-              if (!result || scanBusy.current) return;
-              scanBusy.current = true;
+        const { CameraQrReader } = await import("@/lib/qr-camera-reader");
+        cameraDiagnostic("decoder-imported");
+        if (generation !== cameraGeneration.current || !video.current) return;
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" },
+          audio: false,
+        });
+        if (generation !== cameraGeneration.current || !video.current) {
+          stream.getTracks().forEach((t) => t.stop());
+          return;
+        }
+        cameraStream.current = stream;
+        const onEnded = () => {
+          if (generation === cameraGeneration.current) {
+            stopCamera();
+            setError(
+              "Camera stopped. Restart scanning or use the one-time manual code.",
+            );
+            cameraDiagnostic("track-interrupted");
+          }
+        };
+        const tracks = stream.getVideoTracks();
+        tracks.forEach((t) => t.addEventListener("ended", onEnded));
+        trackCleanup.current = () =>
+          tracks.forEach((t) => t.removeEventListener("ended", onEnded));
+        const scannerControls = await new CameraQrReader().decodeFromStream(
+          stream,
+          video.current,
+          (result, _error, scanner) => {
+            cameraDiagnostic(
+              result ? "decoded" : "frame-error",
+              _error ? cameraErrorCategory(_error) : undefined,
+            );
+            if (generation !== cameraGeneration.current) {
+              cameraDiagnostic("stale-callback");
               scanner.stop();
-              controls.current?.stop();
-              setCamera(false);
-              const payload = result.getText(),
-                parts = payload.split(":");
-              void perform(async () => {
-                if (
-                  parts.length !== 5 ||
-                  parts[0] !== "HUSTLEN1" ||
-                  parts[1] !== String(bookingId) ||
-                  parts[2] !== p
-                )
-                  throw Error("This QR does not match this booking and stage.");
-                await verify({ qrPayload: payload }, parts[3]);
-              }).finally(() => {
-                scanBusy.current = false;
-              });
-            },
-          );
-        if (generation !== cameraGeneration.current) controls.current.stop();
-      } catch {
+              return;
+            }
+            if (
+              _error &&
+              ![
+                "NotFoundException",
+                "ChecksumException",
+                "FormatException",
+              ].includes(cameraErrorCategory(_error))
+            ) {
+              scanner.stop();
+              stopCamera();
+              setError(
+                "Camera frame processing failed. Restart scanning or use the one-time manual code.",
+              );
+              return;
+            }
+            if (!result || scanBusy.current) return;
+            scanBusy.current = true;
+            scanner.stop();
+            controls.current?.stop();
+            setCamera(false);
+            const payload = result.getText(),
+              parts = payload.split(":");
+            void perform(async () => {
+              const mismatch =
+                parts.length !== 5 || parts[0] !== "HUSTLEN1"
+                  ? "format"
+                  : parts[1] !== String(bookingId)
+                    ? "booking"
+                    : parts[2] !== p
+                      ? "purpose"
+                      : null;
+              if (mismatch) {
+                cameraDiagnostic("challenge-rejected", mismatch);
+                throw Error("This QR does not match this booking and stage.");
+              }
+              cameraDiagnostic("verify-request");
+              await verify({ qrPayload: payload }, parts[3]);
+              cameraDiagnostic("verified");
+            }).finally(() => {
+              scanBusy.current = false;
+            });
+          },
+        );
+        cameraDiagnostic("decoder-initialized");
+        if (generation !== cameraGeneration.current) {
+          scannerControls.stop();
+          return;
+        }
+        controls.current = scannerControls;
+      } catch (scanError) {
+        cameraDiagnostic(
+          "initialization-error",
+          cameraErrorCategory(scanError),
+        );
+        stream?.getTracks().forEach((t) => t.stop());
+        if (generation !== cameraGeneration.current) return;
         stopCamera();
         throw Error(
           "Camera unavailable or permission denied. Use the one-time manual code.",

@@ -1,0 +1,107 @@
+{
+  "method": "Offline ordinary QR detector; luminance pixels only; no pure-barcode hint or decoded contents retained",
+  "results": [
+    {
+      "artifact": "029877ec0b415febf542eb4f",
+      "source": "png",
+      "cases": [
+        {
+          "transform": "native",
+          "width": 480,
+          "height": 480,
+          "decoded": false,
+          "category": "NotFoundException"
+        },
+        {
+          "transform": "half",
+          "width": 240,
+          "height": 240,
+          "decoded": false,
+          "category": "NotFoundException"
+        },
+        {
+          "transform": "rotate-half",
+          "width": 240,
+          "height": 240,
+          "decoded": true
+        }
+      ]
+    },
+    {
+      "artifact": "029877ec0b415febf542eb4f",
+      "source": "video",
+      "cases": [
+        {
+          "transform": "native",
+          "width": 640,
+          "height": 480,
+          "decoded": false,
+          "category": "NotFoundException"
+        },
+        {
+          "transform": "half",
+          "width": 320,
+          "height": 240,
+          "decoded": false,
+          "category": "ChecksumException"
+        },
+        {
+          "transform": "rotate-half",
+          "width": 240,
+          "height": 320,
+          "decoded": true
+        }
+      ]
+    },
+    {
+      "artifact": "a49b58b4ca46717d7d668844",
+      "source": "png",
+      "cases": [
+        {
+          "transform": "native",
+          "width": 480,
+          "height": 480,
+          "decoded": false,
+          "category": "NotFoundException"
+        },
+        {
+          "transform": "half",
+          "width": 240,
+          "height": 240,
+          "decoded": true
+        },
+        {
+          "transform": "rotate-half",
+          "width": 240,
+          "height": 240,
+          "decoded": true
+        }
+      ]
+    },
+    {
+      "artifact": "a49b58b4ca46717d7d668844",
+      "source": "video",
+      "cases": [
+        {
+          "transform": "native",
+          "width": 640,
+          "height": 480,
+          "decoded": false,
+          "category": "NotFoundException"
+        },
+        {
+          "transform": "half",
+          "width": 320,
+          "height": 240,
+          "decoded": true
+        },
+        {
+          "transform": "rotate-half",
+          "width": 240,
+          "height": 320,
+          "decoded": true
+        }
+      ]
+    }
+  ]
+}

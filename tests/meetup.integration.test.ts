@@ -1,3 +1,4 @@
+import { observeCamera } from "./support/camera-diagnostics";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -56,7 +57,8 @@ test(
       log = openSync(logPath, "a");
     let server: ChildProcess | undefined,
       browser: Awaited<ReturnType<typeof chromium.launch>> | undefined,
-      cameraBrowser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+      cameraBrowser: Awaited<ReturnType<typeof chromium.launch>> | undefined,
+      returnBrowser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
     async function stop() {
       if (server && server.exitCode === null && server.signalCode === null) {
         const exited = once(server, "exit");
@@ -87,6 +89,7 @@ test(
           env: {
             ...process.env,
             NODE_ENV: "development",
+            NEXT_PUBLIC_HUSTLEN_CAMERA_DIAGNOSTICS: "owned-test",
             MEETUP_TEST_LOCATION_ENABLED: temporary ? "true" : "false",
             MEETUP_TEST_LOCATION_USER_IDS: temporary ? ids.join(",") : "",
             MEETUP_PREVIEW_USER_IDS: ids.join(","),
@@ -159,6 +162,7 @@ test(
       assert.equal(r.status, 201);
       return { id: r.json.user.id, email, cookie: r.cookie };
     }
+    const cameraSavers: (()=>Promise<unknown>)[]=[];
     let owner: Actor,
       borrower: Actor,
       outsider: Actor,
@@ -289,6 +293,8 @@ test(
         });
         return;
       }
+      let pickup: Payload;
+      if(process.env.MRT_TEST_CAMERA_ONLY!=="1") {
       await t.test(
         "preview defaults off, explicit enrollment and participant/CSRF guards",
         async () => {
@@ -618,7 +624,7 @@ test(
           );
         },
       );
-      let pickup: Payload;
+
       await t.test(
         "random hashed challenge, correct role/stage, rotation, concurrent single consumption and evidence gates",
         async () => {
@@ -1336,6 +1342,7 @@ test(
           await start(ids);
         },
       );
+      } else { await stop(); await start(ids); }
       await t.test(
         "two real mobile browser sessions: GPS permission, actual camera QR, drafts, reduced return, restart and screenshots",
         async () => {
@@ -1347,7 +1354,7 @@ test(
             path.join(artifact, "qr.png"),
             await QRCode.toBuffer("placeholder"),
           );
-          const encodeVideo = () =>
+          const encodeVideo = (target = media) =>
             execFileSync("ffmpeg", [
               "-y",
               "-loglevel",
@@ -1364,7 +1371,7 @@ test(
               "10",
               "-pix_fmt",
               "yuv420p",
-              media,
+              target,
             ]);
           encodeVideo();
           browser = await chromium.launch({
@@ -1388,7 +1395,7 @@ test(
             geolocation: { ...point, accuracy: 10 },
             permissions: ["geolocation", "camera"],
           });
-          const opage = await ownerContext.newPage();
+          let opage = await ownerContext.newPage();
           let bpage = await borrowerContext.newPage();
           for (const [page, actor] of [
             [opage, owner],
@@ -1457,6 +1464,7 @@ test(
             .getByRole("button", { name: "Generate Pickup QR", exact: true })
             .click();
           const issued = (await (await issuance).json()) as Payload;
+          if(process.env.MRT_TEST_CAMERA_ONLY==="1")pickup=issued;
           await writeFile(
             path.join(artifact, "qr.png"),
             await QRCode.toBuffer(issued.qrPayload, { width: 480, margin: 4 }),
@@ -1494,14 +1502,17 @@ test(
             permissions: ["geolocation", "camera"],
           });
           bpage = await borrowerContext.newPage();
+          const savePickup=await observeCamera(bpage,"pickup");
+          cameraSavers.push(savePickup);
           bpage.on("dialog", (dialog) => void dialog.accept());
           await bpage.goto(`${base}/bookings/${id}`);
           await bpage
             .getByRole("button", { name: "Scan Pickup QR", exact: true })
             .click();
-          await expect(bpage.getByText(/Verified booking/)).toBeVisible({
-            timeout: 20000,
-          });
+          try { await expect(bpage.getByText(/Verified booking/)).toBeVisible({ timeout: 20000 }); }
+          finally { await savePickup(); }
+          assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupEvent" WHERE "challengeId"=$1 AND kind='CHALLENGE_VERIFIED'`,[issued.challengeId])).rows[0].n,1);
+          assert.equal(await bpage.locator("video").evaluate(v=>!(v as HTMLVideoElement).srcObject || ((v as HTMLVideoElement).srcObject as MediaStream).getTracks().every(t=>t.readyState==="ended")),true);
           assert.equal(
             (await detail(id)).json.booking.status,
             "HANDOFF_PENDING",
@@ -1584,6 +1595,7 @@ test(
               })
               .click();
           }
+          const returnIssuance=bpage.waitForResponse(r=>r.url().endsWith(`/api/bookings/${id}/meetup/issue`)&&r.request().method()==="POST");
           await bpage
             .getByRole("button", { name: "Generate Return QR", exact: true })
             .click();
@@ -1609,44 +1621,21 @@ test(
               { exact: true },
             ),
           ).toBeVisible();
-          const manual = (
-            await bpage.getByText(/One-time manual code:/).innerText()
-          ).match(/\d{6}/)![0];
-          await opage
-            .getByLabel("One-time return code", { exact: true })
-            .fill(manual);
-          // Lose the response after the real server commits. A retry must reuse the same browser request key.
-          let droppedResponse = false;
-          await opage.route(
-            `**/api/bookings/${id}/meetup/verify`,
-            async (route) => {
-              if (!droppedResponse) {
-                droppedResponse = true;
-                const response = await route.fetch();
-                assert.equal(response.status(), 200);
-                await route.abort("connectionreset");
-              } else await route.continue();
-            },
-          );
-          await opage
-            .getByRole("button", { name: "Verify return code", exact: true })
-            .click();
-          await expect(
-            opage
-              .getByRole("region", { name: "MRT meetup verification" })
-              .getByRole("alert"),
-          ).toContainText(/fetch|network|connection/i);
-          const retryResponse = opage.waitForResponse(
-            (r) =>
-              r.url().endsWith(`/api/bookings/${id}/meetup/verify`) &&
-              r.status() === 200,
-          );
-          await opage
-            .getByRole("button", { name: "Verify return code", exact: true })
-            .click();
-          assert.equal((await (await retryResponse).json()).replayed, true);
-          await opage.unroute(`**/api/bookings/${id}/meetup/verify`);
-          await expect(opage.getByText(/Verified booking/)).toBeVisible();
+          const returnIssued=(await (await returnIssuance).json()) as Payload;
+          const returnMedia=path.join(artifact,"return.y4m");
+          await writeFile(path.join(artifact,"qr.png"),await QRCode.toBuffer(returnIssued.qrPayload,{width:480,margin:4}));
+          encodeVideo(returnMedia);
+          const ownerLogin=await ownerContext.storageState();await opage.close();
+          returnBrowser=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true,args:["--use-fake-device-for-media-stream",`--use-file-for-fake-video-capture=${returnMedia}`,"--use-fake-ui-for-media-stream"]});
+          const returnContext=await returnBrowser.newContext({storageState:ownerLogin,timezoneId:"Asia/Taipei",viewport:{width:390,height:844},permissions:["camera"]});
+          opage=await returnContext.newPage();const saveReturn=await observeCamera(opage,"return");cameraSavers.push(saveReturn);
+          opage.on("dialog",dialog=>void dialog.accept());
+          await opage.goto(`${base}/bookings/${id}`);
+          const beforeScan=(await detail(id)).json.booking.status;assert.equal(beforeScan,"RETURN_PENDING");
+          await opage.getByRole("button",{name:"Scan Return QR",exact:true}).click();
+          try{await expect(opage.getByText(/Verified booking/)).toBeVisible({timeout:20000});}finally{await saveReturn();}
+          assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupEvent" WHERE "challengeId"=$1 AND kind='CHALLENGE_VERIFIED'`,[returnIssued.challengeId])).rows[0].n,1);
+          assert.equal((await detail(id)).json.booking.status,"RETURN_PENDING","Camera verification alone cannot record physical return");
           // Disconnect the dev-server HMR clients before restart; retain real authenticated browser contexts.
           await opage.goto("about:blank");
           await bpage.goto("about:blank");
@@ -1711,22 +1700,112 @@ test(
           );
           assert.equal(overflow, false);
           assert.equal((await detail(id)).json.booking.status, "COMPLETED");
+          await returnBrowser.close();returnBrowser=undefined;
           await cameraBrowser.close();
           cameraBrowser = undefined;
           await browser.close();
           browser = undefined;
         },
       );
+      await t.test("manual-code browser response-loss recovery (separate from camera acceptance)",async()=>{
+        const r=await rental(),id=r.id;await prepare(id);
+        const pickup=(await op(id,"issue",owner,{purpose:"PICKUP"})).json;
+        assert.equal((await op(id,"verify",borrower,{purpose:"PICKUP",challengeId:pickup.challengeId,manualCode:pickup.manualCode,requestKey:randomUUID()})).status,200);
+        assert.equal((await api(`/api/bookings/${id}/handoff`,borrower,"POST",{...evidence,meetupChallengeId:pickup.challengeId,physicalReceipt:true})).status,200);
+        assert.equal((await api(`/api/bookings/${id}/return`,borrower,"POST",evidence)).status,200);
+        for(const actor of [owner,borrower])assert.equal((await check(id,actor,"RETURN")).json.checkIn.outcome,"VERIFIED");
+        const returned=(await op(id,"issue",borrower,{purpose:"RETURN"})).json;
+        browser=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true});
+        const ctx=await browser.newContext();await ctx.addCookies([{name:"p2p_session",value:owner.cookie.slice("p2p_session=".length),url:base}]);const opage=await ctx.newPage();
+        await opage.goto(`${base}/bookings/${id}`);
+          const manual=returned.manualCode;
+          await opage
+            .getByLabel("One-time return code", { exact: true })
+            .fill(manual);
+          // Lose the response after the real server commits. A retry must reuse the same browser request key.
+          let droppedResponse = false;
+          await opage.route(
+            `**/api/bookings/${id}/meetup/verify`,
+            async (route) => {
+              if (!droppedResponse) {
+                droppedResponse = true;
+                const response = await route.fetch();
+                assert.equal(response.status(), 200);
+                await route.abort("connectionreset");
+              } else await route.continue();
+            },
+          );
+          await opage
+            .getByRole("button", { name: "Verify return code", exact: true })
+            .click();
+          await expect(
+            opage
+              .getByRole("region", { name: "MRT meetup verification" })
+              .getByRole("alert"),
+          ).toContainText(/fetch|network|connection/i);
+          const retryResponse = opage.waitForResponse(
+            (r) =>
+              r.url().endsWith(`/api/bookings/${id}/meetup/verify`) &&
+              r.status() === 200,
+          );
+          await opage
+            .getByRole("button", { name: "Verify return code", exact: true })
+            .click();
+          assert.equal((await (await retryResponse).json()).replayed, true);
+          await opage.unroute(`**/api/bookings/${id}/meetup/verify`);
+          await expect(opage.getByText(/Verified booking/)).toBeVisible();
+
+        assert.equal((await detail(id)).json.booking.status,"RETURN_PENDING");
+        await browser.close();browser=undefined;
+      });
+      await t.test("camera negatives: invalid content, initialization failure, interruption, cancellation and navigation cleanup",async()=>{
+        const r=await rental(),id=r.id;await prepare(id);
+        const invalid=path.join(artifact,"invalid-camera.y4m"),blank=path.join(artifact,"blank-camera.y4m"),png=path.join(artifact,"negative-camera.png");
+        await writeFile(png,await QRCode.toBuffer("https://fixture.invalid/not-a-meetup",{width:480,margin:4}));
+        execFileSync("ffmpeg",["-y","-loglevel","error","-loop","1","-i",png,"-t","2","-vf","scale=480:480,pad=640:480:80:0:white","-r","10","-pix_fmt","yuv420p",invalid]);
+        execFileSync("ffmpeg",["-y","-loglevel","error","-f","lavfi","-i","color=white:size=640x480:rate=10","-t","2","-pix_fmt","yuv420p",blank]);
+        const make=async(file:string,label:string)=>{
+          const instance=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true,args:["--use-fake-device-for-media-stream",`--use-file-for-fake-video-capture=${file}`,"--use-fake-ui-for-media-stream"]});
+          const context=await instance.newContext({permissions:["camera"]});await context.addCookies([{name:"p2p_session",value:borrower.cookie.slice("p2p_session=".length),url:base}]);
+          const page=await context.newPage();const save=await observeCamera(page,label);await page.goto(`${base}/bookings/${id}`);return {instance,page,save};
+        };
+        const bad=await make(invalid,"invalid-content");
+        try{await bad.page.getByRole("button",{name:"Scan Pickup QR",exact:true}).click();await expect(bad.page.getByText("This QR does not match this booking and stage.",{exact:true})).toBeVisible();const diag=await bad.save();assert.ok(!(diag as {events:{operation?:string}[]}).events.some(e=>e.operation==="verify"));}finally{await bad.save();await bad.instance.close();}
+        const live=await make(blank,"lifecycle");
+        try{
+          await live.page.evaluate(()=>{const original=HTMLCanvasElement.prototype.getContext;Object.assign(window,{__testCanvasContext:original});HTMLCanvasElement.prototype.getContext=(()=>null) as typeof original;});
+          await live.page.getByRole("button",{name:"Scan Pickup QR",exact:true}).click();
+          await expect(live.page.getByText("Camera unavailable or permission denied. Use the one-time manual code.",{exact:true})).toBeVisible();
+          await live.page.evaluate(()=>{HTMLCanvasElement.prototype.getContext=(window as unknown as {__testCanvasContext:typeof HTMLCanvasElement.prototype.getContext}).__testCanvasContext;});
+          await live.page.getByRole("button",{name:"Scan Pickup QR",exact:true}).click();
+          await expect.poll(()=>live.page.locator('video').evaluate(v=>((v as HTMLVideoElement).srcObject as MediaStream|null)?.getVideoTracks()[0]?.readyState)).toBe("live");
+          await live.page.locator('video').evaluate(v=>{const tracks=((v as HTMLVideoElement).srcObject as MediaStream).getVideoTracks();for(const t of tracks){t.stop();t.dispatchEvent(new Event('ended'));}});
+          await expect(live.page.getByText("Camera stopped. Restart scanning or use the one-time manual code.",{exact:true})).toBeVisible();
+          await live.page.getByRole("button",{name:"Scan Pickup QR",exact:true}).click();
+          await expect.poll(()=>live.page.locator('video').evaluate(v=>((v as HTMLVideoElement).srcObject as MediaStream|null)?.getVideoTracks()[0]?.readyState)).toBe("live");
+          await live.page.getByRole("button",{name:"Stop camera",exact:true}).click();
+          assert.equal(await live.page.locator('video').evaluate(v=>!(v as HTMLVideoElement).srcObject || ((v as HTMLVideoElement).srcObject as MediaStream).getTracks().every(t=>t.readyState==='ended')),true);
+          await live.page.getByRole("button",{name:"Scan Pickup QR",exact:true}).click();
+          await expect.poll(()=>live.page.locator('video').evaluate(v=>((v as HTMLVideoElement).srcObject as MediaStream|null)?.getVideoTracks()[0]?.readyState)).toBe("live");
+          const track=await live.page.locator('video').evaluateHandle(v=>((v as HTMLVideoElement).srcObject as MediaStream).getVideoTracks()[0]);
+          await live.page.getByRole('link',{name:'← Back to dashboard',exact:true}).click({noWaitAfter:true});await expect(live.page).toHaveURL(base+'/dashboard');
+          try{assert.equal(await track.evaluate(t=>t.readyState),'ended');}catch(error){assert.match(String(error),/Execution context was destroyed|Cannot find context|JSHandle is disposed/);}
+          const diag=await live.save();assert.ok(!(diag as {events:{operation?:string}[]}).events.some(e=>e.operation==='verify'));
+        }finally{await live.save();await live.instance.close();}
+        assert.equal((await detail(id)).json.booking.status,"HANDOFF_PENDING");
+        await writeFile(path.join(artifact,"camera-negative-evidence.json"),JSON.stringify({invalidQrDeniedBeforeRequest:true,initializationFailureStopsStream:true,interruptedTrackReported:true,restartAndStopCleanup:true,navigationReleasesTrack:true,noVerificationOrCustodyMutation:true},null,2));
+      });
       const logs = readFileSync(logPath, "utf8");
       assert.ok(!logs.includes(pickup!.qrPayload));
       assert.ok(!logs.includes(pickup!.qrPayload.split(":").at(-1)!));
       assert.ok(!logs.includes(serverSecret));
     } finally {
-      if (browser) {
+      for(const save of cameraSavers)await save().catch(()=>{});
+      if (browser || cameraBrowser || returnBrowser) {
         let n = 0;
         // Include the separate synthetic-camera browser: otherwise a failed
         // borrower scan only preserves the owner's screen and hides the failure.
-        for (const context of [browser, cameraBrowser].flatMap((instance) => instance?.contexts() ?? []))
+        for (const context of [browser, cameraBrowser,returnBrowser].flatMap((instance) => instance?.contexts() ?? []))
           for (const page of context.pages()) {
             await writeFile(path.join(artifact, `browser-diagnostics-${n}.json`), JSON.stringify(await page.evaluate(() => {
               const video = document.querySelector("video");
@@ -1745,6 +1824,7 @@ test(
           }
       }
       await cameraBrowser?.close();
+      await returnBrowser?.close();
       await browser?.close();
       await stop();
       closeSync(log);

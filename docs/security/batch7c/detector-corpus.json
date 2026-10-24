@@ -1,0 +1,10 @@
+{
+  "publicFixtures": 128,
+  "decoded": 128,
+  "native": 113,
+  "half": 12,
+  "rotatedHalf": 3,
+  "maximumDetectorAttemptsPerFrame": 3,
+  "realBrowserCanvas": true,
+  "syntheticPayloadsOnly": true
+}

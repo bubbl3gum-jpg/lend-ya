@@ -1,0 +1,82 @@
+{
+  "correlationId": "84d4b255-cbd6-4eb7-ad30-1bff16f58f5d",
+  "label": "pickup",
+  "startedAt": "2026-10-24T17:06:00.996Z",
+  "elapsedMs": 1471,
+  "events": [
+    {
+      "ms": 844,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 132
+    },
+    {
+      "ms": 881,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 169
+    },
+    {
+      "ms": 1343,
+      "event": "response",
+      "operation": "verify",
+      "status": 200,
+      "durationMs": 81
+    }
+  ],
+  "browser": {
+    "observer": {
+      "started": 1792861561160,
+      "draws": 1,
+      "mediaStarts": 1,
+      "mediaResolved": 1,
+      "mediaFailures": 0,
+      "trackStops": 3,
+      "trackEnds": 0,
+      "stages": {
+        "invalidated": 2,
+        "start": 1,
+        "decoder-imported": 1,
+        "frame": 1,
+        "native-decoded": 1,
+        "decoded": 1,
+        "verify-request": 1,
+        "decoder-initialized": 1
+      },
+      "categories": {},
+      "track": {
+        "state": "ended",
+        "width": 640,
+        "height": 480,
+        "frameRate": 10
+      }
+    },
+    "video": {
+      "readyState": 0,
+      "width": 0,
+      "height": 0,
+      "paused": true
+    },
+    "verifiedBooking": true,
+    "visibleAlerts": 0
+  },
+  "host": {
+    "chromiumAggregate": {
+      "processes": 435,
+      "cpuPercent": 208.89999999999998,
+      "residentKiB": 1331960
+    },
+    "loadAverage": [
+      0.65,
+      0.97,
+      0.84
+    ],
+    "cpuCount": 5,
+    "nodeCpuMicros": {
+      "user": 106863,
+      "system": 13163
+    }
+  }
+}

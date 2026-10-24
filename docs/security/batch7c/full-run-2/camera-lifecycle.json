@@ -1,0 +1,97 @@
+{
+  "correlationId": "b895fd96-2598-4081-b1fa-77cf7ad5c11e",
+  "label": "lifecycle",
+  "startedAt": "2026-10-24T17:11:08.001Z",
+  "elapsedMs": 2966,
+  "events": [
+    {
+      "ms": 1007,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 119
+    },
+    {
+      "ms": 1073,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 185
+    },
+    {
+      "ms": 1693,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 66
+    },
+    {
+      "ms": 1900,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 50
+    },
+    {
+      "ms": 2124,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 47
+    }
+  ],
+  "browser": {
+    "observer": {
+      "started": 1792861868242,
+      "draws": 4,
+      "mediaStarts": 4,
+      "mediaResolved": 4,
+      "mediaFailures": 0,
+      "trackStops": 11,
+      "trackEnds": 1,
+      "stages": {
+        "invalidated": 5,
+        "start": 4,
+        "decoder-imported": 4,
+        "initialization-error": 1,
+        "track-interrupted": 1,
+        "frame": 4,
+        "rotate-attempt": 4,
+        "frame-error": 4,
+        "stale-callback": 2,
+        "decoder-initialized": 3,
+        "half-attempt": 2
+      },
+      "categories": {
+        "Unknown": 1,
+        "NotFoundException": 4
+      },
+      "track": {
+        "state": "ended",
+        "width": 640,
+        "height": 480,
+        "frameRate": 10
+      }
+    },
+    "video": null,
+    "verifiedBooking": false,
+    "visibleAlerts": 0
+  },
+  "host": {
+    "chromiumAggregate": {
+      "processes": 463,
+      "cpuPercent": 104.30000000000001,
+      "residentKiB": 732304
+    },
+    "loadAverage": [
+      5.85,
+      3.14,
+      1.75
+    ],
+    "cpuCount": 5,
+    "nodeCpuMicros": {
+      "user": 252061,
+      "system": 36574
+    }
+  }
+}

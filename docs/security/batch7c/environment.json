@@ -1,0 +1,8 @@
+{
+  "node": "v24.19.0",
+  "chromium": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)",
+  "ffmpeg": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "zxingBrowser": "0.1.5",
+  "zxingLibrary": "0.21.3",
+  "physicalDevicesTested": false
+}
