@@ -97,6 +97,7 @@ async function main() {
       ) + "\n",
     );
     const legacyGroup = [
+      "scoped-reads",
       "staff-migration",
       "staff-schema",
       "meetup-migration",
@@ -110,6 +111,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "scoped-reads": "tests/scoped-reads.test.ts",
           "staff-migration": "tests/staff-migration.test.ts",
           "staff-schema": "tests/staff-schema.test.ts",
           "meetup-migration": "tests/meetup-migration.test.ts",
@@ -145,7 +147,9 @@ async function main() {
         ]);
       if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
         if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
-        await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
+        if (legacyGroup === "scoped-reads")
+          await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", standalone]);
+        else await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
       } else {
         const port = await freePort();
         env.MRT_TEST_URL = `http://localhost:${port}`;

@@ -1,0 +1,301 @@
+{
+  "baseline": "c51812bfd0bde62ab2cf30baef08bd73302fba39",
+  "branch": "feature/scoped-staff-data-access-batch-3b",
+  "date": "2026-10-24 Asia/Taipei",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "tests": 57,
+      "passed": 57,
+      "failed": 0
+    }
+  ],
+  "isolatedSuites": [
+    {
+      "group": "test:scoped-reads",
+      "start": "2026-10-24T05:32:07.466Z",
+      "end": "2026-10-24T05:32:09.556Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/871954f44d124bb27e639d10",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:scoped-reads"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-24T05:24:32.808Z",
+      "end": "2026-10-24T05:25:11.966Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/825260bd812e60023540d654",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:authorization"
+    },
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-24T05:24:25.334Z",
+      "end": "2026-10-24T05:24:28.286Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/19913bad7a1e8d6a1e3ce115",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-schema"
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-24T05:24:25.335Z",
+      "end": "2026-10-24T05:24:32.807Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/014df3129c7e37feb8003129",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-migration"
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-24T05:24:32.809Z",
+      "end": "2026-10-24T05:25:33.511Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e1042e2374b611f064a398e4",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:admin"
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-24T05:24:32.810Z",
+      "end": "2026-10-24T05:25:47.315Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9e747d9836828086524499b8",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:moderation"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T05:25:47.315Z",
+      "end": "2026-10-24T05:27:10.746Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c2d49ab78d06246868c18eb5",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:chat"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-24T05:25:47.320Z",
+      "end": "2026-10-24T05:26:26.006Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/61d3cf6cefb8c8f0aa862662",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:rental-api"
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-24T05:25:47.322Z",
+      "end": "2026-10-24T05:26:08.398Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e694fcd138e4f674b4f06f58",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:stability"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-24T05:27:18.579Z",
+      "end": "2026-10-24T05:31:09.602Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/80fd698ac2a57ee73987e2cc",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:meetup"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-24T05:29:17.457Z",
+      "end": "2026-10-24T05:29:25.949Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2ec627d09782b1f8239f5cb5",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "command": "npm run build:verify"
+    }
+  ],
+  "databaseSafety": {
+    "newOwnedDisposableOnly": true,
+    "allRemoved": true,
+    "historicalMigrationsUnchanged": 20,
+    "newMigrations": 0,
+    "productionStaffProvisioned": 0,
+    "productionRoleActivation": false,
+    "existingApplicationDatabaseModified": false
+  },
+  "developmentFailures": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 2,
+      "findings": [
+        "BigInt literal incompatible with existing target; replaced with BigInt(1).",
+        "Test role variable inferred a single enum literal; explicitly typed StaffRole."
+      ],
+      "resolved": true
+    }
+  ],
+  "scopedReadSuccessiveRuns": [
+    {
+      "tests": 7,
+      "artifact": ".test-artifacts/9a8e5a33ecc5f5575ba09bd2",
+      "exit": 0,
+      "cleanup": true
+    },
+    {
+      "tests": 7,
+      "artifact": ".test-artifacts/a4785fe9816808b24e74f11f",
+      "exit": 0,
+      "cleanup": true
+    },
+    {
+      "tests": 9,
+      "artifact": ".test-artifacts/0eadc43bc198ae1be9964126",
+      "exit": 0,
+      "cleanup": true
+    },
+    {
+      "tests": 10,
+      "artifact": ".test-artifacts/caa80642acd1af96920e576e",
+      "exit": 0,
+      "cleanup": true
+    },
+    {
+      "tests": 10,
+      "artifact": ".test-artifacts/f41a86de489507ac0bc7b867",
+      "exit": 0,
+      "cleanup": true
+    },
+    {
+      "tests": 10,
+      "artifact": ".test-artifacts/1fd59a8f3a1c1668e56e5b40",
+      "exit": 0,
+      "cleanup": true
+    },
+    {
+      "tests": 10,
+      "artifact": ".test-artifacts/871954f44d124bb27e639d10",
+      "exit": 0,
+      "cleanup": true
+    }
+  ],
+  "retryExplanation": "Scoped tests rerun as role matrices, committed-epoch fence, audit identity metadata, empty-selection denial, real user projections and query-trace validation were added; all runtime runs passed. Initial compile errors corrected. Production build passed twice, final artifact recorded above.",
+  "meetupAssessment": "One complete final run passed 9 reported tests including actual synthetic-camera QR/two mobile sessions. Historical flakiness is not claimed eliminated; no validation weakened.",
+  "limitations": [
+    "New reads are isolated synthetic shadow composition, not production enforcement.",
+    "No StaffSessionBinding, trusted assignment adapter or production attributable audit sink exists.",
+    "Fresh fence seam tested; complete production fence-to-commit race protocol deferred and blocks cutover.",
+    "Runtime/migration production privilege separation reviewed as a requirement, not provisioned or attested by test credentials."
+  ]
+}
