@@ -1,0 +1,33 @@
+{
+  "baseline": "ce9ad9d1dd7d3b894d4904374421272050629424",
+  "historicalMigrationsUnchanged": 22,
+  "applicationMigrationsAdded": 0,
+  "historicalFileSha256": {
+    "prisma/migrations/20261002105848_init/migration.sql": "10d15eda85c796155df0213be9f6916d5b8b044b7d6079a0475c3cb3e8325f12",
+    "prisma/migrations/20261002110330_set_currency_precision/migration.sql": "2a46f73e2b0025bf252ef9e1f24f1b55ec72bf7fa426d8416db989822ed5bee6",
+    "prisma/migrations/20261002112754_add_auth_sessions/migration.sql": "3ee297957335154d7bf9f080a23ebfa3013e7120747869fa9bbda20f4d4bd5d9",
+    "prisma/migrations/20261002130231_add_transaction_handoffs/migration.sql": "5289b9110c3270feaaab010a965c351bc0904758aa70457d8eabb02941c9d2c5",
+    "prisma/migrations/20261006150000_booking_lifecycle_backbone/migration.sql": "80262e1a4bd4eb60fd97b582cf260bbadf97ca3e21870f498a5d4b61b14032b9",
+    "prisma/migrations/20261012120000_physical_listing_media_reports/migration.sql": "f13e3e6ab87d263196913ac9fc641f4dba9577625d1e5db8c89bc3ffddc7e031",
+    "prisma/migrations/20261012150000_trust_profiles/migration.sql": "5473ab2ad6b4f2721f1cd74cb61627dd83b8828eea24dfeecccf2f05f688a992",
+    "prisma/migrations/20261013080000_booking_cancellation/migration.sql": "854951df0c137141ddc190e606cffc992454057d7f28067503bc9643f067c050",
+    "prisma/migrations/20261013100000_private_rental_evidence/migration.sql": "0cacf72d9e91589c37f50a0342d004c8112177aed62c42193359fc175db0dc90",
+    "prisma/migrations/20261014010000_admin_moderation/migration.sql": "a5e0281f999bf62a7f061808dad02f935c4cdf68e4db974e1b51ff11d128be60",
+    "prisma/migrations/20261014020000_dispute_case_history/migration.sql": "488af1cc7cc05398c282abf6a621b21ae16810361a4b7326d240bf87171e9cde",
+    "prisma/migrations/20261014030000_mvp_security/migration.sql": "741a48d67c33158a127ac9ff13122330a04cb32fba105e62bde252c03d77e00f",
+    "prisma/migrations/20261016100000_official_mrt_stations/migration.sql": "944d20a67d5fc19b31a36fc144d147d5b86b509abef376d1ec4ba596f4f374d1",
+    "prisma/migrations/20261019090000_booking_request_idempotency/migration.sql": "2b025ecdf2aeae96c43fa8b498ed839be74b869e3e89faade5ce6c6546b751e0",
+    "prisma/migrations/20261019120000_private_chat_safety/migration.sql": "935358d65c8db5af17acd2236dc6579accd673a9bf03aad9454ca71849eb20f2",
+    "prisma/migrations/20261019150000_chat_activity_order/migration.sql": "85f230192eee6c04855c769cec3e14a3a61db262fe2dcc7cb2b4b2937d9c506a",
+    "prisma/migrations/20261019180000_chat_shadow_analysis/migration.sql": "0a4efe6f568c0a126eb7d2f2432e896698f9f813782f88a67857f377d6fd5328",
+    "prisma/migrations/20261019210000_mrt_meetup_verification/migration.sql": "719f53fbb9f537d2d94889623983441775eda9d95fe102e334b37059ca04b8e5",
+    "prisma/migrations/20261020090000_meetup_confirmation_window/migration.sql": "02249b7a98c1aa9e356d81094967dceaa9ec32009503be81ec6a3b4a56b55e21",
+    "prisma/migrations/20261024090000_staff_identity_foundation/migration.sql": "06b35cf9ef131285d5fc156efa4bd49f68b3a4b83044d9b54dba7ac8835f5b73",
+    "prisma/migrations/20261024140000_staff_session_audit_foundation/migration.sql": "cb6687e3718c3afb6f804e2b8d2f2050550fb6625757e0b0d955560525f9ed87",
+    "prisma/migrations/20261024160000_independent_approval_foundation/migration.sql": "b3a19f7bc03e7859988e991cab868575b9fe5b5b726eca55fd8443442f5a2231",
+    "prisma/migrations/migration_lock.toml": "99836963713b4f5b269ad49af0ed3d7b0b2e336115c2f92dc9ac683d139d0900"
+  },
+  "applicationSchemaAndLegacyAuthorityUnchanged": true,
+  "fixtureSchemaSql": "tests/fixtures/approval-execution.sql",
+  "fixtureSchemaSqlSha256": "47aa9918598682ce45f28b4d1138417e9f7462c486dff0465a89c2645f37c73f"
+}

@@ -1,0 +1,361 @@
+{
+  "baseline": "ce9ad9d1dd7d3b894d4904374421272050629424",
+  "branch": "feature/approval-execution-safety-batch-4b",
+  "date": "2026-10-24 Asia/Taipei",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "postgres": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "tests": 57,
+      "passed": 57,
+      "failed": 0
+    }
+  ],
+  "finalReportedTests": 205,
+  "isolatedSuites": [
+    {
+      "group": "test:execution-rehearsal",
+      "start": "2026-10-24T09:18:19.781Z",
+      "end": "2026-10-24T09:18:28.130Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/373501450d76de4df3566d97",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:execution-rehearsal"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-24T09:08:55.677Z",
+      "end": "2026-10-24T09:09:24.005Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ff6682bb21e367d8704e919a",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:authorization"
+    },
+    {
+      "group": "test:approval",
+      "start": "2026-10-24T09:08:55.674Z",
+      "end": "2026-10-24T09:09:03.364Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/332af0487a9d8972210db481",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:approval"
+    },
+    {
+      "group": "test:approval-migration",
+      "start": "2026-10-24T09:08:55.676Z",
+      "end": "2026-10-24T09:09:03.715Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a7e3e51903344147af9453cc",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:approval-migration"
+    },
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-24T09:09:24.005Z",
+      "end": "2026-10-24T09:09:26.826Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/31ce14bb225f9a4beb0c70fd",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-schema"
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-24T09:09:24.007Z",
+      "end": "2026-10-24T09:09:31.226Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f5ef9cf8f8c92328bd2e43f9",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-migration"
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-24T09:09:24.007Z",
+      "end": "2026-10-24T09:09:28.392Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/dae4e1e702ba04fffbe9ff95",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-session"
+    },
+    {
+      "group": "test:staff-session-migration",
+      "start": "2026-10-24T09:09:31.226Z",
+      "end": "2026-10-24T09:09:39.298Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9e160812747dda94c45e3897",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:staff-session-migration"
+    },
+    {
+      "group": "test:scoped-reads",
+      "start": "2026-10-24T09:09:31.228Z",
+      "end": "2026-10-24T09:09:34.498Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a52bb1f837857037a06632cc",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:scoped-reads"
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-24T09:09:31.228Z",
+      "end": "2026-10-24T09:10:08.775Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/92b3038fa5216c30346f6f99",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:admin"
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-24T09:10:08.775Z",
+      "end": "2026-10-24T09:11:32.059Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/726c525d9c06fa99e20fe351",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:moderation"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T09:10:08.777Z",
+      "end": "2026-10-24T09:11:55.566Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1033f6b18c58f8872e5435cc",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:chat"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-24T09:10:08.778Z",
+      "end": "2026-10-24T09:10:54.566Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e6696b092a57742573b3ab84",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:rental-api"
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-24T09:11:55.567Z",
+      "end": "2026-10-24T09:12:12.053Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e03c7e71b49899e03a036f00",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:stability"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-24T09:12:12.084Z",
+      "end": "2026-10-24T09:16:12.510Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/176f16593246c147dd6329bb",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "command": "npm run test:meetup"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-24T09:18:19.783Z",
+      "end": "2026-10-24T09:18:28.132Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/22fe1eeb5b2f5588902c470b",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "command": "npm run build:verify"
+    }
+  ],
+  "databaseSafety": {
+    "newOwnedDisposableOnly": true,
+    "allFinalRunsRemoved": true,
+    "remainingBatch4bDatabases": 0,
+    "applicationTablesIncludingMigrationHistoryCompared": 47,
+    "publicTriggersUnchanged": 53,
+    "historicalMigrationsUnchanged": 22,
+    "applicationMigrationsAdded": 0,
+    "productionOrLegacyDataModified": false,
+    "staffProvisioned": false,
+    "approvalOrStaffActivation": false,
+    "productionExecutorEndpoint": false
+  },
+  "executionEvidence": {
+    "counterDomain": "approval_rehearsal.resource",
+    "effect": "READY/value=0 -> CONSUMED/value=1, version+1",
+    "exactlyOncePerRevision": true,
+    "repeatedResult": "executed=false, replayed=true; no duplicated effect",
+    "realLockTimeoutSqlState": "55P03",
+    "realDeadlockSqlState": "40P01",
+    "faultEffectsRolledBack": true,
+    "auditAndReceiptAtomic": true,
+    "schemaSeparateFromAllApplicationTables": true
+  },
+  "developmentFailures": [],
+  "retries": "All completed runs passed: initial 16 rehearsal cases, then 17 and 18 with SQLSTATE, expiry and forged-stored-approval coverage. Targeted rehearsal/build reruns followed test-schema refinements. Injected database errors are expected negative evidence, not failed suites.",
+  "meetupAssessment": "One full final run passed 9 reported tests including synthetic camera/two mobile browser sessions. Historical flakiness is not claimed eliminated. No validation weakened.",
+  "limitations": [
+    "Metadata-only real contract registry: every action blocked; proposed execution capability names are not registered/granted.",
+    "Synthetic identities and TEST_VERIFIED assertions are never live staff/MFA credentials.",
+    "Only one fixed counter effect in owned disposable databases; no real domain handler or application migration.",
+    "Existing legacy Admin high-risk actions are not protected by the rehearsal.",
+    "Real proofing/MFA/session/assignment/role policies, protected audit/runtime privileges, immutable providers, retention and complete legacy cutover remain blockers.",
+    "DB-owner bypass, global real writer locking, cache/external-store consistency and ambiguous commit reconciliation require independent review."
+  ]
+}
