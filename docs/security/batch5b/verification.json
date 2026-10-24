@@ -1,0 +1,492 @@
+{
+  "date": "2026-10-24 Asia/Taipei",
+  "baseline": "f35a33b1d9530429b1870011da0a608c11e2afe8",
+  "branch": "feature/admin-passkey-integration-pilot-batch-5b",
+  "unitTests": 59,
+  "finalReportedPassingTests": 242,
+  "checks": [
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    {
+      "command": "npm run test:unit",
+      "exit": 0
+    },
+    {
+      "command": "npx prisma validate --config prisma7.config.ts",
+      "exit": 0
+    },
+    {
+      "command": "npm audit --omit=dev --json",
+      "exit": 0
+    }
+  ],
+  "isolatedRuns": [
+    {
+      "group": "test:mfa-pilot",
+      "start": "2026-10-24T10:44:25.184Z",
+      "end": "2026-10-24T10:44:46.933Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d14376686ae5d65e053832ec",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa-pilot-production",
+      "start": "2026-10-24T10:38:12.278Z",
+      "end": "2026-10-24T10:38:40.544Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2175aedfec88b8dc4713a601",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa-pilot-disabled",
+      "start": "2026-10-24T10:39:15.191Z",
+      "end": "2026-10-24T10:39:33.804Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c73031ed22709227d07441ee",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa",
+      "start": "2026-10-24T10:35:26.044Z",
+      "end": "2026-10-24T10:35:41.106Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0fc2fa99b5234f056fe1e489",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa-migration",
+      "start": "2026-10-24T10:43:27.105Z",
+      "end": "2026-10-24T10:43:33.635Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/977867bc36a4f0882ee29b00",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-24T10:36:33.680Z",
+      "end": "2026-10-24T10:37:11.587Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9b3eb1cc124890b5af4f92fe",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-schema",
+      "start": "2026-10-24T10:37:11.588Z",
+      "end": "2026-10-24T10:37:14.590Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b5498164df2d116927dd97b5",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-migration",
+      "start": "2026-10-24T10:37:11.589Z",
+      "end": "2026-10-24T10:37:19.160Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a2f190c564fc0186c85aacef",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-24T10:37:20.019Z",
+      "end": "2026-10-24T10:37:24.825Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/062ec96d4da5494d6d64c22c",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-session-migration",
+      "start": "2026-10-24T10:37:20.021Z",
+      "end": "2026-10-24T10:37:27.785Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/07b614da350aef4d2fb79e46",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:scoped-reads",
+      "start": "2026-10-24T10:37:20.023Z",
+      "end": "2026-10-24T10:37:23.429Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f9261d89e08c629c102e715e",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:approval",
+      "start": "2026-10-24T10:36:33.683Z",
+      "end": "2026-10-24T10:36:47.750Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/bd74cc449370c40d3c02ee10",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:approval-migration",
+      "start": "2026-10-24T10:36:33.684Z",
+      "end": "2026-10-24T10:36:48.642Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ce282becb9d1608f674f50eb",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:execution-rehearsal",
+      "start": "2026-10-24T10:37:11.587Z",
+      "end": "2026-10-24T10:37:20.019Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1e95c40d7e6415faea584bee",
+      "tests": [
+        "\u2139 tests 18"
+      ],
+      "passes": [
+        "\u2139 pass 18"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-24T10:37:27.785Z",
+      "end": "2026-10-24T10:38:57.366Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d16ef4946348fa177694713c",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-24T10:37:27.786Z",
+      "end": "2026-10-24T10:39:13.686Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f0790cd91bcca36366d4cfa5",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-24T10:39:50.985Z",
+      "end": "2026-10-24T10:41:12.754Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f5410b11d27abcaaefd422aa",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-24T10:39:15.248Z",
+      "end": "2026-10-24T10:39:56.372Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0cd3dbb9ec83567791316fe1",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:stability",
+      "start": "2026-10-24T10:39:15.252Z",
+      "end": "2026-10-24T10:39:38.291Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a488550a4c9303229c7402b6",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-24T10:39:15.255Z",
+      "end": "2026-10-24T10:43:27.105Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0c20bf5f0fe54fee8245f775",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-24T10:44:35.649Z",
+      "end": "2026-10-24T10:44:43.962Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/aed9e7e587874393a972f08c",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    }
+  ],
+  "retainedInitialFailureMetadata": [
+    {
+      "label": "pilot-initial",
+      "group": "test:mfa-pilot",
+      "start": "2026-10-24T10:34:13.350Z",
+      "end": "2026-10-24T10:34:35.700Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/558244b4edc5e621d68050f2",
+      "tests": [
+        "\u2139 tests 12"
+      ],
+      "passes": [
+        "\u2139 pass 3"
+      ],
+      "fails": [
+        "\u2139 fail 9"
+      ],
+      "cleanup": true
+    },
+    {
+      "label": "pilot-keyboard-initial",
+      "group": "test:mfa-pilot",
+      "start": "2026-10-24T10:41:04.554Z",
+      "end": "2026-10-24T10:41:39.545Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/f6a017cc6375977255803b4b",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true
+    },
+    {
+      "label": "production-initial",
+      "group": "test:mfa-pilot-production",
+      "start": "2026-10-24T10:36:31.614Z",
+      "end": "2026-10-24T10:36:52.803Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/e41d17be888dc59dd7a7f8bc",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "label": "chat-first",
+      "group": "test:chat",
+      "start": "2026-10-24T10:37:27.787Z",
+      "end": "2026-10-24T10:39:15.248Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/37e202ff3bbdf6fd62ffc0a8",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 12"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true
+    }
+  ],
+  "initialFailureExplanations": [
+    "Unawaited service promises escaped route denial mapping; fixed by awaiting inside the catch boundary.",
+    "Concurrent first-page initialization exposed Prisma empty-upsert P2002 race; replaced with atomic INSERT ON CONFLICT DO NOTHING and covered four-way GET.",
+    "Native cancellation assertion matched Next route announcer as well as the intended alert; scoped selector.",
+    "Initial production build failed test-only header-union TypeScript checking; typed closed header fixtures fixed.",
+    "Not-found page streamed HTTP 200; early proxy production/flag-off refusal now tested as actual 404.",
+    "Keyboard test pressed Enter before loading enabled enrollment; wait for enabled control before exercising actual keyboard activation."
+  ],
+  "recurringReliabilityIssue": "Chat browser login remained /login past existing 5000ms assertion on first run; fresh retry passes. Same symptom as Batch 5A; root cause unconfirmed. No chat test or timeout weakened.",
+  "meetupStatus": "9/9 including synthetic-camera browser acceptance passed this run; no GPS/QR/evidence change.",
+  "noProductionActivation": true
+}

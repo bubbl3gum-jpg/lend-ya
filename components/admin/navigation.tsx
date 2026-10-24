@@ -25,7 +25,7 @@ export const adminNavigationGroups = [
   },
 ];
 export const adminLinks = adminNavigationGroups.flatMap((group) => group.links);
-export function AdminNavigation() {
+export function AdminNavigation({ passkeyPilot = false }: { passkeyPilot?: boolean }) {
   const pathname = usePathname();
   return (
     <nav aria-label="Administration" className="space-y-6">
@@ -35,7 +35,8 @@ export function AdminNavigation() {
             {group.label}
           </p>
           <ul className="space-y-1">
-            {group.links.map((link) => {
+            {(group.label === "System" && passkeyPilot
+              ? [{ href: "/admin/security", label: "Security" }, ...group.links] : group.links).map((link) => {
               const active =
                 pathname === link.href ||
                 (link.href !== "/admin" &&

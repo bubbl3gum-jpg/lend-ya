@@ -25,7 +25,7 @@ export class StaffMfaDenied extends Error {
   }
 }
 type Tx = Prisma.TransactionClient;
-async function actor(tx: Tx, token: string) {
+async function actor(tx: Tx, token: string, legacyAdminOnly = false) {
   if (typeof token !== "string" || token.length > 256)
     throw new StaffMfaDenied();
   const session = await tx.authSession.findUnique({
@@ -45,6 +45,7 @@ async function actor(tx: Tx, token: string) {
     !session ||
     session.expiresAt.getTime() <= Date.now() ||
     session.user.accountStatus !== "ACTIVE" ||
+    (legacyAdminOnly && session.user.role !== "ADMIN") ||
     !link ||
     link.state !== "VERIFIED" ||
     link.person.verification !== "VERIFIED" ||
@@ -56,11 +57,8 @@ async function actor(tx: Tx, token: string) {
   await tx.$queryRaw`SELECT id FROM "User" WHERE id=${session.userId} FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffAccountAssociation" WHERE id=${link.id}::uuid FOR SHARE`;
   await tx.$queryRaw`SELECT id FROM "StaffPerson" WHERE id=${link.personId}::uuid FOR SHARE`;
-  await tx.staffMfaVersion.upsert({
-    where: { associationId: link.id },
-    create: { associationId: link.id },
-    update: {},
-  });
+  // Atomic initialization also handles two first-page reads in React Strict Mode.
+  await tx.$executeRaw`INSERT INTO "StaffMfaVersion" ("associationId",version) VALUES (${link.id}::uuid,1) ON CONFLICT ("associationId") DO NOTHING`;
   await tx.$queryRaw`SELECT "associationId" FROM "StaffMfaVersion" WHERE "associationId"=${link.id}::uuid FOR UPDATE`;
   // READ COMMITTED refresh after waiting for session/revocation/epoch locks.
   const current = await tx.authSession.findUnique({
@@ -84,6 +82,7 @@ async function actor(tx: Tx, token: string) {
     current.createdAt.getTime() !== session.createdAt.getTime() ||
     current.expiresAt.getTime() <= Date.now() ||
     current.user.accountStatus !== "ACTIVE" ||
+    (legacyAdminOnly && current.user.role !== "ADMIN") ||
     !association ||
     association.id !== link.id ||
     association.state !== "VERIFIED" ||
@@ -135,12 +134,13 @@ const userHandle = (a: Actor) =>
 export function createStaffWebAuthnFoundation(
   db: PrismaClient,
   realm: WebAuthnRealm,
+  boundary: Readonly<{ legacyAdminOnly?: boolean }> = {},
 ) {
   const config = webAuthnRealm(realm);
   async function run<T>(token: string, work: (tx: Tx, a: Actor) => Promise<T>) {
     try {
       return await db.$transaction(
-        async (tx) => work(tx, await actor(tx, token)),
+        async (tx) => work(tx, await actor(tx, token, boundary.legacyAdminOnly === true)),
         { isolationLevel: "ReadCommitted", timeout: 15000, maxWait: 3000 },
       );
     } catch (error) {
@@ -273,6 +273,13 @@ export function createStaffWebAuthnFoundation(
       throw new StaffMfaDenied();
   }
   return Object.freeze({
+    async listCredentials(token: string) {
+      return run(token, async (tx, a) => tx.staffMfaCredential.findMany({
+        where: { associationId: a.association.id, rpId: config.rpId },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+        select: { id: true, createdAt: true, revokedAt: true, deviceType: true, backedUp: true },
+      }));
+    },
     async beginEnrollment(
       token: string,
       password: string,
@@ -537,6 +544,7 @@ export function createStaffWebAuthnFoundation(
             factorVerified: true as const,
             staffAuthorized: false as const,
             assuranceId: proof.id,
+            expiresAt: proof.expiresAt.toISOString(),
           };
         }),
       );

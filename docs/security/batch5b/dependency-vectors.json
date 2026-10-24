@@ -1,0 +1,31 @@
+{
+  "baseline": "3.1.8",
+  "candidate": "3.1.9",
+  "dependencyPath": "@prisma/client -> prisma -> @prisma/dev -> @prisma/streams-local -> ajv -> fast-uri",
+  "vectors": [
+    {
+      "advisory": "GHSA-w74x-v6f9-j3xg",
+      "vector": "encoded scheme",
+      "baselineSafe": false,
+      "candidateSafe": true
+    },
+    {
+      "advisory": "GHSA-xhq7-xmqj-769h",
+      "vector": "relative path equivalence",
+      "baselineSafe": false,
+      "candidateSafe": true
+    },
+    {
+      "advisory": "GHSA-wjr9-j795-jxcr",
+      "vector": "host confusion",
+      "baselineSafe": false,
+      "candidateSafe": true
+    },
+    {
+      "advisory": "GHSA-333x-w4r6-6crp",
+      "vector": "suffix scheme injection",
+      "baselineSafe": false,
+      "candidateSafe": true
+    }
+  ]
+}

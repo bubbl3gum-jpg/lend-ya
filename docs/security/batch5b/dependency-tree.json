@@ -1,0 +1,39 @@
+{
+  "version": "0.1.0",
+  "name": "p2p-marketplace",
+  "dependencies": {
+    "prisma": {
+      "version": "7.10.1",
+      "resolved": "https://registry.npmjs.org/prisma/-/prisma-7.10.1.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@prisma/dev": {
+          "version": "0.24.17",
+          "resolved": "https://registry.npmjs.org/@prisma/dev/-/dev-0.24.17.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@prisma/streams-local": {
+              "version": "0.1.11",
+              "resolved": "https://registry.npmjs.org/@prisma/streams-local/-/streams-local-0.1.11.tgz",
+              "overridden": false,
+              "dependencies": {
+                "ajv": {
+                  "version": "8.20.0",
+                  "resolved": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "fast-uri": {
+                      "version": "3.1.9",
+                      "resolved": "https://registry.npmjs.org/fast-uri/-/fast-uri-3.1.9.tgz",
+                      "overridden": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

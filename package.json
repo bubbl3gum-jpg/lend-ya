@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "admin:create": "tsx scripts/create-admin.ts",
-    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts tests/operational-error.test.ts tests/dependency-security.test.ts tests/authorization-policy.test.ts",
+    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts tests/operational-error.test.ts tests/dependency-security.test.ts tests/authorization-policy.test.ts tests/passkey-pilot-config.test.ts",
     "test:integration": "tsx tests/run-isolated.ts",
     "test:admin": "tsx tests/run-isolated.ts --admin",
     "test:moderation": "tsx tests/run-isolated.ts --moderation",
@@ -41,7 +41,10 @@
     "test:approval-migration": "tsx tests/run-isolated.ts --approval-migration",
     "test:execution-rehearsal": "tsx tests/run-isolated.ts --execution-rehearsal",
     "test:mfa": "tsx tests/run-isolated.ts --mfa",
-    "test:mfa-migration": "tsx tests/run-isolated.ts --mfa-migration"
+    "test:mfa-migration": "tsx tests/run-isolated.ts --mfa-migration",
+    "test:mfa-pilot": "tsx tests/run-isolated.ts --mfa-pilot",
+    "test:mfa-pilot-production": "tsx tests/run-isolated.ts --mfa-pilot-production",
+    "test:mfa-pilot-disabled": "tsx tests/run-isolated.ts --mfa-pilot-disabled"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

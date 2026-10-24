@@ -168,11 +168,21 @@ async function main() {
         const port = await freePort();
         env.MRT_TEST_URL = `http://localhost:${port}`;
         env.TEST_BASE_URL = env.MRT_TEST_URL;
+        if (process.argv.some(flag => ["--mfa-pilot","--mfa-pilot-production"].includes(flag))) {
+          env.HUSTLEN_PASSKEY_PILOT = "owned-development-only";
+          env.HUSTLEN_PASSKEY_PILOT_ORIGIN = env.TEST_BASE_URL;
+        }
+        if (process.argv.includes("--mfa-pilot-disabled")) env.HUSTLEN_PASSKEY_PILOT = "disabled";
+        const productionPilot = process.argv.includes("--mfa-pilot-production");
+        if (productionPilot) {
+          await run(["node_modules/next/dist/bin/next", "build"]);
+          Object.assign(env, { NODE_ENV: "production" });
+        }
         app = spawn(
           process.execPath,
           [
             "node_modules/next/dist/bin/next",
-            "dev",
+            productionPilot ? "start" : "dev",
             "--hostname",
             "localhost",
             "--port",
@@ -208,7 +218,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--authorization"))
+        if (process.argv.includes("--mfa-pilot") || process.argv.includes("--mfa-pilot-disabled") || productionPilot)
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", (productionPilot || process.argv.includes("--mfa-pilot-disabled")) ? "tests/mfa-pilot-production.test.ts" : "tests/mfa-pilot.integration.test.ts"]);
+        else if (process.argv.includes("--authorization"))
           await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", "tests/authorization.integration.test.ts"]);
         else if (process.argv.includes("--stability"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/core-stability.integration.test.ts"]);

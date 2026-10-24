@@ -1,0 +1,183 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@prisma/client": {
+      "name": "@prisma/client",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "prisma"
+      ],
+      "effects": [],
+      "range": "",
+      "nodes": [
+        "node_modules/@prisma/client"
+      ],
+      "fixAvailable": false
+    },
+    "@prisma/dev": {
+      "name": "@prisma/dev",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@prisma/streams-local"
+      ],
+      "effects": [
+        "prisma"
+      ],
+      "range": "",
+      "nodes": [
+        "node_modules/@prisma/dev"
+      ],
+      "fixAvailable": false
+    },
+    "@prisma/streams-local": {
+      "name": "@prisma/streams-local",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "ajv"
+      ],
+      "effects": [
+        "@prisma/dev"
+      ],
+      "range": "",
+      "nodes": [
+        "node_modules/@prisma/streams-local"
+      ],
+      "fixAvailable": false
+    },
+    "ajv": {
+      "name": "ajv",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "fast-uri"
+      ],
+      "effects": [
+        "@prisma/streams-local"
+      ],
+      "range": "",
+      "nodes": [
+        "node_modules/@prisma/streams-local/node_modules/ajv"
+      ],
+      "fixAvailable": false
+    },
+    "fast-uri": {
+      "name": "fast-uri",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243098,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to URI scheme spoofing via percent-encoded scheme decoding",
+          "url": "https://github.com/advisories/GHSA-w74x-v6f9-j3xg",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-172",
+            "CWE-180"
+          ],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": ">=3.0.0 <3.1.9"
+        },
+        {
+          "source": 1243101,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to improper path equivalence in relative reference normalization",
+          "url": "https://github.com/advisories/GHSA-xhq7-xmqj-769h",
+          "severity": "low",
+          "cwe": [
+            "CWE-41"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=3.0.0 <3.1.9"
+        },
+        {
+          "source": 1243104,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to host confusion via unchecked WHATWG host canonicalization",
+          "url": "https://github.com/advisories/GHSA-wjr9-j795-jxcr",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-20",
+            "CWE-436"
+          ],
+          "cvss": {
+            "score": 4.8,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+          },
+          "range": ">=3.1.3 <3.1.9"
+        },
+        {
+          "source": 1243107,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to scheme injection via an unescaped first-segment colon in suffix references",
+          "url": "https://github.com/advisories/GHSA-333x-w4r6-6crp",
+          "severity": "low",
+          "cwe": [
+            "CWE-41",
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=3.0.0 <3.1.9"
+        }
+      ],
+      "effects": [
+        "ajv"
+      ],
+      "range": "",
+      "nodes": [
+        "node_modules/fast-uri"
+      ],
+      "fixAvailable": false
+    },
+    "prisma": {
+      "name": "prisma",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@prisma/dev"
+      ],
+      "effects": [
+        "@prisma/client"
+      ],
+      "range": "",
+      "nodes": [
+        "node_modules/prisma"
+      ],
+      "fixAvailable": false
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 6,
+      "high": 0,
+      "critical": 0,
+      "total": 6
+    },
+    "dependencies": {
+      "prod": 231,
+      "dev": 399,
+      "optional": 116,
+      "peer": 2,
+      "peerOptional": 0,
+      "total": 668
+    }
+  }
+}

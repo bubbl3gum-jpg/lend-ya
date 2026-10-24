@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { passkeyPilotAvailable } from "@/lib/passkey-pilot";
 import { requireAdminPage } from "@/lib/admin/auth";
 import {
   AdminNavigation,
@@ -13,6 +14,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const admin = await requireAdminPage();
+  const passkeyPilot = await passkeyPilotAvailable();
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-emerald-600 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline-emerald-600">
       <a
@@ -27,13 +29,13 @@ export default async function AdminLayout({
         </Link>
         <p className="mb-8 mt-2 text-xs text-slate-400">Control Center</p>
         <div className="hidden lg:block">
-          <AdminNavigation />
+          <AdminNavigation passkeyPilot={passkeyPilot} />
         </div>
         <details className="lg:hidden">
           <summary className="mb-3 cursor-pointer rounded-xl border border-slate-700 px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300">
             Admin navigation
           </summary>
-          <AdminNavigation />
+          <AdminNavigation passkeyPilot={passkeyPilot} />
         </details>
         <Link href="/" className="mt-6 block text-sm text-slate-400">
           Open marketplace
