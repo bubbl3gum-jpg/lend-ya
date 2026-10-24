@@ -58,7 +58,7 @@ export function readWorkbenchNavigation(params: URLSearchParams): {
 }
 export function investigationHref(pathname: string, view: WorkbenchView) {
   if (
-    !/^\/admin\/(bookings|listings|reports|disputes)\/[1-9]\d*$/.test(pathname)
+    !/^\/admin\/(?:(bookings|listings|reports|disputes)\/[1-9]\d*|(?:reports|disputes)\/[1-9]\d*\/history|case-audit\/[1-9]\d*)$/.test(pathname)
   )
     throw Error("Invalid investigation detail path.");
   const params = new URLSearchParams({

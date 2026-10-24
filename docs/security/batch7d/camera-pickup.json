@@ -1,0 +1,104 @@
+{
+  "correlationId": "4f1154e4-f5e1-4345-aec8-503441c0a400",
+  "label": "pickup",
+  "startedAt": "2026-10-24T17:35:44.139Z",
+  "elapsedMs": 3730,
+  "events": [
+    {
+      "ms": 2106,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 58
+    },
+    {
+      "ms": 2194,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 147
+    },
+    {
+      "ms": 3050,
+      "event": "response",
+      "operation": "verify",
+      "status": 200,
+      "durationMs": 200
+    },
+    {
+      "ms": 3107,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 257
+    },
+    {
+      "ms": 3153,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 101
+    },
+    {
+      "ms": 3288,
+      "event": "response",
+      "operation": "status",
+      "status": 200,
+      "durationMs": 124
+    }
+  ],
+  "browser": {
+    "observer": {
+      "started": 1792863344734,
+      "draws": 1,
+      "mediaStarts": 1,
+      "mediaResolved": 1,
+      "mediaFailures": 0,
+      "trackStops": 3,
+      "trackEnds": 0,
+      "stages": {
+        "invalidated": 2,
+        "start": 1,
+        "decoder-imported": 1,
+        "frame": 1,
+        "native-decoded": 1,
+        "decoded": 1,
+        "verify-request": 1,
+        "decoder-initialized": 1,
+        "verified": 1
+      },
+      "categories": {},
+      "track": {
+        "state": "ended",
+        "width": 640,
+        "height": 480,
+        "frameRate": 10
+      }
+    },
+    "video": {
+      "readyState": 0,
+      "width": 0,
+      "height": 0,
+      "paused": true
+    },
+    "verifiedBooking": true,
+    "visibleAlerts": 0
+  },
+  "host": {
+    "chromiumAggregate": {
+      "processes": 520,
+      "cpuPercent": 113.70000000000002,
+      "residentKiB": 2088116
+    },
+    "loadAverage": [
+      10.01,
+      5.4,
+      3.06
+    ],
+    "cpuCount": 5,
+    "nodeCpuMicros": {
+      "user": 118363,
+      "system": 9342
+    }
+  }
+}

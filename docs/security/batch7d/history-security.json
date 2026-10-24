@@ -1,0 +1,12 @@
+{
+  "legacyAdminOnly": true,
+  "anonymousOrdinarySuspendedExpiredDenied": true,
+  "unknownSelectorsRejected": true,
+  "minimalDto": true,
+  "narrativeAndPayloadCanariesAbsent": true,
+  "realReportAndDisputeDecisionAudits": true,
+  "stableTimestampTies": true,
+  "workbenchRoundTripAllViewports": true,
+  "databaseFailureAndRecovery": true,
+  "caseClosureNotCustody": true
+}

@@ -351,6 +351,8 @@ test("production source never imports shadow policy and all Admin API routes rem
     readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_6C.json", "utf8"),
   ).adminApiRoutes, JSON.parse(
     readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_7A.json", "utf8"),
+  ).adminApiRoutes, JSON.parse(
+    readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_7D.json", "utf8"),
   ).adminApiRoutes) as { file: string; sha256: string }[];
   assert.deepEqual(
     files("app/api/admin")

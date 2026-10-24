@@ -1,0 +1,21 @@
+{
+  "baseline": "93d3c646abc44e8298f2acd9bc3d57507f0691fe",
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/disputes/[id]/history/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi and independent getCaseHistory ACTIVE legacy ADMIN check",
+      "sha256": "9aebc188493186961db66d34415088ce5509b4c5d914083c2c8fc9044740d40b"
+    },
+    {
+      "file": "app/api/admin/reports/[id]/history/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi and independent getCaseHistory ACTIVE legacy ADMIN check",
+      "sha256": "3c1a02f8fe9bf0f762c9b95555014f512971cd3fea793248ce0f51641da6540c"
+    }
+  ]
+}

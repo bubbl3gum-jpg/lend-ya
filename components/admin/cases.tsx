@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CaseHistoryPreview } from "./case-history";
 import { notFound } from "next/navigation";
 import { requireAdminPage, AdminInputError } from "@/lib/admin/auth";
 import { caseDirectory, caseDetail, type CaseKind } from "@/lib/admin/cases";
@@ -286,10 +287,12 @@ export async function AdminCaseDetail({
   kind,
   params,
   investigationContext,
+  historySearchParams,
 }: {
   kind: "reports" | "disputes";
   params: Promise<{ id: string }>;
   investigationContext?: React.ReactNode;
+  historySearchParams?: Promise<SearchParams>;
 }) {
   await requireAdminPage();
   let id: number;
@@ -345,7 +348,7 @@ export async function AdminCaseDetail({
             ]}
           />
         ) : null}
-        <CaseHistory type="REPORT" id={id} />
+        <CaseHistory type="REPORT" id={id} searchParams={historySearchParams} />
       </>
     );
   const b = record.booking,
@@ -497,19 +500,11 @@ export async function AdminCaseDetail({
           ]}
         />
       ) : null}
-      <CaseHistory type="DISPUTE" id={id} />
+      <CaseHistory type="DISPUTE" id={id} searchParams={historySearchParams} />
     </>
   );
 }
-export function CaseHistory({ type, id }: { type: string; id: number }) {
-  return (
-    <p className="mt-5 text-sm">
-      <Link
-        className="underline text-emerald-800"
-        href={`/admin/audit-logs?targetType=${type}&targetId=${id}`}
-      >
-        View decision history and reasons
-      </Link>
-    </p>
-  );
+export async function CaseHistory({ type, id, searchParams }: { type: "USER" | "LISTING" | "REPORT" | "DISPUTE"; id: number; searchParams?: Promise<SearchParams> }) {
+  if (type === "USER" || type === "LISTING") return <p className="mt-5 text-sm"><Link className="underline text-emerald-800" href={`/admin/audit-logs?targetType=${type}&targetId=${id}`}>View decision history and reasons</Link></p>;
+  return <CaseHistoryPreview kind={type} id={id} searchParams={searchParams ?? Promise.resolve({})}/>;
 }

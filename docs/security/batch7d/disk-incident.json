@@ -1,0 +1,102 @@
+{
+  "confirmedHostIncident": "ENOSPC during generated Next.js test build writes",
+  "diskBefore": "32G filesystem, zero available (100%)",
+  "diskAfter": "19G available after generated-only historical build cleanup",
+  "removedGeneratedNextDirectories": 216,
+  "noDatabaseDeletionOutsideOwnedHarness": true,
+  "affectedInitialGroups": [
+    {
+      "group": "test:admin-own-session",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:case-history",
+      "initialExit": 1,
+      "artifact": ".test-artifacts/548669334a0327f495b29ada",
+      "directNoSpaceEvidence": [
+        "server.log",
+        "next/dev/logs/next-development.log"
+      ],
+      "testsStarted": true
+    },
+    {
+      "group": "test:investigation-receipt",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:login-navigation",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:login-readiness",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:mfa-pilot-disabled",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:mfa-pilot-production",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:mfa-pilot",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:moderation",
+      "initialExit": 1,
+      "artifact": ".test-artifacts/c9d7cba1778155936cdd9f08",
+      "directNoSpaceEvidence": [
+        "next/dev/logs/next-development.log"
+      ],
+      "testsStarted": true
+    },
+    {
+      "group": "test:rental-browser",
+      "initialExit": 1,
+      "artifact": ".test-artifacts/7467ef9717023dabc3e706b0",
+      "directNoSpaceEvidence": [],
+      "testsStarted": true
+    },
+    {
+      "group": "test:stability",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    },
+    {
+      "group": "test:staff-read-pilot",
+      "initialExit": 1,
+      "artifact": null,
+      "directNoSpaceEvidence": [],
+      "testsStarted": false
+    }
+  ],
+  "followupConditions": "New owned databases; no timeout increases; history alone, then at most two regression groups concurrently. Initial failures remain separate.",
+  "causalityLimit": "Direct Turbopack ENOSPC confirmed for listed matching logs. Other startup failures occurred during the same incident; their bounded log alone does not establish an independent application defect.",
+  "sourceTopLevelLogsScreenshotsAndQrArtifactsPreserved": true,
+  "cacheCleanupLimit": "Generated internal next/dev/logs in removed historical build directories were removed with caches. Top-level review logs/artifacts and all current 7D incident logs retained."
+}

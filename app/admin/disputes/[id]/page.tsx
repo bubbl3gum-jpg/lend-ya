@@ -12,6 +12,7 @@ export default async function Page({
     <AdminCaseDetail
       kind="disputes"
       params={params}
+      historySearchParams={searchParams}
       investigationContext={
         <InvestigationContext
           kind="DISPUTE"

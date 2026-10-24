@@ -50,7 +50,7 @@ async function CurrentInvestigationContext({
     }
     const errorId = logOperationalError("admin_investigation_read", error);
     return (
-      <section className="mb-6" aria-label="Investigation context">
+      <section id="investigation-checkpoints" className="mb-6" aria-label="Investigation context">
         <AdminPanel title="Investigation context">
           <p role="alert" className="mb-3 text-sm">
             Current investigation checks are unavailable. No checkpoint
@@ -72,7 +72,7 @@ async function CurrentInvestigationContext({
   const recorded = (value: boolean) =>
     value ? "Recorded" : "Not established by current records";
   return (
-    <section className="mb-6" aria-label="Investigation context">
+    <section id="investigation-checkpoints" className="mb-6" aria-label="Investigation context">
       <AdminPanel title="Investigation context">
         <p className="mb-3 text-xs text-slate-600">
           Current persisted state evaluated{" "}
