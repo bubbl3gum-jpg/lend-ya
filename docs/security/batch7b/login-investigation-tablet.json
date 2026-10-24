@@ -1,0 +1,214 @@
+{
+  "label": "workbench-tablet",
+  "outcome": "passed-workbench-login-filter-detail",
+  "path": "OTHER",
+  "events": [
+    {
+      "ms": 6,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 70,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 76,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 461,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 554,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 633,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 638,
+      "event": "request",
+      "path": "/admin",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 707,
+      "event": "response",
+      "path": "/admin",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 716,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 892,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 945,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 1030,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1038,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1211,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1504,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1568,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1575,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1769,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 1968,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 2051,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2121,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2134,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 2334,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 2578,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 2697,
+      "event": "request",
+      "path": "OTHER",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2757,
+      "event": "response",
+      "path": "OTHER",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2768,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 3020,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 3217,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    },
+    {
+      "ms": 3603,
+      "event": "main_frame_committed",
+      "path": "OTHER"
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "unmarked",
+    "submitDisabled": false,
+    "inputValidity": [
+      true
+    ],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 8,
+    "lock_waiters": 0
+  }
+}

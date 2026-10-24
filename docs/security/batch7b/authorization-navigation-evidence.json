@@ -1,0 +1,18 @@
+{
+  "source": "tests/admin-workbench.integration.test.ts / tests/workbench-navigation.test.ts",
+  "workbenchFinalExit": 0,
+  "pageAndServiceGuard": "ACTIVE legacy ADMIN; current route ID only; no navigation authorization",
+  "verifiedAssertions": [
+    "all four detail routes deny anonymous/USER/suspended context access",
+    "valid exact queue/page/size/filter round trip",
+    "forged record filter cannot change detail subject",
+    "invalid/external/private/repeated return metadata discarded",
+    "live restriction change re-evaluated",
+    "open and resolved report/dispute states distinguished",
+    "completed status does not establish missing custody checkpoints",
+    "unavailable read gives no checkpoint conclusions",
+    "panel contains no private narrative/contact canaries",
+    "new related link preserves return view and labels cross-type applicability"
+  ],
+  "cameraGate": "Unresolved, recorded separately. No false all-green claim."
+}

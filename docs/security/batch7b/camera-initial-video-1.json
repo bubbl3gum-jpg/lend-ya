@@ -1,0 +1,9 @@
+{
+  "video": {
+    "readyState": 4,
+    "networkState": 2,
+    "width": 640,
+    "height": 480,
+    "paused": false
+  }
+}

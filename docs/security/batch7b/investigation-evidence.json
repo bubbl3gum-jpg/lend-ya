@@ -1,0 +1,10 @@
+{
+  "sharedPredicates": true,
+  "liveListingChangeReevaluated": true,
+  "completedWithMissingHistoricalCheckpointsFlagged": true,
+  "resolvedDisputeDoesNotProveReturn": true,
+  "ownerAcceptedCompletionRecorded": true,
+  "caseAndRelatedResourceContext": true,
+  "invalidNavigationDiscarded": true,
+  "noPrivateCanariesInPanel": true
+}

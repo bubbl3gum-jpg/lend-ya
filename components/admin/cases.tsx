@@ -285,9 +285,11 @@ export async function AdminCaseDirectory({
 export async function AdminCaseDetail({
   kind,
   params,
+  investigationContext,
 }: {
   kind: "reports" | "disputes";
   params: Promise<{ id: string }>;
+  investigationContext?: React.ReactNode;
 }) {
   await requireAdminPage();
   let id: number;
@@ -305,6 +307,7 @@ export async function AdminCaseDetail({
           title={`Report #${id}`}
           description="Original allegation and recorded administrative decision."
         />
+        {investigationContext}
         <AdminPanel title="Submitted report">
           <DetailFields
             fields={[
@@ -354,6 +357,7 @@ export async function AdminCaseDetail({
         title={`Dispute #${id} · ${b.listing.title}`}
         description="Participant statements are attributed individually. Findings do not settle payments or legal liability."
       />
+      {investigationContext}
       <AdminPanel title="Case and rental agreement">
         <DetailFields
           fields={[

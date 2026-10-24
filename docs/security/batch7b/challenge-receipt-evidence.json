@@ -1,0 +1,8 @@
+{
+  "transport": "manual-code",
+  "actualChallengeVerificationAndExplicitPhysicalReceipt": true,
+  "physicalReturnRecordedViaQrChallenge": true,
+  "acceptedInspectionStillNotEstablished": true,
+  "normalInspectionNotCustodyAnomaly": true,
+  "cameraAcceptanceClaimed": false
+}

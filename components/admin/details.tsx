@@ -192,8 +192,10 @@ export async function AdminUserDetail({
 }
 export async function AdminListingDetail({
   params,
+  investigationContext,
 }: {
   params: Promise<{ id: string }>;
+  investigationContext?: React.ReactNode;
 }) {
   const record = await getAdminListing(await recordId(params));
   if (!record) notFound();
@@ -203,6 +205,7 @@ export async function AdminListingDetail({
         title={`Listing #${record.id} · ${record.title}`}
         description="Administrative listing view, including inactive items. Owner status and administrative restrictions are enforced separately."
       />
+      {investigationContext}
       <AdminPanel title="Item details">
         <DetailFields
           fields={[
@@ -322,8 +325,10 @@ export async function AdminListingDetail({
 }
 export async function AdminBookingDetail({
   params,
+  investigationContext,
 }: {
   params: Promise<{ id: string }>;
+  investigationContext?: React.ReactNode;
 }) {
   const record = await getAdminBooking(await recordId(params));
   if (!record) notFound();
@@ -333,6 +338,7 @@ export async function AdminBookingDetail({
         title={`Booking #${record.id} · ${record.listing.title}`}
         description="Read-only rental monitoring. Private condition evidence can be inspected from a related dispute investigation."
       />
+      {investigationContext}
       <AdminPanel title="Rental agreement">
         <DetailFields
           fields={[

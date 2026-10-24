@@ -193,7 +193,7 @@ test(
       );
       const anomaly = await booking("PENDING"),
         closed = await booking("PENDING");
-      await db.query(`UPDATE "Booking" SET status='IN_USE' WHERE id=$1`, [
+      await db.query(`UPDATE "Booking" SET status='COMPLETED' WHERE id=$1`, [
         anomaly.id,
       ]);
       await db.query(`UPDATE "Booking" SET status='ADMIN_CLOSED' WHERE id=$1`, [
@@ -213,7 +213,7 @@ test(
         await dispute(past.id, "OPEN"),
         await dispute(active.id, "OPEN"),
       ];
-      await dispute(completed.id, "RESOLVED");
+      const resolvedDispute = await dispute(completed.id, "RESOLVED");
       await dispute(closed.id, "RESOLVED");
       const report = async (
         listingId: number,
@@ -315,7 +315,7 @@ test(
               assert.ok(item.reasons.length);
               assert.match(
                 item.href,
-                /^\/admin\/(bookings|listings|reports|disputes)\/[1-9]\d*$/,
+                /^\/admin\/(bookings|listings|reports|disputes)\/[1-9]\d*\?wbCategory=/,
               );
             }
             assert.ok(!JSON.stringify(r).includes(canary));
@@ -353,6 +353,169 @@ test(
                 optionalHandoffMissingFlagged: true,
                 privateCanariesAbsent: true,
                 categoryOverlapExplicit: true,
+              },
+              null,
+              2,
+            ),
+          );
+        },
+      );
+      await t.test(
+        "detail context re-evaluates the same queue criteria and custody checkpoints without trusting navigation",
+        async () => {
+          const html = async (kind: string, id: number, context = "") => {
+            const r = await fetch(base + `/admin/${kind}/${id}` + context, {
+              headers: { Cookie: admin.cookie },
+            });
+            assert.equal(r.status, 200);
+            const body = await r.text();
+            const section = body.match(
+              /<section[^>]*aria-label="Investigation context"[\s\S]*?<\/section>/,
+            )?.[0];
+            assert.ok(section, "Guarded detail must render its context panel");
+            assert.ok(!section.includes(canary));
+            assert.ok(!section.includes(owner.email));
+            return section;
+          };
+          const normal = await html(
+            "bookings",
+            past.id,
+            "?wbCategory=RENTAL_END_PASSED&wbPage=2&wbPageSize=1",
+          );
+          assert.ok(normal.includes('data-selected-queue-match="true"'));
+          assert.ok(normal.includes('data-checkpoint="handoff"'));
+          assert.ok(normal.includes('data-current-queue="RENTAL_END_PASSED"'));
+          const done = await html("bookings", completed.id);
+          assert.ok(done.includes("No current Batch 7A queue criteria"));
+          assert.ok(done.includes('data-checkpoint="accepted-inspection"'));
+          assert.ok(done.includes("Recorded via owner confirmation"));
+          const missing = await html(
+            "bookings",
+            anomaly.id,
+            "?wbCategory=CUSTODY_REVIEW",
+          );
+
+          assert.ok(
+            missing.includes(
+              "Completed state has incomplete accepted inspection",
+            ),
+          );
+          assert.ok(missing.includes("Not established by current records"));
+          const closure = await html("bookings", closed.id);
+          assert.ok(closure.includes("1 resolved"));
+          assert.ok(closure.includes("does not prove physical return"));
+          const open = await html(
+            "reports",
+            openReports[0],
+            "?wbCategory=OPEN_REPORTS",
+          );
+          assert.ok(open.includes('data-selected-queue-match="true"'));
+          assert.ok(open.includes("Current open listing reports"));
+          const resolved = await html(
+            "disputes",
+            resolvedDispute,
+            "?wbCategory=OPEN_DISPUTES",
+          );
+          assert.ok(resolved.includes('data-selected-queue-match="false"'));
+          const forgedFilter = await html(
+            "reports",
+            openReports[0],
+            "?wbCategory=OPEN_REPORTS&wbRecordId=" + resolvedReport,
+          );
+          assert.ok(forgedFilter.includes('data-selected-queue-match="true"'));
+          const reportClosed = await html(
+            "reports",
+            resolvedReport,
+            "?wbCategory=OPEN_REPORTS",
+          );
+          assert.ok(reportClosed.includes('data-selected-queue-match="false"'));
+          const disputed = await html(
+            "disputes",
+            openDisputes[0],
+            "?wbCategory=OPEN_DISPUTES",
+          );
+          assert.ok(disputed.includes("Custody checkpoints"));
+          assert.ok(disputed.includes('data-selected-queue-match="true"'));
+          const parentId = (
+            await db.query(`SELECT "bookingId" FROM "Dispute" WHERE id=$1`, [
+              openDisputes[0],
+            ])
+          ).rows[0].bookingId;
+          assert.ok(
+            disputed.includes(
+              `/admin/bookings/${parentId}?wbCategory=OPEN_DISPUTES`,
+            ),
+          );
+          const parent = await html(
+            "bookings",
+            parentId,
+            "?wbCategory=OPEN_DISPUTES&wbPage=2&wbPageSize=1",
+          );
+          assert.ok(
+            parent.includes('data-selected-queue-match="not-applicable"'),
+          );
+          assert.ok(parent.includes("preserved only as your return view"));
+
+          // A separate reversible fixture transition changes the predicate after a valid queue link.
+          await db.query(
+            `UPDATE "Listing" SET "adminRestricted"=false WHERE id=$1`,
+            [confirmed.listingId],
+          );
+          try {
+            const changed = await html(
+              "listings",
+              confirmed.listingId,
+              "?wbCategory=LISTING_REVIEW&wbPage=3&wbPageSize=1&wbRecordId=" +
+                confirmed.listingId,
+            );
+            assert.ok(changed.includes('data-selected-queue-match="false"'));
+            assert.ok(changed.includes("Not currently in the selected queue"));
+          } finally {
+            await db.query(
+              `UPDATE "Listing" SET "adminRestricted"=true WHERE id=$1`,
+              [confirmed.listingId],
+            );
+          }
+          for (const query of [
+            "?returnTo=https://evil.invalid/private",
+            "?wbCategory=__proto__",
+            "?wbCategory=OPEN_REPORTS&role=ADMIN",
+            "?wbCategory=OPEN_REPORTS&wbPage=10001",
+          ]) {
+            const safe = await html("reports", openReports[0], query);
+            assert.ok(safe.includes("Navigation context was invalid"));
+            assert.ok(safe.includes('href="/admin/workbench"'));
+            assert.ok(!safe.includes("evil.invalid"));
+          }
+          for (const kind of ["bookings", "listings", "reports", "disputes"]) {
+            const id =
+              kind === "bookings"
+                ? past.id
+                : kind === "listings"
+                  ? confirmed.listingId
+                  : kind === "reports"
+                    ? openReports[0]
+                    : openDisputes[0];
+            for (const cookie of ["", owner.cookie]) {
+              const r = await fetch(base + `/admin/${kind}/${id}`, {
+                headers: { Cookie: cookie },
+                redirect: "manual",
+              });
+              assert.ok(!(await r.text()).includes("data-checkpoint="));
+            }
+          }
+          await writeFile(
+            path.join(artifact, "investigation-evidence.json"),
+            JSON.stringify(
+              {
+                sharedPredicates: true,
+                liveListingChangeReevaluated: true,
+                completedWithMissingHistoricalCheckpointsFlagged: true,
+                resolvedDisputeDoesNotProveReturn: true,
+                ownerAcceptedCompletionRecorded: true,
+                caseAndRelatedResourceContext: true,
+                invalidNavigationDiscarded: true,
+                noPrivateCanariesInPanel: true,
               },
               null,
               2,
@@ -422,6 +585,22 @@ test(
             (await api("/api/admin/workbench", admin.cookie)).status,
             403,
           );
+          for (const [kind, id] of [
+            ["bookings", past.id],
+            ["listings", confirmed.listingId],
+            ["reports", openReports[0]],
+            ["disputes", openDisputes[0]],
+          ] as const) {
+            const denied = await fetch(
+              base + `/admin/${kind}/${id}?wbCategory=OPEN_REPORTS`,
+              { headers: { Cookie: admin.cookie }, redirect: "manual" },
+            );
+            const deniedHtml = await denied.text();
+            assert.ok(!deniedHtml.includes("data-checkpoint="));
+            assert.ok(
+              !deniedHtml.includes('aria-label="Investigation context"'),
+            );
+          }
           const deniedPage = await fetch(base + "/admin/workbench", {
             headers: { Cookie: admin.cookie },
             redirect: "manual",
@@ -562,7 +741,11 @@ test(
                 })
                 .click({ noWaitAfter: true });
               await expect(page).toHaveURL(
-                base + "/admin/reports/" + openReports[0],
+                base +
+                  "/admin/reports/" +
+                  openReports[0] +
+                  "?wbCategory=OPEN_REPORTS&wbPage=1&wbPageSize=10&wbRecordId=" +
+                  openReports[0],
               );
               await page.goto(
                 base + "/admin/workbench?category=CUSTODY_REVIEW",
@@ -593,6 +776,48 @@ test(
                 fullPage: true,
                 style: "nextjs-portal { display:none !important; }",
               });
+              await page.goto(
+                base +
+                  "/admin/workbench?category=CUSTODY_REVIEW&page=2&pageSize=1",
+              );
+              await page
+                .getByRole("link", {
+                  name: "booking #" + closed.id,
+                  exact: true,
+                })
+                .click({ noWaitAfter: true });
+              const panel = page.getByRole("region", {
+                name: "Investigation context",
+                exact: true,
+              });
+              await expect(
+                panel.getByText("Currently matches the selected queue.", {
+                  exact: true,
+                }),
+              ).toBeVisible();
+              await expect(
+                panel.locator('[data-checkpoint="physical-return"]'),
+              ).toHaveText("Not established by current records");
+              await expect(
+                panel.locator('[data-checkpoint="disputes"]'),
+              ).toHaveText("0 open · 1 resolved");
+              await panel.screenshot({
+                path: path.join(artifact, "investigation-" + label + ".png"),
+                style: "nextjs-portal { display: none !important; }",
+              });
+              await panel
+                .getByRole("link", { name: "Back to Workbench", exact: true })
+                .click({ noWaitAfter: true });
+              await expect(page).toHaveURL(
+                base +
+                  "/admin/workbench?category=CUSTODY_REVIEW&page=2&pageSize=1",
+              );
+              await expect(
+                page.getByRole("link", {
+                  name: "booking #" + closed.id,
+                  exact: true,
+                }),
+              ).toBeVisible();
               await save("passed-workbench-login-filter-detail");
               await page
                 .getByRole("button", { name: "Sign out", exact: true })
@@ -633,6 +858,20 @@ test(
             assert.equal(r.status, 500);
             assert.ok(!JSON.stringify(r.body).includes(canary));
             assert.deepEqual(Object.keys(r.body).sort(), ["error"]);
+            const unavailable = await fetch(
+              base + `/admin/bookings/${closed.id}?wbCategory=CUSTODY_REVIEW`,
+              { headers: { Cookie: admin.cookie } },
+            );
+            assert.equal(unavailable.status, 200);
+            const unavailableHtml = await unavailable.text();
+            assert.ok(
+              unavailableHtml.includes(
+                "Current investigation checks are unavailable",
+              ),
+            );
+            assert.ok(
+              !unavailableHtml.includes('data-checkpoint="physical-return"'),
+            );
             await page.goto(base + "/admin/workbench");
             await expect(
               page.getByRole("heading", {

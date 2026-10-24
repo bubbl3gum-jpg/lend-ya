@@ -42,4 +42,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/api/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/dev/staff-listing-inspection"] };
+export const config = { matcher: ["/api/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };

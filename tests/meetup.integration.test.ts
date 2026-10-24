@@ -251,6 +251,8 @@ test(
       owner = await register("QROwner");
       borrower = await register("QRBorrower");
       outsider = await register("QROutsider");
+      const investigationAdmin = await register("QRInvestigationAdmin");
+      await db.query(`UPDATE "User" SET role='ADMIN' WHERE id=$1`,[investigationAdmin.id]);
       const station = (
         await db.query(
           'SELECT id,"canonicalId" FROM "MrtStation" WHERE code=\'TPE\'',
@@ -263,6 +265,30 @@ test(
       point = { latitude: coords.latitude!, longitude: coords.longitude! };
       const first = await rental(),
         ids = [owner.id, borrower.id];
+      async function assertInvestigationReceipt(id:number, transport:"camera"|"manual-code") {
+        const result=await fetch(base+`/admin/bookings/${id}?wbCategory=CUSTODY_REVIEW`,{headers:{Cookie:investigationAdmin.cookie}});
+        assert.equal(result.status,200);
+        const panel=(await result.text()).match(/<section[^>]*aria-label="Investigation context"[\s\S]*?<\/section>/)?.[0];
+        assert.ok(panel);assert.ok(panel.includes("Recorded via completed QR receipt"));
+        assert.match(panel,/data-checkpoint="accepted-inspection"[^>]*>Not established by current records/);
+        assert.ok(panel.includes('data-selected-queue-match="false"'));
+        await writeFile(path.join(artifact,"investigation-qr-receipt.json"),JSON.stringify({transport,actualChallengeVerificationAndExplicitPhysicalReceipt:true,physicalReturnRecordedViaQrChallenge:true,acceptedInspectionStillNotEstablished:true,normalInspectionNotCustodyAnomaly:true,cameraAcceptanceClaimed:transport==="camera"},null,2));
+      }
+      if(process.env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY==="1") {
+        await t.test("scoped investigation receipt: actual geofence/challenge/receipt API, independent of camera decoding",async()=>{
+          await stop();await start(ids);await prepare(first.id);
+          const pickup=(await op(first.id,"issue",owner,{purpose:"PICKUP"})).json;
+          assert.equal((await op(first.id,"verify",borrower,{purpose:"PICKUP",challengeId:pickup.challengeId,manualCode:pickup.manualCode,requestKey:randomUUID()})).status,200);
+          assert.equal((await api(`/api/bookings/${first.id}/handoff`,borrower,"POST",{...evidence,meetupChallengeId:pickup.challengeId,physicalReceipt:true})).status,200);
+          assert.equal((await api(`/api/bookings/${first.id}/return`,borrower,"POST",evidence)).status,200);
+          for(const actor of [owner,borrower])assert.equal((await check(first.id,actor,"RETURN")).json.checkIn.outcome,"VERIFIED");
+          const returned=(await op(first.id,"issue",borrower,{purpose:"RETURN"})).json;
+          assert.equal((await op(first.id,"verify",owner,{purpose:"RETURN",challengeId:returned.challengeId,manualCode:returned.manualCode,requestKey:randomUUID()})).status,200);
+          assert.equal((await api(`/api/bookings/${first.id}`,owner,"PATCH",{action:"inspect",meetupChallengeId:returned.challengeId,physicalReceipt:true})).status,200);
+          await assertInvestigationReceipt(first.id,"manual-code");
+        });
+        return;
+      }
       await t.test(
         "preview defaults off, explicit enrollment and participant/CSRF guards",
         async () => {
@@ -1646,6 +1672,8 @@ test(
           await expect(
             opage.getByText("INSPECTION", { exact: true }),
           ).toBeVisible({ timeout: 15000 });
+          // Genuine camera/QR/physical receipt has committed, before acceptance.
+          await assertInvestigationReceipt(id,"camera");
           await opage.screenshot({
             path: path.join(screenshots, "03-return-received-inspection.png"),
             fullPage: true,

@@ -68,6 +68,14 @@ test(
       assert.match(workbenchPage.headers.get("cache-control") ?? "", /no-store/);
       if (process.env.NODE_ENV === "production") assert.match(workbenchPage.headers.get("cache-control") ?? "", /private/);
       assert.ok((await workbenchPage.text()).includes("No records match this queue and filter."));
+      const listingId=(await db.query(`INSERT INTO "Listing" ("ownerId",title,description,category,price,condition,"updatedAt") VALUES ($1,'Owned production context fixture','Synthetic metadata only','Electronics',10,'Good',NOW()) RETURNING id`,[actor.userId])).rows[0].id;
+      const detail = await fetch(base+`/admin/listings/${listingId}?wbCategory=LISTING_REVIEW&wbPage=2&wbPageSize=1`, {headers:{Cookie:cookie}});
+      assert.equal(detail.status,200);
+      assert.match(detail.headers.get("cache-control")??"",/no-store/);
+      if(process.env.NODE_ENV==="production")assert.match(detail.headers.get("cache-control")??"",/private/);
+      const detailHtml=await detail.text();
+      assert.ok(detailHtml.includes('data-selected-queue-match="false"'));
+      assert.ok(detailHtml.includes('category=LISTING_REVIEW&amp;page=2&amp;pageSize=1'));
       for (const table of [
         "StaffMfaCredential",
         "StaffMfaChallenge",

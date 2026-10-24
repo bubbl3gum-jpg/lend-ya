@@ -1,0 +1,8 @@
+{
+  "baseline": "fe83e274ba93183d6b083bd13184015c21a3dc52",
+  "categorySqlTailUnchanged": true,
+  "categorySqlSha256": "7ace79f5b6f35e39a741b7d9d8674c95ce96fc65b074133f84235711ab571c91",
+  "allSixSharedCheckpointPredicateLiteralsPreserved": true,
+  "physicalReturnComposition": "same owner receipt OR completed QR receipt; no new predicate",
+  "additionalReceiptPathColumns": "selected only for detail checkpoint queries"
+}

@@ -1,0 +1,10 @@
+{
+  "components/admin/details.tsx": {
+    "onlyOptionalReadOnlyNodeSlotAdded": true,
+    "allOtherExistingDetailFormsAndRenderingUnchanged": true
+  },
+  "components/admin/cases.tsx": {
+    "onlyOptionalReadOnlyNodeSlotAdded": true,
+    "allOtherExistingDetailFormsAndRenderingUnchanged": true
+  }
+}

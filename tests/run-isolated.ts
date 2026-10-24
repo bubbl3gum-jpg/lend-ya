@@ -96,7 +96,9 @@ async function main() {
         2,
       ) + "\n",
     );
+    if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
     const legacyGroup = [
+      "investigation-receipt",
       "staff-read-pilot",
       "database-principals",
       "mfa-migration",
@@ -120,6 +122,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "investigation-receipt": "tests/meetup.integration.test.ts",
           "staff-read-pilot": "tests/staff-read-pilot.integration.test.ts",
           "database-principals": "tests/database-principals.test.ts",
           "mfa-migration": "tests/mfa-migration.test.ts",
