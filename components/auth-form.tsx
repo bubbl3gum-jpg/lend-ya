@@ -3,7 +3,6 @@
 import { useState, useSyncExternalStore } from "react";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const subscribeHydration = () => () => {};
 const clientReady = () => true;
@@ -14,7 +13,6 @@ type AuthFormProps = {
 };
 
 export function AuthForm({ mode }: AuthFormProps) {
-  const router = useRouter();
   const ready = useSyncExternalStore(
     subscribeHydration,
     clientReady,
@@ -51,13 +49,16 @@ export function AuthForm({ mode }: AuthFormProps) {
         throw new Error(payload.error || "Authentication failed.");
       }
 
-      router.push(payload.user?.role === "ADMIN" ? "/admin" : "/dashboard");
-      router.refresh();
+      // Authentication changes the server session. Commit a fresh document rather
+      // than depending on an in-flight RSC navigation followed by router.refresh().
+      // Targets are fixed application paths, never a caller-provided redirect.
+      window.location.replace(
+        payload.user?.role === "ADMIN" ? "/admin" : "/dashboard",
+      );
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Something went wrong.";
       setError(message);
-    } finally {
       setLoading(false);
     }
   }

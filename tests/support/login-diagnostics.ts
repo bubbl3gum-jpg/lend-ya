@@ -21,33 +21,46 @@ export async function loginDiagnostics(page: Page, db: Client, label: string) {
       ? p
       : "OTHER";
   };
+  const relevant = (r: import("@playwright/test").Request) =>
+    r.isNavigationRequest() ||
+    [
+      "/login",
+      "/dashboard",
+      "/admin",
+      "/api/auth/login",
+      "/api/auth/me",
+    ].includes(new URL(r.url()).pathname);
   const onRequest = (request: import("@playwright/test").Request) => {
-    if (
-      request.isNavigationRequest() ||
-      new URL(request.url()).pathname === "/api/auth/login"
-    )
+    if (relevant(request))
       add({
         event: "request",
         path: safePath(request.url()),
         method: request.method(),
+        navigation: request.isNavigationRequest(),
+        rsc: request.headers()["rsc"] === "1",
       });
   };
   const onResponse = (response: import("@playwright/test").Response) => {
-    if (
-      response.request().isNavigationRequest() ||
-      new URL(response.url()).pathname === "/api/auth/login"
-    )
+    if (relevant(response.request()))
       add({
         event: "response",
         path: safePath(response.url()),
         status: response.status(),
+        navigation: response.request().isNavigationRequest(),
+        rsc: response.request().headers()["rsc"] === "1",
       });
   };
+  const onFrame = (frame: import("@playwright/test").Frame) => {
+    if (frame === page.mainFrame() && /^https?:/.test(frame.url()))
+      add({ event: "main_frame_committed", path: safePath(frame.url()) });
+  };
   const onError = () => add({ event: "browser_error" });
+  page.on("framenavigated", onFrame);
   page.on("request", onRequest);
   page.on("response", onResponse);
   page.on("pageerror", onError);
   return async (outcome: string) => {
+    page.off("framenavigated", onFrame);
     page.off("request", onRequest);
     page.off("response", onResponse);
     page.off("pageerror", onError);
@@ -92,4 +105,32 @@ export async function loginDiagnostics(page: Page, db: Client, label: string) {
     );
     return evidence;
   };
+}
+
+/** Dev compiles routes on demand. Complete bounded anonymous route probes before
+ * measuring login navigation; no credentials or authentication retries are used. */
+export async function readyAuthenticationRoutes(base: string) {
+  const probes = [];
+  for (const pathname of ["/login", "/dashboard", "/admin"]) {
+    const started = Date.now(),
+      response = await fetch(base + pathname, {
+        redirect: "manual",
+        signal: AbortSignal.timeout(20000),
+      });
+    await response.arrayBuffer();
+    if (![200, 307].includes(response.status))
+      throw Error("Authentication destination failed readiness");
+    probes.push({
+      path: pathname,
+      status: response.status,
+      ms: Date.now() - started,
+    });
+  }
+  await writeFile(
+    path.join(
+      process.env.MRT_TEST_ARTIFACT_DIR!,
+      "authentication-route-readiness.json",
+    ),
+    JSON.stringify(probes, null, 2) + "\n",
+  );
 }

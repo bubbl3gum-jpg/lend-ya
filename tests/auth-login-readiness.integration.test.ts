@@ -74,7 +74,7 @@ test(
       await expect(submit).toBeEnabled();
       await page.getByLabel("Email address", { exact: true }).fill(email);
       await page.getByLabel("Password", { exact: true }).fill(password);
-      await submit.click();
+      await submit.click({ noWaitAfter: true });
       await expect(page).not.toHaveURL(/\/login$/);
       const evidence = await finish("fixed-delayed-hydration-login");
       assert.equal(evidence.cookiePresent, true);
@@ -92,7 +92,9 @@ test(
         await p.goto(base + "/login");
         await p.getByLabel("Email address", { exact: true }).fill(email);
         await p.getByLabel("Password", { exact: true }).fill(password);
-        await p.getByRole("button", { name: "Log in", exact: true }).click();
+        await p
+          .getByRole("button", { name: "Log in", exact: true })
+          .click({ noWaitAfter: true });
         await expect(p).not.toHaveURL(/\/login$/);
         const saved = await save("passed");
         assert.equal(saved.cookiePresent, true);

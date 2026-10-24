@@ -47,7 +47,8 @@
     "test:mfa-pilot-disabled": "tsx tests/run-isolated.ts --mfa-pilot-disabled",
     "test:login-readiness": "tsx tests/run-isolated.ts --auth-login-readiness",
     "test:database-principals": "tsx tests/run-isolated.ts --database-principals",
-    "test:staff-read-pilot": "tsx tests/run-isolated.ts --staff-read-pilot"
+    "test:staff-read-pilot": "tsx tests/run-isolated.ts --staff-read-pilot",
+    "test:login-navigation": "tsx tests/run-isolated.ts --login-navigation"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

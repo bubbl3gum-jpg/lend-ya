@@ -1,0 +1,15 @@
+{
+  "onlyProjection": [
+    "id",
+    "status",
+    "category",
+    "adminRestricted"
+  ],
+  "separateWorkerProcess": true,
+  "privilegedDbCredentialsInAppEnv": false,
+  "syntheticIdentityOnly": true,
+  "realWebAuthn": true,
+  "successAuditCount": 4,
+  "activationConstraintsPreserved": true,
+  "workerOsIsolationCertified": false
+}

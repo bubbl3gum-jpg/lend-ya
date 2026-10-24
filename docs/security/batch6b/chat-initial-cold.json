@@ -1,0 +1,64 @@
+{
+  "label": "chat-0",
+  "outcome": "failed",
+  "path": "/login",
+  "events": [
+    {
+      "ms": 167,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 6493,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 6511,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 7102,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 7337,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 8359,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 8364,
+      "event": "request",
+      "path": "/dashboard",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    }
+  ],
+  "browser": null,
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 2,
+    "lock_waiters": 0
+  }
+}

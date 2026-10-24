@@ -1,0 +1,109 @@
+{
+  "label": "navigation-admin",
+  "outcome": "passed-admin-reload",
+  "path": "/admin",
+  "events": [
+    {
+      "ms": 7,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 173,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 188,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 709,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 820,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 976,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 986,
+      "event": "request",
+      "path": "/admin",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1166,
+      "event": "response",
+      "path": "/admin",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1191,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 1607,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    },
+    {
+      "ms": 1765,
+      "event": "request",
+      "path": "/admin",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1901,
+      "event": "response",
+      "path": "/admin",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1920,
+      "event": "main_frame_committed",
+      "path": "/admin"
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "unmarked",
+    "submitDisabled": null,
+    "inputValidity": [],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 5,
+    "lock_waiters": 0
+  }
+}

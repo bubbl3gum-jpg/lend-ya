@@ -226,6 +226,8 @@ async function main() {
           throw Error("Isolated app did not become ready; inspect server.log.");
         if (process.argv.includes("--mfa-pilot") || process.argv.includes("--mfa-pilot-disabled") || productionPilot)
           await run(["node_modules/tsx/dist/cli.mjs", "--test", (productionPilot || process.argv.includes("--mfa-pilot-disabled")) ? "tests/mfa-pilot-production.test.ts" : "tests/mfa-pilot.integration.test.ts"]);
+        else if (process.argv.includes("--login-navigation"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/login-navigation.integration.test.ts"]);
         else if (process.argv.includes("--auth-login-readiness"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/auth-login-readiness.integration.test.ts"]);
         else if (process.argv.includes("--authorization"))

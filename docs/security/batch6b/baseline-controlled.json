@@ -1,0 +1,73 @@
+{
+  "label": "navigation-controlled",
+  "outcome": "baseline-200-cookie-present-rsc-navigation-not-committed",
+  "path": "/login",
+  "events": [
+    {
+      "ms": 30,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2594,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 2600,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 2957,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 3040,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 3268,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 3282,
+      "event": "request",
+      "path": "/dashboard",
+      "method": "GET",
+      "navigation": false,
+      "rsc": true
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "true",
+    "submitDisabled": false,
+    "inputValidity": [
+      true,
+      true
+    ],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 2,
+    "lock_waiters": 0
+  }
+}
