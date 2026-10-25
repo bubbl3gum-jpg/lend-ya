@@ -1,0 +1,66 @@
+[
+  {
+    "action": "channel.read",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": true,
+    "hasCorrelation": true
+  },
+  {
+    "action": "ticket.metadata.read",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": false,
+    "hasCorrelation": true
+  },
+  {
+    "action": "ticket.metadata.read",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": false,
+    "hasCorrelation": true
+  },
+  {
+    "action": "ticket.events.read",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": false,
+    "hasCorrelation": true
+  },
+  {
+    "action": "channel.reply",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": true,
+    "hasCorrelation": true
+  },
+  {
+    "action": "channel.read",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": true,
+    "hasCorrelation": true
+  },
+  {
+    "action": "channel.reply",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": true,
+    "hasCorrelation": true
+  },
+  {
+    "action": "channel.reply",
+    "outcome": "TEST_ACCESS_COMMITTED",
+    "policy": "support-scoped-owned-8d-v1",
+    "actor": "h8d_3fd0e83fe3a5f4e3_support",
+    "channelScoped": true,
+    "hasCorrelation": true
+  }
+]

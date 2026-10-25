@@ -1,0 +1,13 @@
+{
+  "actualNativeLogin": true,
+  "actualNativeWebAuthn": true,
+  "independentOwnerBorrowerIntake": true,
+  "exactOwnedAssignment": true,
+  "actualStaffReply": true,
+  "requesterSawReply": true,
+  "borrowerForeignReadDenied": true,
+  "revocationDeniedAndClearedDisplay": true,
+  "logoutDenied": true,
+  "responsiveViewports": 3,
+  "productionActivation": false
+}
