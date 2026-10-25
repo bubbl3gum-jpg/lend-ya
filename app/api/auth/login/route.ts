@@ -6,6 +6,7 @@ import {
   readJsonObject,
 } from "@/lib/api-response";
 import { createSession, verifyPassword } from "@/lib/auth";
+import { createOwnedSupportSession } from "@/lib/support-staff-candidate/login";
 import { prisma } from "@/lib/prisma";
 import { parseEmail, parsePassword } from "@/lib/api-validation";
 
@@ -48,7 +49,9 @@ export async function POST(request: Request): Promise<Response> {
       return apiError("Invalid email or password.", 401);
     }
 
-    await createSession(user.id);
+    if(process.env.NODE_ENV==="development" && process.env.HUSTLEN_SUPPORT_STAFF_CANDIDATE==="owned-synthetic-only")
+      await createOwnedSupportSession(email,password);
+    else await createSession(user.id);
     return Response.json({
       user: {
         id: user.id,

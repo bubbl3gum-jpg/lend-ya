@@ -99,6 +99,8 @@ async function main() {
     if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
     if(process.argv.includes("--meetup-camera")) env.MRT_TEST_CAMERA_ONLY="1";
     const legacyGroup = [
+      "support-staff",
+      "support-staff-migration",
       "support-channel-migration",
       "support-ticket-migration",
       "meetup-camera",
@@ -126,6 +128,8 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "support-staff": "tests/support-staff.integration.test.ts",
+          "support-staff-migration": "tests/support-staff-migration.test.ts",
           "support-channel-migration": "tests/support-channel-migration.test.ts",
           "support-ticket-migration": "tests/support-ticket-migration.test.ts",
           "meetup-camera": "tests/meetup.integration.test.ts",
@@ -165,7 +169,7 @@ async function main() {
     if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (!["support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
+      if (!["support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",
@@ -175,7 +179,7 @@ async function main() {
         ]);
       if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
         if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
-        if (["scoped-reads","staff-session","approval","execution-rehearsal","mfa","database-principals"].includes(legacyGroup??""))
+        if (["support-staff","scoped-reads","staff-session","approval","execution-rehearsal","mfa","database-principals"].includes(legacyGroup??""))
           await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", standalone]);
         else await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
       } else {
@@ -199,7 +203,8 @@ async function main() {
           env.HUSTLEN_PASSKEY_PILOT_ORIGIN = env.TEST_BASE_URL;
         }
         if (process.argv.includes("--mfa-pilot-disabled")) env.HUSTLEN_PASSKEY_PILOT = "disabled";
-        const productionPilot = process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        const productionPilot = process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        if(process.argv.includes("--support-staff-production")){env.HUSTLEN_SUPPORT_STAFF_CANDIDATE="owned-synthetic-only";env.HUSTLEN_SUPPORT_STAFF_ORIGIN=env.TEST_BASE_URL;}
         if (productionPilot) {
           await run(["node_modules/next/dist/bin/next", "build"]);
           Object.assign(env, { NODE_ENV: "production" });
@@ -244,7 +249,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--support-channel-production"))
+        if (process.argv.includes("--support-staff-production"))
+          await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-staff-production.test.ts"]);
+        else if (process.argv.includes("--support-channel-production"))
           await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-channel-production.test.ts"]);
         else if (process.argv.includes("--support-channels"))
           await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-channels.integration.test.ts"]);

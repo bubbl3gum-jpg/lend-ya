@@ -33,6 +33,8 @@ test(
         "Runner must supply an empty owned database",
       );
       await cp("prisma/migrations", migrations, { recursive: true });
+      // Keep this historical fixture before later Support candidates.
+      await rm(path.join(migrations,"20261026010000_scoped_support_candidate"),{recursive:true});
 
       await rm(path.join(migrations, migration), { recursive: true });
 
