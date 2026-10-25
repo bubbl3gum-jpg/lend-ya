@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname.startsWith("/api/support/tickets") || request.nextUrl.pathname.startsWith("/customer-service/tickets")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_SUPPORT_TICKET_CANDIDATE !== "owned-development-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname === "/api/dev/staff-listing-read" || request.nextUrl.pathname === "/dev/staff-listing-inspection") &&
     (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_STAFF_READ_PILOT !== "owned-synthetic-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
@@ -42,4 +44,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/api/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
+export const config = { matcher: ["/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };

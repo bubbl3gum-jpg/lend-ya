@@ -1439,11 +1439,8 @@ test(
         await stopped;
       }
       closeSync(log);
-      // This entire dedicated database was proven empty at entry. TRUNCATE is deliberate test-only teardown,
-      // since durable audit rows intentionally cannot be deleted through ordinary row operations.
-      await pool.query(
-        'TRUNCATE "User", "MrtStation", "AdminAuditLog" RESTART IDENTITY CASCADE',
-      );
+      // The verified ownership harness drops this entire disposable database.
+      // Do not cascade TRUNCATE through append-only ticket/event tables.
       await pool.end();
       await Promise.all(files.map((file) => unlink(file).catch(() => {})));
     }

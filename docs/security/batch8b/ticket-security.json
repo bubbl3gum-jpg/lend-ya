@@ -1,0 +1,12 @@
+{
+  "candidateOnly": true,
+  "ownerScopedQueries": true,
+  "counterpartyAndLegacyAdminDenied": true,
+  "atomicInitialEvent": true,
+  "appendOnly": true,
+  "concurrentIdempotency": true,
+  "csrf": true,
+  "noSourceRecordMutation": true,
+  "quotaIsTestOnly": true,
+  "viewports": 3
+}

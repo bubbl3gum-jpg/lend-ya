@@ -62,7 +62,6 @@ test(
       process.env.TEST_MVP_LOG ?? "/tmp/lend-ya-m5-server.log",
       "w",
     );
-    let ownsFixtures = false;
     let server: ChildProcess | undefined,
       browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
     const stop = async () => {
@@ -210,7 +209,6 @@ test(
         0,
         "Dedicated MVP fixture database must start empty",
       );
-      ownsFixtures = true;
       await start();
       owner = await account("owner");
       borrower = await account("borrower");
@@ -1201,10 +1199,8 @@ test(
       await browser?.close();
       await stop();
       closeSync(log);
-      if (ownsFixtures)
-        await pool.query(
-          'TRUNCATE "User","MrtStation","AdminAuditLog","AuthRateLimit" RESTART IDENTITY CASCADE',
-        );
+      // Ownership was verified at entry. run-isolated.ts drops the whole
+      // disposable database without bypassing append-only event constraints.
       await pool.end();
       await Promise.all(files.map((f) => unlink(f).catch(() => {})));
     }

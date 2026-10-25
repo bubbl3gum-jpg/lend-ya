@@ -88,8 +88,8 @@ export default async function SupportPage({
       />
       <p className="mb-5 max-w-4xl text-sm text-slate-600">
         Operations Workbench groups current marketplace exceptions. Support
-        brings open and historical cases into one directory. Tickets,
-        assignments, priorities, response targets and support replies are not
+        brings open and historical cases into one directory. Private Support Tickets
+        are not read by this case index. Assignments, priorities, response targets and support replies are not
         configured.
       </p>
       <div className="mb-5 grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-4 [&>section>h2]:min-h-14">

@@ -51,6 +51,9 @@ enum DisputeStatus {
 }
 
 model User {
+  supportTickets SupportTicket[] @relation("SupportRequester")
+  supportTicketEvents SupportTicketEvent[] @relation("SupportEventActor")
+
   id                 Int      @id @default(autoincrement())
   name               String
   email              String   @unique
@@ -125,6 +128,8 @@ model MrtStation {
 }
 
 model Listing {
+  supportTickets SupportTicket[] @relation("SupportListing")
+
   id              Int           @id @default(autoincrement())
   ownerId         Int
   title           String
@@ -159,6 +164,8 @@ model ListingStation {
 }
 
 model Booking {
+  supportTickets SupportTicket[] @relation("SupportBooking")
+
   id                 Int           @id @default(autoincrement())
   listingId          Int
   ownerId            Int
@@ -249,6 +256,8 @@ model Return {
 }
 
 model Dispute {
+  supportTickets SupportTicket[] @relation("SupportDispute")
+
   id          Int           @id @default(autoincrement())
   bookingId   Int
   openedBy    Int
@@ -284,6 +293,8 @@ model ListingMedia {
 }
 
 model ListingReport {
+  supportTickets SupportTicket[] @relation("SupportReport")
+
   id          Int                 @id @default(autoincrement())
   listingId   Int
   reporterId  Int
@@ -1043,4 +1054,50 @@ model StaffMfaRateLimit {
   key String @id @db.VarChar(64)
   attempts Int
   expiresAt DateTime @db.Timestamp(3)
+}
+
+// Batch 8B: inert development-only intake candidate. No staff access or transitions.
+model SupportTicket {
+  id String @id @db.Uuid
+  requesterUserId Int
+  categoryCode String @db.VarChar(32)
+  policyVersion String @db.VarChar(80)
+  subject String @db.VarChar(120)
+  description String @db.VarChar(2000)
+  currentState String @db.VarChar(32)
+  lifecycleVersion Int
+  requestKey String @db.Uuid
+  requestHash String @db.VarChar(64)
+  initialEventId String @unique @db.Uuid
+  bookingId Int?
+  listingId Int?
+  reportId Int?
+  disputeId Int?
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @db.Timestamp(3)
+  requester User @relation("SupportRequester",fields:[requesterUserId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  booking Booking? @relation("SupportBooking",fields:[bookingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  listing Listing? @relation("SupportListing",fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  report ListingReport? @relation("SupportReport",fields:[reportId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  dispute Dispute? @relation("SupportDispute",fields:[disputeId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  initialEvent SupportTicketEvent @relation("SupportInitialEvent",fields:[initialEventId,id,requesterUserId,requestKey,lifecycleVersion],references:[id,ticketId,actorUserId,correlationId,lifecycleVersion],onDelete:NoAction,onUpdate:NoAction,map:"SupportTicket_initial_event_required")
+  events SupportTicketEvent[] @relation("SupportTicketEvents")
+  @@unique([id,requesterUserId,requestKey,lifecycleVersion],map:"SupportTicket_identity_key")
+  @@unique([requesterUserId,requestKey])
+  @@index([requesterUserId,createdAt,id])
+}
+model SupportTicketEvent {
+  id String @id @db.Uuid
+  ticketId String @db.Uuid
+  actorUserId Int
+  eventType String @db.VarChar(32)
+  sequence Int
+  lifecycleVersion Int
+  correlationId String @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  actor User @relation("SupportEventActor",fields:[actorUserId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  ticket SupportTicket @relation("SupportTicketEvents",fields:[ticketId,actorUserId,correlationId,lifecycleVersion],references:[id,requesterUserId,requestKey,lifecycleVersion],onDelete:NoAction,onUpdate:NoAction,map:"SupportTicketEvent_parent_fkey")
+  initialForTickets SupportTicket[] @relation("SupportInitialEvent")
+  @@unique([id,ticketId,actorUserId,correlationId,lifecycleVersion],map:"SupportTicketEvent_initial_key")
+  @@unique([ticketId,sequence])
 }

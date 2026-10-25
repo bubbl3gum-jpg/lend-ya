@@ -1,7 +1,11 @@
+import { ownedSupportCandidate,TicketDenied } from "@/lib/support/tickets";
+import { logOperationalError } from "@/lib/operational-error";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 
-export default function CustomerServicePage() {
+export default async function CustomerServicePage() {
+  let candidate=false;
+  try {await ownedSupportCandidate();candidate=true;} catch(e) {if(!(e instanceof TicketDenied))logOperationalError("support_candidate_help",e);}
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <SiteHeader />
@@ -15,6 +19,7 @@ export default function CustomerServicePage() {
           </h1>
         </div>
 
+        {candidate?<section className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 p-5"><h2 className="text-lg font-semibold">Isolated development ticket pilot</h2><p className="my-3 text-sm">Allowlisted ACTIVE requesters can submit text-only test tickets. No live Support replies. Production intake remains disabled.</p><Link className="mr-5 underline" href="/customer-service/tickets/new">Create ticket</Link><Link className="underline" href="/customer-service/tickets">My tickets</Link></section>:null}
         <div className="grid gap-6 md:grid-cols-2">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-slate-900">
