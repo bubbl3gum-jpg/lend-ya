@@ -1,0 +1,14 @@
+{
+  "testedRealPrincipals": [
+    "runtime",
+    "mfa",
+    "authorization",
+    "inspection"
+  ],
+  "selectAndDmlDenied": true,
+  "sideFunctionExecuteDenied": true,
+  "privilegedOwnerCanReadAll": true,
+  "perRequesterRlsNotDeployed": true,
+  "staffReadWriteGate": "BLOCKED",
+  "durableStaffDisclosureAuditNotImplemented": true
+}

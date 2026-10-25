@@ -1,3 +1,4 @@
+import { channelCandidateConfig } from "@/lib/support/channel-config";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -28,6 +29,7 @@ export default async function Page({
         : related?.kind === "listing"
           ? `/listings/${related.id}`
           : null;
+  let channelCandidate=false;try{channelCandidateConfig();channelCandidate=true;}catch{}
   return (
     <TicketShell title="Support ticket details">
       <p role="status" className="mb-4 font-semibold">
@@ -69,6 +71,7 @@ export default async function Page({
           </div>
         ) : null}
       </dl>
+      {channelCandidate?<Link className="mt-6 inline-block text-emerald-800 underline" href={`/customer-service/tickets/${t.id}/channel`}>Requester-only test channel</Link>:null}
       <h2 className="mt-6 text-lg font-semibold">Recorded ticket history</h2>
       <ol>
         {t.events.map((e) => (

@@ -35,6 +35,11 @@ test(
       await cp("prisma/migrations", migrations, { recursive: true });
 
       await rm(path.join(migrations, migration), { recursive: true });
+      // This historical upgrade fixture must stop before later candidates.
+      await rm(
+        path.join(migrations, "20261025160000_support_private_channel_candidate"),
+        { recursive: true },
+      );
 
       await writeFile(
         config,

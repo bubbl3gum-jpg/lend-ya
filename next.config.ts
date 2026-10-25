@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
         },
       }
     : {}),
+  // Candidate private references must not enter development access logs.
+  // Application error diagnostics remain bounded and enabled independently.
+  logging: { incomingRequests: { ignore: [/\/api\/support\/(?:tickets|channels)(?:\/|$)/, /\/customer-service\/tickets(?:\/|$)/] } },
   images: { unoptimized: true },
   experimental: { proxyClientMaxBodySize: "64mb" },
 };

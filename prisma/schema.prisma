@@ -1082,6 +1082,8 @@ model SupportTicket {
   dispute Dispute? @relation("SupportDispute",fields:[disputeId],references:[id],onDelete:Restrict,onUpdate:NoAction)
   initialEvent SupportTicketEvent @relation("SupportInitialEvent",fields:[initialEventId,id,requesterUserId,requestKey,lifecycleVersion],references:[id,ticketId,actorUserId,correlationId,lifecycleVersion],onDelete:NoAction,onUpdate:NoAction,map:"SupportTicket_initial_event_required")
   events SupportTicketEvent[] @relation("SupportTicketEvents")
+  channel SupportParticipantChannel? @relation("TicketRequesterChannel")
+  @@unique([id,requesterUserId],map:"SupportTicket_requester_identity_key")
   @@unique([id,requesterUserId,requestKey,lifecycleVersion],map:"SupportTicket_identity_key")
   @@unique([requesterUserId,requestKey])
   @@index([requesterUserId,createdAt,id])
@@ -1100,4 +1102,32 @@ model SupportTicketEvent {
   initialForTickets SupportTicket[] @relation("SupportInitialEvent")
   @@unique([id,ticketId,actorUserId,correlationId,lifecycleVersion],map:"SupportTicketEvent_initial_key")
   @@unique([ticketId,sequence])
+}
+
+// Batch 8C: requester-only private channel/message candidate; no staff audience.
+model SupportParticipantChannel {
+  id String @id @db.Uuid
+  ticketId String @unique @db.Uuid
+  participantUserId Int
+  relationshipSide String @db.VarChar(24)
+  policyVersion String @db.VarChar(80)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  ticket SupportTicket @relation("TicketRequesterChannel",fields:[ticketId,participantUserId],references:[id,requesterUserId],onDelete:Restrict,onUpdate:NoAction,map:"SupportParticipantChannel_requester_fkey")
+  messages SupportMessage[] @relation("ChannelRequesterMessages")
+  @@unique([ticketId,participantUserId],map:"SupportParticipantChannel_ticket_requester_key")
+  @@unique([id,ticketId,participantUserId],map:"SupportParticipantChannel_identity_key")
+}
+model SupportMessage {
+  id String @id @db.Uuid
+  channelId String @db.Uuid
+  ticketId String @db.Uuid
+  authorUserId Int
+  requestKey String @db.Uuid
+  requestHash String @db.VarChar(64)
+  content String @db.VarChar(2000)
+  sequence Int
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  channel SupportParticipantChannel @relation("ChannelRequesterMessages",fields:[channelId,ticketId,authorUserId],references:[id,ticketId,participantUserId],onDelete:Restrict,onUpdate:NoAction,map:"SupportMessage_channel_author_fkey")
+  @@unique([channelId,sequence])
+  @@unique([channelId,requestKey])
 }

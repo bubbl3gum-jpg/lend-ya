@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname.startsWith("/api/support/channels") || /^\/api\/support\/tickets\/[^/]+\/channel(?:\/|$)/.test(request.nextUrl.pathname) || /^\/customer-service\/tickets\/[^/]+\/channel(?:\/|$)/.test(request.nextUrl.pathname)) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_SUPPORT_CHANNEL_CANDIDATE !== "owned-requester-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname.startsWith("/api/support/tickets") || request.nextUrl.pathname.startsWith("/customer-service/tickets")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_SUPPORT_TICKET_CANDIDATE !== "owned-development-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname === "/api/dev/staff-listing-read" || request.nextUrl.pathname === "/dev/staff-listing-inspection") &&

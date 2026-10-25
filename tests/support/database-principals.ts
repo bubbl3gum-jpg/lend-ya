@@ -94,6 +94,7 @@ export async function principalFixture(owner: Client) {
     for (const table of tables.filter(
       (t) =>
         !t.startsWith("Staff") &&
+        !t.startsWith("Support") &&
         t !== "_prisma_migrations" &&
         t !== "User" &&
         t !== "AdminAuditLog" &&

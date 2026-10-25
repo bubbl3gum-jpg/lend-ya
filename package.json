@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "admin:create": "tsx scripts/create-admin.ts",
-    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts tests/operational-error.test.ts tests/dependency-security.test.ts tests/authorization-policy.test.ts tests/passkey-pilot-config.test.ts tests/staff-read-pilot-config.test.ts tests/workbench-navigation.test.ts tests/camera-diagnostics.test.ts tests/case-history-navigation.test.ts tests/support-query.test.ts tests/support-ticket-input.test.ts",
+    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts tests/operational-error.test.ts tests/dependency-security.test.ts tests/authorization-policy.test.ts tests/passkey-pilot-config.test.ts tests/staff-read-pilot-config.test.ts tests/workbench-navigation.test.ts tests/camera-diagnostics.test.ts tests/case-history-navigation.test.ts tests/support-query.test.ts tests/support-ticket-input.test.ts tests/support-channel-input.test.ts",
     "test:integration": "tsx tests/run-isolated.ts",
     "test:admin": "tsx tests/run-isolated.ts --admin",
     "test:moderation": "tsx tests/run-isolated.ts --moderation",
@@ -58,7 +58,10 @@
     "test:support-workspace": "tsx tests/run-isolated.ts --support-workspace",
     "test:support-tickets": "tsx tests/run-isolated.ts --support-tickets",
     "test:support-ticket-migration": "tsx tests/run-isolated.ts --support-ticket-migration",
-    "test:support-ticket-production": "tsx tests/run-isolated.ts --support-ticket-production"
+    "test:support-ticket-production": "tsx tests/run-isolated.ts --support-ticket-production",
+    "test:support-channels": "tsx tests/run-isolated.ts --support-channels",
+    "test:support-channel-migration": "tsx tests/run-isolated.ts --support-channel-migration",
+    "test:support-channel-production": "tsx tests/run-isolated.ts --support-channel-production"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

@@ -1,0 +1,17 @@
+{
+  "ownerBorrowerSeparateTickets": true,
+  "noAutomaticOppositeChannel": true,
+  "foreignMetadata404": true,
+  "legacyAdminReviewerDenied": true,
+  "ownBoundedQueries": true,
+  "serverDerivedSideAndAuthor": true,
+  "sameAccountAndSelfReportBlocked": true,
+  "concurrentSequenceAndIdempotency": true,
+  "immutableAttribution": true,
+  "noSequenceConsumedOnFailure": true,
+  "sessionRevocationDenied": true,
+  "noTranscriptOrEvidenceImport": true,
+  "sourceTranscriptCanaryTested": true,
+  "realBrowserViewports": 3,
+  "candidateOnly": true
+}

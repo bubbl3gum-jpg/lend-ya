@@ -99,6 +99,7 @@ async function main() {
     if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
     if(process.argv.includes("--meetup-camera")) env.MRT_TEST_CAMERA_ONLY="1";
     const legacyGroup = [
+      "support-channel-migration",
       "support-ticket-migration",
       "meetup-camera",
       "investigation-receipt",
@@ -125,6 +126,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "support-channel-migration": "tests/support-channel-migration.test.ts",
           "support-ticket-migration": "tests/support-ticket-migration.test.ts",
           "meetup-camera": "tests/meetup.integration.test.ts",
           "investigation-receipt": "tests/meetup.integration.test.ts",
@@ -163,7 +165,7 @@ async function main() {
     if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (!["support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
+      if (!["support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",
@@ -180,11 +182,15 @@ async function main() {
         const port = await freePort();
         env.MRT_TEST_URL = `http://localhost:${port}`;
         env.TEST_BASE_URL = env.MRT_TEST_URL;
-        if (process.argv.includes("--support-tickets") || process.argv.includes("--support-ticket-production")) {
+        if (process.argv.includes("--support-tickets") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channels") || process.argv.includes("--support-channel-production")) {
           env.HUSTLEN_SUPPORT_TICKET_CANDIDATE="owned-development-only";
           env.HUSTLEN_SUPPORT_TICKET_ORIGIN=env.TEST_BASE_URL;
           env.HUSTLEN_SUPPORT_TICKET_TEST_LIMIT="12";
           env.HUSTLEN_SUPPORT_TICKET_REQUESTER_IDS="1,2,3,4,5,6";
+        }
+        if (process.argv.includes("--support-channels") || process.argv.includes("--support-channel-production")) {
+          env.HUSTLEN_SUPPORT_CHANNEL_CANDIDATE="owned-requester-only";
+          env.HUSTLEN_SUPPORT_CHANNEL_TEST_LIMIT="20";
         }
         if (process.argv.some(flag => ["--mfa-pilot","--mfa-pilot-production"].includes(flag))) {
           env.HUSTLEN_PASSKEY_PILOT = "owned-development-only";
@@ -193,7 +199,7 @@ async function main() {
           env.HUSTLEN_PASSKEY_PILOT_ORIGIN = env.TEST_BASE_URL;
         }
         if (process.argv.includes("--mfa-pilot-disabled")) env.HUSTLEN_PASSKEY_PILOT = "disabled";
-        const productionPilot = process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production");
+        const productionPilot = process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
         if (productionPilot) {
           await run(["node_modules/next/dist/bin/next", "build"]);
           Object.assign(env, { NODE_ENV: "production" });
@@ -238,7 +244,11 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--support-ticket-production"))
+        if (process.argv.includes("--support-channel-production"))
+          await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-channel-production.test.ts"]);
+        else if (process.argv.includes("--support-channels"))
+          await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-channels.integration.test.ts"]);
+        else if (process.argv.includes("--support-ticket-production"))
           await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-ticket-production.test.ts"]);
         else if (process.argv.includes("--mfa-pilot") || process.argv.includes("--mfa-pilot-disabled") || productionPilot)
           await run(["node_modules/tsx/dist/cli.mjs", "--test", (productionPilot || process.argv.includes("--mfa-pilot-disabled")) ? "tests/mfa-pilot-production.test.ts" : "tests/mfa-pilot.integration.test.ts"]);
