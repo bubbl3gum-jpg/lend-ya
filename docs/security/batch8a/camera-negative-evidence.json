@@ -1,0 +1,8 @@
+{
+  "invalidQrDeniedBeforeRequest": true,
+  "initializationFailureStopsStream": true,
+  "interruptedTrackReported": true,
+  "restartAndStopCleanup": true,
+  "navigationReleasesTrack": true,
+  "noVerificationOrCustodyMutation": true
+}

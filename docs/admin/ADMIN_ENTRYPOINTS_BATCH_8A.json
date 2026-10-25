@@ -1,0 +1,13 @@
+{
+  "baseline": "fec839b7b62711733b94210aba55fdcb6d599f29",
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/support/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "guard": "adminApi plus independent getSupportWorkspace ACTIVE legacy ADMIN check",
+      "sha256": "8ccb1ee4b62290dc58b1b92cd24b5ed2398b67ce6bb21c8d1379ac14ff222544"
+    }
+  ]
+}

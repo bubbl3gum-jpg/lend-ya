@@ -1,0 +1,7 @@
+{
+  "channel": "bounded structured operational log, not immutable AdminAuditLog",
+  "eventsObserved": 37,
+  "serverResolvedActor": true,
+  "allowlistedFieldsOnly": true,
+  "noCaseIdsParticipantDataOrNarratives": true
+}

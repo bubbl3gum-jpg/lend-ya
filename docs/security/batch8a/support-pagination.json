@@ -1,0 +1,13 @@
+{
+  "distinctCaseRecords": 28,
+  "sharedListingAndBooking": true,
+  "typedIdCollision": true,
+  "pageSize": 10,
+  "pages": 3,
+  "deterministicTies": true,
+  "httpMilliseconds": [
+    21.060577000000194,
+    76.78854300000057,
+    30.497607000000244
+  ]
+}

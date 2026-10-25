@@ -1,0 +1,16 @@
+{
+  "legacyAdminOnly": true,
+  "anonymousOrdinarySuspendedExpiredDenied": true,
+  "independentPageAndApiGuards": true,
+  "minimalDto": true,
+  "openAndHistoricalCountsVerified": true,
+  "relatedIdsServerDerived": true,
+  "caseHistoryPreserved": true,
+  "sourceRowsUnchangedByReads": true,
+  "typedCasePagination": true,
+  "narrativeCanaryAbsent": true,
+  "workbenchEnvelopePreserved": true,
+  "responsiveViewports": 3,
+  "databaseFailureAndRecovery": true,
+  "noTicketOrMessagingMutation": true
+}

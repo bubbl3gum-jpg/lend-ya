@@ -17,6 +17,7 @@ export const adminNavigationGroups = [
     label: "Community",
     links: [
       { href: "/admin/users", label: "Users" },
+      { href: "/admin/support", label: "Support" },
       { href: "/admin/chat", label: "Chat moderation" },
     ],
   },

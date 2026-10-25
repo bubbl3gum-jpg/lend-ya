@@ -832,6 +832,7 @@ test(
                 "/admin/listings",
                 "/admin/reports",
                 "/admin/users",
+                "/admin/support",
                 "/admin/chat",
                 "/admin/account-security",
                 "/admin/audit-logs",
