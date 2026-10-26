@@ -1,0 +1,12 @@
+{
+  "baseline": "afa1da866936fcfb0f3eb14cca4c78ea70580b18",
+  "protectedPathChanges": [],
+  "stage6to8SectionsUnchanged": {
+    "6": true,
+    "7": true,
+    "8": true
+  },
+  "historicalMigrationsUnchanged": true,
+  "apiAndAuthorizationCodeUnchanged": true,
+  "lockfileAndAssetsUnchanged": true
+}

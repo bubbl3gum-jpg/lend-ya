@@ -1,0 +1,33 @@
+{
+  "onlyCompletedOwnedRuns": true,
+  "removedBuildCacheDirectories": [
+    "ad200f3ffdac4ce1041e74d8",
+    "08904abd148c657ee817bdf8",
+    "d7cfbc01cb5ecf095b7a74ac",
+    "f461d3fa0e5f5af9732035da",
+    "ca92be6b0b9a82174932f241",
+    "b55895c6582f2228ffc7b933",
+    "63262c867af79635b57cbbae",
+    "d2633c24e9b1c931fc4b8904",
+    "dd887a4309e710bd5b75f742",
+    "b945c0276040c116114c8a0f",
+    "87282c5b4a43ee60747e21f6",
+    "5c119331bd5fade8edeaf457",
+    "bc28aa5a1b9472f1a396b2ed",
+    "d63aa05d3595edcd0be66fc0",
+    "9996f0a8be2dc8fd9d02f947",
+    "214d877513f2a8e0da2b226f",
+    "722853826b17114333e4f315",
+    "54a7f56fc311ef573cde872a",
+    "c6c5c49c623439c8bc231a87",
+    "70d56b3907e2f0068336f808",
+    "679de4c8f4eb95e41c7c4361",
+    "5de5a158a0006815e8dfdf7b",
+    "c257bab57ac74bef9cf409e4",
+    "4578c00bba31639ac138edbe",
+    "5c5ac4c32d336d4beed623b8",
+    "336e705e3eef0756936b2cd5",
+    "22fe1a4e457cd490d02820c7"
+  ],
+  "diagnosticsAndScreenshotsPreserved": true
+}
