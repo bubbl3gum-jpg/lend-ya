@@ -1,0 +1,14 @@
+{
+  "artifact": ".test-artifacts/d2d8eba5386172feba58e887",
+  "command": "npm run test:announcements-migration",
+  "exit": 0,
+  "tests": 4,
+  "fixture": "Fresh owned empty DB migrated through Batch 9A; historical user, booking, station, listing, reviewer, session, audit, evidence fixtures before new migration",
+  "injectedDdlFailureRolledBack": true,
+  "explicitOwnedFixtureRecoveryAndReplayPassed": true,
+  "noOpReplayHistoryUnchanged": true,
+  "allPreexistingPublicRowsAndOldTriggersUnchanged": true,
+  "missingMarkerMutationAndEventlessInsertDenied": true,
+  "historyTruncateDenied": true,
+  "noLiveStaffOrApplicationDatabaseTouched": true
+}

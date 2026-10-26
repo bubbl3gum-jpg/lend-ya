@@ -1,0 +1,281 @@
+[
+  {
+    "label": "Maximum rental duration",
+    "value": "90",
+    "metadata": [
+      "lib/booking-time.ts:MAX_RENTAL_DAYS",
+      "integer days · Rental eligibility and price interval",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Rental display and unzoned input clock",
+    "value": "Asia/Taipei (UTC+08:00)",
+    "metadata": [
+      "lib/booking-time.ts:parseRentalTime / formatRentalTime",
+      "IANA timezone · UTC storage; explicit offsets honored",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Agreed handoff station",
+    "value": "Canonical + operational + offered station required for new listing / booking choices; agreed station preserved",
+    "metadata": [
+      "lib/mrt/station-validation.ts; app/api/bookings/route.ts; MrtStation.operational; ListingStation",
+      "database booleans / relations · Existing meetup verification does not suspend already-agreed handoffs based on operational alone",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Standard station radius",
+    "value": "200 m (selected standard station; per-station overrides may apply)",
+    "metadata": [
+      "lib/meetup/location.ts; MEETUP_STATION_RADIUS_M; MEETUP_STATION_RADII_JSON",
+      "number 50–800 m · Geofence acceptance; default 200 m",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Interchange radius",
+    "value": "350 m (selected interchange; per-station overrides may apply)",
+    "metadata": [
+      "lib/meetup/location.ts; MEETUP_INTERCHANGE_RADIUS_M; MEETUP_STATION_RADII_JSON",
+      "number 50–800 m · Geofence acceptance; default 350 m",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Maximum GPS accuracy",
+    "value": "100 m",
+    "metadata": [
+      "lib/meetup/location.ts; MEETUP_MAX_ACCURACY_M",
+      "number 10–200 m · Rejects inaccurate samples; distance + accuracy must fit radius",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "GPS freshness / future skew",
+    "value": "120 seconds / 5 seconds",
+    "metadata": [
+      "lib/meetup/location.ts:evaluateLocation",
+      "fixed milliseconds · Stale/future sample rejection; security invariant",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Authoritative coordinates",
+    "value": "109 of 120 stations; missing remains unavailable",
+    "metadata": [
+      "data/mrt/official-network.json",
+      "immutable reviewed catalogue · No inferred coordinates or test-centre substitution",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "QR challenge validity",
+    "value": "180 seconds",
+    "metadata": [
+      "lib/meetup/config.ts; MEETUP_CHALLENGE_TTL_SECONDS",
+      "integer 30–300; default 180 · Replay / expiration boundary",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Check-in validity",
+    "value": "600 seconds",
+    "metadata": [
+      "lib/meetup/config.ts; MEETUP_CHECKIN_TTL_SECONDS",
+      "integer 60–1800; default 600 · Location freshness across challenge issuance",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Physical receipt confirmation window",
+    "value": "Unavailable: invalid or missing trusted configuration seconds",
+    "metadata": [
+      "lib/meetup/config.ts; MEETUP_CONFIRMATION_TTL_SECONDS",
+      "explicit integer 60–1800; no default · Preview policy must be explicitly configured",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Evidence and camera safeguards",
+    "value": "Five checklist answers; physical receipt; participant authorization; QR camera and evidence validation preserved",
+    "metadata": [
+      "lib/booking-evidence.ts; lib/rental-checklist.ts; lib/meetup/service.ts",
+      "code invariants · Custody and dispute protections",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Private photo upload limits",
+    "value": "8 images; 5 MiB each; 20 MiB total; JPEG / PNG / WebP",
+    "metadata": [
+      "lib/booking-evidence.ts:validatePrivatePhotos",
+      "bounded bytes / MIME allowlist · Private rental evidence processing",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Authentication session lifetime",
+    "value": "7 days at creation; persisted expiry governs current session",
+    "metadata": [
+      "lib/auth.ts:newSessionCredential; AuthSession.expiresAt",
+      "fixed seconds / database timestamp · Session validity; current account rechecked",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Authentication rate limits",
+    "value": "Per-account: 10 login or 5 registration attempts in 15 minutes; persisted counters",
+    "metadata": [
+      "lib/auth-rate-limit.ts:authenticationLimit; AuthRateLimit",
+      "fixed integer limits / expiry · Not a substitute for approved trusted-ingress traffic limits",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Account restriction policy",
+    "value": "Legacy ACTIVE / SUSPENDED moderation remains in force. Future 48-hour / 24-hour review / cumulative 72-hour restrictions are not activated.",
+    "metadata": [
+      "lib/admin/mutations.ts; User.accountStatus; docs/admin/ADMIN_PERMISSION_MATRIX.md",
+      "persisted enum / existing guarded mutations · No new suspension powers or future policy activation",
+      "Independent approval / reviewed authorization cutover"
+    ]
+  },
+  {
+    "label": "Temporary location isolation",
+    "value": "Owned-development allowlists and participant consent; maximum 1 hour, earlier revocation; TEST_LOCATION only",
+    "metadata": [
+      "lib/meetup/test-location.ts; lib/geofencing-lab/store.ts; lib/geofencing-lab/config.ts",
+      "immutable test boundary / bounded TTL · No raw test coordinates in inventory; no production simulation",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Meetup request throttles",
+    "value": "Check-in 5 / 60 seconds; issue 5 / 60 seconds; verify 10 / 900 seconds; return assistance 3 / 86400 seconds",
+    "metadata": [
+      "lib/meetup/service.ts:limit call sites",
+      "fixed action-specific integer windows · Abuse controls do not waive custody or evidence requirements",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Staff activation / approval execution",
+    "value": "Not activated by this batch; legacy ACTIVE Admin guards remain authoritative",
+    "metadata": [
+      "lib/admin/auth.ts; lib/authorization; prisma/migrations",
+      "immutable guards / inactive membership constraints · No ADMIN OR STAFF bypass",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Passkey development pilot",
+    "value": "Disabled",
+    "metadata": [
+      "lib/passkey-pilot-config.ts; HUSTLEN_PASSKEY_PILOT",
+      "exact development-only gate · Owned DB and trusted origin required; not mandatory production MFA",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "tickets development availability",
+    "value": "Disabled",
+    "metadata": [
+      "lib/support/config.ts; HUSTLEN_SUPPORT_TICKET_CANDIDATE",
+      "exact gate + owned DB + scoped authorization · Production refused independently of flag",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "channels development availability",
+    "value": "Disabled",
+    "metadata": [
+      "lib/support/channel-config.ts; HUSTLEN_SUPPORT_CHANNEL_CANDIDATE",
+      "exact gate + owned DB + scoped authorization · Production refused independently of flag",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "staff development availability",
+    "value": "Disabled",
+    "metadata": [
+      "lib/support-staff-candidate/config.ts; HUSTLEN_SUPPORT_STAFF_CANDIDATE",
+      "exact gate + owned DB + scoped authorization · Production refused independently of flag",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "lab development availability",
+    "value": "Disabled",
+    "metadata": [
+      "lib/geofencing-lab/config.ts; HUSTLEN_GEOFENCING_LAB",
+      "exact gate + owned DB + scoped authorization · Production refused independently of flag",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "staffRead development availability",
+    "value": "Disabled",
+    "metadata": [
+      "lib/staff-read-pilot/config.ts; HUSTLEN_STAFF_READ_PILOT",
+      "exact gate + owned DB + scoped authorization · Production refused independently of flag",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Chat availability",
+    "value": "Global disabled; explicit preview allowlist may apply",
+    "metadata": [
+      "lib/chat/config.ts; CHAT_ENABLED; CHAT_PREVIEW_USER_IDS",
+      "boolean / bounded account allowlist · Private conversations remain participant scoped",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Chat retention configuration",
+    "value": "Message days: not configured; reported evidence days: not configured; automatic deletion: disabled",
+    "metadata": [
+      "lib/chat/config.ts; CHAT_MESSAGE_RETENTION_DAYS; CHAT_EVIDENCE_RETENTION_DAYS",
+      "optional positive integer days · Retention / holds need approved policy",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Advisory analysis mode",
+    "value": "Disabled",
+    "metadata": [
+      "lib/chat/analysis/jobs.ts; CHAT_ANALYSIS_MODE",
+      "exact mode · No autonomous administrative authority",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Announcement mutation configuration",
+    "value": "Owned-development candidate configured; current tester/DB marker still checked on each operation",
+    "metadata": [
+      "lib/announcements/config.ts; HUSTLEN_ANNOUNCEMENT_CANDIDATE",
+      "exact gate + origin + allowlist + owned DB · No production publication authority",
+      "Not dashboard-editable"
+    ]
+  },
+  {
+    "label": "Candidate publication policy",
+    "value": "OWNED_TEST_ADMIN; plain text 120 / 4000 characters; 31-day maximum window; no external delivery",
+    "metadata": [
+      "lib/announcements/input.ts; service.ts",
+      "fixed candidate policy · Not product approval; routine/high-impact split unresolved",
+      "Independent approval / reviewed code migration"
+    ]
+  },
+  {
+    "label": "Announcement notification delivery",
+    "value": "Not implemented; in-app test page only",
+    "metadata": [
+      "app/dev/announcements/page.tsx; lib/announcements/service.ts",
+      "no provider / outbox · No fabricated delivery counts",
+      "Separate approved infrastructure and audience policy"
+    ]
+  }
+]

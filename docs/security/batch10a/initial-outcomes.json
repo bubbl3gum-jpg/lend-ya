@@ -1,0 +1,60 @@
+[
+  {
+    "run": {
+      "group": "test:announcements",
+      "start": "2026-10-26T07:23:34.820Z",
+      "end": "2026-10-26T07:24:21.076Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/3305523971fc82a257ecfc0f",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 6"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10a/test:announcements.log"
+    },
+    "finding": "P2010: PostgreSQL void advisory-lock result unsupported by Prisma; return scalar from same lock. Dependent workflows failed after draft failure.",
+    "fixtureFinding": "Existing auth deleted expired fixture session; recreate fixture session instead of UPDATE. No auth source changes."
+  },
+  {
+    "run": {
+      "group": "test:integration",
+      "start": "2026-10-26T07:51:07.831Z",
+      "end": "2026-10-26T07:51:41.812Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/881d5a138ac95ecd5fa979de",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10a/test:integration.log"
+    },
+    "finding": "Legacy MRT browser collector observed meetup status 401 after explicit logout and before login completed. No announcement/settings route involved.",
+    "boundedFreshRetry": {
+      "group": "test:integration",
+      "start": "2026-10-26T07:52:47.091Z",
+      "end": "2026-10-26T07:53:22.248Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/221d131a6502eb35e0e6c102",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10a/test:integration.log"
+    },
+    "resolution": "Retry passed without source/assertion/deadline changes; unresolved logout/polling test intermittence, not proven fixed or attributed to Batch 10A."
+  },
+  {
+    "tool": "Prisma generate",
+    "exit": "validation failure",
+    "finding": "Mechanical reverse-relation edit briefly inserted field into MeetupEvent; removed before DB operations; existing schema definitions preserved and final generation/validation pass."
+  }
+]
