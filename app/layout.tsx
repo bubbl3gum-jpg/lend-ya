@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MRT Market",
+  title: "Hustlen’",
   description: "Peer-to-peer marketplace for physical item rentals.",
 };
 

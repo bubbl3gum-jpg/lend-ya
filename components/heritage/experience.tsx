@@ -43,14 +43,24 @@ function usePreference(key: string, fallback: string, allowed: string[]) {
   }
   return [value, update] as const;
 }
+const subscribeReadiness = () => () => {};
+const readyClient = () => true;
+const readyServer = () => false;
 const Experience = createContext({ effects: true, sound: false });
 export function HeritageSurface({
   children,
   initialTheme,
+  chromeOnly = false,
 }: {
   children: React.ReactNode;
   initialTheme: Appearance;
+  chromeOnly?: boolean;
 }) {
+  const preferencesReady = useSyncExternalStore(
+    subscribeReadiness,
+    readyClient,
+    readyServer,
+  );
   const [theme, setTheme] = usePreference(
     "hustlen:catalogue-theme",
     initialTheme,
@@ -77,48 +87,59 @@ export function HeritageSurface({
       value={{ effects: effects === "on", sound: sound === "on" }}
     >
       <div
-        className="catalogue heritage"
+        className={
+          chromeOnly
+            ? "catalogue heritage heritage-chrome"
+            : "catalogue heritage"
+        }
         data-theme={theme}
         data-effects={effects}
       >
         {children}
-        <aside
-          className="heritage-preferences"
-          aria-label="Experience preferences"
-        >
-          <label>
-            Appearance
-            <select
-              aria-label="Appearance"
-              value={theme}
-              onChange={(e) => appearance(e.target.value)}
-            >
-              <option value="system">System</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={effects === "on"}
-              onChange={(e) => setEffects(e.target.checked ? "on" : "off")}
-            />{" "}
-            Immersive effects
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={sound === "on"}
-              onChange={(e) => setSound(e.target.checked ? "on" : "off")}
-            />{" "}
-            Discovery sound
-          </label>
-          <p>
-            Sound is optional and used only for intentional discovery. Reduced
-            motion is always respected.
-          </p>
-        </aside>
+        {!chromeOnly && (
+          <aside
+            id="experience-preferences"
+            className="heritage-preferences"
+            aria-label="Experience preferences"
+            aria-busy={!preferencesReady}
+          >
+            <label>
+              Appearance
+              <select
+                aria-label="Appearance"
+                disabled={!preferencesReady}
+                value={theme}
+                onChange={(e) => appearance(e.target.value)}
+              >
+                <option value="system">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                disabled={!preferencesReady}
+                checked={effects === "on"}
+                onChange={(e) => setEffects(e.target.checked ? "on" : "off")}
+              />{" "}
+              Immersive effects
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                disabled={!preferencesReady}
+                checked={sound === "on"}
+                onChange={(e) => setSound(e.target.checked ? "on" : "off")}
+              />{" "}
+              Discovery sound
+            </label>
+            <p>
+              Sound is optional and used only for intentional discovery. Reduced
+              motion is always respected.
+            </p>
+          </aside>
+        )}
       </div>
     </Experience.Provider>
   );

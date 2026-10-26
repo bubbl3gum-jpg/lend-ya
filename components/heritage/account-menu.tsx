@@ -1,14 +1,25 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useId } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 export function HeritageAccountMenu({
   name,
   links,
+  triggerLabel,
+  menuTitle = "Your account book",
+  navigationLabel = "Account center",
+  closeLabel = "Close account navigation",
+  actions,
 }: {
   name: string;
+  triggerLabel?: string;
+  menuTitle?: string;
+  navigationLabel?: string;
+  closeLabel?: string;
+  actions?: React.ReactNode;
   links: { href: string; label: string }[];
 }) {
+  const titleId = useId();
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
@@ -24,12 +35,12 @@ export function HeritageAccountMenu({
         aria-haspopup="dialog"
         onClick={() => dialog.current?.showModal()}
       >
-        Account center · {name}
+        {triggerLabel ?? `Account center · ${name}`}
       </button>
       <dialog
         ref={dialog}
         className="heritage-account-sheet"
-        aria-labelledby="account-menu-title"
+        aria-labelledby={titleId}
         onKeyDown={(event) => {
           if (event.key !== "Tab") return;
           const controls = event.currentTarget.querySelectorAll<HTMLElement>(
@@ -60,18 +71,20 @@ export function HeritageAccountMenu({
       >
         <header>
           <div>
-            <p className="catalogue-eyebrow">Hustlen’ / Personal index</p>
-            <h2 id="account-menu-title">Your account book</h2>
+            <p className="catalogue-eyebrow">
+              Hustlen’ / {triggerLabel ? "Marketplace index" : "Personal index"}
+            </p>
+            <h2 id={titleId}>{menuTitle}</h2>
           </div>
           <button
             type="button"
-            aria-label="Close account navigation"
+            aria-label={closeLabel}
             onClick={() => dialog.current?.close()}
           >
             ×
           </button>
         </header>
-        <nav aria-label="Account center">
+        <nav aria-label={navigationLabel}>
           {links.map((link) => (
             <Link
               key={link.href}
@@ -93,6 +106,9 @@ export function HeritageAccountMenu({
             </Link>
           ))}
         </nav>
+        {actions ? (
+          <div className="heritage-menu-actions">{actions}</div>
+        ) : null}
       </dialog>
     </>
   );

@@ -869,3 +869,178 @@
     transform: none !important;
   }
 }
+/* 11B integration: same R1 materials, shared marketplace chrome and retained functional controls. */
+.catalogue.heritage.heritage-chrome {
+  min-height: 0;
+}
+.heritage-primary-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem;
+}
+.heritage .heritage-primary-navigation a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 0.7rem;
+  color: var(--rail-ink);
+  border-bottom: 2px solid transparent;
+  font-size: 0.8rem;
+}
+.heritage .heritage-primary-navigation a[aria-current="page"] {
+  border-bottom-color: #cba56b;
+  background: #3c3426;
+}
+.heritage-mobile-navigation {
+  display: none;
+}
+.heritage .heritage-auth-link {
+  color: var(--rail-ink);
+  min-height: 44px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #a38b63;
+  border-radius: 3px;
+}
+.heritage .heritage-account-sheet .heritage-menu-actions {
+  margin-top: 1rem;
+}
+.heritage
+  .catalogue-masthead:has(.heritage-account-sheet[open])
+  .heritage-header-logout {
+  visibility: hidden;
+}
+.heritage-market-rail a[aria-current="page"] {
+  background: #48402e;
+  border-left: 3px solid #cba56b;
+  padding-left: 0.7rem;
+}
+.heritage-mrt-entry {
+  margin: 1rem 0 1.7rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) 95px minmax(0, 1fr);
+  gap: 1.8rem;
+  align-items: center;
+  padding: 1.5rem;
+  border: 3px double var(--rule);
+  background: var(--sheet);
+  background-image: url("/heritage/paper-fibers.png");
+}
+.heritage-mrt-entry h2 {
+  font-family: var(--display);
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0.7rem 0;
+}
+.heritage-mrt-entry h3 {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+.heritage-mrt-entry p:not(.catalogue-eyebrow) {
+  color: var(--muted-ink);
+  line-height: 1.7;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+.heritage-mrt-entry > svg {
+  color: var(--brass);
+  width: 85px;
+  height: 160px;
+}
+.heritage-mrt-entry > div:last-child a {
+  text-decoration: underline;
+  min-height: 44px;
+  display: inline-block;
+  padding-block: 0.6rem;
+}
+.heritage-browse {
+  min-height: 70vh;
+}
+.heritage .heritage-browse :is(.text-slate-900, .text-slate-700) {
+  color: var(--ink);
+}
+.heritage
+  .heritage-browse
+  :is(.text-slate-600, .text-slate-500, .text-emerald-600) {
+  color: var(--muted-ink);
+}
+.heritage .heritage-browse :is(.bg-white, .bg-slate-100) {
+  background: var(--sheet);
+  border-color: var(--rule);
+}
+.heritage .heritage-browse #marketplace-filters {
+  border-radius: 3px;
+  background-image: url("/heritage/paper-fibers.png");
+  scroll-margin-top: 1rem;
+}
+.heritage-browse h1 {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+}
+.heritage-browse :is(input, select) {
+  min-height: 44px;
+  color: var(--ink);
+  background: var(--sheet);
+  border-color: var(--rule);
+}
+.heritage .heritage-browse > div > div > a {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: 3px;
+}
+@media (max-width: 1100px) {
+  .heritage-primary-navigation {
+    display: none;
+  }
+  .heritage-mobile-navigation {
+    display: block;
+  }
+}
+@media (max-width: 760px) {
+  .heritage-mrt-entry {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+    padding: 1.2rem;
+  }
+  .heritage-mrt-entry > svg {
+    display: none;
+  }
+  .heritage-mrt-entry > div:last-child {
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+  }
+}
+
+.heritage .heritage-primary-navigation a {
+  font-family: var(--support);
+  font-style: normal;
+  letter-spacing: normal;
+}
+.heritage .heritage-primary-navigation a:hover {
+  background: #443c2a;
+  color: #fff0d1;
+}
+.heritage .heritage-menu-actions button {
+  font-size: 0.9rem;
+}
+.heritage-browse article p.text-emerald-800 {
+  color: var(--muted-ink);
+}
+.heritage-has-rail .heritage-primary-navigation {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .heritage .heritage-market-rail {
+    display: none;
+  }
+  .heritage .heritage-market-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.heritage-category > span:last-child,
+.heritage-listings :is(.catalogue-eyebrow, article p:last-child) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}

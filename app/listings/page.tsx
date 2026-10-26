@@ -1,10 +1,16 @@
 import Link from "next/link";
+import { HeritageSurface } from "@/components/heritage/experience";
+import { readAppearance } from "@/lib/heritage/appearance";
 import { prisma } from "@/lib/prisma";
 import { SiteHeader } from "@/components/site-header";
 import { ListingsBrowser } from "@/components/listings-browser";
 import { getListingAvailability } from "@/lib/listing-status";
 
-export default async function ListingsPage() {
+export default async function ListingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string | string[] }>;
+}) {
   const records = await prisma.listing.findMany({
     where: {
       status: "ACTIVE",
@@ -67,33 +73,43 @@ export default async function ListingsPage() {
     ...new Set(listings.flatMap((listing) => listing.pickupStations)),
   ].sort();
 
+  const requestedCategory = (await searchParams).category;
+  const initialCategory =
+    typeof requestedCategory === "string" &&
+    categories.includes(requestedCategory)
+      ? requestedCategory
+      : "ALL";
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      <SiteHeader />
-      <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="mb-8 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">
-              Marketplace
-            </p>
-            <h1 className="mt-2 text-4xl font-semibold text-slate-900">
-              Browse listings
-            </h1>
+    <HeritageSurface initialTheme={await readAppearance()}>
+      <main className="heritage-browse">
+        <SiteHeader catalogue />
+        <div className="mx-auto max-w-6xl px-6 py-12">
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">
+                Marketplace
+              </p>
+              <h1 className="mt-2 text-4xl font-semibold text-slate-900">
+                Browse listings
+              </h1>
+            </div>
+            <Link
+              href="/listings/new"
+              className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white"
+            >
+              Create listing
+            </Link>
           </div>
-          <Link
-            href="/listings/new"
-            className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white"
-          >
-            Create listing
-          </Link>
-        </div>
 
-        <ListingsBrowser
-          listings={listings}
-          categories={categories}
-          stations={stations}
-        />
-      </div>
-    </main>
+          <ListingsBrowser
+            key={initialCategory}
+            initialCategory={initialCategory}
+            listings={listings}
+            categories={categories}
+            stations={stations}
+          />
+        </div>
+      </main>
+    </HeritageSurface>
   );
 }
