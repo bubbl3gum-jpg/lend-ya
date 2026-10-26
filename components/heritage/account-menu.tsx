@@ -1,24 +1,27 @@
 "use client";
 import { useEffect, useRef, useId } from "react";
 import Link from "next/link";
+import { useLocale } from "@/components/i18n/locale";
+import type { MessageId } from "@/lib/i18n/catalogues";
 import { usePathname } from "next/navigation";
 export function HeritageAccountMenu({
   name,
   links,
   triggerLabel,
-  menuTitle = "Your account book",
-  navigationLabel = "Account center",
-  closeLabel = "Close account navigation",
+  menuTitle = "nav.accountTitle",
+  navigationLabel = "nav.accountNav",
+  closeLabel = "nav.closeAccount",
   actions,
 }: {
   name: string;
-  triggerLabel?: string;
-  menuTitle?: string;
-  navigationLabel?: string;
-  closeLabel?: string;
+  triggerLabel?: MessageId;
+  menuTitle?: MessageId;
+  navigationLabel?: MessageId;
+  closeLabel?: MessageId;
   actions?: React.ReactNode;
-  links: { href: string; label: string }[];
+  links: { href: string; label: MessageId }[];
 }) {
+  const { locale, t } = useLocale();
   const titleId = useId();
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -35,11 +38,12 @@ export function HeritageAccountMenu({
         aria-haspopup="dialog"
         onClick={() => dialog.current?.showModal()}
       >
-        {triggerLabel ?? `Account center · ${name}`}
+        {triggerLabel ? t(triggerLabel) : t("nav.account", { name })}
       </button>
       <dialog
         ref={dialog}
         className="heritage-account-sheet"
+        lang={locale}
         aria-labelledby={titleId}
         onKeyDown={(event) => {
           if (event.key !== "Tab") return;
@@ -72,19 +76,20 @@ export function HeritageAccountMenu({
         <header>
           <div>
             <p className="catalogue-eyebrow">
-              Hustlen’ / {triggerLabel ? "Marketplace index" : "Personal index"}
+              Hustlen’ /{" "}
+              {t(triggerLabel ? "nav.marketIndex" : "nav.personalIndex")}
             </p>
-            <h2 id={titleId}>{menuTitle}</h2>
+            <h2 id={titleId}>{t(menuTitle)}</h2>
           </div>
           <button
             type="button"
-            aria-label={closeLabel}
+            aria-label={t(closeLabel)}
             onClick={() => dialog.current?.close()}
           >
             ×
           </button>
         </header>
-        <nav aria-label={navigationLabel}>
+        <nav aria-label={t(navigationLabel)}>
           {links.map((link) => (
             <Link
               key={link.href}
@@ -92,7 +97,7 @@ export function HeritageAccountMenu({
               aria-current={pathname === link.href ? "page" : undefined}
               onClick={() => dialog.current?.close()}
             >
-              {link.label}
+              {t(link.label)}
               <svg
                 aria-hidden="true"
                 width="14"

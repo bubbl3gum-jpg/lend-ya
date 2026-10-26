@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { readLocale } from "@/lib/i18n/server";
 import { HeritageSurface } from "@/components/heritage/experience";
 import { readAppearance } from "@/lib/heritage/appearance";
 import { prisma } from "@/lib/prisma";
@@ -80,8 +81,11 @@ export default async function ListingsPage({
       ? requestedCategory
       : "ALL";
   return (
-    <HeritageSurface initialTheme={await readAppearance()}>
-      <main className="heritage-browse">
+    <HeritageSurface
+      initialTheme={await readAppearance()}
+      initialLocale={await readLocale()}
+    >
+      <main className="heritage-browse" lang="en">
         <SiteHeader catalogue />
         <div className="mx-auto max-w-6xl px-6 py-12">
           <div className="mb-8 flex items-center justify-between gap-4">

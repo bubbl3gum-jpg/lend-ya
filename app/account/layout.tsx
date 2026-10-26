@@ -1,3 +1,4 @@
+import { readLocale } from "@/lib/i18n/server";
 import { readAppearance } from "@/lib/heritage/appearance";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
@@ -12,6 +13,7 @@ export default async function AccountLayout({
   return (
     <AccountShell
       initialTheme={await readAppearance()}
+      initialLocale={await readLocale()}
       header={<SiteHeader catalogue />}
     >
       {children}

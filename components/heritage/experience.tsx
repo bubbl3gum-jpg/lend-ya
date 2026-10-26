@@ -8,6 +8,12 @@ import {
   useSyncExternalStore,
 } from "react";
 import Link from "next/link";
+import {
+  LocaleProvider,
+  useLocale,
+  LanguageSelect,
+} from "@/components/i18n/locale";
+import type { Locale } from "@/lib/i18n/core";
 import type { Appearance } from "@/lib/heritage/appearance";
 
 const memory = new Map<string, string>();
@@ -48,6 +54,21 @@ const readyClient = () => true;
 const readyServer = () => false;
 const Experience = createContext({ effects: true, sound: false });
 export function HeritageSurface({
+  initialLocale = "en",
+  ...props
+}: {
+  initialLocale?: Locale;
+  children: React.ReactNode;
+  initialTheme: Appearance;
+  chromeOnly?: boolean;
+}) {
+  return (
+    <LocaleProvider initialLocale={initialLocale}>
+      <HeritageSurfaceContents {...props} />
+    </LocaleProvider>
+  );
+}
+function HeritageSurfaceContents({
   children,
   initialTheme,
   chromeOnly = false,
@@ -56,6 +77,7 @@ export function HeritageSurface({
   initialTheme: Appearance;
   chromeOnly?: boolean;
 }) {
+  const { locale, t } = useLocale();
   const preferencesReady = useSyncExternalStore(
     subscribeReadiness,
     readyClient,
@@ -76,11 +98,19 @@ export function HeritageSurface({
   ]);
   useEffect(() => {
     // Migrate the old local-only preference once; subsequent document responses know the theme.
-    document.cookie = `hustlen_appearance=${theme}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+    try {
+      document.cookie = `hustlen_appearance=${theme}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+    } catch {
+      /* Optional preference persistence may be unavailable. */
+    }
   }, [theme]);
   function appearance(value: string) {
     setTheme(value);
-    document.cookie = `hustlen_appearance=${value}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+    try {
+      document.cookie = `hustlen_appearance=${value}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+    } catch {
+      /* Optional preference persistence may be unavailable. */
+    }
   }
   return (
     <Experience.Provider
@@ -92,6 +122,8 @@ export function HeritageSurface({
             ? "catalogue heritage heritage-chrome"
             : "catalogue heritage"
         }
+        lang={locale}
+        data-locale={locale}
         data-theme={theme}
         data-effects={effects}
       >
@@ -100,20 +132,21 @@ export function HeritageSurface({
           <aside
             id="experience-preferences"
             className="heritage-preferences"
-            aria-label="Experience preferences"
+            aria-label={t("pref.region")}
             aria-busy={!preferencesReady}
           >
+            <LanguageSelect disabled={!preferencesReady} />
             <label>
-              Appearance
+              {t("pref.appearance")}
               <select
-                aria-label="Appearance"
+                aria-label={t("pref.appearance")}
                 disabled={!preferencesReady}
                 value={theme}
                 onChange={(e) => appearance(e.target.value)}
               >
-                <option value="system">System</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
+                <option value="system">{t("pref.system")}</option>
+                <option value="light">{t("pref.light")}</option>
+                <option value="dark">{t("pref.dark")}</option>
               </select>
             </label>
             <label>
@@ -123,7 +156,7 @@ export function HeritageSurface({
                 checked={effects === "on"}
                 onChange={(e) => setEffects(e.target.checked ? "on" : "off")}
               />{" "}
-              Immersive effects
+              {t("pref.effects")}
             </label>
             <label>
               <input
@@ -132,12 +165,10 @@ export function HeritageSurface({
                 checked={sound === "on"}
                 onChange={(e) => setSound(e.target.checked ? "on" : "off")}
               />{" "}
-              Discovery sound
+              {t("pref.sound")}
             </label>
-            <p>
-              Sound is optional and used only for intentional discovery. Reduced
-              motion is always respected.
-            </p>
+            <p>{t("pref.note")}</p>
+            <p>{t("pref.scope")}</p>
           </aside>
         )}
       </div>
@@ -176,12 +207,15 @@ export function EditorialHeading({
   children,
 }: {
   number: string;
-  title: string;
+  title: React.ReactNode;
   children?: React.ReactNode;
 }) {
+  const { t } = useLocale();
   return (
     <header className="heritage-editorial-heading">
-      <span className="catalogue-eyebrow">{number} / The shared catalogue</span>
+      <span className="catalogue-eyebrow">
+        {t("editorial.number", { number })}
+      </span>
       <h2>{title}</h2>
       {children}
     </header>

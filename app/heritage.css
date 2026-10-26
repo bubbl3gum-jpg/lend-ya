@@ -1044,3 +1044,61 @@
   max-width: 100%;
   overflow-wrap: anywhere;
 }
+/* 11C: Taiwan glyph metrics within the existing editorial system; no new palette. */
+.heritage[lang="zh-TW"] {
+  --display:
+    "Noto Serif CJK TC", "Noto Serif TC", "Songti TC", "PMingLiU", Georgia,
+    serif;
+  --support:
+    "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    Arial, sans-serif;
+}
+.heritage[lang="zh-TW"] :is(h1, h2, h3) {
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+.heritage[lang="zh-TW"] .heritage-hero h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 1.25;
+}
+.heritage[lang="zh-TW"] .catalogue-eyebrow {
+  letter-spacing: 0.075em;
+  font-size: 0.75rem;
+}
+.heritage[lang="zh-TW"] .heritage-home-brand {
+  font-family: Georgia, serif;
+}
+.heritage [lang="zh-TW"] {
+  overflow-wrap: anywhere;
+}
+.account-security-note {
+  margin-top: 1.5rem;
+}
+.account-security-note p {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--muted-ink);
+  margin-top: 0.8rem;
+}
+.account-security-note a,
+.account-login-again {
+  display: inline-block;
+  min-height: 44px;
+  padding-block: 0.75rem;
+  text-decoration: underline;
+}
+.heritage input[aria-invalid="true"] {
+  border-color: var(--error);
+}
+.heritage[lang="zh-TW"]
+  :is(
+    .catalogue-heading h1,
+    .catalogue-section-title h2,
+    .heritage-hero h1,
+    em
+  ) {
+  font-style: normal;
+}
+.heritage[lang="zh-TW"] .catalogue-section-title h2 {
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+}
