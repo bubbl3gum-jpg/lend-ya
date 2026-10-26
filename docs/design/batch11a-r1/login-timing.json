@@ -1,0 +1,48 @@
+{
+  "initialArtifact": ".test-artifacts/53c06b7e680a2afed94f57d7",
+  "assertion": "not /login within existing 5000ms; pending dashboard document navigation",
+  "serverObservation": [
+    {
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 200,
+      "totalMs": 1890,
+      "nextCompileMs": 1761,
+      "applicationMs": 122
+    },
+    {
+      "path": "/dashboard",
+      "method": "GET",
+      "status": 200,
+      "totalMs": 254,
+      "nextCompileMs": 57,
+      "applicationMs": 197
+    }
+  ],
+  "workload": "Occurred while account-design/heritage-ui browser work was overlapping. No causal attribution established.",
+  "initialStart": "2026-10-26T15:06:45.815Z",
+  "initialEnd": "2026-10-26T15:07:10.589Z",
+  "overlappingAccountStart": "2026-10-26T15:06:32.437Z",
+  "overlappingAccountEnd": "2026-10-26T15:07:00.337Z",
+  "overlappingHeritageStart": "2026-10-26T15:07:00.339Z",
+  "overlappingHeritageEnd": "2026-10-26T15:07:35.819Z",
+  "freshSerialRerun": {
+    "group": "test:login-readiness",
+    "start": "2026-10-26T15:18:53.228Z",
+    "end": "2026-10-26T15:19:15.378Z",
+    "exit": 0,
+    "signal": null,
+    "artifact": ".test-artifacts/5f47c3f8beeec574a40c2c04",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 1"
+    ],
+    "fails": [
+      "\u2139 fail 0"
+    ],
+    "cleanup": true
+  },
+  "result": "Serial test passed, including delayed hydration and six repeated logins. Underlying timing intermittence remains a risk; this UI batch does not claim to fix it."
+}

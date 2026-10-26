@@ -1,0 +1,134 @@
+{
+  "scope": "Engineering checks, not a complete WCAG or low-end-device performance certification",
+  "opaqueTokenContrastPairs": [
+    {
+      "mode": "light",
+      "pair": [
+        "ink",
+        "paper"
+      ],
+      "contrast": 10.14
+    },
+    {
+      "mode": "light",
+      "pair": [
+        "ink",
+        "sheet"
+      ],
+      "contrast": 11.73
+    },
+    {
+      "mode": "light",
+      "pair": [
+        "muted",
+        "paper"
+      ],
+      "contrast": 5.19
+    },
+    {
+      "mode": "light",
+      "pair": [
+        "muted",
+        "sheet"
+      ],
+      "contrast": 6.0
+    },
+    {
+      "mode": "light",
+      "pair": [
+        "actionInk",
+        "action"
+      ],
+      "contrast": 7.41
+    },
+    {
+      "mode": "light",
+      "pair": [
+        "error",
+        "sheet"
+      ],
+      "contrast": 6.73
+    },
+    {
+      "mode": "light",
+      "pair": [
+        "focus",
+        "sheet"
+      ],
+      "contrast": 6.1
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "ink",
+        "paper"
+      ],
+      "contrast": 13.74
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "ink",
+        "sheet"
+      ],
+      "contrast": 11.67
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "muted",
+        "paper"
+      ],
+      "contrast": 9.0
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "muted",
+        "sheet"
+      ],
+      "contrast": 7.64
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "actionInk",
+        "action"
+      ],
+      "contrast": 7.36
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "error",
+        "sheet"
+      ],
+      "contrast": 9.33
+    },
+    {
+      "mode": "dark",
+      "pair": [
+        "focus",
+        "sheet"
+      ],
+      "contrast": 9.06
+    }
+  ],
+  "minimumCheckedContrast": 5.19,
+  "totalPublicArtworkBytes": 435200,
+  "noNewDependencies": true,
+  "temporaryParticleNodesPerActivatedControl": 9,
+  "particleAnimationMs": 420,
+  "particleRemovalTimerMs": 460,
+  "noSimulationLoop": true,
+  "audioSourceMs": 110,
+  "audioStopByMs": 120,
+  "audioContextCloseTimerMs": 180,
+  "browserCoverage": "Real Chromium desktop/tablet/mobile, touch and keyboard; native audio observed; not Safari/iOS hardware",
+  "automaticEvidence": "heritage-ux.json and account-browser.json",
+  "remaining": [
+    "Full screen-reader review",
+    "Low-end physical-phone FPS/LCP/CLS",
+    "Subjective listening and visual acceptance"
+  ]
+}

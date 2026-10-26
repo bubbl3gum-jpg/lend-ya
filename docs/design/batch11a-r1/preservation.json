@@ -1,0 +1,21 @@
+{
+  "baseline": "912fc8c4a065ffe9af1ce35c44d7ce3d1c663764",
+  "priorImplementation": "a7e1929d0ac1d128eea22873b51ed31a12f79fec",
+  "baselineWorkingTree": "clean",
+  "ancestryVerified": true,
+  "protectedFilesByteIdentical": 1041,
+  "historicalMigrationCount": 28,
+  "unchanged": [
+    "all API routes",
+    "all authentication/session/logout/booking/meetup/evidence logic",
+    "all staff/approval/MFA/Support/announcement/settings services",
+    "Prisma schema and all historical migrations",
+    "proxy guards and next.config.ts security headers",
+    "global browser-error collector",
+    "original integration and meetup tests/meaningful assertions",
+    "package-lock.json",
+    "all historical review evidence"
+  ],
+  "master14StagesPreserved": true,
+  "stage6Stage7Stage8SectionsByteIdentical": true
+}

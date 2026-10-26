@@ -1,0 +1,81 @@
+{
+  "initialOutcomes": [
+    {
+      "group": "test:account-design",
+      "start": "2026-10-26T14:55:54.708Z",
+      "end": "2026-10-26T14:56:14.499Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/f207b93bd398292a49cdc51a",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "finding": "Decorative success seal altered DOM text while the unchanged exact save-status assertion expected Settings saved.; corrected to a CSS-generated aria-hidden ornament."
+    },
+    {
+      "group": "test:heritage-ui",
+      "start": "2026-10-26T14:56:14.501Z",
+      "end": "2026-10-26T14:56:28.647Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/b928c413f8a592107867f7f4",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "finding": "Backward Tab left the native dialog controls in Chromium; explicit first/last boundary wrapping added."
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-26T15:06:45.815Z",
+      "end": "2026-10-26T15:07:10.589Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/53c06b7e680a2afed94f57d7",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "finding": "Existing five-second login navigation assertion failed during overlap with candidate UI browser work; server recorded auth login 200 and dashboard 200. Test, deadline and login code unchanged. Fresh serial rerun passed delayed hydration plus six browser repeats; no claim that concurrency caused or resolved the original timing failure."
+    },
+    {
+      "phase": "initial TypeScript check",
+      "finding": "Test observation used animationName on base Animation; narrowed to CSSAnimation before property access."
+    },
+    {
+      "phase": "initial lint",
+      "finding": "Offline texture generator used require(); converted to ESM .mjs imports. Final lint passed."
+    },
+    {
+      "phase": "cleanup packaging helper",
+      "finding": "Temporary helper initially could not resolve dotenv from /tmp; corrected to repository absolute import before any database connection. Subsequent read-only effective-target cleanup verification passed."
+    }
+  ],
+  "visualReviewRefinements": [
+    "Compact menu type after inherited masthead selector was found to affect sheet links",
+    "Finer paper fibers after initial visual review",
+    "Original engraved image plates added to supplement simple vectors",
+    "Decorative unsupported arrow glyph replaced with original SVG",
+    "Final keyboard/reduced-motion semantics and actual state screenshots verified"
+  ],
+  "noAssertionTimeoutOrAuthorizationRelaxation": true
+}
