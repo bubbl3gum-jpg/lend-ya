@@ -56,5 +56,10 @@
     "tool": "Prisma generate",
     "exit": "validation failure",
     "finding": "Mechanical reverse-relation edit briefly inserted field into MeetupEvent; removed before DB operations; existing schema definitions preserved and final generation/validation pass."
+  },
+  {
+    "stage": "final Git packaging audit",
+    "finding": "The tested proxy.ts refusal/matcher addition was omitted from the first staging list. Final source commit includes that exact already-tested guard. No application source bytes or test assertions were changed for this correction.",
+    "correctedImplementationSha": "44146203549c2e9f2be2bdcdfd2c0ae12fcecaba"
   }
 ]
