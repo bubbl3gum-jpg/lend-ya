@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname === "/dev/announcements" || request.nextUrl.pathname.startsWith("/dev/announcements/")) && (process.env.NODE_ENV!=="development" || process.env.HUSTLEN_ANNOUNCEMENT_CANDIDATE!=="owned-informational-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname.startsWith("/api/admin/locations/lab") || request.nextUrl.pathname==="/admin/locations/lab" || request.nextUrl.pathname.startsWith("/admin/locations/lab/")) && (process.env.NODE_ENV!=="development" || process.env.HUSTLEN_GEOFENCING_LAB!=="owned-self-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((["/api/dev/support-agent","/api/dev/support-requester","/dev/support-agent","/dev/support-requester"].some(path=>request.nextUrl.pathname===path || request.nextUrl.pathname.startsWith(path+"/"))) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_SUPPORT_STAFF_CANDIDATE !== "owned-synthetic-only"))
@@ -50,4 +52,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
+export const config = { matcher: ["/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
