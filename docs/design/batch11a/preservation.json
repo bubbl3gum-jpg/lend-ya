@@ -1,0 +1,17 @@
+{
+  "baseline": "bcfb32566c31140f6539fe1a109500bdcee18865",
+  "protectedFilesByteIdentical": 1019,
+  "unchanged": [
+    "all API routes",
+    "all auth/session/logout implementations",
+    "booking/meetup/evidence logic",
+    "all staff/approval/MFA/Support/configuration logic",
+    "global browser-error collector",
+    "Prisma schema and all historical migrations",
+    "original integration test and assertions",
+    "package-lock.json"
+  ],
+  "historicalMigrationCount": 28,
+  "master14StagesNamesOrderObjectivesPreserved": true,
+  "stage6And7And8SectionsByteIdentical": true
+}

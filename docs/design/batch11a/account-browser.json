@@ -1,0 +1,17 @@
+{
+  "anonymousDenied": true,
+  "ownNamePersisted": true,
+  "themesPersisted": true,
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "keyboardFocus": true,
+  "reducedMotion": true,
+  "nativeValidation": true,
+  "outageRetainsInput": true,
+  "retrySaved": true,
+  "actualLogout": true,
+  "browserErrors": []
+}

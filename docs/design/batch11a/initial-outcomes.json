@@ -1,0 +1,48 @@
+{
+  "initialOutcomes": [
+    {
+      "stage": "initial sandbox execution",
+      "result": "tsx IPC listen EPERM before database creation; rerun with reviewed local process/network access"
+    },
+    {
+      "group": "test:account-design",
+      "start": "2026-10-26T14:20:48.822Z",
+      "end": "2026-10-26T14:21:11.415Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/bca7c982ee93211cdaec36f1",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "cause": "Test locator incorrectly included aria-hidden decorative section numbers"
+    },
+    {
+      "group": "test:account-design",
+      "start": "2026-10-26T14:21:39.606Z",
+      "end": "2026-10-26T14:21:57.696Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/a1eef4a8fc17a95039d5304b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "cause": "Error-state locator also matched the framework route announcer"
+    }
+  ],
+  "correction": "Scoped test locators to actual accessible names and the form error. No timeouts, product assertions, collector or authorization checks weakened.",
+  "subsequentReruns": "Account browser passed after locator correction; final keyboard/44px touch candidate and build also passed."
+}

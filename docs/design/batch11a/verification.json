@@ -1,0 +1,160 @@
+{
+  "implementation": "a7e1929d0ac1d128eea22873b51ed31a12f79fec",
+  "selectedCommandGroups": [
+    {
+      "group": "test:account-design",
+      "start": "2026-10-26T14:28:32.328Z",
+      "end": "2026-10-26T14:28:51.589Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/043f8ce12eed617ac4f3d2df",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mvp",
+      "start": "2026-10-26T14:21:57.698Z",
+      "end": "2026-10-26T14:23:13.233Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/845470a41556f25e8fc5ebf2",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:login-navigation",
+      "start": "2026-10-26T14:23:13.234Z",
+      "end": "2026-10-26T14:23:42.846Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/af3b734667750cd215c309ec",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-26T14:23:42.846Z",
+      "end": "2026-10-26T14:24:26.099Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/96d0db40f92c240cd08dfc17",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-26T14:24:26.100Z",
+      "end": "2026-10-26T14:25:43.080Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ecb8d7ecf7a64b9d985e6e87",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-26T14:25:46.434Z",
+      "end": "2026-10-26T14:26:22.580Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1575b81aacd0848725f64f75",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-26T14:26:22.581Z",
+      "end": "2026-10-26T14:30:43.223Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a0b25b6fd9727f79274d26df",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-26T14:28:51.590Z",
+      "end": "2026-10-26T14:29:00.520Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f951e4bdfd17f154980a49b2",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    }
+  ],
+  "static": [
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "passedTests": 90
+    },
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "passedTests": null
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "passedTests": null
+    },
+    {
+      "command": "npx prisma validate",
+      "exit": 0,
+      "passedTests": null
+    }
+  ],
+  "scope": "Selected relevant regression groups, not every repository suite"
+}

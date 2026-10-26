@@ -1,0 +1,103 @@
+{
+  "method": "WCAG sRGB relative luminance on opaque token pairs; not a complete accessibility audit",
+  "checks": [
+    {
+      "theme": "light",
+      "foreground": "ink",
+      "background": "paper",
+      "contrast": 10.27,
+      "passes4_5": true
+    },
+    {
+      "theme": "light",
+      "foreground": "ink",
+      "background": "sheet",
+      "contrast": 11.32,
+      "passes4_5": true
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "paper",
+      "contrast": 5.36,
+      "passes4_5": true
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "sheet",
+      "contrast": 5.9,
+      "passes4_5": true
+    },
+    {
+      "theme": "light",
+      "foreground": "onAccent",
+      "background": "accent",
+      "contrast": 7.88,
+      "passes4_5": true
+    },
+    {
+      "theme": "light",
+      "foreground": "error",
+      "background": "sheet",
+      "contrast": 7.06,
+      "passes4_5": true
+    },
+    {
+      "theme": "light",
+      "foreground": "focus",
+      "background": "sheet",
+      "contrast": 6.43,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "ink",
+      "background": "paper",
+      "contrast": 12.05,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "ink",
+      "background": "sheet",
+      "contrast": 10.31,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "paper",
+      "contrast": 8.23,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "sheet",
+      "contrast": 7.04,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "onAccent",
+      "background": "accent",
+      "contrast": 8.81,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "error",
+      "background": "sheet",
+      "contrast": 7.43,
+      "passes4_5": true
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus",
+      "background": "sheet",
+      "contrast": 7.71,
+      "passes4_5": true
+    }
+  ]
+}
