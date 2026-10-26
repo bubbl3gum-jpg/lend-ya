@@ -1,0 +1,613 @@
+{
+  "apiLogout": {
+    "sessionDeleted": true,
+    "protectedApi401": true,
+    "protectedContentCleared": true,
+    "expectedNegativeResponse401": 1,
+    "strictCollectorWouldFail": true,
+    "trace": [
+      {
+        "ms": 4222,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 4575,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 14
+      },
+      {
+        "ms": 4579,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 14
+      },
+      {
+        "ms": 4579,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 15
+      },
+      {
+        "ms": 4582,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 4584,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 4591,
+        "phase": "SETUP",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 5424,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 5448,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 5595,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 7584,
+        "phase": "LOGGED_OUT",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 7632,
+        "phase": "LOGGED_OUT",
+        "kind": "poll-end",
+        "id": 3,
+        "status": 401
+      },
+      {
+        "ms": 7633,
+        "phase": "LOGGED_OUT",
+        "kind": "timer-stop",
+        "id": 15
+      },
+      {
+        "ms": 8204,
+        "phase": "LOGGED_OUT",
+        "kind": "document-ready"
+      }
+    ]
+  },
+  "newLogin": {
+    "wrongCredentials401": true,
+    "newSessionPersisted": true,
+    "oldSessionStill401": true,
+    "poll200": true,
+    "trace": [
+      {
+        "ms": 222,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 641,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 2517,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 2598,
+        "phase": "NEW_LOGIN",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 2987,
+        "phase": "NEW_LOGIN",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 3299,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 3301,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 3301,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 13
+      },
+      {
+        "ms": 3302,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 3304,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 3304,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 3356,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 3557,
+        "phase": "NEW_LOGIN",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 3648,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 11
+      },
+      {
+        "ms": 3650,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-stop",
+        "id": 11
+      },
+      {
+        "ms": 3651,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 3651,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 3656,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 3657,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 3690,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 6656,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 6735,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "phase"
+      },
+      {
+        "ms": 7693,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 7696,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-aborted",
+        "id": 3
+      },
+      {
+        "ms": 11353,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 11610,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 11611,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 11611,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-start",
+        "id": 13
+      },
+      {
+        "ms": 11612,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 11616,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 11617,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 11695,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 14610,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 15025,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "document-ready"
+      }
+    ]
+  },
+  "unmount": {
+    "real200Held": true,
+    "pollAborted": true,
+    "noPollAfterOneInterval": true,
+    "privateDocumentNotResurrected": true,
+    "delivery": {
+      "completed": true,
+      "aborted": false
+    },
+    "trace": [
+      {
+        "ms": 222,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 641,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 2517,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 2598,
+        "phase": "NEW_LOGIN",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 2987,
+        "phase": "NEW_LOGIN",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 3299,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 3301,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 3301,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 13
+      },
+      {
+        "ms": 3302,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 3304,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 3304,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 3356,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 3557,
+        "phase": "NEW_LOGIN",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 3648,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 11
+      },
+      {
+        "ms": 3650,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-stop",
+        "id": 11
+      },
+      {
+        "ms": 3651,
+        "phase": "NEW_LOGIN",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 3651,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 3656,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 3657,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 3690,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 6656,
+        "phase": "NEW_LOGIN",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 6735,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "phase"
+      },
+      {
+        "ms": 7693,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 7696,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-aborted",
+        "id": 3
+      },
+      {
+        "ms": 11353,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 11610,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 11611,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 11611,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "timer-start",
+        "id": 13
+      },
+      {
+        "ms": 11612,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 11616,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 11617,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 11695,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 14610,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 15025,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "document-ready"
+      }
+    ]
+  },
+  "inflightLogout": {
+    "real200Held": true,
+    "nativeLogout200": true,
+    "protectedApi401": true,
+    "noResurrection": true,
+    "delivery": {
+      "completed": true,
+      "aborted": false
+    }
+  },
+  "unexpected401": {
+    "requestWithoutCredentials401": true,
+    "currentSessionIndependently200": true,
+    "detected": true,
+    "strictEmptyErrorAssertionFails": true,
+    "sessionExpired": true,
+    "trace": [
+      {
+        "ms": 376,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 862,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 11
+      },
+      {
+        "ms": 864,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 11
+      },
+      {
+        "ms": 864,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 12
+      },
+      {
+        "ms": 866,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 869,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 869,
+        "phase": "SETUP",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 934,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 963,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 992,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 3,
+        "status": 401
+      },
+      {
+        "ms": 3865,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 4
+      },
+      {
+        "ms": 3917,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 4,
+        "status": 401
+      },
+      {
+        "ms": 3919,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 12
+      },
+      {
+        "ms": 3998,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+[
+  {
+    "stage": "test-only diagnostic serialization",
+    "run": {
+      "group": "test:integration",
+      "start": "2026-10-26T09:08:50.824Z",
+      "end": "2026-10-26T09:09:27.615Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/fcbe37dd9f2a9b6e85957f03",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10c/test:integration.log"
+    },
+    "finding": "__name was not defined in the serialized transformed init script. Fixed with raw test-only JS; not used as clean root-cause proof."
+  },
+  {
+    "stage": "clean unchanged-application reproduction",
+    "run": {
+      "group": "test:integration",
+      "start": "2026-10-26T09:11:00.747Z",
+      "end": "2026-10-26T09:11:36.674Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/c08776b2d714d3855724f204",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10c/test:integration.log"
+    },
+    "finding": "Original strict collector failed on a real post-logout status 401 plus native diagnostic. Application component still matched baseline; bounded trace retained."
+  },
+  {
+    "stage": "first focused fixture",
+    "run": {
+      "group": "test:meetup-session",
+      "start": "2026-10-26T09:17:10.688Z",
+      "end": "2026-10-26T09:17:45.214Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/2418e16b1c80be562fd3d601",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10c/test:meetup-session.log"
+    },
+    "finding": "4/6 nodes passed; duplicate diagnostic binding registration failed SPA case plus parent. Reuse the per-context binding. Playwright type identities aligned with the unchanged root helper; no dependency or deadline change."
+  },
+  {
+    "stage": "environment disk exhaustion",
+    "run": {
+      "group": "test:meetup",
+      "start": "2026-10-26T09:34:06.124Z",
+      "end": "2026-10-26T09:43:56.067Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/bb3f1cb5f9c1d59719618ac6",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 4"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-b10c/test:meetup.log"
+    },
+    "finding": {
+      "cause": "ENOSPC in Turbopack ZXing chunk and build-manifest writes; compiled pages returned 500",
+      "ownedRunId": "bb3f1cb5f9c1d59719618ac6",
+      "terminatedOnlyRunMarkedProcesses": [
+        738662,
+        738678,
+        738681
+      ],
+      "partialPassedSubtests": 7,
+      "failedBrowserSubtests": 3,
+      "noAssertionsOrTimeoutsChanged": true
+    },
+    "resolution": "Reclaimed only completed owned generated build caches; retained diagnostics and screenshots. Unchanged full suite reran in fresh owned DB after space recovery."
+  }
+]

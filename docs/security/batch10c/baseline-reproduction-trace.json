@@ -1,0 +1,260 @@
+{
+  "traces": [
+    [
+      {
+        "ms": 3305,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 8630,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 15848,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 16190,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 14
+      },
+      {
+        "ms": 16191,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 14
+      },
+      {
+        "ms": 16191,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 15
+      },
+      {
+        "ms": 16192,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 16195,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 16491,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 1,
+        "status": 200
+      },
+      {
+        "ms": 16513,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 19198,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 19253,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 3,
+        "status": 200
+      },
+      {
+        "ms": 22192,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 4
+      },
+      {
+        "ms": 22290,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 4,
+        "status": 200
+      },
+      {
+        "ms": 24133,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 24309,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 24466,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 25192,
+        "phase": "WRONG_LOGIN",
+        "kind": "poll-start",
+        "id": 5
+      },
+      {
+        "ms": 25313,
+        "phase": "WRONG_LOGIN",
+        "kind": "poll-end",
+        "id": 5,
+        "status": 200
+      },
+      {
+        "ms": 25814,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      }
+    ],
+    [
+      {
+        "ms": 11071,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 15174,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 21
+      },
+      {
+        "ms": 15179,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 21
+      },
+      {
+        "ms": 15180,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 22
+      },
+      {
+        "ms": 15180,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 15180,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 16284,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 16304,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 1,
+        "status": 200
+      },
+      {
+        "ms": 18178,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 18351,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 3,
+        "status": 200
+      },
+      {
+        "ms": 21176,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 4
+      },
+      {
+        "ms": 21241,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 4,
+        "status": 200
+      },
+      {
+        "ms": 23913,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 24089,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 24173,
+        "phase": "LOGGED_OUT",
+        "kind": "poll-start",
+        "id": 5
+      },
+      {
+        "ms": 24223,
+        "phase": "LOGGED_OUT",
+        "kind": "poll-end",
+        "id": 5,
+        "status": 401
+      },
+      {
+        "ms": 24246,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 25594,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      }
+    ],
+    [
+      {
+        "ms": 23834,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 24010,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 24167,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 25515,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      }
+    ]
+  ],
+  "browserErrors": [
+    "MEETUP_STATUS_401",
+    "HTTP_401_CONSOLE"
+  ]
+}

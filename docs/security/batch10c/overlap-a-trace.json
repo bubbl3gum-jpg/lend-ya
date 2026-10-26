@@ -1,0 +1,331 @@
+{
+  "browserWorkload": {
+    "startedAt": "2026-10-26T09:26:39.249Z",
+    "endedAt": "2026-10-26T09:27:17.969Z"
+  },
+  "traces": [
+    [
+      {
+        "ms": 4578,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 11146,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 21924,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 22318,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 14
+      },
+      {
+        "ms": 22318,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 14
+      },
+      {
+        "ms": 22318,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 15
+      },
+      {
+        "ms": 22318,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 22320,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 22326,
+        "phase": "SETUP",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 22905,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 25316,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 25956,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 3,
+        "status": 200
+      },
+      {
+        "ms": 28312,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 4
+      },
+      {
+        "ms": 28361,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 4,
+        "status": 200
+      },
+      {
+        "ms": 31311,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 5
+      },
+      {
+        "ms": 31389,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 5,
+        "status": 200
+      },
+      {
+        "ms": 34317,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 6
+      },
+      {
+        "ms": 34527,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 6,
+        "status": 200
+      },
+      {
+        "ms": 35709,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "phase"
+      },
+      {
+        "ms": 36750,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 37052,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 37102,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 37312,
+        "phase": "WRONG_LOGIN",
+        "kind": "poll-start",
+        "id": 7
+      },
+      {
+        "ms": 37418,
+        "phase": "WRONG_LOGIN",
+        "kind": "poll-end",
+        "id": 7,
+        "status": 200
+      },
+      {
+        "ms": 39131,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      }
+    ],
+    [
+      {
+        "ms": 14482,
+        "phase": "SETUP",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 20786,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 21
+      },
+      {
+        "ms": 20797,
+        "phase": "SETUP",
+        "kind": "timer-stop",
+        "id": 21
+      },
+      {
+        "ms": 20801,
+        "phase": "SETUP",
+        "kind": "timer-start",
+        "id": 22
+      },
+      {
+        "ms": 20803,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 1
+      },
+      {
+        "ms": 20806,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 2
+      },
+      {
+        "ms": 20806,
+        "phase": "SETUP",
+        "kind": "poll-aborted",
+        "id": 1
+      },
+      {
+        "ms": 22631,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 2,
+        "status": 200
+      },
+      {
+        "ms": 23782,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 3
+      },
+      {
+        "ms": 23869,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 3,
+        "status": 200
+      },
+      {
+        "ms": 26785,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 4
+      },
+      {
+        "ms": 26883,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 4,
+        "status": 200
+      },
+      {
+        "ms": 29776,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 5
+      },
+      {
+        "ms": 29869,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 5,
+        "status": 200
+      },
+      {
+        "ms": 32777,
+        "phase": "SETUP",
+        "kind": "poll-start",
+        "id": 6
+      },
+      {
+        "ms": 32958,
+        "phase": "SETUP",
+        "kind": "poll-end",
+        "id": 6,
+        "status": 200
+      },
+      {
+        "ms": 35464,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "phase"
+      },
+      {
+        "ms": 35775,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-start",
+        "id": 7
+      },
+      {
+        "ms": 35978,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "poll-end",
+        "id": 7,
+        "status": 200
+      },
+      {
+        "ms": 36397,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "document-ready"
+      },
+      {
+        "ms": 36505,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 36807,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 36857,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 38886,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      }
+    ],
+    [
+      {
+        "ms": 35370,
+        "phase": "NAVIGATE_PUBLIC",
+        "kind": "phase"
+      },
+      {
+        "ms": 36411,
+        "phase": "LOGOUT_BEGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 36713,
+        "phase": "LOGGED_OUT",
+        "kind": "phase"
+      },
+      {
+        "ms": 36763,
+        "phase": "WRONG_LOGIN",
+        "kind": "phase"
+      },
+      {
+        "ms": 38792,
+        "phase": "NEW_LOGIN",
+        "kind": "phase"
+      }
+    ]
+  ],
+  "browserErrors": []
+}
