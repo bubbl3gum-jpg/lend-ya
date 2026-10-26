@@ -1,0 +1,147 @@
+[
+  {
+    "stage": "new fixture type checking",
+    "observed": "TS2345: inferred union of header maps has optional undefined fields, incompatible with Record<string,string>",
+    "affectedInitialCommands": [
+      {
+        "group": "test:platform-settings-production",
+        "start": "2026-10-26T08:16:03.957Z",
+        "end": "2026-10-26T08:16:21.829Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/e979018f58ed0757974e01e6",
+        "tests": null,
+        "passes": null,
+        "fails": null,
+        "cleanup": true,
+        "log": "/tmp/hustlen-b10b/test:platform-settings-production.log"
+      },
+      {
+        "group": "build:verify",
+        "start": "2026-10-26T08:16:21.829Z",
+        "end": "2026-10-26T08:16:27.672Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/20152cf904dc9973e09bf126",
+        "tests": null,
+        "passes": null,
+        "fails": null,
+        "cleanup": true,
+        "log": "/tmp/hustlen-b10b/build:verify.log"
+      }
+    ],
+    "correction": "Explicit test header-map typing. No assertion or timeout changes; final production/browser/build checks pass."
+  },
+  {
+    "stage": "legacy MRT integration",
+    "executedAttempts": [
+      {
+        "group": "test:integration",
+        "start": "2026-10-26T08:42:13.557Z",
+        "end": "2026-10-26T08:42:49.576Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/deca0bbf1fa904fb7cc9df43",
+        "tests": null,
+        "passes": null,
+        "fails": null,
+        "cleanup": true,
+        "log": "/tmp/hustlen-b10b/test:integration.log"
+      },
+      {
+        "group": "test:integration",
+        "start": "2026-10-26T08:46:34.930Z",
+        "end": "2026-10-26T08:47:11.951Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/cceb12e4f3c57a1cb1fb9a80",
+        "tests": null,
+        "passes": null,
+        "fails": null,
+        "cleanup": true,
+        "log": "/tmp/hustlen-b10b/test:integration.log"
+      }
+    ],
+    "finding": "Both reached final browser collector with a meetup-status 401 after API logout and before API login completed. Existing fixture leaves a booking page open; its background poll is unauthenticated during that interval.",
+    "status": "UNRESOLVED. No further retry, assertion weakening or auth/polling source changes. This behavior was reported in Batch 10A; not attributed to the two display settings."
+  },
+  {
+    "stage": "sandbox startup interruption",
+    "details": {
+      "stage": "test startup before harness/DB creation",
+      "cause": "execution sandbox denied tsx IPC socket listen (EPERM)",
+      "commands": [
+        {
+          "group": "test:integration",
+          "start": "2026-10-26T08:44:07.378Z",
+          "end": "2026-10-26T08:44:07.675Z",
+          "exit": 1,
+          "signal": null,
+          "tests": null,
+          "passes": null,
+          "fails": null,
+          "cleanup": false,
+          "log": "/tmp/hustlen-b10b/test:integration.log"
+        },
+        {
+          "group": "test:platform-settings",
+          "start": "2026-10-26T08:44:07.677Z",
+          "end": "2026-10-26T08:44:07.996Z",
+          "exit": 1,
+          "signal": null,
+          "tests": null,
+          "passes": null,
+          "fails": null,
+          "cleanup": false,
+          "log": "/tmp/hustlen-b10b/test:platform-settings.log"
+        },
+        {
+          "group": "test:platform-settings-migration",
+          "start": "2026-10-26T08:44:07.997Z",
+          "end": "2026-10-26T08:44:08.306Z",
+          "exit": 1,
+          "signal": null,
+          "tests": null,
+          "passes": null,
+          "fails": null,
+          "cleanup": false,
+          "log": "/tmp/hustlen-b10b/test:platform-settings-migration.log"
+        },
+        {
+          "group": "test:platform-settings-production",
+          "start": "2026-10-26T08:44:08.306Z",
+          "end": "2026-10-26T08:44:08.595Z",
+          "exit": 1,
+          "signal": null,
+          "tests": null,
+          "passes": null,
+          "fails": null,
+          "cleanup": false,
+          "log": "/tmp/hustlen-b10b/test:platform-settings-production.log"
+        },
+        {
+          "group": "build:verify",
+          "start": "2026-10-26T08:44:08.595Z",
+          "end": "2026-10-26T08:44:08.876Z",
+          "exit": 1,
+          "signal": null,
+          "tests": null,
+          "passes": null,
+          "fails": null,
+          "cleanup": false,
+          "log": "/tmp/hustlen-b10b/build:verify.log"
+        }
+      ]
+    },
+    "classification": "No test harness/DB creation occurred. tsx local IPC listen was denied after sandbox policy changed; rerun used automatic reviewed sandbox permission."
+  },
+  {
+    "stage": "initial lint",
+    "observedWarnings": 2,
+    "finding": "Unused imports; removed. Final lint has zero errors/warnings."
+  },
+  {
+    "stage": "read-only final preservation tooling",
+    "finding": "Restricted sandbox blocked Node child-process git audit; final read-only audit rerun with reviewed permission passed. No application change or DB mutation."
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "artifact": ".test-artifacts/8f6d78ba9368adedadc9503d",
+  "exit": 0,
+  "tests": 4,
+  "fixture": "New owned empty DB migrated through Batch 10A, then historical users/booking/station/listing/reviewer/session/audit/evidence/announcement-and-event rows before Batch 10B",
+  "injectedPartialDdlFailureRolledBack": true,
+  "ownedFixtureExplicitResolveAndForwardReplayPassed": true,
+  "noOpReplayHistoryUnchanged": true,
+  "preexistingPublicRowsAndOldTriggersByteEquivalent": true,
+  "missingMarkerAndEventlessWriteDenied": true,
+  "truncateDenied": true,
+  "all27HistoricalMigrationFilesUnchanged": true,
+  "noProductionMigrationExecuted": true
+}

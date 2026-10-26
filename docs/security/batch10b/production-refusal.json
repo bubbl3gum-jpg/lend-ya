@@ -1,0 +1,9 @@
+{
+  "artifact": ".test-artifacts/6ff0a099f16fffb37eddb55d",
+  "exit": 0,
+  "settingsAndAnnouncementFlagsConfiguredInProductionTest": true,
+  "legacyAdminReadOnlyPages200": true,
+  "candidateSettingsApiGetAndPost404": true,
+  "demo404": true,
+  "effectiveSettingRows": 0
+}

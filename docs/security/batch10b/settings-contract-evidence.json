@@ -1,0 +1,108 @@
+{
+  "effective": {
+    "settings": [
+      {
+        "key": "dev.announcements.visible",
+        "label": "Show development notices",
+        "type": "boolean",
+        "defaultValue": true,
+        "description": "Show or hide the eligible-notice section of the owned demonstration page. Authorization and warnings remain visible.",
+        "value": true,
+        "version": 2,
+        "source": "DATABASE",
+        "updatedAt": "2026-10-26T08:47:23.025Z",
+        "actorId": 1
+      },
+      {
+        "key": "dev.announcements.maxVisible",
+        "label": "Maximum development notices",
+        "type": "integer",
+        "defaultValue": 100,
+        "description": "Display 1–100 already eligible notices. Never changes publication eligibility or the server query hard cap.",
+        "value": 100,
+        "version": 6,
+        "source": "DATABASE",
+        "updatedAt": "2026-10-26T08:47:27.443Z",
+        "actorId": 1
+      }
+    ]
+  },
+  "history": {
+    "events": [
+      {
+        "id": "e8c49c10-e669-4ffc-8b63-4fc45b468418",
+        "key": "dev.announcements.maxVisible",
+        "action": "ROLLBACK",
+        "previousValue": 2,
+        "value": 100,
+        "previousVersion": 5,
+        "version": 6,
+        "rollbackVersion": 0,
+        "actorId": 1,
+        "createdAt": "2026-10-26T08:47:27.445Z"
+      },
+      {
+        "id": "e3aaf734-e6e8-41a7-ae60-092bae83496d",
+        "key": "dev.announcements.maxVisible",
+        "action": "SET",
+        "previousValue": 1,
+        "value": 2,
+        "previousVersion": 4,
+        "version": 5,
+        "rollbackVersion": null,
+        "actorId": 1,
+        "createdAt": "2026-10-26T08:47:27.090Z"
+      },
+      {
+        "id": "74f61206-028e-40d1-9d91-9b0e526911ec",
+        "key": "dev.announcements.maxVisible",
+        "action": "SET",
+        "previousValue": 100,
+        "value": 1,
+        "previousVersion": 3,
+        "version": 4,
+        "rollbackVersion": null,
+        "actorId": 1,
+        "createdAt": "2026-10-26T08:47:26.473Z"
+      },
+      {
+        "id": "d3fbba59-5067-4b35-89a9-9468cb3573cd",
+        "key": "dev.announcements.maxVisible",
+        "action": "ROLLBACK",
+        "previousValue": 3,
+        "value": 100,
+        "previousVersion": 2,
+        "version": 3,
+        "rollbackVersion": 0,
+        "actorId": 1,
+        "createdAt": "2026-10-26T08:47:23.176Z"
+      },
+      {
+        "id": "789155a8-72c8-47c8-8cd2-78cb5ad0ed4a",
+        "key": "dev.announcements.maxVisible",
+        "action": "SET",
+        "previousValue": 1,
+        "value": 3,
+        "previousVersion": 1,
+        "version": 2,
+        "rollbackVersion": null,
+        "actorId": 1,
+        "createdAt": "2026-10-26T08:47:23.128Z"
+      },
+      {
+        "id": "64fa0741-f5ed-4370-8342-29d1c60db002",
+        "key": "dev.announcements.maxVisible",
+        "action": "SET",
+        "previousValue": 100,
+        "value": 1,
+        "previousVersion": 0,
+        "version": 1,
+        "rollbackVersion": null,
+        "actorId": 1,
+        "createdAt": "2026-10-26T08:47:22.316Z"
+      }
+    ]
+  },
+  "realConsumerVerified": true,
+  "readonlyEntriesPreserved": 31
+}

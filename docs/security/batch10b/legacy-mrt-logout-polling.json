@@ -1,0 +1,145 @@
+{
+  "status": "UNRESOLVED",
+  "actualExecutedAttempts": 2,
+  "collector": "tests/mrt-integration.ts:587; tests/support/browser.ts:collectBrowserErrors",
+  "observations": [
+    {
+      "artifact": ".test-artifacts/deca0bbf1fa904fb7cc9df43",
+      "exit": 1,
+      "safeHttpSequence": [
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/logout",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 401
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "artifact": ".test-artifacts/cceb12e4f3c57a1cb1fb9a80",
+      "exit": 1,
+      "safeHttpSequence": [
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/logout",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 401
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/bookings/1/meetup/status",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "noAuthSourceOrAssertionsModified": true
+}
