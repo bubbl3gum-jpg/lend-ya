@@ -1,0 +1,23 @@
+{
+  "officialStations": 120,
+  "officialLines": 6,
+  "interchangesPreserved": true,
+  "readOnlyOperationalFlag": true,
+  "noLiveClosureClaims": true,
+  "legacyActiveAdminOnly": true,
+  "labAdditionalAllowlist": true,
+  "explicitConsentAndNativeGpsOnDemand": true,
+  "devicePermissionDenial": true,
+  "exactBrowserSessionBinding": true,
+  "wrongBrowserAndReplacedSessionDenied": true,
+  "accuracyFreshnessBoundaryPreserved": true,
+  "centreAndSessionExpiry": true,
+  "earlyRevocation": true,
+  "withdrawalClearsSamples": true,
+  "auditFailureDeniesUseButDoesNotPreventRevocation": true,
+  "noPreciseCoordinatesPersistedOrLogged": true,
+  "testLocationNeverArrival": true,
+  "noBookingOfferingBypass": true,
+  "protectedDataUnchanged": true,
+  "responsiveViewports": 3
+}

@@ -1,0 +1,73 @@
+[
+  {
+    "action": "MRT_LAB_STARTED",
+    "newState": {
+      "consent": true,
+      "classification": "TEST_LOCATION",
+      "durationSeconds": 600
+    }
+  },
+  {
+    "action": "MRT_LAB_REVOKED",
+    "newState": {
+      "classification": "TEST_LOCATION"
+    }
+  },
+  {
+    "action": "MRT_LAB_STARTED",
+    "newState": {
+      "consent": true,
+      "classification": "TEST_LOCATION",
+      "durationSeconds": 600
+    }
+  },
+  {
+    "action": "MRT_LAB_EVALUATED",
+    "newState": {
+      "reason": "WITHIN_PILOT_AREA",
+      "stationId": "daan",
+      "centreMode": "station",
+      "sampleOutcome": "PASS",
+      "classification": "TEST_LOCATION"
+    }
+  },
+  {
+    "action": "MRT_LAB_EVALUATED",
+    "newState": {
+      "reason": "WITHIN_PILOT_AREA",
+      "stationId": "daan",
+      "centreMode": "station",
+      "sampleOutcome": "PASS",
+      "classification": "TEST_LOCATION"
+    }
+  },
+  {
+    "action": "MRT_LAB_EVALUATED",
+    "newState": {
+      "reason": "OUTSIDE_PILOT_AREA",
+      "stationId": "daan",
+      "centreMode": "station",
+      "sampleOutcome": "OUTSIDE",
+      "classification": "TEST_LOCATION"
+    }
+  },
+  {
+    "action": "MRT_LAB_EVALUATED",
+    "newState": {
+      "reason": "LOW_ACCURACY",
+      "stationId": "daan",
+      "centreMode": "station",
+      "sampleOutcome": "INACCURATE",
+      "classification": "TEST_LOCATION"
+    }
+  },
+  {
+    "action": "MRT_LAB_CENTRE_SET",
+    "newState": {
+      "mode": "map",
+      "consent": true,
+      "classification": "TEST_LOCATION",
+      "durationSeconds": 1
+    }
+  }
+]

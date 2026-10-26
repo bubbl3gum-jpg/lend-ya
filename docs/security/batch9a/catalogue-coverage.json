@@ -1,0 +1,90 @@
+{
+  "source": "data/mrt/official-network.json",
+  "sha256": "56c88d8cdda29a2a7ce209468d2a2ba61f1e4f4e1a0a76cc9963391d899691dd",
+  "asOf": "2026-10-16",
+  "stations": 120,
+  "lines": 6,
+  "withCoordinates": 109,
+  "withoutCoordinates": 11,
+  "missingCoordinateStations": [
+    {
+      "id": "taipei-mrt:station:201",
+      "nameEn": "Shisizhang",
+      "codes": {
+        "Y": "Y08"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:202",
+      "nameEn": "Xiulang Bridge",
+      "codes": {
+        "Y": "Y09"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:203",
+      "nameEn": "Jingping",
+      "codes": {
+        "Y": "Y10"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:205",
+      "nameEn": "Zhonghe",
+      "codes": {
+        "Y": "Y12"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:206",
+      "nameEn": "Qiaohe",
+      "codes": {
+        "Y": "Y13"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:207",
+      "nameEn": "Zhongyuan",
+      "codes": {
+        "Y": "Y14"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:208",
+      "nameEn": "Banxin",
+      "codes": {
+        "Y": "Y15"
+      }
+    },
+    {
+      "id": "circular-banqiao",
+      "nameEn": "Banqiao",
+      "codes": {
+        "Y": "Y16"
+      }
+    },
+    {
+      "id": "xinpu-minsheng",
+      "nameEn": "Xinpu Minsheng",
+      "codes": {
+        "Y": "Y17"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:212",
+      "nameEn": "Xingfu",
+      "codes": {
+        "Y": "Y19"
+      }
+    },
+    {
+      "id": "taipei-mrt:station:213",
+      "nameEn": "New Taipei Industrial Park",
+      "codes": {
+        "Y": "Y20"
+      }
+    }
+  ],
+  "noCatalogueEdits": true,
+  "notLiveClosureData": true
+}
