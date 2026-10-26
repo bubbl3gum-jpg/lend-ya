@@ -2,7 +2,7 @@
 
 **Canonical product roadmap.** Supplied and confirmed by the product owner on 26 October 2026. No existing canonical 14-stage file was found; this file records the original stages without replacing or renumbering the existing Blueprint engineering plan. Future work must identify its master stage. Engineering batches (6A, 7D, 8B, 9A, 10A, etc.) are implementation increments, not product stages.
 
-Progress updated for Batch 10A. Status vocabulary: **Planned / In Progress / Implemented Candidate / Production Ready**. Implemented Candidate means an independently reviewable implementation exists; it does not mark the whole stage complete or authorize production. **No stage is newly declared Production Ready.** Historical reports are evidence for their own revisions; the Batch 10A regression ledger records current reruns.
+Progress updated for Batch 10B (Stage 8). Status vocabulary: **Planned / In Progress / Implemented Candidate / Production Ready**. Implemented Candidate means an independently reviewable implementation exists; it does not mark the whole stage complete or authorize production. **No stage is newly declared Production Ready.** Historical reports are evidence for their own revisions; the Batch 10B regression ledger records current reruns.
 
 Cross-references: [Blueprint v1](../admin/ADMIN_CONTROL_CENTER_BLUEPRINT_V1.md), [gap analysis](../admin/ADMIN_GAP_ANALYSIS.md), [permission matrix](../admin/ADMIN_PERMISSION_MATRIX.md), [engineering implementation roadmap](../admin/ADMIN_IMPLEMENTATION_ROADMAP.md). Preserve original objectives below; update the progress fields as verified increments land.
 
@@ -88,11 +88,11 @@ Build support tickets, private case messaging, dispute investigation, custody re
 Add notices, scheduling, configurable operational policies, feature controls and change history.
 
 - **Status:** Implemented Candidate
-- **Implemented functionality:** Stage 8 begins with Batch 10A: persisted owned-development informational drafts, edit/preview, publication windows, archive/withdrawal, immutable history and controlled test audience; safe read-only Platform Settings inventory.
-- **Remaining functionality:** Approve live audience/authors/publishers/risk/emergency/retention/localization/delivery; implement individually reviewed typed configuration in Batch 10B; no arbitrary policy editor.
-- **Relevant engineering batches:** 10A; proposed 10B
-- **Verification evidence:** docs/announcements/ANNOUNCEMENTS_REVIEW_BATCH_10A.md; ANNOUNCEMENTS_CONTRACT_BATCH_10A.md; PRODUCT_DECISIONS_BATCH_10A.md; docs/settings/BATCH_10B_CONFIGURATION_PLAN.md
-- **Production blockers:** Production publication/mutations blocked, no operational settings edits, high-risk approvals/execution or notifications enabled. Entire Stage 8 is not production ready.
+- **Implemented functionality:** Stage 8 begins with Batch 10A and extends in Batch 10B: persisted owned-development informational drafts, edit/preview, publication windows, archive/withdrawal, immutable history and controlled test audience; safe 31-entry read-only Platform Settings inventory; two owned-development typed display settings with real consumer integration, immutable history, conflicts and rollback.
+- **Remaining functionality:** Approve live audience/authors/publishers/risk/emergency/retention/localization/delivery; approve any production typed configuration slice separately; no arbitrary policy editor.
+- **Relevant engineering batches:** 10A; 10B
+- **Verification evidence:** docs/announcements/ANNOUNCEMENTS_REVIEW_BATCH_10A.md; ANNOUNCEMENTS_CONTRACT_BATCH_10A.md; PRODUCT_DECISIONS_BATCH_10A.md; docs/settings/TYPED_SETTINGS_REVIEW_BATCH_10B.md; TYPED_SETTINGS_CONTRACT_BATCH_10B.md; PRODUCT_DECISIONS_BATCH_10B.md
+- **Production blockers:** Production publication/mutations blocked, no operational settings edits, high-risk approvals/execution or notifications enabled. Entire Stage 8 is not production ready. Batch 10B records a known legacy MRT logout/polling integration failure; the full ledger is not all green.
 
 ## 9. Account Settings & User Experience
 
@@ -162,4 +162,4 @@ Complete operational security, backups, real MRT field testing, accessibility, m
 
 ## Current implementation boundary
 
-Stage 6 still lacks authorized station suspension/restoration. Stage 7 still has unresolved production policies and activation gates. Stage 8 starts with Batch 10A and has no live publisher or arbitrary settings editor. These statements must not be removed because isolated tests pass. Future policy approvals must record owner/date/version/scope and independent review. No automatic merges, pushes, deployments, staff provisioning, production MFA enforcement, Support enablement, approval execution, financial controls or AI administration follow from this roadmap.
+Stage 6 still lacks authorized station suspension/restoration. Stage 7 still has unresolved production policies and activation gates. Stage 8 starts with Batch 10A and extends through Batch 10B with only two development display settings; it has no live publisher, production configuration writes or arbitrary settings editor. These statements must not be removed because isolated tests pass. Future policy approvals must record owner/date/version/scope and independent review. No automatic merges, pushes, deployments, staff provisioning, production MFA enforcement, Support enablement, approval execution, financial controls or AI administration follow from this roadmap.

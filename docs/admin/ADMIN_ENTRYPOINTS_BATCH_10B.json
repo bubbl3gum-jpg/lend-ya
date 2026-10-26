@@ -1,0 +1,8 @@
+{
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/platform-settings/route.ts",
+      "sha256": "87bf209072fff35119fbf2ec491a018cd999f7e800e4bd3d65ddb191f8eab2db"
+    }
+  ]
+}

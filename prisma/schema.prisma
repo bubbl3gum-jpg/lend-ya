@@ -51,6 +51,8 @@ enum DisputeStatus {
 }
 
 model User {
+  displaySettingChanges DevDisplaySetting[] @relation("DisplaySettingActor")
+  displaySettingEvents DevDisplaySettingEvent[] @relation("DisplaySettingEventActor")
   announcementsCreated Announcement[] @relation("AnnouncementCreator")
   announcementEvents AnnouncementEvent[] @relation("AnnouncementActor")
   supportTickets SupportTicket[] @relation("SupportRequester")
@@ -1165,4 +1167,35 @@ model AnnouncementEvent {
   requestHash String @db.Char(64)
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   @@unique([announcementId, resultingVersion])
+}
+
+
+// Fixed owned-development display values only, not an operational policy registry.
+model DevDisplaySetting {
+ key String @id @db.VarChar(64)
+ value Int
+ version Int
+ policy String @default("owned-display-10b-v1") @db.VarChar(32)
+ actorId Int
+ actor User @relation("DisplaySettingActor",fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ updatedAt DateTime @default(now()) @db.Timestamptz(3)
+ events DevDisplaySettingEvent[]
+}
+model DevDisplaySettingEvent {
+ id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+ key String @db.VarChar(64)
+ setting DevDisplaySetting @relation(fields:[key],references:[key],onDelete:Restrict,onUpdate:NoAction)
+ action String @db.VarChar(16)
+ previousValue Int
+ value Int
+ previousVersion Int
+ version Int
+ rollbackVersion Int?
+ policy String @default("owned-display-10b-v1") @db.VarChar(32)
+ actorId Int
+ actor User @relation("DisplaySettingEventActor",fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ requestId String @unique @db.Uuid
+ requestHash String @db.Char(64)
+ createdAt DateTime @default(now()) @db.Timestamptz(3)
+ @@unique([key,version])
 }

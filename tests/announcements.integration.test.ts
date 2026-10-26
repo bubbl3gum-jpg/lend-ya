@@ -530,7 +530,7 @@ test(
                   JSON.stringify(
                     await page.locator("article").evaluateAll((items) =>
                       items.map((item) => ({
-                        label: item.querySelector("h2")?.textContent,
+                        label: item.querySelector("h2,h3")?.textContent,
                         value: item.querySelector("p")?.textContent,
                         metadata: Array.from(item.querySelectorAll("dd")).map(
                           (x) => x.textContent,
