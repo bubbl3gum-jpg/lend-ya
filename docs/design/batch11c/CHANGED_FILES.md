@@ -72,3 +72,4 @@ Compared with baseline `afa1da866936fcfb0f3eb14cca4c78ea70580b18`, including imp
 - `tests/localization.integration.test.ts`
 - `tests/localization.test.ts`
 - `tests/run-isolated.ts`
+- `docs/design/batch11c/TEST_COMMANDS.md`
