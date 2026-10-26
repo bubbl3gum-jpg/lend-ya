@@ -256,7 +256,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--platform-settings") || process.argv.includes("--platform-settings-production"))
+        if (process.argv.includes("--meetup-session"))
+          await run(["node_modules/tsx/dist/cli.mjs","--test","tests/meetup-session.integration.test.ts"]);
+        else if (process.argv.includes("--platform-settings") || process.argv.includes("--platform-settings-production"))
           await run(["node_modules/tsx/dist/cli.mjs","--test",process.argv.includes("--platform-settings-production")?"tests/platform-settings-production.test.ts":"tests/platform-settings.integration.test.ts"]);
         else if (process.argv.includes("--announcements") || process.argv.includes("--announcements-production"))
           await run(["node_modules/tsx/dist/cli.mjs","--test",process.argv.includes("--announcements-production")?"tests/announcements-production.test.ts":"tests/announcements.integration.test.ts"]);

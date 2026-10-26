@@ -8,6 +8,7 @@ import {
   cameraErrorCategory,
 } from "@/lib/camera-diagnostics";
 import type { IScannerControls } from "@zxing/browser";
+class MeetupSessionEnded extends Error {}
 type Check = {
   id: number;
   userId: number;
@@ -79,6 +80,11 @@ export function MeetupVerification({
     [clock, setClock] = useState(0),
     [camera, setCamera] = useState(false),
     [assistanceReason, setAssistanceReason] = useState("LOCATION_PROBLEM");
+  const mounted = useRef(false),
+    sessionEnded = useRef(false),
+    statusRequest = useRef<AbortController | null>(null),
+    pollGeneration = useRef(0),
+    haltPolling = useRef<() => void>(() => {});
   const phaseRef = useRef<string | undefined>(undefined);
   const cameraGeneration = useRef(0);
   const cameraStream = useRef<MediaStream | null>(null);
@@ -93,13 +99,15 @@ export function MeetupVerification({
       key: string;
     } | null>(null);
   const api = useCallback(
-    async (operation: string, body?: object) => {
+    async (operation: string, body?: object, signal?: AbortSignal) => {
       const r = await fetch(`/api/bookings/${bookingId}/meetup/${operation}`, {
         method: body ? "POST" : "GET",
         cache: "no-store",
+        ...(signal ? { signal } : {}),
         headers: { "Content-Type": "application/json" },
         ...(body ? { body: JSON.stringify(body) } : {}),
       });
+      if (r.status === 401 && signal) throw new MeetupSessionEnded();
       const result = await r.json();
       if (!r.ok)
         throw Error(result.error ?? "Verification could not be completed.");
@@ -108,33 +116,79 @@ export function MeetupVerification({
     [bookingId],
   );
   const load = useCallback(async () => {
-    const value = (await api("status")) as State;
-    if (phaseRef.current && phaseRef.current !== value.purpose) {
+    if (!mounted.current || sessionEnded.current) return;
+    statusRequest.current?.abort();
+    const controller = new AbortController(),
+      generation = pollGeneration.current;
+    statusRequest.current = controller;
+    try {
+      const value = (await api(
+        "status",
+        undefined,
+        controller.signal,
+      )) as State;
+      if (
+        controller.signal.aborted ||
+        !mounted.current ||
+        generation !== pollGeneration.current ||
+        sessionEnded.current
+      )
+        return;
+      if (phaseRef.current && phaseRef.current !== value.purpose) {
+        setIssued(null);
+        setCode("");
+        setFeedback("");
+        setPhysical(false);
+        setFallbackAck(false);
+        issueRetry.current = null;
+        verifyRetry.current = null;
+        arrivalRetry.current = null;
+      }
+      phaseRef.current = value.purpose;
+      setData(value);
+      setClock(Date.now());
+      if (value.enabled && value.bookingStatus !== bookingStatus)
+        router.refresh();
+      const c = value.challenge;
+      onState(
+        value.enabled,
+        c?.verifierId === userId &&
+          c.consumedAt &&
+          c.confirmationEligible &&
+          !c.completedAt &&
+          Date.parse(c.confirmationExpiresAt ?? "") > Date.now()
+          ? c.id
+          : null,
+      );
+    } catch (error) {
+      if (
+        controller.signal.aborted ||
+        !mounted.current ||
+        generation !== pollGeneration.current
+      )
+        return;
+      if (!(error instanceof MeetupSessionEnded)) throw error;
+      sessionEnded.current = true;
+      haltPolling.current();
+      phaseRef.current = undefined;
+      setData(null);
       setIssued(null);
       setCode("");
       setFeedback("");
       setPhysical(false);
       setFallbackAck(false);
+      setSimulationAck(false);
+      setCamera(false);
       issueRetry.current = null;
       verifyRetry.current = null;
       arrivalRetry.current = null;
+      // Keep receipt controls locked until a new authenticated document is loaded.
+      onState(true, null);
+      setError("Session ended. Sign in again.");
+      window.location.replace("/login");
+    } finally {
+      if (statusRequest.current === controller) statusRequest.current = null;
     }
-    phaseRef.current = value.purpose;
-    setData(value);
-    setClock(Date.now());
-    if (value.enabled && value.bookingStatus !== bookingStatus)
-      router.refresh();
-    const c = value.challenge;
-    onState(
-      value.enabled,
-      c?.verifierId === userId &&
-        c.consumedAt &&
-        c.confirmationEligible &&
-        !c.completedAt &&
-        Date.parse(c.confirmationExpiresAt ?? "") > Date.now()
-        ? c.id
-        : null,
-    );
   }, [api, onState, userId, bookingStatus, router]);
   const invalidateCamera = useCallback(() => {
     cameraDiagnostic("invalidated");
@@ -147,16 +201,31 @@ export function MeetupVerification({
     controls.current = null;
   }, []);
   useEffect(() => {
-    void Promise.resolve()
-      .then(load)
-      .catch((e) => setError(e.message));
+    if (sessionEnded.current) return;
+    mounted.current = true;
     const timer = setInterval(() => {
       setClock(Date.now());
-      void load().catch((e) => setError(e.message));
+      void load().catch((e) => {
+        if (mounted.current && !sessionEnded.current) setError(e.message);
+      });
     }, 3000);
-    return () => {
+    const halt = () => {
       clearInterval(timer);
+      pollGeneration.current++;
+      statusRequest.current?.abort();
+      statusRequest.current = null;
       invalidateCamera();
+    };
+    haltPolling.current = halt;
+    void Promise.resolve()
+      .then(load)
+      .catch((e) => {
+        if (mounted.current && !sessionEnded.current) setError(e.message);
+      });
+    return () => {
+      mounted.current = false;
+      halt();
+      if (haltPolling.current === halt) haltPolling.current = () => {};
     };
   }, [load, invalidateCamera]);
   async function perform(work: () => Promise<void>) {

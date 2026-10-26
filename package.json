@@ -72,7 +72,8 @@
     "test:announcements-migration": "tsx tests/run-isolated.ts --announcements-migration",
     "test:platform-settings": "tsx tests/run-isolated.ts --platform-settings",
     "test:platform-settings-production": "tsx tests/run-isolated.ts --platform-settings-production",
-    "test:platform-settings-migration": "tsx tests/run-isolated.ts --platform-settings-migration"
+    "test:platform-settings-migration": "tsx tests/run-isolated.ts --platform-settings-migration",
+    "test:meetup-session": "tsx tests/run-isolated.ts --meetup-session"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

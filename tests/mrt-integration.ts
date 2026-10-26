@@ -6,6 +6,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { type APIResponse } from "playwright";
 import path from "node:path";
 import { connectTestDatabase } from "./support/test-database";
+import {mrtPollTrace} from "./support/mrt-poll-trace";
 import { launchBrowser, collectBrowserErrors } from "./support/browser";
 import { verifyApplicationDatabase } from "./support/application-database";
 import { removalRace } from "./support/concurrency";
@@ -24,12 +25,15 @@ async function main() {
   const browser = await launchBrowser();
   const errors: string[] = [];
   const checks: string[] = [];
+  let browserWorkloadStartedAt:string|null=null;
+  const traces: Awaited<ReturnType<typeof mrtPollTrace>>[]=[];
   async function check(response: APIResponse, status = 200) {
     assert.equal(response.status(), status, await response.text());
     return response.json();
   }
   async function register(name: string) {
     const context = await browser.newContext({ baseURL });
+    traces.push(await mrtPollTrace(context));
     collectBrowserErrors(context, errors);
     await check(
       await context.request.post("/api/auth/register", {
@@ -84,6 +88,7 @@ async function main() {
     const owner = await register("owner"),
       borrower = await register("borrower"),
       other = await register("other");
+    browserWorkloadStartedAt=new Date().toISOString();
     const page = await owner.newPage();
 
     await page.goto("/listings/new");
@@ -560,11 +565,19 @@ async function main() {
     );
     const email = (await check(await borrower.request.get("/api/auth/me"))).user
       .email;
+    // Booking UI assertions are complete. End its polling lifecycle before this API-only
+    // negative-auth phase; real open-page session loss is exercised separately.
+    traces.forEach(t=>t.mark("NAVIGATE_PUBLIC"));
+    for (const view of borrower.pages()) await view.goto("/login");
+    traces.forEach(t=>t.mark("LOGOUT_BEGIN"));
     await check(await borrower.request.post("/api/auth/logout"));
+    traces.forEach(t=>t.mark("LOGGED_OUT"));
+
     await check(
       await borrower.request.post("/api/bookings", { data: bookingData }),
       401,
     );
+    traces.forEach(t=>t.mark("WRONG_LOGIN"));
     await check(
       await borrower.request.post("/api/auth/login", {
         data: { email, password: "wrong" },
@@ -576,6 +589,7 @@ async function main() {
         data: { email, password: "IntegrationTest123!" },
       }),
     );
+    traces.forEach(t=>t.mark("NEW_LOGIN"));
     checks.push(
       "Existing dispute authorization, authentication, logout and login",
     );
@@ -598,6 +612,7 @@ async function main() {
     );
     console.log(JSON.stringify(report, null, 2));
   } finally {
+    await writeFile(path.join(artifactDir,"logout-poll-trace.json"),JSON.stringify({browserWorkload:{startedAt:browserWorkloadStartedAt,endedAt:new Date().toISOString()},traces:traces.map(t=>t.events),browserErrors:errors.map(e=>e.startsWith("401 /api/bookings/")?"MEETUP_STATUS_401":e.includes("401")?"HTTP_401_CONSOLE":"UNEXPECTED_BROWSER_ERROR")},null,2));
     await browser.close();
     await prisma.$disconnect();
   }
