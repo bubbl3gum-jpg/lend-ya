@@ -347,15 +347,23 @@ test("production source never imports shadow policy and all Admin API routes rem
       );
   const inventory = JSON.parse(
     readFileSync("docs/admin/LEGACY_ADMIN_ENTRYPOINTS_BATCH_2B.json", "utf8"),
-  ).adminApiRoutes.concat(JSON.parse(
-    readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_6C.json", "utf8"),
-  ).adminApiRoutes, JSON.parse(
-    readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_7A.json", "utf8"),
-  ).adminApiRoutes, JSON.parse(
-    readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_7D.json", "utf8"),
-  ).adminApiRoutes, JSON.parse(
-    readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_8A.json", "utf8"),
-  ).adminApiRoutes) as { file: string; sha256: string }[];
+  ).adminApiRoutes.concat(
+    JSON.parse(
+      readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_6C.json", "utf8"),
+    ).adminApiRoutes,
+    JSON.parse(
+      readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_7A.json", "utf8"),
+    ).adminApiRoutes,
+    JSON.parse(
+      readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_7D.json", "utf8"),
+    ).adminApiRoutes,
+    JSON.parse(
+      readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_8A.json", "utf8"),
+    ).adminApiRoutes,
+    JSON.parse(
+      readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_9A.json", "utf8"),
+    ).adminApiRoutes,
+  ) as { file: string; sha256: string }[];
   assert.deepEqual(
     files("app/api/admin")
       .filter((file) => file.endsWith("route.ts"))
@@ -370,10 +378,31 @@ test("production source never imports shadow policy and all Admin API routes rem
     );
   for (const file of files("app/api/admin").filter((file) =>
     file.endsWith("route.ts"),
-  ))
-    assert.match(
-      readFileSync(file, "utf8"),
-      /adminApi|adminMutation|chatApi|readDisputeEvidence|readOwnAdminSession/,
-      file,
-    );
+  )) {
+    if (file === "app/api/admin/locations/lab/[operation]/route.ts") {
+      assert.match(readFileSync(file, "utf8"), /labApi/);
+      const added = JSON.parse(
+        readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_9A.json", "utf8"),
+      );
+      for (const guard of added.labGuardFiles)
+        assert.equal(
+          createHash("sha256").update(readFileSync(guard.file)).digest("hex"),
+          guard.sha256,
+          guard.file,
+        );
+      assert.match(
+        readFileSync("lib/geofencing-lab/service.ts", "utf8"),
+        /await requireLocationsAdmin\(\)/,
+      );
+      assert.match(
+        readFileSync("lib/admin/locations.ts", "utf8"),
+        /user.role !== "ADMIN" \|\| user.accountStatus !== "ACTIVE"/,
+      );
+    } else
+      assert.match(
+        readFileSync(file, "utf8"),
+        /adminApi|adminMutation|chatApi|readDisputeEvidence|readOwnAdminSession/,
+        file,
+      );
+  }
 });

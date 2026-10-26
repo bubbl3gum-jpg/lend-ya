@@ -365,6 +365,7 @@ test(
                 .replace(/^app\//, "")
                 .replace(/\/route.ts$/, "")
                 .replaceAll("[id]", "1")
+                .replaceAll("[operation]", "status")
                 .replaceAll(
                   "[photoId]",
                   "11111111-1111-4111-8111-111111111111",
@@ -387,7 +388,7 @@ test(
                 );
                 assert.equal(
                   response.status,
-                  actor ? 403 : 401,
+                  file === "app/api/admin/locations/lab/[operation]/route.ts" ? 404 : actor ? 403 : 401,
                   `${method} ${url} / ${actor?.role ?? "ordinary/anonymous"}`,
                 );
                 assert.ok(

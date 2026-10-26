@@ -1,0 +1,35 @@
+{
+  "batch": "9A",
+  "baseline": "79ddffd9fd0a99623ac8ac00dcb491c52857ed0b",
+  "mode": "Legacy ACTIVE Admin read-only Locations; separately owned-development allowlisted Lab",
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/locations/route.ts",
+      "sha256": "dd017b932490dcde660a884c2708e79d1bb0fb23d656b0f88bbea83bde6bee3d"
+    },
+    {
+      "file": "app/api/admin/locations/lab/[operation]/route.ts",
+      "sha256": "425904f8d006232281cf07ffdfd5633b10cba9251d7ff16eb455d2a3d527058d"
+    }
+  ],
+  "labGuardFiles": [
+    {
+      "file": "lib/admin/locations.ts",
+      "sha256": "951510a28d4896dd63957c44a01fce43d47c608665ece0506d78b1e9c70fcb69"
+    },
+    {
+      "file": "lib/geofencing-lab/config.ts",
+      "sha256": "d99de432bbc747706f8d018fe3bc1e36349cd0e78e7769ef9234f9df2b02dcba"
+    },
+    {
+      "file": "lib/geofencing-lab/service.ts",
+      "sha256": "aca213c79da0bb9cd49c8372077ecf1db41df06178838659b5246a26ab12f7be"
+    },
+    {
+      "file": "lib/geofencing-lab/store.ts",
+      "sha256": "08429f4747f36ca49d570087f4ebbc0f6a4268548b25a0822dbf1ce87fa171d7"
+    }
+  ],
+  "newStaffPermissionsActivated": false,
+  "databaseMigrationAdded": false
+}

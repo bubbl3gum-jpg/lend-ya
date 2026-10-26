@@ -10,6 +10,7 @@ export const adminNavigationGroups = [
       { href: "/admin/bookings", label: "Bookings" },
       { href: "/admin/disputes", label: "Disputes" },
       { href: "/admin/listings", label: "Listings" },
+      { href: "/admin/locations", label: "Locations" },
       { href: "/admin/reports", label: "Reports" },
     ],
   },

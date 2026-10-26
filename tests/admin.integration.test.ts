@@ -830,6 +830,7 @@ test(
                 "/admin/bookings",
                 "/admin/disputes",
                 "/admin/listings",
+                "/admin/locations",
                 "/admin/reports",
                 "/admin/users",
                 "/admin/support",

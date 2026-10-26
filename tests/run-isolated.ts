@@ -203,7 +203,8 @@ async function main() {
           env.HUSTLEN_PASSKEY_PILOT_ORIGIN = env.TEST_BASE_URL;
         }
         if (process.argv.includes("--mfa-pilot-disabled")) env.HUSTLEN_PASSKEY_PILOT = "disabled";
-        const productionPilot = process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        const productionPilot = process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        if(process.argv.includes("--locations") || process.argv.includes("--locations-production")){env.HUSTLEN_GEOFENCING_LAB="owned-self-only";env.HUSTLEN_GEOFENCING_LAB_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_GEOFENCING_LAB_ADMIN_IDS="1";}
         if(process.argv.includes("--support-staff-production")){env.HUSTLEN_SUPPORT_STAFF_CANDIDATE="owned-synthetic-only";env.HUSTLEN_SUPPORT_STAFF_ORIGIN=env.TEST_BASE_URL;}
         if (productionPilot) {
           await run(["node_modules/next/dist/bin/next", "build"]);
@@ -249,7 +250,11 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--support-staff-production"))
+        if (process.argv.includes("--locations-production"))
+          await run(["node_modules/tsx/dist/cli.mjs","--test","tests/admin-locations-production.test.ts"]);
+        else if (process.argv.includes("--locations"))
+          await run(["node_modules/tsx/dist/cli.mjs","--test","tests/admin-locations.integration.test.ts"]);
+        else if (process.argv.includes("--support-staff-production"))
           await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-staff-production.test.ts"]);
         else if (process.argv.includes("--support-channel-production"))
           await run(["node_modules/tsx/dist/cli.mjs","--test","tests/support-channel-production.test.ts"]);
