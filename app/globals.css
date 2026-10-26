@@ -26,3 +26,444 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Batch 11A: opt-in catalogue foundation. No theme overrides outside this root. */
+.catalogue {
+  --paper: #f3eedf;
+  --sheet: #fcf9f0;
+  --wash: #e7e9da;
+  --ink: #293b30;
+  --muted-ink: #596455;
+  --rule: #a5ac96;
+  --accent: #345840;
+  --on-accent: #fffdf4;
+  --focus: #8d491d;
+  --error: #9a3025;
+  --display: Georgia, "Times New Roman", serif;
+  --support: Arial, Helvetica, sans-serif;
+  --grain-opacity: 0.075;
+  --radius-control: 3px;
+  --shadow-small: 0 2px 4px #17291e12;
+  --space-section: clamp(2rem, 5vw, 4rem);
+  --motion-quick: 140ms;
+  color-scheme: light;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--support);
+  isolation: isolate;
+  position: relative;
+}
+.catalogue[data-theme="dark"] {
+  --paper: #202b25;
+  --sheet: #28372e;
+  --wash: #303f33;
+  --ink: #eee9d8;
+  --muted-ink: #bdc5b3;
+  --rule: #71816a;
+  --accent: #c6d3ad;
+  --on-accent: #203026;
+  --focus: #f1c38c;
+  --error: #ffb6a1;
+  --grain-opacity: 0.055;
+  --shadow-small: 0 2px 4px #0002;
+  color-scheme: dark;
+}
+/* One fixed, pointer-transparent grain field: clean controls sit above it. */
+.catalogue::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%2354432d' filter='url(%23grain)' opacity='.7' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+}
+.catalogue :where(button, input, a, summary) {
+  transition:
+    background-color var(--motion-quick),
+    color var(--motion-quick),
+    border-color var(--motion-quick);
+}
+.catalogue :where(a, button, input, summary):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+.catalogue a {
+  text-underline-offset: 4px;
+}
+.catalogue button,
+.catalogue summary {
+  cursor: pointer;
+}
+.catalogue button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.catalogue .catalogue-masthead {
+  border-block: 5px solid var(--ink);
+  border-bottom-width: 1px;
+  background: var(--sheet);
+}
+.catalogue-masthead > nav {
+  max-width: 1280px;
+  padding: 1.25rem 2rem;
+}
+.catalogue-masthead nav > a {
+  font-family: var(--display);
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  color: var(--ink);
+}
+.catalogue-masthead :where(a, button, summary) {
+  color: var(--ink);
+}
+.catalogue-masthead nav > div > a,
+.catalogue-masthead button {
+  border-radius: var(--radius-control);
+}
+.catalogue-masthead summary {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius-control);
+  max-width: min(60vw, 400px);
+}
+.catalogue-masthead details > div {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-small);
+}
+.catalogue-masthead :where(a, button):hover {
+  background: var(--wash);
+  color: var(--ink);
+}
+.catalogue-page {
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 2rem;
+}
+.catalogue-running {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.catalogue-running > span,
+.catalogue-eyebrow {
+  font-size: 0.69rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1.8;
+}
+.catalogue-theme {
+  min-height: 44px;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  font-size: 0.8rem;
+  background: var(--sheet);
+}
+.catalogue-theme span {
+  margin-left: 0.6rem;
+}
+.catalogue-heading {
+  padding: var(--space-section) 0;
+}
+.catalogue-heading h1 {
+  font-family: var(--display);
+  font-size: clamp(3rem, 7vw, 5.25rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+  margin: 0.6rem 0 1rem;
+}
+.catalogue-heading > p:last-child {
+  color: var(--muted-ink);
+  max-width: 40rem;
+  line-height: 1.7;
+}
+.catalogue-layout {
+  border-top: 3px double var(--ink);
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 3.5rem;
+  padding: 2rem 0 var(--space-section);
+}
+.catalogue-index {
+  align-self: start;
+}
+.catalogue-index > p {
+  margin-bottom: 1.1rem;
+  color: var(--muted-ink);
+}
+.catalogue-index a {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.88rem;
+  min-height: 48px;
+}
+.catalogue-index a > span {
+  color: var(--muted-ink);
+  font-family: var(--display);
+  font-size: 0.8rem;
+}
+.catalogue-index a[aria-current="page"] {
+  background: var(--wash);
+  border-left: 3px solid var(--accent);
+  padding-left: 0.8rem;
+  font-weight: 700;
+}
+.catalogue-index a:hover {
+  background: var(--wash);
+}
+.catalogue-content {
+  min-width: 0;
+}
+.catalogue-content h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.catalogue-section {
+  background: var(--sheet);
+  padding: 2rem 2.25rem;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+}
+.catalogue-section-title > h2 {
+  margin: 0.5rem 0 0.8rem;
+}
+.catalogue-section-title > p:last-child {
+  color: var(--muted-ink);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.catalogue-record {
+  margin: 1.7rem 0;
+  padding: 1.2rem 0;
+  border-block: 1px solid var(--rule);
+}
+.catalogue-record dt,
+.catalogue-form label {
+  font-size: 0.87rem;
+  font-weight: 700;
+}
+.catalogue-record dd {
+  margin-top: 0.5rem;
+  overflow-wrap: anywhere;
+}
+.catalogue-record small {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted-ink);
+  margin-top: 0.45rem;
+  line-height: 1.7;
+}
+.catalogue-form label {
+  display: block;
+}
+.catalogue-help {
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+.catalogue-form > .catalogue-help {
+  margin: 0.5rem 0 0.8rem;
+}
+.catalogue-form input {
+  width: 100%;
+  max-width: 30rem;
+  background: var(--sheet);
+  color: var(--ink);
+  border: 1px solid var(--muted-ink);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-control);
+  min-height: 48px;
+}
+.catalogue-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.catalogue-button {
+  background: var(--accent);
+  color: var(--on-accent);
+  min-height: 48px;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-small);
+  font-size: 0.9rem;
+}
+.catalogue-button:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.catalogue-button:active {
+  transform: translateY(1px);
+}
+.catalogue-feedback {
+  min-height: 1.6rem;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+.catalogue-error {
+  color: var(--error);
+}
+.catalogue-editorial {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 2rem;
+  padding: 2.5rem 1.5rem 0;
+  align-items: center;
+}
+.catalogue-botanical {
+  width: 120px;
+  height: 160px;
+  color: var(--accent);
+}
+.catalogue-editorial h2 {
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  margin: 0.6rem 0 1rem;
+}
+.catalogue-editorial p:last-child {
+  max-width: 34rem;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--muted-ink);
+}
+.catalogue-footer {
+  border-top: 3px double var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0 2rem;
+  color: var(--muted-ink);
+  font-size: 0.75rem;
+}
+.catalogue-footer > span:first-child {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  color: var(--ink);
+}
+.catalogue-skip {
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  z-index: 100;
+  background: var(--sheet);
+  padding: 0.8rem;
+  border: 2px solid var(--focus);
+  transform: translateY(-180%);
+}
+.catalogue-skip:focus {
+  transform: translateY(0);
+}
+@media (max-width: 760px) {
+  .catalogue-page {
+    padding-inline: 1.2rem;
+  }
+  .catalogue-masthead > nav {
+    padding: 1rem 1.2rem;
+    align-items: start;
+  }
+  .catalogue-masthead nav > div {
+    gap: 0.3rem;
+  }
+  .catalogue-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 1rem;
+  }
+  .catalogue-index {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 0.8rem;
+  }
+  .catalogue-index > p {
+    grid-column: 1 / -1;
+    margin-bottom: 0.3rem;
+  }
+  .catalogue-index a {
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+  .catalogue-section {
+    padding: 1.5rem 1.2rem;
+  }
+  .catalogue-editorial {
+    grid-template-columns: 70px minmax(0, 1fr);
+    gap: 1rem;
+    padding: 2rem 0 0;
+  }
+  .catalogue-botanical {
+    width: 70px;
+    height: 125px;
+  }
+  .catalogue-running > span {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+  .catalogue-theme {
+    font-size: 0.75rem;
+    padding-inline: 0.5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catalogue *,
+  .catalogue *::before,
+  .catalogue *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (forced-colors: active) {
+  .catalogue::before {
+    display: none;
+  }
+  .catalogue-index a[aria-current="page"] {
+    outline: 2px solid Highlight;
+  }
+}
+/* Adapt retained account-only trust records; public profile styling is untouched. */
+.catalogue-trust :where(.bg-white, .bg-emerald-50, .bg-slate-100) {
+  background: var(--sheet);
+}
+.catalogue-trust :where(.text-slate-600, .text-emerald-800) {
+  color: var(--muted-ink);
+}
+.catalogue-trust :where(section, [role="tabpanel"] > div) {
+  border-color: var(--rule);
+  border-radius: var(--radius-control);
+}
+.catalogue-trust [role="tab"][aria-selected="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.catalogue-trust [role="tab"] {
+  border: 1px solid var(--rule);
+}
+.catalogue-masthead details > div {
+  gap: 0.2rem;
+}
+.catalogue-masthead details > div > a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.2rem;
+}

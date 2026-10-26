@@ -2,7 +2,7 @@
 
 **Canonical product roadmap.** Supplied and confirmed by the product owner on 26 October 2026. No existing canonical 14-stage file was found; this file records the original stages without replacing or renumbering the existing Blueprint engineering plan. Future work must identify its master stage. Engineering batches (6A, 7D, 8B, 9A, 10A, etc.) are implementation increments, not product stages.
 
-Progress updated for Batch 10C (Stage 8 verification closeout, before Stage 9A). Status vocabulary: **Planned / In Progress / Implemented Candidate / Production Ready**. Implemented Candidate means an independently reviewable implementation exists; it does not mark the whole stage complete or authorize production. **No stage is newly declared Production Ready.** Historical reports are evidence for their own revisions; the Batch 10C selected regression ledger records current reruns.
+Progress updated for Batch 11A (Stage 9 account/shared-shell visual candidate). Status vocabulary: **Planned / In Progress / Implemented Candidate / Production Ready**. Implemented Candidate means an independently reviewable implementation exists; it does not mark the whole stage complete or authorize production. **No stage is newly declared Production Ready.** Historical reports are evidence for their own revisions; the Batch 10C selected regression ledger records current reruns.
 
 Cross-references: [Blueprint v1](../admin/ADMIN_CONTROL_CENTER_BLUEPRINT_V1.md), [gap analysis](../admin/ADMIN_GAP_ANALYSIS.md), [permission matrix](../admin/ADMIN_PERMISSION_MATRIX.md), [engineering implementation roadmap](../admin/ADMIN_IMPLEMENTATION_ROADMAP.md). Preserve original objectives below; update the progress fields as verified increments land.
 
@@ -99,11 +99,11 @@ Add notices, scheduling, configurable operational policies, feature controls and
 Improve profiles, password management, language selection, mobile UX and the overall design system. Add light/dark themes during the visual makeover.
 
 - **Status:** In Progress
-- **Implemented functionality:** Existing account/profile/password/settings pages and responsive marketplace/Admin components are present; own-session security overview is implemented.
-- **Remaining functionality:** Dedicated Stage 9 product audit, language/fallback controls, mobile/accessibility acceptance, coherent visual makeover including light/dark themes.
-- **Relevant engineering batches:** Existing MVP; 1; 6C (partial relevant foundations only)
-- **Verification evidence:** components/account-settings.tsx; app/account/page.tsx; app/admin/account-security; existing MVP/browser evidence
-- **Production blockers:** No claim that full Stage 9 language/theme makeover is implemented; separate approval and acceptance needed.
+- **Implemented functionality:** Existing account/profile/settings pages and responsive marketplace/Admin components are present; own-session security overview is implemented. Batch 11A introduces an opt-in Balanced Agricultural Luxury foundation, account/shared-shell light/dark candidate and preserved display-name editing. Password-management functionality is not claimed by this visual slice.
+- **Remaining functionality:** Product-owner visual acceptance before wider rollout, remaining profile/password/language audit and language/fallback controls, full accessibility acceptance, other marketplace/Admin theme adoption and safe appearance initialization improvements.
+- **Relevant engineering batches:** Existing MVP; 1; 6C; 11A (account/shared-shell visual candidate only)
+- **Verification evidence:** docs/design/HUSTLEN_UI_UX_DESIGN_CONTRACT.md; docs/design/EDITORIAL_FOUNDATION_BATCH_11A.md; docs/design/ACCOUNT_DESIGN_REVIEW_BATCH_11A.md; components/account-settings.tsx; app/admin/account-security
+- **Production blockers:** Only account/shared-shell theme slice is implemented. Product-owner design review is required before wider rollout; Stage 9 is not production ready. Full password/language/marketplace makeover is not claimed.
 
 ## 10. AI Assistant — Stage 1
 

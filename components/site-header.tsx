@@ -3,14 +3,22 @@ import { chatAvailable } from "@/lib/chat/config";
 import { getCurrentUser } from "@/lib/auth";
 import { LogoutButton } from "@/components/logout-button";
 
-export async function SiteHeader() {
+export async function SiteHeader({
+  catalogue = false,
+}: { catalogue?: boolean } = {}) {
   const currentUser = await getCurrentUser();
 
   return (
-    <header className="border-b border-slate-200 bg-white/90 backdrop-blur-sm">
+    <header
+      className={
+        catalogue
+          ? "catalogue-masthead"
+          : "border-b border-slate-200 bg-white/90 backdrop-blur-sm"
+      }
+    >
       <nav className="mx-auto flex flex-wrap max-w-6xl items-center justify-between gap-4 px-6 py-4">
         <Link href="/" className="text-xl font-semibold text-slate-900">
-          MRT Market
+          {catalogue ? "Hustlen’" : "MRT Market"}
         </Link>
 
         <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2 text-sm font-medium">
@@ -38,7 +46,9 @@ export async function SiteHeader() {
                     <Link href="/admin">Admin Desktop</Link>
                   ) : null}
                   <Link href="/dashboard">Dashboard</Link>
-                  {chatAvailable(currentUser.id) && <Link href="/messages">Messages</Link>}
+                  {chatAvailable(currentUser.id) && (
+                    <Link href="/messages">Messages</Link>
+                  )}
                   <Link href="/account">Account settings</Link>
                   <Link href={`/profile/${currentUser.id}`}>
                     Public profile view
