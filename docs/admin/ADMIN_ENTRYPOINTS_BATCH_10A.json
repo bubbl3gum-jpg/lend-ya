@@ -1,0 +1,8 @@
+{
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/announcements/route.ts",
+      "sha256": "792880844bf595b372b67beaa37ace79ba9a204306acf977dd146911cf5c0923"
+    }
+  ]
+}

@@ -51,6 +51,8 @@ enum DisputeStatus {
 }
 
 model User {
+  announcementsCreated Announcement[] @relation("AnnouncementCreator")
+  announcementEvents AnnouncementEvent[] @relation("AnnouncementActor")
   supportTickets SupportTicket[] @relation("SupportRequester")
   supportTicketEvents SupportTicketEvent[] @relation("SupportEventActor")
 
@@ -1130,4 +1132,37 @@ model SupportMessage {
   channel SupportParticipantChannel @relation("ChannelRequesterMessages",fields:[channelId,ticketId,authorUserId],references:[id,ticketId,participantUserId],onDelete:Restrict,onUpdate:NoAction,map:"SupportMessage_channel_author_fkey")
   @@unique([channelId,sequence])
   @@unique([channelId,requestKey])
+}
+
+
+// Owned-development informational notices only; no production publication authority.
+model Announcement {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title String @db.VarChar(120)
+  body String @db.VarChar(4000)
+  state String @default("DRAFT") @db.VarChar(16)
+  audience String @default("OWNED_TEST_ADMIN") @db.VarChar(32)
+  version Int @default(1)
+  creatorId Int
+  creator User @relation("AnnouncementCreator", fields: [creatorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @default(now()) @db.Timestamptz(3)
+  startsAt DateTime? @db.Timestamptz(3)
+  expiresAt DateTime? @db.Timestamptz(3)
+  events AnnouncementEvent[]
+  @@index([state, startsAt, expiresAt])
+}
+model AnnouncementEvent {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  announcementId String @db.Uuid
+  announcement Announcement @relation(fields: [announcementId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  actorId Int
+  actor User @relation("AnnouncementActor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  action String @db.VarChar(16)
+  previousVersion Int
+  resultingVersion Int
+  requestId String @unique @db.Uuid
+  requestHash String @db.Char(64)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@unique([announcementId, resultingVersion])
 }

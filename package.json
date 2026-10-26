@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "admin:create": "tsx scripts/create-admin.ts",
-    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts tests/operational-error.test.ts tests/dependency-security.test.ts tests/authorization-policy.test.ts tests/passkey-pilot-config.test.ts tests/staff-read-pilot-config.test.ts tests/workbench-navigation.test.ts tests/camera-diagnostics.test.ts tests/case-history-navigation.test.ts tests/support-query.test.ts tests/support-ticket-input.test.ts tests/support-channel-input.test.ts tests/support-staff-command.test.ts tests/geofencing-lab.test.ts",
+    "test:unit": "tsx --test tests/meetup-test-location.test.ts tests/meetup-location.test.ts tests/chat-policy.test.ts tests/chat-analysis.test.ts tests/chat-demo-safety.test.ts tests/booking-time.test.ts tests/rental-evidence.test.ts tests/mrt.test.ts tests/test-safety.test.ts tests/migration-history.test.ts tests/operational-error.test.ts tests/dependency-security.test.ts tests/authorization-policy.test.ts tests/passkey-pilot-config.test.ts tests/staff-read-pilot-config.test.ts tests/workbench-navigation.test.ts tests/camera-diagnostics.test.ts tests/case-history-navigation.test.ts tests/support-query.test.ts tests/support-ticket-input.test.ts tests/support-channel-input.test.ts tests/support-staff-command.test.ts tests/geofencing-lab.test.ts tests/announcements.test.ts",
     "test:integration": "tsx tests/run-isolated.ts",
     "test:admin": "tsx tests/run-isolated.ts --admin",
     "test:moderation": "tsx tests/run-isolated.ts --moderation",
@@ -66,7 +66,10 @@
     "test:support-staff-migration": "tsx tests/run-isolated.ts --support-staff-migration",
     "test:support-staff-production": "tsx tests/run-isolated.ts --support-staff-production",
     "test:locations": "tsx tests/run-isolated.ts --locations",
-    "test:locations-production": "tsx tests/run-isolated.ts --locations-production"
+    "test:locations-production": "tsx tests/run-isolated.ts --locations-production",
+    "test:announcements": "tsx tests/run-isolated.ts --announcements",
+    "test:announcements-production": "tsx tests/run-isolated.ts --announcements-production",
+    "test:announcements-migration": "tsx tests/run-isolated.ts --announcements-migration"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

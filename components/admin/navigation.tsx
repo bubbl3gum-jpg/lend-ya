@@ -18,6 +18,7 @@ export const adminNavigationGroups = [
     label: "Community",
     links: [
       { href: "/admin/users", label: "Users" },
+      { href: "/admin/announcements", label: "Announcements" },
       { href: "/admin/support", label: "Support" },
       { href: "/admin/chat", label: "Chat moderation" },
     ],
@@ -25,6 +26,7 @@ export const adminNavigationGroups = [
   {
     label: "System",
     links: [
+      { href: "/admin/settings", label: "Platform Settings" },
       { href: "/admin/account-security", label: "Security overview" },
       { href: "/admin/audit-logs", label: "Audit Logs" },
     ],

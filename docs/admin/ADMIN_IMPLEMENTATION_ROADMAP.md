@@ -160,3 +160,8 @@ Do not authorize high-risk go-live before staff-person binding, step-up authenti
 Recommended first coding scope, **after separate approval**, is Batch 0 policy resolution plus a small Batch 1 presentation-only PR, followed by Batch 2 capability tests. Do not launch the entire roadmap at once. Authorization/private-support/approval model migration plans need their own review before schema/application changes.
 
 This task ends with four documents. No permissions, AI agents, payment code, Admin screens, database changes, migration edits, merge or deployment were implemented or authorized here.
+
+
+## Batch 10A status overlay (26 October 2026)
+
+The original planning text above is preserved. The canonical product roadmap is [the original 14-stage master roadmap](../roadmap/MASTER_ROADMAP_14_STAGES.md); engineering batches below are not those product stages. Stage 8 now has a functional **owned-development-only** announcement candidate and truthful read-only Platform Settings inventory. This does not approve live publishing, operational edits, new roles or high-risk execution. See [Batch 10A roadmap overlay](MASTER_14_STAGE_ROADMAP_STATUS_BATCH_10A.md), [publication decisions](../announcements/PRODUCT_DECISIONS_BATCH_10A.md), and [Batch 10B configuration plan](../settings/BATCH_10B_CONFIGURATION_PLAN.md). Stages 6 and 7 remain unfinished; do not conflate this document's historical batch numbers with the separate 14-stage master roadmap.
