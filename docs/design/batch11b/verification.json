@@ -1,0 +1,450 @@
+{
+  "implementation": "5d7101a84c2944d0ad69c4a1e4659fa0af774ce1",
+  "finalSelectedGroupsPassed": 24,
+  "selectedGroups": [
+    {
+      "group": "test:homepage",
+      "start": "2026-10-26T16:14:24.831Z",
+      "end": "2026-10-26T16:14:54.670Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ea4dfe0e30e7193812938dde",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:account-design",
+      "start": "2026-10-26T16:09:53.096Z",
+      "end": "2026-10-26T16:10:18.301Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/cea35f7bdae97c4261e9d264",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:heritage-ui",
+      "start": "2026-10-26T16:10:18.302Z",
+      "end": "2026-10-26T16:10:52.135Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/227a5810300ddc11f7618c31",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-26T15:56:46.912Z",
+      "end": "2026-10-26T15:57:23.825Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f6e36aec402c1256f506edab",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-26T15:55:47.074Z",
+      "end": "2026-10-26T15:56:37.446Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/78d0fed92876dfdff171df5c",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-26T15:57:23.826Z",
+      "end": "2026-10-26T16:01:48.138Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/98a50eea102d0c2ed09eba71",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-26T16:01:48.138Z",
+      "end": "2026-10-26T16:02:33.911Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f70298602238147b11b0acb4",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-26T16:02:33.912Z",
+      "end": "2026-10-26T16:03:04.834Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b73ec6ff1db3f9a9986f1139",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-browser",
+      "start": "2026-10-26T16:03:04.835Z",
+      "end": "2026-10-26T16:03:59.509Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b69ae4748d4f3957294a3977",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-26T16:03:59.509Z",
+      "end": "2026-10-26T16:05:23.190Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/95acadd60fc61f1ac0326b40",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:support-channels",
+      "start": "2026-10-26T16:05:23.190Z",
+      "end": "2026-10-26T16:05:58.628Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8af9bdb00308104e179d35ab",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-26T16:05:58.629Z",
+      "end": "2026-10-26T16:06:38.704Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0fb7f815294eba24863e2f6b",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-26T16:06:38.704Z",
+      "end": "2026-10-26T16:07:13.677Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7ce4bfad30617f24abf7a92b",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-26T16:07:13.678Z",
+      "end": "2026-10-26T16:07:17.694Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d40cc36109739703786c42df",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa",
+      "start": "2026-10-26T16:07:17.694Z",
+      "end": "2026-10-26T16:07:28.638Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/675b5084cdbecf3f84261d98",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:announcements",
+      "start": "2026-10-26T16:07:28.638Z",
+      "end": "2026-10-26T16:07:54.127Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b765e7c0f9a3ffbd67937f42",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:platform-settings",
+      "start": "2026-10-26T16:07:54.127Z",
+      "end": "2026-10-26T16:08:14.978Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/96da2470d8e3cdf002f6fba0",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:locations",
+      "start": "2026-10-26T16:08:14.979Z",
+      "end": "2026-10-26T16:08:40.774Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d84f74b8fa5614ee7b6260a9",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:workbench",
+      "start": "2026-10-26T16:08:40.774Z",
+      "end": "2026-10-26T16:09:33.847Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/be7c6b365e9586a33cba889a",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mvp",
+      "start": "2026-10-26T16:09:33.848Z",
+      "end": "2026-10-26T16:11:09.721Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c82f5606c409e13c16df70ec",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-26T16:11:09.721Z",
+      "end": "2026-10-26T16:12:16.769Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/42b93ecef966e875adcb97d1",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:login-navigation",
+      "start": "2026-10-26T16:12:16.770Z",
+      "end": "2026-10-26T16:12:47.347Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c1635724ab8a561075e686ba",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-26T16:15:04.068Z",
+      "end": "2026-10-26T16:15:26.236Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0672087c5929ddf2f693fefe",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-26T16:14:54.672Z",
+      "end": "2026-10-26T16:15:04.068Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/24acd6aed0ecc9e3ba7928be",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    }
+  ],
+  "static": [
+    {
+      "command": "npm run test:unit",
+      "exit": 0,
+      "testCount": 90
+    },
+    {
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "testCount": null
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "testCount": null
+    },
+    {
+      "command": "npx prisma validate",
+      "exit": 0,
+      "testCount": null
+    }
+  ],
+  "scope": "Final selected outcomes, not a claim of first-attempt clean pass or every repository suite. R1 login timing root cause remains open.",
+  "initialOutcomes": "initial-outcomes.json"
+}

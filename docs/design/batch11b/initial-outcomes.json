@@ -1,0 +1,65 @@
+{
+  "initialOutcomes": [
+    {
+      "group": "test:homepage",
+      "start": "2026-10-26T15:54:39.573Z",
+      "end": "2026-10-26T15:55:02.150Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/72c15dc2ab355ba7b2b1700e",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "finding": "Exact implicit-label locator did not match select label text; actual combobox already held Cameras and one real result. Changed locator to combobox accessible name; same value/timeout."
+    },
+    {
+      "group": "test:homepage",
+      "start": "2026-10-26T16:06:06.361Z",
+      "end": "2026-10-26T16:06:33.067Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/10b0e001c0fefdbd176f7074",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "finding": "Redundant sound .check raced the transition from server OFF to persisted ON during cross-document hydration. Nonessential preference controls now remain disabled until browser snapshots are ready; test asserts restored ON and effect choice directly. No navigation/authentication delay."
+    },
+    {
+      "group": "test:homepage",
+      "start": "2026-10-26T16:10:52.904Z",
+      "end": "2026-10-26T16:11:33.399Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/fbb94672bd4c72749b44f791",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true,
+      "finding": "Explicit JavaScript-disabled fixture correctly blocked two development HMR script requests. Kept shared collector strict; separate negative-fixture bucket permits only up to two exact GET development-HMR paths with reason csp. Native category navigation and all functional assertions already passed."
+    }
+  ],
+  "noTimeoutOrAuthorizationRelaxation": true,
+  "globalBrowserErrorCollectorUnchanged": true,
+  "normalBrowserErrorAssertion": "deepEqual(errors, [])",
+  "visualIntegrationRefinement": "Remove duplicated visible homepage rail/toolbar navigation without changing R1 art direction; refine compact shared navigation only."
+}

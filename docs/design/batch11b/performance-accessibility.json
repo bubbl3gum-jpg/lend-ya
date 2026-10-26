@@ -1,0 +1,34 @@
+{
+  "provisionalR1IdentityRetained": true,
+  "allR1AssetsUnchanged": true,
+  "runtimeArtworkBytes": 435200,
+  "noNewDependencies": true,
+  "discoveryReadModelQueries": 2,
+  "maxReturnedCategories": 12,
+  "maxReturnedHomeListings": 4,
+  "noDatabaseQueryInsideCardLoop": true,
+  "legacyBrowseQueryScope": "Retained existing public query/filter/availability behavior; no new private projection. Existing full browse scalability remains future review.",
+  "reservedImageGeometry": "Fixed hero min-height; listing aspect-ratio; explicit decorative image dimensions",
+  "actualBrowserWidths": [
+    1440,
+    820,
+    390
+  ],
+  "checks": [
+    "No horizontal overflow at tested widths",
+    "Native labelled sheet, Escape/link dismissal and focus return",
+    "Shared R1 focus wrapping/outside dismissal regression",
+    "Active route semantics",
+    "Appearance and effects/sound shared with account",
+    "Real optional WebAudio close, reduced motion and particle cleanup",
+    "Server preference controls disabled pending hydration",
+    "Native category links work with JavaScript disabled",
+    "Semantic listing badge colors retained"
+  ],
+  "limits": [
+    "No low-end hardware FPS/LCP/CLS benchmark",
+    "No full screen-reader/zoom or Safari/iOS certification",
+    "Non-shell legacy operational/detail/messages/Support presentation retained",
+    "R1 visual acceptance and login timing investigation remain pending"
+  ]
+}

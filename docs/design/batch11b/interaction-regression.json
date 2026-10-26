@@ -1,0 +1,25 @@
+{
+  "liveSystem": {
+    "light": "rgb(232, 223, 203)",
+    "dark": "rgb(25, 24, 18)"
+  },
+  "savedDarkServerRendered": true,
+  "sheetEscapeOutsideFocusAndNavigation": true,
+  "noHorizontalOverflow": [
+    1440,
+    820,
+    390
+  ],
+  "keyboardParticles": 9,
+  "particlesCleaned": true,
+  "audioDefaultOff": true,
+  "realNativeAudioStartStopAndClose": true,
+  "noAutoplay": true,
+  "independentMotionAndSound": true,
+  "realCategoryFiltering": true,
+  "restrictedListingExcluded": true,
+  "unmountNavigation": true,
+  "touchParticles": true,
+  "storageAndAudioUnavailableFallback": true,
+  "unexpectedBrowserErrors": []
+}

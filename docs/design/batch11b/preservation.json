@@ -1,0 +1,24 @@
+{
+  "baseline": "97722d12e4aef0d3fd0b1654f32d8230210d1d85",
+  "initialWorkingTree": "clean",
+  "verifiedImplementation": "95238a58be48730956eb25087353e1e82f146fd2",
+  "verifiedEvidenceCloseout": "42db04a18a8252a266074cd26408ebf23e5e7cf8",
+  "ancestryVerified": true,
+  "protectedBaselineFilesByteIdentical": 1102,
+  "historicalMigrationCount": 28,
+  "unchanged": [
+    "all API routes",
+    "all auth/session/logout/booking/meetup/GPS/QR/camera/consent/evidence services",
+    "all Admin navigation, staff, approval, MFA, Support, announcement/settings service code",
+    "AccountSettings name-editing component/API",
+    "MRT selector/map, station catalogue and coordinate data",
+    "Prisma schema and historical migrations",
+    "original tests/assertions and global browser-error collector",
+    "package-lock and all public artwork",
+    "historical reports/screenshots"
+  ],
+  "r1ArtworkAndDiscoveryInteractionFunctionsByteIdentical": true,
+  "master14StagesPreserved": true,
+  "stage6Stage7Stage8SectionsByteIdentical": true,
+  "originalBrowserErrorCollectorHash": "c0ee724573e4a2d9438dd7bf5e378a4083c39de3fa7e161570375551645d8700"
+}

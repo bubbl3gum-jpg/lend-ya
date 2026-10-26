@@ -1,0 +1,23 @@
+{
+  "priorRisk": "R1 five-second login navigation timing failure during overlapping browser workloads; root cause not established.",
+  "thisBatch": "Existing unmodified readiness suite run after other browser workloads, serially following final build.",
+  "actual": {
+    "group": "test:login-readiness",
+    "start": "2026-10-26T16:15:04.068Z",
+    "end": "2026-10-26T16:15:26.236Z",
+    "exit": 0,
+    "signal": null,
+    "artifact": ".test-artifacts/0672087c5929ddf2f693fefe",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 1"
+    ],
+    "fails": [
+      "\u2139 fail 0"
+    ],
+    "cleanup": true
+  },
+  "result": "Passed delayed hydration and six repeated logins; this does not prove root-cause closure. No login/session/MFA code or assertion deadline changed."
+}
