@@ -91,6 +91,7 @@ export default async function HomePage() {
             >
               Create listing
             </Link>
+            <Link href="/catalogue" className="px-2 py-3 underline underline-offset-4">Explore the heritage catalogue · Design study</Link>
           </div>
         </div>
 

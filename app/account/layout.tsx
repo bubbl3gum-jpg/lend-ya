@@ -1,3 +1,4 @@
+import { readAppearance } from "@/lib/heritage/appearance";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
@@ -9,6 +10,11 @@ export default async function AccountLayout({
 }) {
   if (!(await getCurrentUser())) redirect("/login");
   return (
-    <AccountShell header={<SiteHeader catalogue />}>{children}</AccountShell>
+    <AccountShell
+      initialTheme={await readAppearance()}
+      header={<SiteHeader catalogue />}
+    >
+      {children}
+    </AccountShell>
   );
 }

@@ -1,0 +1,871 @@
+/* R1: opt-in material and tactile vocabulary. No operational status/MRT overrides. */
+.catalogue.heritage {
+  --paper: #e8dfcb;
+  --sheet: #f7efdd;
+  --wash: #dcd2b9;
+  --ink: #342e25;
+  --muted-ink: #675844;
+  --rule: #9c8665;
+  --accent: #4c5437;
+  --on-accent: #fff6df;
+  --focus: #8c461d;
+  --error: #962f23;
+  --brass: #8a632d;
+  --rail: #332d23;
+  --rail-ink: #e9dcc0;
+  --editorial-paper: #e7d6b6;
+  --grain-opacity: 0.3;
+  --shadow-small: 0 2px 3px #24180e25;
+}
+.catalogue.heritage[data-theme="dark"] {
+  --paper: #191812;
+  --sheet: #29261e;
+  --wash: #3c3628;
+  --ink: #eee1c6;
+  --muted-ink: #c6b797;
+  --rule: #8f7c59;
+  --accent: #cba56b;
+  --on-accent: #211c14;
+  --focus: #f0c086;
+  --error: #ffbca3;
+  --brass: #c9a46c;
+  --rail: #211f17;
+  --rail-ink: #e9dcc0;
+  --grain-opacity: 0.32;
+}
+@media (prefers-color-scheme: dark) {
+  .catalogue.heritage[data-theme="system"] {
+    --paper: #191812;
+    --sheet: #29261e;
+    --wash: #3c3628;
+    --ink: #eee1c6;
+    --muted-ink: #c6b797;
+    --rule: #8f7c59;
+    --accent: #cba56b;
+    --on-accent: #211c14;
+    --focus: #f0c086;
+    --error: #ffbca3;
+    --brass: #c9a46c;
+    --rail: #211f17;
+    --rail-ink: #e9dcc0;
+    --grain-opacity: 0.32;
+    color-scheme: dark;
+  }
+}
+.heritage::before {
+  background-image: url("/heritage/organic-grain.webp");
+  mix-blend-mode: soft-light;
+}
+.heritage .catalogue-masthead {
+  background: var(--rail);
+  color: var(--rail-ink);
+  border-top: 3px solid var(--brass);
+  border-bottom: 1px solid var(--rule);
+}
+.heritage .catalogue-masthead > nav {
+  max-width: 1440px;
+  padding: 0.85rem 2rem;
+}
+.heritage .catalogue-masthead > nav > a {
+  color: var(--rail-ink);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-style: italic;
+  font-size: 2.1rem;
+}
+.heritage-brand-mark {
+  width: 35px;
+  height: 58px;
+  color: #c9a46c;
+}
+.heritage .catalogue-masthead > nav > a small {
+  display: block;
+  font-family: var(--support);
+  font-style: normal;
+  font-size: 0.49rem;
+  letter-spacing: 0.21em;
+  margin-top: 0.1rem;
+  text-transform: uppercase;
+}
+.heritage .catalogue-masthead nav > div > a,
+.heritage .catalogue-masthead button {
+  color: var(--rail-ink);
+  background: transparent;
+  border-color: #a38b63;
+  min-height: 44px;
+}
+.heritage .catalogue-masthead nav > div > a:hover,
+.heritage .catalogue-masthead button:hover {
+  background: #443c2a;
+}
+.heritage-account-trigger {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-size: 0.8rem;
+  max-width: min(55vw, 380px);
+  overflow-wrap: anywhere;
+}
+.heritage-account-sheet {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  padding: 1.6rem;
+  width: min(420px, 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
+  color: var(--ink);
+  background: var(--sheet);
+  background-image: url("/heritage/paper-fibers.png");
+  border: 1px solid var(--rule);
+  box-shadow: -8px 0 28px #0003;
+}
+.heritage-account-sheet::backdrop {
+  background: #0a0805a8;
+}
+.heritage-account-sheet > header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.3rem;
+  border-bottom: 3px double var(--rule);
+}
+.heritage-account-sheet h2 {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+}
+.heritage .heritage-account-sheet button {
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 1.4rem;
+}
+.heritage .heritage-account-sheet button:hover {
+  background: var(--wash);
+}
+.heritage-account-sheet nav {
+  display: grid;
+  padding-top: 0.6rem;
+}
+.heritage-account-sheet nav a {
+  min-height: 48px;
+  padding: 0.8rem 0.4rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+.heritage-account-sheet nav a[aria-current="page"] {
+  background: var(--wash);
+  border-left: 3px solid var(--accent);
+  padding-left: 0.8rem;
+}
+.heritage .catalogue-page {
+  max-width: 1340px;
+}
+.heritage .catalogue-running {
+  padding: 0.6rem 0;
+  color: var(--muted-ink);
+}
+.heritage .catalogue-heading {
+  padding: 2rem 0 2rem 270px;
+}
+.heritage .catalogue-heading h1 {
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-style: italic;
+  margin: 0.3rem 0 0.6rem;
+}
+.heritage .catalogue-layout {
+  gap: 2.4rem;
+  grid-template-columns: 230px minmax(0, 1fr);
+  padding-top: 1.6rem;
+}
+.heritage .catalogue-index {
+  color: var(--rail-ink);
+  background: var(--rail);
+  background-image: url("/heritage/paper-fibers.png");
+  padding: 1.2rem;
+  border: 1px solid var(--rule);
+}
+.heritage-index-art {
+  border-bottom: 3px double #88734f;
+  padding-bottom: 1rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+.heritage-index-art svg {
+  width: 80px;
+  height: 130px;
+  color: #c9a46c;
+  margin: 0.4rem auto;
+  stroke-width: 1.1;
+}
+.heritage-index-art p {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+.heritage .catalogue-index > p,
+.heritage .catalogue-index a > span {
+  color: #c6b797;
+}
+.heritage .catalogue-index a {
+  border-color: #78694e;
+}
+.heritage .catalogue-index a:hover,
+.heritage .catalogue-index a[aria-current="page"] {
+  background: #48402e;
+  color: #fff3d9;
+  border-left-color: #cba56b;
+}
+.heritage .catalogue-section {
+  position: relative;
+  padding: 1.7rem 2rem;
+  border: 1px solid var(--rule);
+  outline: 1px solid var(--rule);
+  outline-offset: -6px;
+  border-top: 4px double var(--rule);
+  background-image: url("/heritage/paper-fibers.png");
+  box-shadow: 0 3px 8px #130c0615;
+}
+.heritage .catalogue-section-title > h2 {
+  font-style: italic;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+.heritage .catalogue-section-title > p:last-child {
+  max-width: 37rem;
+}
+.heritage .catalogue-record {
+  margin-block: 1.3rem;
+  padding-block: 1rem;
+}
+.heritage .catalogue-form input {
+  box-shadow: inset 0 1px 2px #24180e15;
+  background: var(--sheet);
+  border-bottom-width: 2px;
+}
+.heritage .catalogue-button {
+  border: 1px solid var(--accent);
+  outline: 1px solid var(--on-accent);
+  outline-offset: -4px;
+  padding-inline: 1.6rem;
+  font-family: var(--display);
+  font-size: 1rem;
+}
+.heritage-press {
+  transition:
+    transform 110ms,
+    background-color 140ms,
+    box-shadow 140ms;
+}
+.heritage-press:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 3px #0003;
+}
+.heritage-saved-seal {
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  margin-right: 0.5rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+.heritage .catalogue-editorial {
+  margin-top: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--editorial-paper);
+  background-image: url("/heritage/paper-fibers.png");
+  color: #3d3326;
+  border: 3px double #987d51;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 1.5rem;
+}
+.heritage .catalogue-editorial p:last-child {
+  color: #5c4a34;
+}
+.heritage .catalogue-botanical {
+  color: #625034;
+  width: 115px;
+  height: 170px;
+}
+.heritage-preferences {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem 1.6rem;
+  border-top: 1px solid var(--rule);
+  padding: 1rem 1.5rem;
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: 0.8rem;
+}
+.heritage-preferences label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+}
+.heritage-preferences select {
+  min-height: 44px;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  padding: 0.4rem;
+  color: var(--ink);
+}
+.heritage-preferences input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.heritage-preferences p {
+  flex-basis: 100%;
+  text-align: center;
+  color: var(--muted-ink);
+  font-size: 0.74rem;
+}
+.heritage-market-layout {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  max-width: 1520px;
+  margin: auto;
+}
+.heritage-market-rail {
+  background: var(--rail);
+  color: var(--rail-ink);
+  border-right: 1px solid var(--rule);
+  padding: 2rem 1.5rem;
+  background-image: url("/heritage/paper-fibers.png");
+}
+.heritage-market-rail > svg {
+  height: 120px;
+  width: 70px;
+  margin: 0 auto 1rem;
+  color: #c9a46c;
+}
+.heritage-market-rail > p {
+  text-align: center;
+}
+.heritage-market-rail nav {
+  display: grid;
+  margin: 2rem 0 5rem;
+}
+.heritage-market-rail nav a {
+  padding: 1rem 0.3rem;
+  min-height: 48px;
+  border-bottom: 1px solid #766447;
+  font-family: var(--display);
+}
+.heritage-market-rail nav a:hover {
+  background: #49402d;
+}
+.heritage-market-rail .heritage-rail-note {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #c9b38b;
+}
+.heritage-market-main {
+  min-width: 0;
+  padding: 1rem 1.7rem;
+}
+.heritage-candidate-label {
+  color: var(--muted-ink);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.8rem;
+}
+.heritage-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 450px;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  color: #fff1d4;
+  background: #292417;
+}
+.heritage-hero > img {
+  object-fit: cover;
+  object-position: center 58%;
+}
+.heritage-hero-copy {
+  position: relative;
+  padding: 2rem 2.2rem;
+  width: min(660px, 75%);
+  background: linear-gradient(90deg, #15120de0, #15120d65, transparent);
+  min-height: 450px;
+}
+.heritage-hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.8rem, 5.2vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-style: italic;
+  margin: 0.8rem 0 1rem;
+  text-shadow: 0 1px 3px #0008;
+}
+.heritage-hero h1 em {
+  font-style: inherit;
+}
+.heritage-hero-copy > p:last-of-type {
+  font-family: var(--display);
+  line-height: 1.6;
+  margin-bottom: 1.4rem;
+}
+.heritage-hero-seal {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 110px;
+  height: 110px;
+  border: 3px double #d3ad6c;
+  border-radius: 50%;
+  color: #f1d19b;
+  background: #1e170965;
+  text-align: center;
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.heritage-hero-seal svg {
+  width: 40px;
+  height: 55px;
+}
+.heritage-brass-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.9rem 1.2rem;
+  background: #d2ad70;
+  color: #282017;
+  border: 1px solid #f0d39a;
+  border-radius: 3px;
+  font-family: var(--display);
+  min-height: 48px;
+  box-shadow: 0 2px 3px #0002;
+}
+.heritage-discovery {
+  position: relative;
+  touch-action: manipulation;
+}
+.heritage-discovery:hover {
+  filter: brightness(1.05);
+}
+.heritage-discovery:active {
+  transform: translateY(1px);
+}
+.soil-burst {
+  position: absolute;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  z-index: 5;
+}
+.soil-burst i {
+  display: block;
+  position: absolute;
+  border-radius: 30%;
+  background: #a58150;
+  box-shadow: 0 0 0 0.5px #372619;
+  animation: soil-scatter 420ms cubic-bezier(0.12, 0.5, 0.35, 1) both;
+}
+.soil-burst i:nth-child(3n) {
+  background: #d4b884;
+}
+.soil-burst i:nth-child(2n) {
+  background: #5a3b23;
+}
+@keyframes soil-scatter {
+  0% {
+    transform: translate(0, 0) rotate(0);
+    opacity: 0.85;
+  }
+  60% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) rotate(var(--twist));
+    opacity: 0;
+  }
+}
+.heritage-editorial-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  padding: 1.4rem 0 0.8rem;
+}
+.heritage-editorial-heading > span {
+  flex-basis: 100%;
+  color: var(--muted-ink);
+  font-size: 0.6rem;
+}
+.heritage-editorial-heading h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  line-height: 1.2;
+}
+.heritage-editorial-heading > p,
+.heritage-editorial-heading > a {
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+}
+.heritage-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 0.8rem;
+}
+.heritage-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 175px;
+  padding: 0.8rem;
+  border: 3px double var(--rule);
+  background: var(--sheet);
+  background-image: url("/heritage/paper-fibers.png");
+  transition:
+    border-color 140ms,
+    box-shadow 140ms;
+}
+.heritage-category > span:first-child {
+  color: var(--muted-ink);
+  font-size: 0.55rem;
+}
+.heritage-category > span:last-child {
+  font-family: var(--display);
+  text-align: center;
+  font-size: 1.05rem;
+}
+.heritage-engraving {
+  height: 100px;
+  width: 165px;
+  max-width: 100%;
+  color: var(--brass);
+  transition: transform 160ms;
+}
+.heritage-category:hover .heritage-engraving,
+.heritage-category:focus-visible .heritage-engraving {
+  transform: translateY(-2px);
+}
+.heritage-category.is-selected {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  background-color: var(--wash);
+}
+.heritage-listings {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.heritage-listings article {
+  min-width: 0;
+  border: 1px solid var(--rule);
+  background: var(--sheet);
+  background-image: url("/heritage/paper-fibers.png");
+}
+.heritage-listing-image {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+}
+.heritage-listing-image img {
+  object-fit: cover;
+}
+.heritage-listings article a > div:last-child {
+  padding: 0.8rem;
+}
+.heritage-listings h3 {
+  font-family: var(--display);
+  font-size: 1.12rem;
+  line-height: 1.35;
+  margin: 0.4rem 0;
+  overflow-wrap: anywhere;
+}
+.heritage-listings article p:last-child {
+  font-size: 0.85rem;
+}
+.heritage-listings small {
+  color: var(--muted-ink);
+}
+.heritage-all-listings {
+  display: inline-block;
+  margin-block: 1rem;
+  min-height: 44px;
+  padding: 0.6rem 0;
+  text-decoration: underline;
+}
+.heritage-empty {
+  border-block: 1px solid var(--rule);
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.heritage-section {
+  border: 3px double #9c8054;
+  background: var(--editorial-paper);
+  color: #382e21;
+  background-image: url("/heritage/paper-fibers.png");
+  padding: 1rem 1.5rem 1.5rem;
+}
+.heritage-how {
+  margin: 1rem 0 1.6rem;
+}
+.heritage-how .heritage-editorial-heading > span {
+  color: #655035;
+}
+.heritage-how > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.heritage-how > div > section {
+  border-top: 1px solid #9c8054;
+  padding-top: 0.5rem;
+}
+.heritage-how section > svg {
+  width: 120px;
+  height: 85px;
+  margin: 0.6rem 0;
+  color: #655035;
+}
+.heritage-how h3 {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.heritage-how section p {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+.heritage-categories {
+  scroll-margin-top: 1rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .heritage[data-effects="on"] .heritage-how {
+    animation: editorial-reveal 300ms ease-out both;
+  }
+  @keyframes editorial-reveal {
+    from {
+      opacity: 0.65;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+.heritage[data-effects="off"] .heritage-discovery,
+.heritage[data-effects="off"] .heritage-engraving {
+  transform: none;
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .heritage .soil-burst {
+    display: none;
+  }
+  .heritage .heritage-discovery:active {
+    transform: none;
+  }
+}
+@media (max-width: 1000px) {
+  .heritage-market-layout {
+    grid-template-columns: 130px minmax(0, 1fr);
+  }
+  .heritage-market-rail {
+    padding: 1.5rem 0.9rem;
+  }
+  .heritage-listings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .heritage-hero-copy {
+    width: 85%;
+  }
+  .heritage-hero-seal {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .heritage .catalogue-masthead > nav {
+    padding: 0.7rem 1.1rem;
+    gap: 0.7rem;
+  }
+  .heritage .catalogue-masthead > nav > a {
+    font-size: 1.8rem;
+  }
+  .heritage-brand-mark {
+    height: 45px;
+  }
+  .heritage .catalogue-heading {
+    padding: 1.5rem 0;
+  }
+  .heritage .catalogue-heading h1 {
+    font-size: 3rem;
+  }
+  .heritage .catalogue-layout {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .heritage .catalogue-index {
+    padding: 0.6rem 0.8rem;
+  }
+  .heritage-index-art {
+    display: none;
+  }
+  .heritage .catalogue-section {
+    padding: 1.3rem;
+  }
+  .heritage .catalogue-editorial {
+    grid-template-columns: 70px minmax(0, 1fr);
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .heritage .catalogue-botanical {
+    width: 65px;
+    height: 140px;
+  }
+  .heritage-market-layout {
+    grid-template-columns: 1fr;
+  }
+  .heritage-market-rail {
+    padding: 0.3rem 1rem;
+    border-bottom: 1px solid var(--rule);
+    border-right: 0;
+  }
+  .heritage-market-rail > svg,
+  .heritage-market-rail > p {
+    display: none;
+  }
+  .heritage-market-rail nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+    margin: 0;
+  }
+  .heritage-market-rail nav a {
+    font-size: 0.85rem;
+    padding: 0.7rem 0.2rem;
+    border: 0;
+  }
+  .heritage-market-main {
+    padding: 0.9rem 1rem;
+  }
+  .heritage-hero {
+    min-height: 410px;
+  }
+  .heritage-hero-copy {
+    width: 100%;
+    min-height: 410px;
+    padding: 1.5rem;
+    background: #13110970;
+  }
+  .heritage-hero h1 {
+    font-size: clamp(2.6rem, 9vw, 4rem);
+  }
+  .heritage-hero > img {
+    object-position: 65% center;
+  }
+  .heritage-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .heritage-category {
+    min-height: 155px;
+  }
+  .heritage-listings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+  .heritage-how > div {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .heritage-how > div > section {
+    display: grid;
+    grid-template-columns: 85px minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+  }
+  .heritage-how section > svg {
+    grid-row: span 2;
+    width: 80px;
+    height: 100px;
+    margin: 0;
+  }
+  .heritage-how section h3 {
+    margin-top: 0.5rem;
+  }
+  .heritage-preferences {
+    justify-content: start;
+    gap: 0.5rem 1rem;
+  }
+}
+@media (forced-colors: active) {
+  .heritage::before {
+    display: none;
+  }
+  .heritage-hero-copy {
+    background: Canvas;
+    color: CanvasText;
+  }
+  .heritage .catalogue-index a[aria-current="page"] {
+    outline: 2px solid Highlight;
+  }
+}
+.heritage-saved-seal::before {
+  content: "✓";
+}
+.heritage-plate {
+  width: 100%;
+  height: 125px;
+  object-fit: contain;
+  margin: 0.4rem 0;
+  background: #211e17;
+  transition: transform 160ms;
+}
+.heritage-category:hover .heritage-plate,
+.heritage-category:focus-visible .heritage-plate {
+  transform: translateY(-2px);
+}
+.heritage[data-effects="off"] .heritage-plate {
+  transform: none;
+  transition: none;
+}
+
+.heritage .heritage-account-sheet nav > a {
+  font-family: var(--support);
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  color: var(--ink);
+}
+.heritage[data-effects="off"] .soil-burst {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .heritage
+    :is(
+      .heritage-engraving,
+      .heritage-plate,
+      .heritage-press,
+      .heritage-discovery
+    ) {
+    transform: none !important;
+  }
+}

@@ -2,26 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSyncExternalStore } from "react";
+import { HeritageSurface, WheatMark } from "@/components/heritage/experience";
+import type { Appearance } from "@/lib/heritage/appearance";
 
-const preferenceKey = "hustlen:catalogue-theme";
-let memoryTheme = "light";
-function snapshot() {
-  try {
-    const stored = localStorage.getItem(preferenceKey);
-    return stored === "dark" || stored === "light" ? stored : memoryTheme;
-  } catch {
-    return memoryTheme;
-  }
-}
-function subscribe(callback: () => void) {
-  window.addEventListener("storage", callback);
-  window.addEventListener("hustlen:theme", callback);
-  return () => {
-    window.removeEventListener("storage", callback);
-    window.removeEventListener("hustlen:theme", callback);
-  };
-}
 const sections = [
   ["/account", "01", "Personal details"],
   ["/account/activity", "02", "Activity logs"],
@@ -31,23 +14,15 @@ const sections = [
 export function AccountShell({
   header,
   children,
+  initialTheme,
 }: {
+  initialTheme: Appearance;
   header: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const theme = useSyncExternalStore(subscribe, snapshot, () => "light");
   const pathname = usePathname();
-  function changeTheme() {
-    memoryTheme = theme === "dark" ? "light" : "dark";
-    try {
-      localStorage.setItem(preferenceKey, memoryTheme);
-    } catch {
-      /* This tab remains usable without storage. */
-    }
-    window.dispatchEvent(new Event("hustlen:theme"));
-  }
   return (
-    <div className="catalogue" data-theme={theme}>
+    <HeritageSurface initialTheme={initialTheme}>
       <a className="catalogue-skip" href="#account-content">
         Skip to account content
       </a>
@@ -55,15 +30,7 @@ export function AccountShell({
       <main className="catalogue-page">
         <div className="catalogue-running">
           <span>Hustlen’ / The account book</span>
-          <button
-            type="button"
-            className="catalogue-theme"
-            onClick={changeTheme}
-            aria-pressed={theme === "dark"}
-          >
-            Dark appearance{" "}
-            <span aria-hidden="true">{theme === "dark" ? "●" : "○"}</span>
-          </button>
+          <span>Personal edition · Nº 01</span>
         </div>
         <div className="catalogue-heading">
           <p className="catalogue-eyebrow">A place for the particulars</p>
@@ -72,6 +39,14 @@ export function AccountShell({
         </div>
         <div className="catalogue-layout">
           <nav className="catalogue-index" aria-label="Account sections">
+            <div className="heritage-index-art">
+              <WheatMark />
+              <p>
+                Small things.
+                <br />
+                Thoughtfully shared.
+              </p>
+            </div>
             <p className="catalogue-eyebrow">In this account</p>
             {sections.map(([href, number, label]) => (
               <Link
@@ -97,6 +72,6 @@ export function AccountShell({
           <span>Account edition · 01</span>
         </footer>
       </main>
-    </div>
+    </HeritageSurface>
   );
 }

@@ -51,3 +51,7 @@ Review explicitly:
 ## Roadmap alignment
 
 This is Stage 9 — Account Settings & User Experience in [the canonical 14-stage roadmap](../roadmap/MASTER_ROADMAP_14_STAGES.md). Preserve all original stages, their ordering/objectives, candidate versus production distinctions and unfinished Stage 6, 7 and 8 requirements. Engineering batch numbers do not replace product stages.
+
+## Batch 11A-R1 owner clarification
+
+The supplied homepage reference is now available for direct review. Batch 11A did not pass visual acceptance. R1 requires warmer soil/walnut materials, perceptible controlled textures, engraved object/botanical art, cinematic original agricultural imagery and a focused real marketplace/account proof. Use [the R1 foundation](MATERIAL_AND_INTERACTION_FOUNDATION_R1.md), including event-driven bounded soil particles, restrained form press, accessible sheet navigation, optional original sound OFF by default, independent effects/mute preferences and Light/Dark/System behavior. The image is an aesthetic target, not evidence of implemented homepage features or permission to copy its artwork. Product-owner acceptance remains mandatory; no full-site rollout or operational activation follows from engineering results.

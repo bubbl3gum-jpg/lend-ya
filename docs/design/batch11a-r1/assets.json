@@ -1,0 +1,62 @@
+{
+  "publicAssets": [
+    {
+      "path": "public/heritage/harvest-landscape.webp",
+      "bytes": 240306,
+      "sha256": "526771ea1e8190a1460797686172f909ac64579805fbc023b0a8c471fda2c5cf",
+      "provenance": "Original image-generation artwork, optimized WebP"
+    },
+    {
+      "path": "public/heritage/organic-grain.webp",
+      "bytes": 39104,
+      "sha256": "9284a3785d0a5da31e0b0c3d090e1b4f0764bc3ab437fcb7c108394b895d27be",
+      "provenance": "Original deterministic procedural texture"
+    },
+    {
+      "path": "public/heritage/paper-fibers.png",
+      "bytes": 4422,
+      "sha256": "9d71b4b2ade67a52e6cf244dce8342047d52dfb0586a8f2721fdc0455d2abe97",
+      "provenance": "Original deterministic procedural texture"
+    },
+    {
+      "path": "public/heritage/plate-camera.webp",
+      "bytes": 45202,
+      "sha256": "499c1f5f991316281c45baa5a9e14a180222521164f47cb7529ba480b2fe41b8",
+      "provenance": "Original image-generation artwork, optimized WebP"
+    },
+    {
+      "path": "public/heritage/plate-laptop.webp",
+      "bytes": 33222,
+      "sha256": "84c39f7066ed61e4cc75f12890a6a2dc3a85b5416d7df129b2a2a9d9a215e015",
+      "provenance": "Original image-generation artwork, optimized WebP"
+    },
+    {
+      "path": "public/heritage/plate-tent.webp",
+      "bytes": 41584,
+      "sha256": "10e906e99f8f750584c2ad0a37147d65c9ff5f039d018e921c6131b62f000785",
+      "provenance": "Original image-generation artwork, optimized WebP"
+    },
+    {
+      "path": "public/heritage/plate-tool.webp",
+      "bytes": 31360,
+      "sha256": "0e624945d858c3d83beec374320ebae80c2bb3f3670f236a51d7d85a111178a1",
+      "provenance": "Original image-generation artwork, optimized WebP"
+    }
+  ],
+  "totalPublicBytes": 435200,
+  "reference": {
+    "path": "docs/design/batch11a-r1/reference/owner-homepage.jpg",
+    "sha256": "fbc7db31e54e3bc6d681abe9f3c24f6bb2973e7ce601e473d6fc1d0736867d1a",
+    "source": "Product-owner supplied 1000162869.jpg; reference only, not a public asset/license grant"
+  },
+  "originalVectors": [
+    "components/heritage/engraving.tsx",
+    "components/heritage/experience.tsx",
+    "app/account/page.tsx"
+  ],
+  "audio": {
+    "runtime": "Original synthesized decaying bandpass noise; no downloaded sample",
+    "reviewSample": "soil-sound-preview.wav",
+    "reviewSampleBytes": 10604
+  }
+}

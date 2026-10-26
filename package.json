@@ -73,6 +73,7 @@
     "test:platform-settings": "tsx tests/run-isolated.ts --platform-settings",
     "test:platform-settings-production": "tsx tests/run-isolated.ts --platform-settings-production",
     "test:platform-settings-migration": "tsx tests/run-isolated.ts --platform-settings-migration",
+    "test:heritage-ui": "tsx tests/run-isolated.ts --heritage-ui",
     "test:account-design": "tsx tests/run-isolated.ts --account-design",
     "test:meetup-session": "tsx tests/run-isolated.ts --meetup-session"
   },

@@ -11,3 +11,5 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Hustlen’ UI/UX work
 
 For Batch 11A and all subsequent user-facing or Admin UI changes, read and follow [the mandatory Balanced Agricultural Luxury design contract](docs/design/HUSTLEN_UI_UX_DESIGN_CONTRACT.md) and [the reusable foundation](docs/design/EDITORIAL_FOUNDATION_BATCH_11A.md). Scope initial adoption to the approved account/shared-shell slice; wider marketplace rollout requires product-owner visual approval. Preserve the original 14-stage roadmap and all unfinished Stage 6–8 gates.
+
+Batch 11A-R1 refines this system using the supplied owner reference. Read [the material/interaction foundation](docs/design/MATERIAL_AND_INTERACTION_FOUNDATION_R1.md) for the scoped account/catalogue candidate, original assets, System appearance and independently controlled motion/sound. Batch 11A was not visually accepted; R1 also needs explicit owner review before wider rollout.

@@ -52,6 +52,9 @@ test(
         page.getByRole("heading", { name: "Your account", exact: true }),
       ).toBeVisible();
       const root = page.locator(".catalogue");
+      await page
+        .getByLabel("Appearance", { exact: true })
+        .selectOption("light");
       await expect(root).toHaveAttribute("data-theme", "light");
       const name = page.getByLabel("Display name", { exact: true });
       await expect(name).toHaveValue("Catalogue reader");
@@ -85,8 +88,8 @@ test(
           .rows[0].name,
         "Garden neighbour",
       );
-      await page.getByRole("button", { name: "Dark appearance" }).focus();
-      await page.keyboard.press("Space");
+      await page.getByLabel("Appearance", { exact: true }).focus();
+      await page.keyboard.press("End");
       await expect(root).toHaveAttribute("data-theme", "dark");
       await page.screenshot({
         path: path.join(artifact, "account-dark-desktop.png"),
@@ -107,7 +110,9 @@ test(
         await page.setViewportSize({ width, height });
         for (const theme of ["dark", "light"]) {
           if ((await root.getAttribute("data-theme")) !== theme)
-            await page.getByRole("button", { name: "Dark appearance" }).click();
+            await page
+              .getByLabel("Appearance", { exact: true })
+              .selectOption(theme);
           assert.equal(
             await page.evaluate(
               () => document.documentElement.scrollWidth <= innerWidth,
@@ -131,9 +136,10 @@ test(
         page.getByRole("link", { name: "Public profile view" }),
       ).toBeVisible();
       await page
-        .getByRole("navigation", { name: "Account sections" })
-        .getByRole("link", { name: "Activity logs" })
+        .getByRole("dialog")
+        .getByRole("link", { name: "Activity logs", exact: true })
         .click();
+      await expect(page.getByRole("dialog")).not.toBeVisible();
       await expect(
         page.getByRole("heading", { name: "Activity logs" }),
       ).toBeVisible();

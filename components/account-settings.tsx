@@ -65,7 +65,11 @@ export function AccountSettings({ name }: { name: string }) {
         disabled={busy}
       />
       <div className="catalogue-form-actions">
-        <button type="submit" className="catalogue-button" disabled={busy}>
+        <button
+          type="submit"
+          className="catalogue-button heritage-press"
+          disabled={busy}
+        >
           {busy ? "Saving…" : "Save settings"}
           <span aria-hidden="true"> →</span>
         </button>
@@ -79,6 +83,9 @@ export function AccountSettings({ name }: { name: string }) {
         }
         role={failed ? "alert" : "status"}
       >
+        {message && !failed ? (
+          <span className="heritage-saved-seal" aria-hidden="true" />
+        ) : null}
         {message}
       </p>
     </form>
