@@ -2,7 +2,7 @@
 
 27 October 2026 · Asia/Taipei · Stage 10 — AI Assistant, Stage 1.
 
-Branch: `feature/offline-ai-quality-review-batch-12d`. Tested implementation: `008acb786898a39c6e9edd37b5e3020d17fa4c18`. Evidence revision is recorded after closeout. Clean starting HEAD `7be0a59ffe590e1ede373940087fe6ee541b2860` contains supplied 12C implementation `ffb40f788d5d2fe0ec91166c809593061803f582` and evidence `63b34e036974c00bf105919930fd5d38f347a4bf`.
+Branch: `feature/offline-ai-quality-review-batch-12d`. Tested implementation: `008acb786898a39c6e9edd37b5e3020d17fa4c18`. Evidence closeout: `e40b240105fa7e252b34b14664f19d543e4074f3`. This final index revision adds that reference only. Clean starting HEAD `7be0a59ffe590e1ede373940087fe6ee541b2860` contains supplied 12C implementation `ffb40f788d5d2fe0ec91166c809593061803f582` and evidence `63b34e036974c00bf105919930fd5d38f347a4bf`.
 
 ## Outcome
 
