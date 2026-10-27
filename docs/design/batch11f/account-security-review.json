@@ -1,0 +1,27 @@
+{
+  "actualPasswordCommit": true,
+  "visibilityLocalAndReset": true,
+  "confirmationFocus": true,
+  "serverErrorFocus": true,
+  "successFocus": true,
+  "silentAuditFailureRollback": true,
+  "concurrentLimitFiveOfSix": true,
+  "alreadyAuthorizedNameMayFinish": true,
+  "newRequestAfterLogoutDenied": true,
+  "keyboardAndOutsideDismissal": true,
+  "touchTargets44": true,
+  "visibilityContrast4_5": true,
+  "errorToFirstFieldKeyboardFlow": true,
+  "noOverflowWidths": [
+    1440,
+    820,
+    390,
+    640
+  ],
+  "reducedMotion": true,
+  "credentialValuesCleared": true,
+  "nameDraftRetained": true,
+  "screenReaderCertification": false,
+  "physicalSafariCertification": false,
+  "browserErrors": []
+}

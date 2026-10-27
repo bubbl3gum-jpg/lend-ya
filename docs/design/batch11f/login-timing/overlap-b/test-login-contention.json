@@ -1,0 +1,19 @@
+{
+  "group": "test:login-contention",
+  "start": "2026-10-27T03:55:11.102Z",
+  "end": "2026-10-27T03:55:30.225Z",
+  "exit": 0,
+  "signal": null,
+  "artifact": ".test-artifacts/51a8d1d1fa4b0d7812752c56",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 1"
+  ],
+  "fails": [
+    "ℹ fail 0"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/overlap-b-login/test:login-contention.log"
+}

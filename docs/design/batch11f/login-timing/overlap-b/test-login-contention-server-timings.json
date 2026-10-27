@@ -1,0 +1,14 @@
+{
+  "source": "Retained server.log, postprocessed after trial; original diagnostic serverTimingLines array was empty because indented lines did not match. Parser corrected without rerunning trials.",
+  "lines": [
+    "GET /login 200 in 235ms (next.js: 72ms, application-code: 163ms)",
+    "POST /api/auth/login 200 in 876ms (next.js: 780ms, proxy.ts: 5ms, application-code: 91ms)",
+    "GET /dashboard 200 in 250ms (next.js: 15ms, application-code: 234ms)",
+    "GET /login 200 in 39ms (next.js: 1.8ms, application-code: 37ms)",
+    "POST /api/auth/login 200 in 106ms (next.js: 37ms, proxy.ts: 8ms, application-code: 61ms)",
+    "GET /dashboard 200 in 144ms (next.js: 1.4ms, application-code: 142ms)",
+    "GET /login 200 in 49ms (next.js: 2ms, application-code: 46ms)",
+    "POST /api/auth/login 200 in 70ms (next.js: 5ms, proxy.ts: 5ms, application-code: 61ms)",
+    "GET /dashboard 200 in 94ms (next.js: 0.9ms, application-code: 93ms)"
+  ]
+}

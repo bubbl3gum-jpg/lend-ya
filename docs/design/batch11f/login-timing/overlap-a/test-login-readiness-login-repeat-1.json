@@ -1,0 +1,83 @@
+{
+  "label": "repeat-1",
+  "outcome": "passed",
+  "path": "/dashboard",
+  "events": [
+    {
+      "ms": 8,
+      "event": "request",
+      "path": "/login",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 108,
+      "event": "response",
+      "path": "/login",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 120,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 812,
+      "event": "main_frame_committed",
+      "path": "/login"
+    },
+    {
+      "ms": 966,
+      "event": "request",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 1066,
+      "event": "response",
+      "path": "/api/auth/login",
+      "status": 200,
+      "navigation": false,
+      "rsc": false
+    },
+    {
+      "ms": 1085,
+      "event": "request",
+      "path": "/dashboard",
+      "method": "GET",
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1127,
+      "event": "response",
+      "path": "/dashboard",
+      "status": 200,
+      "navigation": true,
+      "rsc": false
+    },
+    {
+      "ms": 1134,
+      "event": "main_frame_committed",
+      "path": "/dashboard"
+    }
+  ],
+  "browser": {
+    "readyState": "complete",
+    "authReady": "unmarked",
+    "submitDisabled": null,
+    "inputValidity": [],
+    "navigationEntries": 1
+  },
+  "cookiePresent": true,
+  "cookieHttpOnly": true,
+  "database": {
+    "sessions": 4,
+    "lock_waiters": 0
+  }
+}

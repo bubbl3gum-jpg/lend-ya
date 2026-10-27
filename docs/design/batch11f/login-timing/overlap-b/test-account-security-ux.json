@@ -1,0 +1,19 @@
+{
+  "group": "test:account-security-ux",
+  "start": "2026-10-27T03:54:59.915Z",
+  "end": "2026-10-27T03:55:23.913Z",
+  "exit": 0,
+  "signal": null,
+  "artifact": ".test-artifacts/0b89056ce440668452c63354",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 1"
+  ],
+  "fails": [
+    "ℹ fail 0"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/overlap-b-load/test:account-security-ux.log"
+}

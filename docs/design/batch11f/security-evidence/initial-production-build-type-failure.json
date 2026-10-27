@@ -1,0 +1,13 @@
+{
+  "group": "test:password-change-production",
+  "start": "2026-10-27T03:48:27.880Z",
+  "end": "2026-10-27T03:48:38.611Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/2b54db69e9ff8cd5313a62d6",
+  "tests": null,
+  "passes": null,
+  "fails": null,
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/test:password-change-production.log"
+}

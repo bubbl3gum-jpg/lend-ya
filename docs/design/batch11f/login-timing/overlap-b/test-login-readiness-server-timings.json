@@ -1,0 +1,26 @@
+{
+  "source": "Retained server.log, postprocessed after trial; original diagnostic serverTimingLines array was empty because indented lines did not match. Parser corrected without rerunning trials.",
+  "lines": [
+    "GET /login 200 in 259ms (next.js: 69ms, application-code: 190ms)",
+    "POST /api/auth/login 200 in 852ms (next.js: 764ms, proxy.ts: 4ms, application-code: 84ms)",
+    "GET /dashboard 200 in 273ms (next.js: 16ms, application-code: 256ms)",
+    "GET /login 200 in 48ms (next.js: 1.8ms, application-code: 46ms)",
+    "POST /api/auth/login 200 in 136ms (next.js: 46ms, proxy.ts: 11ms, application-code: 79ms)",
+    "GET /dashboard 200 in 136ms (next.js: 1.7ms, application-code: 134ms)",
+    "GET /login 200 in 57ms (next.js: 4ms, application-code: 53ms)",
+    "POST /api/auth/login 200 in 85ms (next.js: 9ms, proxy.ts: 6ms, application-code: 71ms)",
+    "GET /dashboard 200 in 111ms (next.js: 1.2ms, application-code: 109ms)",
+    "GET /login 200 in 73ms (next.js: 0.9ms, application-code: 72ms)",
+    "POST /api/auth/login 200 in 83ms (next.js: 6ms, proxy.ts: 10ms, application-code: 67ms)",
+    "GET /dashboard 200 in 103ms (next.js: 1.0ms, application-code: 102ms)",
+    "GET /login 200 in 47ms (next.js: 1.5ms, application-code: 46ms)",
+    "POST /api/auth/login 200 in 73ms (next.js: 6ms, proxy.ts: 5ms, application-code: 62ms)",
+    "GET /dashboard 200 in 138ms (next.js: 1.0ms, application-code: 137ms)",
+    "GET /login 200 in 78ms (next.js: 1.4ms, application-code: 77ms)",
+    "POST /api/auth/login 200 in 76ms (next.js: 6ms, proxy.ts: 6ms, application-code: 64ms)",
+    "GET /dashboard 200 in 115ms (next.js: 0.9ms, application-code: 114ms)",
+    "GET /login 200 in 38ms (next.js: 4ms, application-code: 34ms)",
+    "POST /api/auth/login 200 in 78ms (next.js: 8ms, proxy.ts: 7ms, application-code: 63ms)",
+    "GET /dashboard 200 in 140ms (next.js: 1.2ms, application-code: 139ms)"
+  ]
+}

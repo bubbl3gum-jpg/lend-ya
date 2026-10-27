@@ -1,0 +1,19 @@
+{
+  "group": "test:heritage-ui",
+  "start": "2026-10-27T03:51:30.703Z",
+  "end": "2026-10-27T03:51:58.071Z",
+  "exit": 0,
+  "signal": null,
+  "artifact": ".test-artifacts/e04fa061ce812a5b7cf25589",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 1"
+  ],
+  "fails": [
+    "ℹ fail 0"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/overlap-a-load/test:heritage-ui.log"
+}

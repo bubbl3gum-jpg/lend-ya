@@ -1,0 +1,52 @@
+[
+  {
+    "path": "lib/auth.ts",
+    "unchanged": true,
+    "sha256": "cc1d66b878f57c40e6b35386d9e8e6ed8d010928b057fea2efc7d510fafb2bf0"
+  },
+  {
+    "path": "app/api/auth/login/route.ts",
+    "unchanged": true,
+    "sha256": "3dd0cb2a5f91727b59ce93e1934537ae8f9cf1ad2261c8f2dc9a8a2d1adcafa0"
+  },
+  {
+    "path": "lib/support-staff-candidate/service.ts",
+    "unchanged": true,
+    "sha256": "803ab879f9a86004033b0d4218b1c9b692cd03afdd96c0a8104ef6b3d160d564"
+  },
+  {
+    "path": "scripts/support-candidate-worker.mjs",
+    "unchanged": true,
+    "sha256": "43df45379fbc8d031b9766494413e392fa9470777843dacc002bf0f4c2ee3ac4"
+  },
+  {
+    "path": "prisma/schema.prisma",
+    "unchanged": true,
+    "sha256": "de80b55cf3c747d2ce90897efdda0eedfa65ad8e0b58a1a465f1be0f1e459762"
+  },
+  {
+    "path": "package-lock.json",
+    "unchanged": true,
+    "sha256": "a11a98f1790709e63ed85038bfecabc2e5f2b7153da6b182b869351b7b5e9a2d"
+  },
+  {
+    "path": "lib/rental-lifecycle.ts",
+    "unchanged": true,
+    "sha256": "b6bdd899441a4b0b6c3ce9094436d80619ffe6f4b3fc9a39f12dddd7b8f9a14c"
+  },
+  {
+    "path": "lib/meetup/service.ts",
+    "unchanged": true,
+    "sha256": "eff2e423a2518e5707813875043df85cc04612dfa5c1baefca456e8c07ce182d"
+  },
+  {
+    "path": "components/meetup-verification.tsx",
+    "unchanged": true,
+    "sha256": "a2232fd12e2295dc34e4040369dfe5bcf7d92479f7e47d2faa7cf11ed74a3702"
+  },
+  {
+    "path": "tests/support/browser.ts",
+    "unchanged": true,
+    "sha256": "c0ee724573e4a2d9438dd7bf5e378a4083c39de3fa7e161570375551645d8700"
+  }
+]

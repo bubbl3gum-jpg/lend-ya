@@ -1,0 +1,55 @@
+{
+  "assertionMs": 5000,
+  "anonymousDestinationWarming": false,
+  "syntheticAuthResponse": false,
+  "attempts": [
+    {
+      "index": 0,
+      "phase": "cold login/dashboard paths",
+      "outcome": "passed",
+      "elapsedToHydrationAndFillMs": 3444,
+      "clickToObservationMs": 2475,
+      "cookiePresent": true,
+      "hostLoadAverage": [
+        2,
+        1.04,
+        0.56
+      ],
+      "cpuCount": 5,
+      "unexpectedBrowserErrors": 0
+    },
+    {
+      "index": 1,
+      "phase": "warm paths",
+      "outcome": "passed",
+      "elapsedToHydrationAndFillMs": 472,
+      "clickToObservationMs": 286,
+      "cookiePresent": true,
+      "hostLoadAverage": [
+        2.48,
+        1.16,
+        0.6
+      ],
+      "cpuCount": 5,
+      "unexpectedBrowserErrors": 0
+    },
+    {
+      "index": 2,
+      "phase": "warm paths",
+      "outcome": "passed",
+      "elapsedToHydrationAndFillMs": 450,
+      "clickToObservationMs": 267,
+      "cookiePresent": true,
+      "hostLoadAverage": [
+        2.48,
+        1.16,
+        0.6
+      ],
+      "cpuCount": 5,
+      "unexpectedBrowserErrors": 0
+    }
+  ],
+  "serverTimingLines": [],
+  "workload": "overlap-b",
+  "conclusion": "This bounded trial does not by itself establish or close the historical intermittence root cause."
+}

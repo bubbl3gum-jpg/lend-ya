@@ -1,0 +1,18 @@
+{
+  "previousMigrations": 28,
+  "finalMigrations": 29,
+  "historicalRowsUnchanged": [
+    "User",
+    "AuthSession",
+    "ChatReviewer",
+    "MrtStation",
+    "Listing",
+    "Booking",
+    "AdminAuditLog"
+  ],
+  "partialFailureAtomic": true,
+  "replayPassed": true,
+  "noCredentialBackfill": true,
+  "noNewAuthority": true,
+  "oldSessionFieldsPreserved": true
+}

@@ -1,0 +1,8 @@
+{
+  "kind": "audit",
+  "responseStatus": 200,
+  "credentialChanged": true,
+  "remainingSessions": 0,
+  "securityEvents": 0,
+  "noCredentialMaterialRecorded": true
+}

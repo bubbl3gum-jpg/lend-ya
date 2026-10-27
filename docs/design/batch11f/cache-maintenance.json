@@ -1,0 +1,74 @@
+{
+  "automatic-cache-cleanup": {
+    "onlyCompletedOwnedRuns": true,
+    "removedBuildCacheDirectories": [
+      "0d2eeafd996d571b11ab5a35",
+      "6e2bf61e9672c7faeab3075c",
+      "3657a02e09e25f984d16e2c4",
+      "c6b15585fbc0c3ca3a535da0",
+      "c09e4aac62f52d4c0049463a",
+      "e04fa061ce812a5b7cf25589",
+      "f90952448c1bddb1c66c4936",
+      "3b1ffe152f41f25c9e9e48be",
+      "bf2e6c3a0f989231169fba87",
+      "0b89056ce440668452c63354",
+      "51a8d1d1fa4b0d7812752c56",
+      "681a153f516605653e6ef05d",
+      "c34ff7aac33fbfa3da74e0ab",
+      "6da50d6429026f6e968a5c4e",
+      "dee3bad2fba4f8b8dbdcd712",
+      "28bbbbded70febabc976b885",
+      "f364fc88e0dc4000a26cb220",
+      "e60662e3c53ff235bde10b45",
+      "ac9079a4c71798cf87e0666b",
+      "752335bc422cb7d43a839480",
+      "e3305b31230d102a5008543a",
+      "742add2638251290e7d5e0d4",
+      "b1030a64073c67050258dd73",
+      "a96a999cc7d8d6043c49ed20",
+      "8169ca616e9b87676da6e36c",
+      "9cda18d48f2aabce58f2d79e",
+      "314f785bc6a87c71b3abe14b",
+      "96307d52b82c62a2ba65dce9",
+      "ca98e39259468123afd38536",
+      "fdb8eebe9f2cecc01eacf319",
+      "2c00a67138298e9977a70e4d",
+      "ebbca29a9c77fdc4a37ce5a4",
+      "af0cc28b59b136bb1d0cd629",
+      "cff78098b603ec3bfb5cad8a",
+      "ec8ea2caead5bca8e9eeff20",
+      "2a157b8d7a0eef6b64bcd055"
+    ],
+    "diagnosticsAndScreenshotsPreserved": true
+  },
+  "prior-generated-cache-cleanup": {
+    "onlyCompletedOwned11eRuns": true,
+    "removedGeneratedCaches": [
+      "8b4d131af090e2675e32318b",
+      "4bc9c4c4e892e01982ad1d0b",
+      "fdbe45894f9b72325065702b",
+      "c642174328011bd1de811c8a",
+      "b672293d4fdb95b69e82694f"
+    ],
+    "diagnosticsPreserved": true
+  },
+  "additional-prior-cache-cleanup": {
+    "onlyCompletedOwned11eGeneratedNextCaches": true,
+    "screenshotsAndDiagnosticsPreserved": true,
+    "removed": [
+      {
+        "runId": "c199884ce5bab993d170c7a4",
+        "bytes": 112168063
+      }
+    ]
+  },
+  "failed-cache-cleanup": {
+    "onlyEndedOwned11fFailedRuns": true,
+    "retainedDiagnosticsAndScreenshots": true,
+    "removedGeneratedNextCaches": [
+      "0b287e84cd35ce2c3c02d622",
+      "f6e90a02306a396ff8bf2427",
+      "c6bc44e2ac00bc52b84fe2ff"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "group": "test:account-security-ux",
+  "start": "2026-10-27T03:41:24.609Z",
+  "end": "2026-10-27T03:41:45.786Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/c6bc44e2ac00bc52b84fe2ff",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 0"
+  ],
+  "fails": [
+    "ℹ fail 1"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/test:account-security-ux.log"
+}

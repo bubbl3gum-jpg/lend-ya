@@ -1,0 +1,19 @@
+{
+  "group": "test:account-password-review",
+  "start": "2026-10-27T03:41:12.984Z",
+  "end": "2026-10-27T03:41:24.608Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/f6e90a02306a396ff8bf2427",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 0"
+  ],
+  "fails": [
+    "ℹ fail 1"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/test:account-password-review.log"
+}

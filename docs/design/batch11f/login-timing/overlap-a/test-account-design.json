@@ -1,0 +1,19 @@
+{
+  "group": "test:account-design",
+  "start": "2026-10-27T03:51:12.194Z",
+  "end": "2026-10-27T03:51:30.701Z",
+  "exit": 0,
+  "signal": null,
+  "artifact": ".test-artifacts/c6b15585fbc0c3ca3a535da0",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 1"
+  ],
+  "fails": [
+    "ℹ fail 0"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/overlap-a-load/test:account-design.log"
+}

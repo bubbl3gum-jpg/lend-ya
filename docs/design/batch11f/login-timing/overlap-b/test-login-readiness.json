@@ -1,0 +1,19 @@
+{
+  "group": "test:login-readiness",
+  "start": "2026-10-27T03:54:46.456Z",
+  "end": "2026-10-27T03:55:11.100Z",
+  "exit": 0,
+  "signal": null,
+  "artifact": ".test-artifacts/bf2e6c3a0f989231169fba87",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 1"
+  ],
+  "fails": [
+    "ℹ fail 0"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-11f/overlap-b-login/test:login-readiness.log"
+}
