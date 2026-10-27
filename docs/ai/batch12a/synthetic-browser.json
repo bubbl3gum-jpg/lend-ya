@@ -1,0 +1,29 @@
+{
+  "realAdminRoute": true,
+  "activeLegacyAdminOnly": true,
+  "forgedSelectorsDenied": true,
+  "unknownMutationRoute404": true,
+  "localReviewOnly": true,
+  "draftEditsClearReview": true,
+  "languagePreservesDraft": true,
+  "draftDiscardConfirmation": true,
+  "exactScenarioSources": true,
+  "escapedInjection": true,
+  "incompleteAndTranslationCautions": true,
+  "noCaseStateMutation": true,
+  "noExternalRequests": [],
+  "noApiDataRequests": [],
+  "noBrowserMutations": [],
+  "browserErrors": [],
+  "responsiveWidths": [
+    1440,
+    820,
+    390
+  ],
+  "touchTargets44": true,
+  "mobileTouchReview": true,
+  "keyboardReview": true,
+  "reducedMotion": true,
+  "noModelExecuted": true,
+  "noLiveCasePrivacyCertification": true
+}

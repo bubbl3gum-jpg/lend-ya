@@ -1,0 +1,62 @@
+# Complete changed-file inventory
+
+Compared with clean 11F final documentation HEAD `7b90c72bcfaa724b30b5dfc15b3bbd2af7b9d86b`. Tested implementation `cf67562c6df99ea486aa354f24db5ea52305d34d` contains 21 source/test/planning paths. The evidence closeout records browser/static/regression/cleanup evidence and a precision clarification that existing cloud adapter tests use fake transport. The final report-index commit records exact evidence SHA. No schema, migration, dependency or lockfile changes.
+
+56 total changed/added paths:
+
+- `AGENTS.md`
+- `app/admin/ai-case-brief/page.tsx`
+- `app/admin/layout.tsx`
+- `app/heritage.css`
+- `components/admin/ai-case-brief.tsx`
+- `components/admin/navigation.tsx`
+- `docs/ai/AI_CASE_BRIEF_REVIEW_BATCH_12A.md`
+- `docs/ai/batch12a/CHANGED_FILES.md`
+- `docs/ai/batch12a/EXISTING_INFRASTRUCTURE_AUDIT.md`
+- `docs/ai/batch12a/INITIAL_FAILURES.md`
+- `docs/ai/batch12a/PRODUCT_AND_WORKFLOW.md`
+- `docs/ai/batch12a/PRODUCT_DECISIONS.md`
+- `docs/ai/batch12a/READ_ONLY_INTEGRATION_AND_12B.md`
+- `docs/ai/batch12a/SCREENSHOTS.md`
+- `docs/ai/batch12a/SETUP_AND_TEST_SCOPE.md`
+- `docs/ai/batch12a/SYNTHETIC_EVALUATION.md`
+- `docs/ai/batch12a/VERIFICATION.md`
+- `docs/ai/batch12a/cache-maintenance.json`
+- `docs/ai/batch12a/camera-pickup.json`
+- `docs/ai/batch12a/camera-return.json`
+- `docs/ai/batch12a/cleanup.json`
+- `docs/ai/batch12a/disabled-refusal.json`
+- `docs/ai/batch12a/initial-outcomes/initial-mode-mismatch.json`
+- `docs/ai/batch12a/initial-outcomes/initial-production-type-failure.json`
+- `docs/ai/batch12a/initial-outcomes/initial-query-streaming.json`
+- `docs/ai/batch12a/production-refusal.json`
+- `docs/ai/batch12a/regression-ledger.json`
+- `docs/ai/batch12a/roadmap-preservation.json`
+- `docs/ai/batch12a/screenshots/case-brief-en-dark-desktop.png`
+- `docs/ai/batch12a/screenshots/case-brief-en-dark-mobile.png`
+- `docs/ai/batch12a/screenshots/case-brief-en-dark-tablet.png`
+- `docs/ai/batch12a/screenshots/case-brief-en-light-desktop.png`
+- `docs/ai/batch12a/screenshots/case-brief-en-light-mobile.png`
+- `docs/ai/batch12a/screenshots/case-brief-en-light-tablet.png`
+- `docs/ai/batch12a/screenshots/case-brief-local-review.png`
+- `docs/ai/batch12a/screenshots/case-brief-mobile-review.png`
+- `docs/ai/batch12a/screenshots/case-brief-scripted-injection.png`
+- `docs/ai/batch12a/screenshots/case-brief-unavailable.png`
+- `docs/ai/batch12a/screenshots/case-brief-zh-TW-dark-desktop.png`
+- `docs/ai/batch12a/screenshots/case-brief-zh-TW-dark-mobile.png`
+- `docs/ai/batch12a/screenshots/case-brief-zh-TW-dark-tablet.png`
+- `docs/ai/batch12a/screenshots/case-brief-zh-TW-light-desktop.png`
+- `docs/ai/batch12a/screenshots/case-brief-zh-TW-light-mobile.png`
+- `docs/ai/batch12a/screenshots/case-brief-zh-TW-light-tablet.png`
+- `docs/ai/batch12a/source-preservation.json`
+- `docs/ai/batch12a/synthetic-browser.json`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/ai-case-brief/config.ts`
+- `lib/ai-case-brief/fixtures.ts`
+- `lib/i18n/catalogues.ts`
+- `package.json`
+- `proxy.ts`
+- `tests/ai-case-brief.integration.test.ts`
+- `tests/ai-case-brief.test.ts`
+- `tests/localization.test.ts`
+- `tests/run-isolated.ts`

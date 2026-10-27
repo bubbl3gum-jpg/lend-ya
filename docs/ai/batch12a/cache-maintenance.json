@@ -1,0 +1,59 @@
+{
+  "prior-cache-cleanup": {
+    "onlyCompletedOwnedGeneratedNextCaches": true,
+    "diagnosticsAndScreenshotsRetained": true,
+    "removed": [
+      {
+        "runId": "1a03e1306d9836672fcad766",
+        "bytes": 306982924
+      },
+      {
+        "runId": "796b7667e075bc2222600fad",
+        "bytes": 294214029
+      },
+      {
+        "runId": "60f1e6763ff315647128a80a",
+        "bytes": 261283773
+      },
+      {
+        "runId": "16a04c3c412f7bce480ef742",
+        "bytes": 248365301
+      },
+      {
+        "runId": "ecb8d7ecf7a64b9d985e6e87",
+        "bytes": 213454130
+      },
+      {
+        "runId": "a001b26dc49b11c531b3124a",
+        "bytes": 207769588
+      }
+    ]
+  },
+  "automatic-cache-cleanup": {
+    "onlyCompletedOwnedRuns": true,
+    "removedBuildCacheDirectories": [
+      "fb992c5e412c00f37cf95f5c",
+      "e6e5c966026af2b773d5d904",
+      "0fe4734bd6895a7faf75c1a1",
+      "f0e5a455699864c0e6f17f9e",
+      "2026e81b478b59be7e9b3e5e",
+      "af597cdb54bbaeaa27634ce3",
+      "719e19a5f8e4abf2a3fe0d45",
+      "cb87c7672264827d57d5a0a9",
+      "4c0b9aa17d6f3b61df576dc2",
+      "e7b1c00288c059bd901a9b20",
+      "37e9d76a80cd39f77cec5921",
+      "cd7d6f54bfcdb1564956234d",
+      "9ea1caa10a91369e6bb45092",
+      "8cbbf7f2cb8956cc32c7c65b",
+      "ee18d9882f28cad1852bafde",
+      "ca2ec236051a3704ebe30820",
+      "8b818a3f4daec00cbb5d7a1d",
+      "fa0293547d1fc54d591d459f",
+      "9a942ad9fbbdebad77ac812f",
+      "b8a875d3f7d5a8e759aa959f",
+      "8f29c33889cff8b810244649"
+    ],
+    "diagnosticsAndScreenshotsPreserved": true
+  }
+}
