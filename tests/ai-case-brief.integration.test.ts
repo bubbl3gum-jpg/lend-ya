@@ -67,9 +67,12 @@ test("12B real offline pipeline, selected manifests, review failure recovery and
     const page=await context.newPage(); await page.goto(base+"/admin/ai-case-brief");
     await expect(page.getByRole("heading",{name:"AI Case Brief",exact:true})).toBeVisible();
     await expect(page.getByTestId("scripted-output")).toHaveCount(0);
+    await expect(page.getByTestId("experiment-checkpoint")).toContainText("Live experiment blocked");
+    const checkpoint=page.getByTestId("experiment-checkpoint");await checkpoint.locator("summary").focus();await page.keyboard.press("Enter");assert.equal(await checkpoint.locator("li").count(),10);await page.screenshot({path:path.join(art,"case-brief-approval-checkpoint.png"),fullPage:true});await checkpoint.locator("summary").click();
     const generate=()=>page.getByRole("button",{name:"Request simulated brief",exact:true});
     await generate().click();await expect(page.getByTestId("scripted-output")).toBeVisible();await expect(page.getByRole("status")).toBeFocused();
     await expect(page.getByTestId("synthetic-notebook")).toContainText("Simulated — no AI model was called.");
+    const inspector=page.getByTestId("quality-inspector");await inspector.locator("summary").focus();await page.keyboard.press("Enter");await expect(inspector).toContainText("not scored");await expect(inspector).toContainText("Participant statement is not an established fact.");await page.screenshot({path:path.join(art,"case-brief-quality-hints.png"),fullPage:true});await inspector.locator("summary").click();
     const citation=page.getByRole("link",{name:"Read synthetic source B2",exact:true}).first();await citation.focus();await page.keyboard.press("Enter");await expect(page.locator("#fact-SYN-BORROWER-A-B2")).toBeFocused();
     const ack=()=>page.getByRole("checkbox",{name:"I compared the draft with this scenario’s sources and uncertainty.",exact:true});
     await ack().focus();await page.keyboard.press("Space");await page.getByRole("button",{name:"Mark locally reviewed",exact:true}).click();await expect(page.getByRole("status")).toContainText("Local review marked");
@@ -96,6 +99,8 @@ test("12B real offline pipeline, selected manifests, review failure recovery and
     // Actual mobile touch generation and acknowledgement, not a synthetic success response.
     await page.getByRole("button",{name:"產生模擬摘要",exact:true}).tap();await expect(page.getByRole("status")).toContainText("未呼叫任何 AI 模型");
     await page.getByRole("checkbox",{name:"我已將草稿與此情境的來源及不確定資訊比對。",exact:true}).tap();await page.getByRole("button",{name:"標記為本機已審閱",exact:true}).tap();await expect(page.getByRole("status")).toContainText("已標記本機審閱");await page.screenshot({path:path.join(art,"case-brief-zh-output-review.png"),fullPage:true});
+    await page.getByTestId("quality-inspector").locator("summary").tap();await expect(page.getByTestId("quality-inspector")).toContainText("尚未評分");await page.screenshot({path:path.join(art,"case-brief-quality-hints-zh.png"),fullPage:true});await page.getByTestId("quality-inspector").locator("summary").tap();
+    await checkpoint.locator("summary").tap();await expect(checkpoint).toContainText("確切的服務供應商與模型版本");await page.screenshot({path:path.join(art,"case-brief-approval-checkpoint-zh.png"),fullPage:true});await checkpoint.locator("summary").tap();
     // Real expiry keeps an old draft labeled separately; never fabricates a new success.
     await db.query(`UPDATE "AuthSession" SET "expiresAt"=now()-interval '1 second' WHERE "userId"=$1`,[admin.id]);mark=errors.length;await page.getByRole("button",{name:"產生模擬摘要",exact:true}).tap();await expect(page.getByRole("status")).toContainText("工作階段已過期");
     const denied=errors.splice(mark);assert.ok(denied.every(e=>e==="401 /api/admin/ai-case-brief"||/^Failed to load resource: the server responded with a status of 401/.test(e)));
@@ -103,6 +108,6 @@ test("12B real offline pipeline, selected manifests, review failure recovery and
     await context.close();
     assert.deepEqual(outside,[]); assert.ok(dataRequests.length>0 && dataRequests.every(x=>/^(GET|POST) \/api\/admin\/ai-case-brief$/.test(x))); assert.ok(mutations.every(x=>x==="POST /api/admin/ai-case-brief")); assert.deepEqual(errors,[]);
     assert.deepEqual(await snap(),before);
-    await writeFile(path.join(art,"synthetic-browser.json"),JSON.stringify({ realAdminRoute:true, activeLegacyAdminOnly:true, forgedSelectorsDenied:true, closedSyntheticPipeline:true, localReviewOnly:true, draftEditsClearReview:true, languagePreservesDraft:true, draftDiscardConfirmation:true, exactScenarioSources:true, escapedInjection:true, incompleteAndTranslationCautions:true, noCaseStateMutation:true, noExternalRequests:outside, onlySyntheticPipelineRequests:dataRequests, onlyNonmutatingGenerationPosts:mutations, browserErrors:errors, responsiveWidths:[1440,820,390], touchTargets44:true, mobileTouchReview:true, keyboardReview:true, reducedMotion:true, noModelExecuted:true, noLiveCasePrivacyCertification:true },null,2));
+    await writeFile(path.join(art,"synthetic-browser.json"),JSON.stringify({ realAdminRoute:true, activeLegacyAdminOnly:true, forgedSelectorsDenied:true, closedSyntheticPipeline:true, localReviewOnly:true, draftEditsClearReview:true, languagePreservesDraft:true, draftDiscardConfirmation:true, exactScenarioSources:true, escapedInjection:true, incompleteAndTranslationCautions:true, noCaseStateMutation:true, noExternalRequests:outside, onlySyntheticPipelineRequests:dataRequests, onlyNonmutatingGenerationPosts:mutations, browserErrors:errors, responsiveWidths:[1440,820,390], touchTargets44:true, mobileTouchReview:true, keyboardReview:true, reducedMotion:true, noModelExecuted:true, noLiveCasePrivacyCertification:true, approvalCheckpointBlocked:true, missingApprovalDecisions:10, humanQualityScoresUnrecorded:true },null,2));
   } finally { await browser?.close(); await db.end(); }
 });

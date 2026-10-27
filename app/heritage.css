@@ -1224,3 +1224,5 @@
 .ai-ack input { width: 20px; height: 20px; flex-shrink: 0; margin-top: .2rem; }
 .ai-footnote { border-top: 3px double var(--rule); margin-top: 1.5rem; padding-top: 1rem; font-size: .85rem; }
 @media (max-width: 1050px) { .ai-ledger-layout { grid-template-columns: minmax(0, 1fr); } .ai-source-ledger { border-right: 0; border-bottom: 1px solid var(--rule); } }
+/* 12C: native disclosure controls for the read-only experiment checklist/rubric. */
+.ai-notebook details > summary { min-height: 44px; padding: .6rem 0; cursor: pointer; }

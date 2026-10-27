@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import { experimentCheckpoint } from "@/lib/ai-case-brief/experiment-contract";
+import { inspectBriefQuality } from "@/lib/ai-case-brief/quality";
 import { useEffect, useRef, useState } from "react";
 import { HeritageSurface } from "@/components/heritage/experience";
 import { useLocale } from "@/components/i18n/locale";
@@ -36,9 +38,11 @@ function Notebook({initialManifest,directory}:Props){
  }
  const errors:Record<string,MessageId>={INPUT:"ai.invalid",LANGUAGE:"ai.languageError",VALIDATION:"ai.invalid",REFERENCES:"ai.referencesError",UNAVAILABLE:"ai.providerError",TIMEOUT:"ai.timeoutError",LIMIT:"ai.limitError",CANCELED:"ai.canceledError",SESSION:"ai.sessionError",DENIED:"ai.sessionError",ORIGIN:"ai.invalid"};
  const out=result?.output;
+ const quality=out?inspectBriefQuality(manifest,out):null;
  const citations=(refs:string[])=>refs.map(ref=><a key={ref} href={`#fact-${manifest.caseId}-${ref}`} aria-label={t("ai.cite",{id:ref})} onClick={e=>{e.preventDefault();document.getElementById(`fact-${manifest.caseId}-${ref}`)?.focus();}}>[{ref}]</a>);
  return <article className="ai-notebook" data-testid="synthetic-notebook">
   <header className="ai-masthead"><p className="catalogue-eyebrow">{t("ai.kicker")}</p><h1>{t("ai.title")}</h1><p className="ai-deck">{t("ai.intro")}</p><p className="ai-boundary">{t("ai.simulated")}</p><Link href="/admin/workbench">← {t("ai.back")}</Link></header>
+  <aside className="ai-boundary" data-testid="experiment-checkpoint" aria-labelledby="experiment-heading"><h2 id="experiment-heading">{t("ai.experimentBlocked")}</h2><p>{t("ai.experimentExplanation")}</p><details><summary>{t("ai.missingApprovals")}</summary><ol>{experimentCheckpoint().missing.map(id=><li key={id}>{t(`ai.approval.${id}` as MessageId)}</li>)}</ol></details></aside>
   <div className="ai-scenario"><label htmlFor="synthetic-scenario">{t("ai.select")}</label><select id="synthetic-scenario" value={selected} aria-describedby="scenario-note" onChange={e=>void request(e.target.value,false)}>{directory.map(c=><option key={c.id} value={c.id}>{c.id} · {c.title[locale]}</option>)}</select><p id="scenario-note">{t("ai.switchNote")}</p></div>
   <div className="ai-ledger-layout">
    <section className="ai-source-ledger" aria-labelledby="source-heading"><h2 id="source-heading">{t("ai.context")}</h2>{selected===manifest.caseId ? <><p>{manifest.caseId} · {t(manifest.side==="OWNER"?"ai.owner":"ai.borrower")}</p><h3>{manifest.title}</h3><p>{t("ai.sourceLanguage")} {manifest.language}</p><ol className="ai-facts">{manifest.sources.map(s=><li key={s.id} id={`fact-${manifest.caseId}-${s.id}`} tabIndex={-1} data-source-id={s.id}><span className="catalogue-eyebrow">{s.id} / {t(s.kind==="CONTEXT"?"ai.contextKind":"ai.claimKind")}</span><p>{s.excerpt}</p><time dateTime={s.at}>{formatTime(locale,s.at)}</time></li>)}</ol><p className="ai-privacy">{t("ai.isolation")}</p></> : <p>{t("ai.sourceUnavailable")}</p>}</section>
@@ -49,6 +53,7 @@ function Notebook({initialManifest,directory}:Props){
     <p ref={feedback} tabIndex={-1} role="status" className="ai-feedback">{t(state==="error"?(errors[code]??"ai.providerError"):state==="loading"?"ai.pending":reviewed?"ai.reviewed":state==="ready"?"ai.simulated":"ai.idle")}</p>
     {code==="SESSION"&&<Link href="/login">{t("password.signin")}</Link>}
     {out&&<div data-testid="scripted-output"><p className="ai-boundary">{t(state!=="ready"?"ai.lastValid":"ai.humanCheck")}</p>
+     <details className="ai-privacy" data-testid="quality-inspector"><summary>{t("ai.qualityHints")}</summary><p>{t("ai.qualityExplanation")}</p><p>{t("ai.qualityUnreviewed")}</p><ul>{quality?.flags.map((f,i)=><li key={i}>{t(`ai.flag.${f.code}` as MessageId)} {citations(f.refs)}</li>)}</ul><p>{t("ai.qualityAxes")}</p><ul>{quality?.dimensions.map(d=><li key={d.id}>{t(`ai.quality.${d.id}` as MessageId)} — {t("ai.notScored")}</li>)}</ul></details>
      <h3>{t("ai.summary")}</h3><ul className="ai-summary">{out.summary.map((s,i)=><li key={i}><p>{s.text}</p><span>{t(s.basis==="SOURCE_EXCERPT"?"ai.excerpt":"ai.interpretation")}</span><div className="ai-citations">{citations(s.refs)}</div></li>)}</ul>
      <h3>{t("ai.observations")}</h3>{out.observations.map((s,i)=><p key={i}>{s.text} {citations(s.refs)} · {t("ai.humanCheck")}</p>)}
      <h3>{t("ai.timeline")}</h3><div className="ai-citations">{citations(out.timeline)}</div>
