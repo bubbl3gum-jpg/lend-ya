@@ -1159,3 +1159,25 @@
   justify-self: start;
   min-height: 44px;
 }
+
+/* 11F: local credential visibility; no sensory/discovery effects. */
+.password-control-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.password-control-row input {
+  min-width: 0;
+  flex: 1;
+}
+.password-control-row button {
+  flex: 0 0 auto;
+  min-height: 44px;
+  min-width: 60px;
+  border: 1px solid var(--rule);
+  padding: 0.5rem;
+  color: var(--ink);
+  background: var(--sheet);
+  border-radius: var(--radius-control);
+}

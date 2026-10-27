@@ -252,6 +252,15 @@ export const en = {
   "password.signin": "Sign in again",
   "password.origin":
     "The security check failed. Reload the page before trying again.",
+  "password.showCurrent": "Show current password",
+  "password.hideCurrent": "Hide current password",
+  "password.showNew": "Show new password",
+  "password.hideNew": "Hide new password",
+  "password.showConfirm": "Show password confirmation",
+  "password.hideConfirm": "Hide password confirmation",
+  "password.show": "Show",
+  "password.hide": "Hide",
+  "password.group": "Password change fields",
 } as const;
 export type MessageId = keyof typeof en;
 export const zhTW: Record<MessageId, string> = {
@@ -489,5 +498,14 @@ export const zhTW: Record<MessageId, string> = {
     "密碼已變更，先前的工作階段皆已登出。重新登入前，請先複製尚未儲存的顯示名稱草稿。本次未寄送通知。",
   "password.signin": "重新登入",
   "password.origin": "安全檢查未通過，請重新載入頁面後再試。",
+  "password.showCurrent": "顯示目前密碼",
+  "password.hideCurrent": "隱藏目前密碼",
+  "password.showNew": "顯示新密碼",
+  "password.hideNew": "隱藏新密碼",
+  "password.showConfirm": "顯示確認密碼",
+  "password.hideConfirm": "隱藏確認密碼",
+  "password.show": "顯示",
+  "password.hide": "隱藏",
+  "password.group": "密碼變更欄位",
 };
 export const catalogues = { en, "zh-TW": zhTW } as const;

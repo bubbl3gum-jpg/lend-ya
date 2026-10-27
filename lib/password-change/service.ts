@@ -122,6 +122,10 @@ export async function changePassword(raw: unknown) {
     !(await verifyPassword(input.currentPassword, snapshot.user.passwordHash))
   )
     throw new PasswordChangeError("CURRENT", 400);
+  // Different JS strings can encode to identical UTF-8 password bytes (for
+  // example, distinct lone surrogates). Reject effective credential reuse.
+  if (await verifyPassword(input.newPassword, snapshot.user.passwordHash))
+    throw new PasswordChangeError("INPUT", 400);
   const nextHash = await hashPassword(input.newPassword);
   await prisma.$transaction(async (tx) => {
     await lockPasswordAccount(tx, user.id);
@@ -161,19 +165,37 @@ export async function changePassword(raw: unknown) {
       data: { passwordHash: nextHash },
     });
     if (changed.count !== 1) throw new PasswordChangeError("CONFLICT", 409);
+    const persisted = await tx.user.findUnique({
+      where: { id: user.id },
+      select: { passwordHash: true },
+    });
+    if (persisted?.passwordHash !== nextHash)
+      throw new Error("Required credential write unavailable");
     const revoked = await tx.authSession.deleteMany({
       where: { userId: user.id },
     });
     if ((await tx.authSession.count({ where: { userId: user.id } })) !== 0)
       throw new Error("Session revocation incomplete");
+    const eventId = randomUUID();
     await tx.accountSecurityEvent.create({
       data: {
-        id: randomUUID(),
+        id: eventId,
         actorId: user.id,
         action: "PASSWORD_CHANGED",
         revokedSessions: revoked.count,
       },
     });
+    const event = await tx.accountSecurityEvent.findUnique({
+      where: { id: eventId },
+      select: { actorId: true, action: true, revokedSessions: true },
+    });
+    if (
+      !event ||
+      event.actorId !== user.id ||
+      event.action !== "PASSWORD_CHANGED" ||
+      event.revokedSessions !== revoked.count
+    )
+      throw new Error("Required security event unavailable");
   });
   (await cookies()).delete("p2p_session");
 }
