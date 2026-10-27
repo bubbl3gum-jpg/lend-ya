@@ -314,9 +314,9 @@ test(
         .click();
       await expect(page).toHaveURL(base + "/listings");
       await expect(
-        page.getByRole("heading", { name: "Browse listings", exact: true }),
+        page.getByRole("heading", { name: "瀏覽物品", exact: true }),
       ).toBeVisible();
-      await expect(page.locator("main")).toHaveAttribute("lang", "en");
+      await expect(page.locator("main")).toHaveAttribute("lang", "zh-TW");
       await page.goto(base + "/account");
       await expect(page.getByLabel("介面語言", { exact: true })).toHaveValue(
         "zh-TW",
@@ -436,7 +436,7 @@ test(
             unsupportedPreferenceFallback: true,
             userContentUntouchedAndEscaped: true,
             usdValueUnchanged: true,
-            outsideScopeEnglish: true,
+            discoveryBrowseLocalized: true,
             browserErrors: errors,
           },
           null,

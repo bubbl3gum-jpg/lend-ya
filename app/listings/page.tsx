@@ -1,3 +1,5 @@
+import { T } from "@/components/i18n/locale";
+import { DiscoveryRegion } from "@/components/i18n/discovery";
 import Link from "next/link";
 import { readLocale } from "@/lib/i18n/server";
 import { HeritageSurface } from "@/components/heritage/experience";
@@ -85,23 +87,23 @@ export default async function ListingsPage({
       initialTheme={await readAppearance()}
       initialLocale={await readLocale()}
     >
-      <main className="heritage-browse" lang="en">
+      <DiscoveryRegion className="heritage-browse">
         <SiteHeader catalogue />
         <div className="mx-auto max-w-6xl px-6 py-12">
           <div className="mb-8 flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-600">
-                Marketplace
+                <T id="nav.marketplace" />
               </p>
               <h1 className="mt-2 text-4xl font-semibold text-slate-900">
-                Browse listings
+                <T id="browse.title" />
               </h1>
             </div>
             <Link
               href="/listings/new"
               className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white"
             >
-              Create listing
+              <T id="browse.create" />
             </Link>
           </div>
 
@@ -113,7 +115,7 @@ export default async function ListingsPage({
             stations={stations}
           />
         </div>
-      </main>
+      </DiscoveryRegion>
     </HeritageSurface>
   );
 }

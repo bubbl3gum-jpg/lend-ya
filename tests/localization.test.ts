@@ -9,7 +9,7 @@ import {
   formatTime,
 } from "../lib/i18n/core";
 test("exact locales, complete typed catalogues and matching interpolation contracts", () => {
-  assert.equal(Object.keys(en).length, 131);
+  assert.equal(Object.keys(en).length, 203);
   assert.deepEqual(Object.keys(en).sort(), Object.keys(zhTW).sort());
   for (const value of [
     undefined,
@@ -84,4 +84,22 @@ test("development missing-message diagnostics are bounded and never include inte
     if (previous === undefined) Reflect.deleteProperty(process.env, "NODE_ENV");
     else Reflect.set(process.env, "NODE_ENV", previous);
   }
+});
+
+test("discovery display mapping never rewrites identifiers or unknown user data", async () => {
+  const { categoryLabel, detailLabel } = await import("../lib/i18n/listings");
+  for (const locale of ["en", "zh-TW"] as const) {
+    for (const raw of [
+      "__proto__",
+      "constructor",
+      "Custom <script>分類</script>",
+      "cameras",
+    ]) {
+      assert.equal(categoryLabel(locale, raw), raw);
+      assert.equal(detailLabel(locale, raw), raw);
+    }
+  }
+  assert.equal(categoryLabel("zh-TW", "Cameras"), "相機");
+  assert.equal(categoryLabel("en", "Cameras"), "Cameras");
+  assert.equal(detailLabel("zh-TW", "brandModel"), "品牌與型號");
 });

@@ -1,4 +1,5 @@
 "use client";
+import { DiscoveryPending } from "@/components/i18n/discovery";
 import Link from "next/link";
 import Image from "next/image";
 import { cataloguePlate } from "@/lib/heritage/plates";
@@ -11,6 +12,7 @@ import {
 import { MarketplaceRail } from "@/components/marketplace/navigation";
 import { ObjectEngraving } from "@/components/heritage/engraving";
 import { useLocale } from "@/components/i18n/locale";
+import { categoryLabel } from "@/lib/i18n/listings";
 import { formatMoney } from "@/lib/i18n/core";
 export type HomeData = {
   categories: { category: string }[];
@@ -106,7 +108,7 @@ export function MarketplaceHomeView({
                   ) : (
                     <ObjectEngraving category={c.category} />
                   )}
-                  <span>{c.category}</span>
+                  <span>{categoryLabel(locale, c.category)}</span>
                 </DiscoveryLink>
               ))}
             </div>
@@ -122,7 +124,9 @@ export function MarketplaceHomeView({
             number="02"
             title={
               category
-                ? t("home.categoryRecent", { category })
+                ? t("home.categoryRecent", {
+                    category: categoryLabel(locale, category),
+                  })
                 : t("home.recent")
             }
           >
@@ -135,6 +139,7 @@ export function MarketplaceHomeView({
               {listings.map((l) => (
                 <article key={l.id}>
                   <Link href={`/listings/${l.id}`}>
+                    <DiscoveryPending />
                     <div className="heritage-listing-image">
                       <Image
                         src={l.media[0].url}
@@ -144,7 +149,9 @@ export function MarketplaceHomeView({
                       />
                     </div>
                     <div>
-                      <p className="catalogue-eyebrow">{l.category}</p>
+                      <p className="catalogue-eyebrow">
+                        {categoryLabel(locale, l.category)}
+                      </p>
                       <h3>{l.title}</h3>
                       <p>
                         {formatMoney(locale, l.price)}{" "}

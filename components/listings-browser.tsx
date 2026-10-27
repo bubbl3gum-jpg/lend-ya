@@ -1,5 +1,8 @@
 "use client";
 
+import { useLocale } from "@/components/i18n/locale";
+import { formatNumber } from "@/lib/i18n/core";
+import { categoryLabel } from "@/lib/i18n/listings";
 import { useState } from "react";
 import { ListingCard, type ListingCardData } from "@/components/listing-card";
 
@@ -16,6 +19,7 @@ export function ListingsBrowser({
   stations,
   initialCategory = "ALL",
 }: Props) {
+  const { locale, t } = useLocale();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(initialCategory);
   const [status, setStatus] = useState("ALL");
@@ -24,9 +28,12 @@ export function ListingsBrowser({
   const filtered = listings.filter((listing) => {
     const matchesQuery =
       !normalizedQuery ||
-      [listing.title, listing.description, listing.category].some((value) =>
-        value.toLowerCase().includes(normalizedQuery),
-      );
+      [
+        listing.title,
+        listing.description,
+        listing.category,
+        categoryLabel(locale, listing.category),
+      ].some((value) => value.toLowerCase().includes(normalizedQuery));
     const matchesCategory = category === "ALL" || listing.category === category;
     const matchesStatus = status === "ALL" || listing.availability === status;
     const matchesStation =
@@ -41,48 +48,53 @@ export function ListingsBrowser({
         className="mb-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-2 xl:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(10rem,0.7fr))]"
       >
         <label className="text-sm font-medium text-slate-700">
-          Search items
+          {t("browse.search")}
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search name or keywords"
+            placeholder={t("browse.placeholder")}
             className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2"
           />
         </label>
         <label className="text-sm font-medium text-slate-700">
-          Category
+          {t("browse.category")}
           <select
+            aria-label={t("browse.category")}
             value={category}
             onChange={(event) => setCategory(event.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2"
           >
-            <option value="ALL">All categories</option>
+            <option value="ALL">{t("browse.allCategories")}</option>
             {categories.map((entry) => (
-              <option key={entry}>{entry}</option>
+              <option key={entry} value={entry}>
+                {categoryLabel(locale, entry)}
+              </option>
             ))}
           </select>
         </label>
         <label className="text-sm font-medium text-slate-700">
-          Status
+          {t("browse.status")}
           <select
+            aria-label={t("browse.status")}
             value={status}
             onChange={(event) => setStatus(event.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2"
           >
-            <option value="ALL">All statuses</option>
-            <option value="AVAILABLE">Available</option>
-            <option value="RENTED">Rented</option>
-            <option value="FLAGGED">Flagged</option>
+            <option value="ALL">{t("browse.allStatuses")}</option>
+            <option value="AVAILABLE">{t("listing.available")}</option>
+            <option value="RENTED">{t("listing.rented")}</option>
+            <option value="FLAGGED">{t("listing.flagged")}</option>
           </select>
         </label>
         <label className="text-sm font-medium text-slate-700">
-          Pickup station
+          {t("browse.station")}
           <select
+            aria-label={t("browse.station")}
             value={station}
             onChange={(event) => setStation(event.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2"
           >
-            <option value="ALL">All stations</option>
+            <option value="ALL">{t("browse.allStations")}</option>
             {stations.map((entry) => (
               <option key={entry}>{entry}</option>
             ))}
@@ -91,7 +103,9 @@ export function ListingsBrowser({
       </div>
 
       <p className="mb-4 text-sm text-slate-600" aria-live="polite">
-        {filtered.length} {filtered.length === 1 ? "listing" : "listings"}
+        {t(filtered.length === 1 ? "browse.countOne" : "browse.countMany", {
+          count: formatNumber(locale, filtered.length),
+        })}
       </p>
       {filtered.length > 0 ? (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -101,7 +115,7 @@ export function ListingsBrowser({
         </div>
       ) : (
         <p className="border-t border-slate-200 py-8 text-slate-600">
-          No listings match these filters.
+          {t("browse.empty")}
         </p>
       )}
     </>

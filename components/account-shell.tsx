@@ -82,6 +82,11 @@ function AccountShellContent({
             </Link>
           </nav>
           <div id="account-content" tabIndex={-1} className="catalogue-content">
+            {pathname !== "/account" && (
+              <p className="catalogue-scope-note">
+                {t("account.recordsEnglish")}
+              </p>
+            )}
             <div lang={pathname === "/account" ? undefined : "en"}>
               {children}
             </div>

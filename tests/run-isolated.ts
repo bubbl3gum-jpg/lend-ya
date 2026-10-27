@@ -256,7 +256,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--localization"))
+        if (process.argv.includes("--discovery-localization"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/discovery-localization.integration.test.ts"]);
+        else if (process.argv.includes("--localization"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/localization.integration.test.ts"]);
         else if (process.argv.includes("--homepage"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/homepage.integration.test.ts"]);

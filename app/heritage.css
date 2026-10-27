@@ -985,7 +985,7 @@
   background: var(--sheet);
   border-color: var(--rule);
 }
-.heritage .heritage-browse > div > div > a {
+.heritage .heritage-browse:not(.heritage-detail) > div > div > a {
   background: var(--accent);
   color: var(--on-accent);
   border-radius: 3px;
@@ -1101,4 +1101,47 @@
 }
 .heritage[lang="zh-TW"] .catalogue-section-title h2 {
   font-size: clamp(1.7rem, 3vw, 2.2rem);
+}
+
+/* 11D: nonblocking link progress, without streaming unavailable listings as 200. */
+.heritage .discovery-progress {
+  position: fixed;
+  z-index: 40;
+  inset: auto 1rem 1rem auto;
+  max-width: calc(100vw - 2rem);
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--rule);
+  background: var(--sheet);
+  color: var(--ink);
+  pointer-events: none;
+  font-family: var(--support);
+  font-size: 0.875rem;
+}
+.catalogue-scope-note {
+  border-block: 1px solid var(--rule);
+  padding-block: 0.8rem;
+  margin-bottom: 1rem;
+  color: var(--muted-ink);
+}
+.heritage-detail {
+  overflow-wrap: anywhere;
+}
+
+/* Preserve readable functional controls when existing detail UI inherits dark materials. */
+.heritage .heritage-detail .mrt-selector > button {
+  color: var(--ink);
+  border-color: var(--rule);
+  background: var(--sheet);
+}
+.heritage .heritage-detail textarea {
+  color: var(--ink);
+  background: var(--sheet);
+  border-color: var(--rule);
+}
+.heritage[lang="zh-TW"] .heritage-browse h1 {
+  font-style: normal;
+}
+/* Browse body ink must not override the dark masthead's sign-out label. */
+.heritage .heritage-browse .heritage-header-logout button {
+  color: var(--rail-ink);
 }
