@@ -1,0 +1,26 @@
+{
+  "baseline": "e9636b7c2150f17ed3952c41600fd6217eacd5d2",
+  "historicalMigrationFilesUnchanged": 29,
+  "protectedPathChanges": [],
+  "allExistingSchemaBlocksUnchangedExceptAdditiveUserRelation": true,
+  "authSessionModelAndStaffMfaEvidenceModelsUnchanged": true,
+  "stage6to8SectionsUnchanged": {
+    "6": true,
+    "7": true,
+    "8": true
+  },
+  "original14ObjectivesUnchanged": true,
+  "newMigrationOnly": "20261027090000_account_password_security_event",
+  "existingAuthenticationBodiesTokenUnchanged": [
+    "derivePasswordKey",
+    "hashSessionToken",
+    "newSessionCredential",
+    "persistSession",
+    "setSessionCookie",
+    "hashPassword",
+    "verifyPassword",
+    "deleteCurrentSession",
+    "getCurrentUser"
+  ],
+  "sessionIssuanceTightenedInBothPasswordLoginPaths": true
+}

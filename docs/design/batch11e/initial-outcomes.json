@@ -1,0 +1,94 @@
+[
+  {
+    "attempt": "initial-password",
+    "result": {
+      "group": "test:password-change",
+      "start": "2026-10-27T02:25:23.721Z",
+      "end": "2026-10-27T02:25:49.304Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/c642174328011bd1de811c8a",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "draft-copy-failure",
+    "result": {
+      "group": "test:password-change",
+      "start": "2026-10-27T02:38:36.885Z",
+      "end": "2026-10-27T02:39:10.269Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/fdbe45894f9b72325065702b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "lock-observation-failure",
+    "result": {
+      "group": "test:password-change",
+      "start": "2026-10-27T02:46:22.195Z",
+      "end": "2026-10-27T02:46:38.996Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/4bc9c4c4e892e01982ad1d0b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "lock-observation-repeat",
+    "result": {
+      "group": "test:password-change",
+      "start": "2026-10-27T02:50:22.687Z",
+      "end": "2026-10-27T02:50:38.752Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/8b4d131af090e2675e32318b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "initial-lint",
+    "result": "prefer-const on a new test marker; corrected, final lint exit 0"
+  },
+  {
+    "attempt": "service-origin-types",
+    "result": "ORIGIN missing from the new typed error union; added, final TypeScript exit 0"
+  }
+]
