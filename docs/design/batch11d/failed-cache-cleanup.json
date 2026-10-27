@@ -1,0 +1,14 @@
+{
+  "onlyCompletedFailedOwnedRuns": true,
+  "databaseCleanupAlreadyVerified": true,
+  "removedBuildCacheDirectories": [
+    "260359a1bf9c9af1085d3987",
+    "e4126aab15f628abef36096f",
+    "1c7d01c1fdc75229357281af",
+    "4c10274c205c91cffe389d3c",
+    "3a90877f681498e9adcc1743",
+    "8239e4ee0647da2fdcf27cd3",
+    "fbf9446f6b2ce06c398937c6"
+  ],
+  "diagnosticsAndScreenshotsPreserved": true
+}

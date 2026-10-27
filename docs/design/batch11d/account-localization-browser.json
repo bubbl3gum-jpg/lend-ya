@@ -1,0 +1,35 @@
+{
+  "serverChineseAndNoScript": true,
+  "keyboardLanguageSelection": true,
+  "expectedBlockedDevScriptReads": 1,
+  "immediateBothDirections": true,
+  "realOwnSave": true,
+  "foreignSelectorCannotEditOther": true,
+  "emailReadOnly": true,
+  "noRecoveryInvented": true,
+  "realDatabaseFailure500AndRetry": true,
+  "realExpiredSession401": true,
+  "precedingSaveRefreshCompletedBeforeInducedExpiry": true,
+  "expiredReadOnlyInfoHidden": true,
+  "unsavedRetained": true,
+  "suspendedOwnNamePolicyPreserved": true,
+  "themeMotionSoundIndependent": true,
+  "locales": [
+    "en",
+    "zh-TW"
+  ],
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "unsupportedPreferenceFallback": true,
+  "userContentUntouchedAndEscaped": true,
+  "usdValueUnchanged": true,
+  "discoveryBrowseLocalized": true,
+  "browserErrors": []
+}

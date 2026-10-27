@@ -1,0 +1,32 @@
+{
+  "locales": [
+    "en",
+    "zh-TW"
+  ],
+  "actualHomeBrowseDetailAccount": true,
+  "exactCategoryQueryPreserved": true,
+  "unknownCategoryRaw": true,
+  "eligibleBrowseCount": 3,
+  "hiddenDetail404": true,
+  "missingPhotoLegacyDetailPreserved": true,
+  "realReportPersisted": true,
+  "duplicateReport409Localized": true,
+  "actualNotFoundBothLocales404": true,
+  "rawListingUnchanged": true,
+  "usdUnchanged": true,
+  "independentLocaleAndTheme": true,
+  "rentalDraftSurvivesLanguageChange": true,
+  "activityTrustEnglishExplicit": true,
+  "invalidLocaleAndCategoryFallback": true,
+  "keyboardNavigation": true,
+  "mobileEscapeFocusReturn": true,
+  "mastheadTextContrastAtLeast4_5": true,
+  "reducedMotion": true,
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "screenshots": 36,
+  "browserErrors": []
+}

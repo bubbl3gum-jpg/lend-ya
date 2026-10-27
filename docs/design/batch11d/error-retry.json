@@ -1,0 +1,9 @@
+{
+  "realOwnedTableFault": true,
+  "response": 500,
+  "fixedChineseMessage": true,
+  "noRawErrorInUi": true,
+  "realRetryRestoresBrowse": true,
+  "expectedFaultObservations": 4,
+  "unexpectedRetryErrors": []
+}

@@ -1,0 +1,220 @@
+[
+  {
+    "attempt": "initial-discovery",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:15:50.376Z",
+      "end": "2026-10-27T01:16:13.060Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/fbf9446f6b2ce06c398937c6",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "notes-locator-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:17:19.691Z",
+      "end": "2026-10-27T01:17:42.610Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/8239e4ee0647da2fdcf27cd3",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "streamed-notfound-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:18:35.121Z",
+      "end": "2026-10-27T01:19:22.886Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/3a90877f681498e9adcc1743",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "notfound-localization-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:20:55.611Z",
+      "end": "2026-10-27T01:21:38.186Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/4c10274c205c91cffe389d3c",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "notfound-boundary-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:22:35.550Z",
+      "end": "2026-10-27T01:23:29.693Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/1c7d01c1fdc75229357281af",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "notfound-probe-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:25:32.031Z",
+      "end": "2026-10-27T01:26:25.760Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/e4126aab15f628abef36096f",
+      "tests": [
+        "\u2139 tests 2"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "error-observation-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:28:54.861Z",
+      "end": "2026-10-27T01:29:55.423Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/260359a1bf9c9af1085d3987",
+      "tests": [
+        "\u2139 tests 2"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "structured-fault-observation-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:30:38.767Z",
+      "end": "2026-10-27T01:31:46.577Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/90c7138d58e57d82f8ded5a8",
+      "tests": [
+        "\u2139 tests 2"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "retry-contract-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:32:35.156Z",
+      "end": "2026-10-27T01:33:40.324Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/3012f57d37c9ee58872f6d16",
+      "tests": [
+        "\u2139 tests 2"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "contrast-serialization-failure",
+    "result": {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:37:38.623Z",
+      "end": "2026-10-27T01:38:01.821Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/b74ccdf988c85ff36abc80d6",
+      "tests": [
+        "\u2139 tests 2"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  },
+  {
+    "attempt": "unit-stale-count",
+    "passed": 94,
+    "failed": 1,
+    "expected": 198,
+    "actual": 203,
+    "correction": "Fixed asserted catalogue count; complete pair and placeholder tests preserved."
+  }
+]

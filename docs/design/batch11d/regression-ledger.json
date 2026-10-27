@@ -1,0 +1,454 @@
+{
+  "groups": [
+    {
+      "group": "build:verify",
+      "start": "2026-10-27T01:38:01.822Z",
+      "end": "2026-10-27T01:38:10.936Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/4c67a62aeead96e2019976a0",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    },
+    {
+      "group": "test:account-design",
+      "start": "2026-10-27T01:31:08.573Z",
+      "end": "2026-10-27T01:31:35.547Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f75355917dc9e06e0f652f1a",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-27T01:23:40.329Z",
+      "end": "2026-10-27T01:24:24.203Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7abe5fe3e1b8cee1c9fabdd0",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:announcements",
+      "start": "2026-10-27T01:29:34.881Z",
+      "end": "2026-10-27T01:30:04.777Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ba260795b5bc654f656b7ce1",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-27T01:28:36.359Z",
+      "end": "2026-10-27T01:29:15.741Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/837adc953e5bb2ca1d4db88d",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-27T01:25:53.929Z",
+      "end": "2026-10-27T01:27:20.455Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ac0adff475f75372b34dddd8",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:discovery-localization",
+      "start": "2026-10-27T01:39:03.056Z",
+      "end": "2026-10-27T01:39:46.529Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/27abec751d5778e6a535a705",
+      "tests": [
+        "\u2139 tests 2"
+      ],
+      "passes": [
+        "\u2139 pass 2"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:heritage-ui",
+      "start": "2026-10-27T01:31:35.551Z",
+      "end": "2026-10-27T01:32:13.215Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/bec3990744db46cb1a39cb4e",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:homepage",
+      "start": "2026-10-27T01:30:27.230Z",
+      "end": "2026-10-27T01:31:08.572Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1bf21d8c3785777f5d3b57b6",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-27T01:17:38.066Z",
+      "end": "2026-10-27T01:18:28.808Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/acdddbd1d8eb078cf8bdda12",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true
+    },
+    {
+      "group": "test:localization",
+      "start": "2026-10-27T01:29:55.426Z",
+      "end": "2026-10-27T01:30:27.230Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/33c1d3a4cbe744d58e25205f",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:locations",
+      "start": "2026-10-27T01:30:28.905Z",
+      "end": "2026-10-27T01:31:10.275Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3fd3d0a10c1468e7ee516de6",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:login-navigation",
+      "start": "2026-10-27T01:33:37.372Z",
+      "end": "2026-10-27T01:34:04.322Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/77cca48be4d0cb1563c6a405",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-27T01:36:03.679Z",
+      "end": "2026-10-27T01:36:31.110Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/daf32c9380fbdab2df4601f8",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-27T01:18:28.809Z",
+      "end": "2026-10-27T01:19:13.518Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a3e795882cdfea1e922cf631",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-27T01:19:13.519Z",
+      "end": "2026-10-27T01:23:40.329Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/fb37d80b55bc72ebba611888",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:mfa",
+      "start": "2026-10-27T01:29:21.856Z",
+      "end": "2026-10-27T01:29:34.881Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/bbb5a2aa8d611d55e5e2c326",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-27T01:32:25.414Z",
+      "end": "2026-10-27T01:33:37.371Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/4326458c60b9a09be106188b",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:platform-settings",
+      "start": "2026-10-27T01:30:04.777Z",
+      "end": "2026-10-27T01:30:28.904Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d5904b6a885e65ffcf0a8d26",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-27T01:24:24.204Z",
+      "end": "2026-10-27T01:24:55.797Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/6c24ea789a535ecf57d40d73",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:rental-browser",
+      "start": "2026-10-27T01:24:55.797Z",
+      "end": "2026-10-27T01:25:53.929Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1b4f4a9c3ac3711523faa156",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-27T01:29:15.742Z",
+      "end": "2026-10-27T01:29:21.855Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b6aa04e4a2939043047b2783",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:support-channels",
+      "start": "2026-10-27T01:27:20.456Z",
+      "end": "2026-10-27T01:28:01.942Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/21d90664127db942f78cbaa3",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-27T01:28:01.943Z",
+      "end": "2026-10-27T01:28:36.358Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/fa35269c034d066d025fecb2",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:workbench",
+      "start": "2026-10-27T01:31:10.275Z",
+      "end": "2026-10-27T01:32:25.414Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2e5161ecc2c7a48dfa41d3e2",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    }
+  ],
+  "finalPassed": 25,
+  "unit": {
+    "command": "npm run test:unit",
+    "passed": 95,
+    "failed": 0
+  },
+  "static": {
+    "types": 0,
+    "lint": 0,
+    "prisma": 0
+  },
+  "note": "Selected command groups only. Initial failures retained separately. Quiet login readiness does not close overlapping-workload risk."
+}

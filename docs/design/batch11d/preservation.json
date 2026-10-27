@@ -1,0 +1,18 @@
+{
+  "baseline": "0ac03f31f54dd907ee3b4de9a66f38a939d86240",
+  "protectedPathChanges": [],
+  "serverTokenComparisons": {
+    "browseQueryAndReadModel": true,
+    "detailQueryAndEligibility": true
+  },
+  "stage6to8SectionsUnchanged": {
+    "6": true,
+    "7": true,
+    "8": true
+  },
+  "original14ObjectivesUnchanged": true,
+  "historicalMigrationsUnchanged": true,
+  "lockfileAndAssetsUnchanged": true,
+  "rentalMrtChatWorkflowsUnchanged": true,
+  "accountActivityTrustQueriesAndRecordsUnchanged": true
+}
