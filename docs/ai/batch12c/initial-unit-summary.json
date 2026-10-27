@@ -1,0 +1,10 @@
+{
+  "cause": "An over-literal new architecture sentinel matched the word dotenv inside a comment asserting no environment loader. Corrected the comment; guard and runtime behavior were unchanged.",
+  "summary": [
+    "\u2716 offline preparation records no model/token/latency claims or external requests (10.736899ms)",
+    "\u2139 tests 115",
+    "\u2139 pass 114",
+    "\u2139 fail 1",
+    "\u2716 offline preparation records no model/token/latency claims or external requests (10.736899ms)"
+  ]
+}

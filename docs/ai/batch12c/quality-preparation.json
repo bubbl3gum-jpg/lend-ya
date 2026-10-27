@@ -1,0 +1,1257 @@
+{
+  "kind": "NON_EGRESS_PREPARATION",
+  "datasetVersion": "synthetic-case-quality-v1",
+  "datasetDigest": "ced5a1e9f01f3eea0250fbfa2e85b8f4026002b3994ac9c927b3442efd04fff0",
+  "rubric": "case-brief-quality-v1",
+  "checkpoint": {
+    "state": "BLOCKED_APPROVAL_REQUIRED",
+    "confirmed": [
+      "OFFLINE_PREPARATION_ONLY",
+      "NO_CUSTOMER_DATA",
+      "NO_SPENDING_AUTHORIZED"
+    ],
+    "missing": [
+      "provider",
+      "endpoint",
+      "terms",
+      "dataset",
+      "tasks",
+      "ownership",
+      "limits",
+      "execution",
+      "retention",
+      "stops"
+    ],
+    "activeLiveAdapter": false,
+    "allowedDestinations": []
+  },
+  "realModelRequests": 0,
+  "provider": null,
+  "model": null,
+  "tokenUsage": null,
+  "providerLatencyMs": null,
+  "actualModelSpendUsd": 0,
+  "humanJudgmentsRecorded": false,
+  "rows": [
+    {
+      "id": "SYN-BORROWER-A:en",
+      "inputDigest": "b8d899a86420413c9c3708f4fd035d3cef109ea654c3d3a777cdacd4d9d200ae",
+      "sourceIds": [
+        "B1",
+        "B2"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "B2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 3,
+          "refs": [
+            "B2"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-BORROWER-A:zh-TW",
+      "inputDigest": "c32af58148c355b27079489fa5f705d99d5114fdf0319f5a1a52d06b972ae3a0",
+      "sourceIds": [
+        "B1",
+        "B2"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 0,
+          "refs": [
+            "B1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "B2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 1,
+          "refs": [
+            "B2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 2,
+          "refs": [
+            "B1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 3,
+          "refs": [
+            "B2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 3,
+          "refs": [
+            "B2"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-OWNER-A:en",
+      "inputDigest": "8dd5c296beebd7f51c29cc0d7a5344769503f8a761ca8b684898b73bd48af279",
+      "sourceIds": [
+        "O1",
+        "O2"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "O1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 2,
+          "refs": [
+            "O1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-OWNER-A:zh-TW",
+      "inputDigest": "1a4a56e4196ba5e08796377b90d8534c05fa6328eb54fd2226be3593950326ce",
+      "sourceIds": [
+        "O1",
+        "O2"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "O1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 0,
+          "refs": [
+            "O1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 1,
+          "refs": [
+            "O2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 2,
+          "refs": [
+            "O1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 2,
+          "refs": [
+            "O1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 3,
+          "refs": [
+            "O2"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-INJECTION:en",
+      "inputDigest": "b984794172d34dc5b99c50aeca5cc64133ec347c65cd6506ee7c450d45a8cba7",
+      "sourceIds": [
+        "I1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "UNVERIFIED_INTERPRETATION",
+          "claim": 0,
+          "refs": [
+            "I1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "I1"
+          ]
+        },
+        {
+          "code": "UNVERIFIED_INTERPRETATION",
+          "claim": 1,
+          "refs": [
+            "I1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "I1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-INJECTION:zh-TW",
+      "inputDigest": "414e3c071fcce344de58c2744f9158f4be0813da6f4987fcaf0b57e9e2bed321",
+      "sourceIds": [
+        "I1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "UNVERIFIED_INTERPRETATION",
+          "claim": 0,
+          "refs": [
+            "I1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "I1"
+          ]
+        },
+        {
+          "code": "UNVERIFIED_INTERPRETATION",
+          "claim": 1,
+          "refs": [
+            "I1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "I1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-UNCERTAIN:en",
+      "inputDigest": "5d4460362410ba64749e7a48494374349f74a2249e06213da2097e9542f2d98c",
+      "sourceIds": [
+        "T1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "T1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "T1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-UNCERTAIN:zh-TW",
+      "inputDigest": "8a7546d96fd513937e0f39b53a9de6a7da0f46e3af514f3aa63459502b89187f",
+      "sourceIds": [
+        "T1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "T1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "T1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-CONFLICT:en",
+      "inputDigest": "3846d73611a619ec9b89f187165c781418edec2ba88c1276665721cd0d52472d",
+      "sourceIds": [
+        "C1",
+        "C2"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "C1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "C2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 2,
+          "refs": [
+            "C1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 3,
+          "refs": [
+            "C2"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-CONFLICT:zh-TW",
+      "inputDigest": "7aa1ed98d2e987efc4f3cbba27f498a925e481f04481d10228d1dca7573a8560",
+      "sourceIds": [
+        "C1",
+        "C2"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "C1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 0,
+          "refs": [
+            "C1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "C2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 1,
+          "refs": [
+            "C2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 2,
+          "refs": [
+            "C1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 2,
+          "refs": [
+            "C1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 3,
+          "refs": [
+            "C2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 3,
+          "refs": [
+            "C2"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-ACCUSATION:en",
+      "inputDigest": "b7f20f26ddef708cc3f3de1e31a4959589819cc1e972ebd310313bafcc0933ad",
+      "sourceIds": [
+        "A1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "ACCUSATION_REVIEW",
+          "claim": 0,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "ACCUSATION_REVIEW",
+          "claim": 1,
+          "refs": [
+            "A1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-ACCUSATION:zh-TW",
+      "inputDigest": "533abc2d14b5cb9cfb452a4c0d24ad2e07a1e7e403c26c17f1edf6c47929d656",
+      "sourceIds": [
+        "A1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "ACCUSATION_REVIEW",
+          "claim": 0,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 0,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "ACCUSATION_REVIEW",
+          "claim": 1,
+          "refs": [
+            "A1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 1,
+          "refs": [
+            "A1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-MIXED:en",
+      "inputDigest": "4944f7cc40f3286c0e96f047495b263e63b5d2799ab8aa439ad3651efdd40c07",
+      "sourceIds": [
+        "M1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "M1"
+          ]
+        },
+        {
+          "code": "COMPLETION_REVIEW",
+          "claim": 0,
+          "refs": [
+            "M1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "M1"
+          ]
+        },
+        {
+          "code": "COMPLETION_REVIEW",
+          "claim": 1,
+          "refs": [
+            "M1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-MIXED:zh-TW",
+      "inputDigest": "14361ec3d3e3b59825cf461081f5fb9c054d7c915b0fdabf114135d30476724e",
+      "sourceIds": [
+        "M1"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": false,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "M1"
+          ]
+        },
+        {
+          "code": "COMPLETION_REVIEW",
+          "claim": 0,
+          "refs": [
+            "M1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "M1"
+          ]
+        },
+        {
+          "code": "COMPLETION_REVIEW",
+          "claim": 1,
+          "refs": [
+            "M1"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-NOISE:en",
+      "inputDigest": "96fa1b63f3da8135e8a5b1b9280624e3c42f517a0fb1e8d7af6c7301e7d445c7",
+      "sourceIds": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "en",
+      "truncated": true,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "N1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "N2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 2,
+          "refs": [
+            "N3"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 3,
+          "refs": [
+            "N1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 4,
+          "refs": [
+            "N2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 5,
+          "refs": [
+            "N3"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    },
+    {
+      "id": "SYN-NOISE:zh-TW",
+      "inputDigest": "fcdd1bf6388b0482362ec24bb4b53607d61a0dec668bde378be2edd53b7aafe9",
+      "sourceIds": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "sourceLanguage": "en-or-mixed",
+      "outputLanguage": "zh-TW",
+      "truncated": true,
+      "provenance": "SIMULATED_NO_MODEL",
+      "structural": "VALID",
+      "rubric": "case-brief-quality-v1",
+      "flags": [
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 0,
+          "refs": [
+            "N1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 0,
+          "refs": [
+            "N1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 1,
+          "refs": [
+            "N2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 1,
+          "refs": [
+            "N2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 2,
+          "refs": [
+            "N3"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 2,
+          "refs": [
+            "N3"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 3,
+          "refs": [
+            "N1"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 3,
+          "refs": [
+            "N1"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 4,
+          "refs": [
+            "N2"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 4,
+          "refs": [
+            "N2"
+          ]
+        },
+        {
+          "code": "SOURCE_CLAIM_REVIEW",
+          "claim": 5,
+          "refs": [
+            "N3"
+          ]
+        },
+        {
+          "code": "LANGUAGE_REVIEW",
+          "claim": 5,
+          "refs": [
+            "N3"
+          ]
+        }
+      ],
+      "humanReview": "UNREVIEWED",
+      "dimensions": [
+        {
+          "id": "factuality",
+          "score": null
+        },
+        {
+          "id": "entailment",
+          "score": null
+        },
+        {
+          "id": "privacy",
+          "score": null
+        },
+        {
+          "id": "injection",
+          "score": null
+        },
+        {
+          "id": "translation",
+          "score": null
+        },
+        {
+          "id": "draft",
+          "score": null
+        }
+      ]
+    }
+  ]
+}

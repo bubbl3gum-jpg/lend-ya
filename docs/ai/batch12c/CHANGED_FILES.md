@@ -1,0 +1,62 @@
+# Complete changed-file inventory
+
+Compared with clean 12B HEAD `cc68facd7fcc29d4af8d186357e3f01f44258559`. Implementation `ffb40f788d5d2fe0ec91166c809593061803f582` changes 17 source/test/planning paths. Closeout records non-egress preparation, corpus/rubric, screenshots and actual regressions. Final index records exact closeout SHA. No provider adapter, credential, dependency/lockfile, schema or migration changes.
+
+56 total changed/added paths:
+
+- `AGENTS.md`
+- `app/heritage.css`
+- `components/admin/ai-case-brief.tsx`
+- `docs/ai/MODEL_EXPERIMENT_PREPARATION_REVIEW_BATCH_12C.md`
+- `docs/ai/batch12c/APPROVAL_CHECKPOINT.md`
+- `docs/ai/batch12c/CHANGED_FILES.md`
+- `docs/ai/batch12c/DATASET_AND_RUBRIC.md`
+- `docs/ai/batch12c/IMPLEMENTATION_AND_REPRODUCTION.md`
+- `docs/ai/batch12c/INITIAL_FAILURES.md`
+- `docs/ai/batch12c/OFFLINE_OBSERVATIONS.md`
+- `docs/ai/batch12c/SCREENSHOTS.md`
+- `docs/ai/batch12c/VERIFICATION.md`
+- `docs/ai/batch12c/browser-evidence.json`
+- `docs/ai/batch12c/cache-maintenance.json`
+- `docs/ai/batch12c/camera-pickup.json`
+- `docs/ai/batch12c/camera-return.json`
+- `docs/ai/batch12c/cleanup.json`
+- `docs/ai/batch12c/disabled-refusal.json`
+- `docs/ai/batch12c/initial-unit-summary.json`
+- `docs/ai/batch12c/offline-contract-evaluation.json`
+- `docs/ai/batch12c/production-refusal.json`
+- `docs/ai/batch12c/quality-preparation.json`
+- `docs/ai/batch12c/regression-ledger.json`
+- `docs/ai/batch12c/roadmap-preservation.json`
+- `docs/ai/batch12c/screenshots/case-brief-approval-checkpoint-zh.png`
+- `docs/ai/batch12c/screenshots/case-brief-approval-checkpoint.png`
+- `docs/ai/batch12c/screenshots/case-brief-canceled.png`
+- `docs/ai/batch12c/screenshots/case-brief-en-dark-desktop.png`
+- `docs/ai/batch12c/screenshots/case-brief-en-dark-mobile.png`
+- `docs/ai/batch12c/screenshots/case-brief-en-dark-tablet.png`
+- `docs/ai/batch12c/screenshots/case-brief-en-light-desktop.png`
+- `docs/ai/batch12c/screenshots/case-brief-en-light-mobile.png`
+- `docs/ai/batch12c/screenshots/case-brief-en-light-tablet.png`
+- `docs/ai/batch12c/screenshots/case-brief-previous-draft.png`
+- `docs/ai/batch12c/screenshots/case-brief-quality-hints-zh.png`
+- `docs/ai/batch12c/screenshots/case-brief-quality-hints.png`
+- `docs/ai/batch12c/screenshots/case-brief-session-expired.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-TW-dark-desktop.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-TW-dark-mobile.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-TW-dark-tablet.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-TW-light-desktop.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-TW-light-mobile.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-TW-light-tablet.png`
+- `docs/ai/batch12c/screenshots/case-brief-zh-output-review.png`
+- `docs/ai/batch12c/source-preservation.json`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/ai-case-brief/experiment-contract.ts`
+- `lib/ai-case-brief/experiment.ts`
+- `lib/ai-case-brief/quality.ts`
+- `lib/i18n/catalogues.ts`
+- `package.json`
+- `scripts/prepare-ai-experiment.ts`
+- `tests/ai-case-brief.integration.test.ts`
+- `tests/ai-experiment.test.ts`
+- `tests/localization.test.ts`
+- `tests/run-isolated.ts`

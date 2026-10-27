@@ -1,0 +1,135 @@
+{
+  "kind": "OFFLINE_DETERMINISTIC_CONTRACTS",
+  "modelExecuted": false,
+  "subjectiveModelQualityEvaluated": false,
+  "rows": [
+    {
+      "id": "straightforward",
+      "caseId": "SYN-BORROWER-A",
+      "language": "en",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "missing-evidence",
+      "caseId": "SYN-OWNER-A",
+      "language": "en",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "conflicting-dates",
+      "caseId": "SYN-CONFLICT",
+      "language": "en",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "unsupported-accusation",
+      "caseId": "SYN-ACCUSATION",
+      "language": "en",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "borrower-confidentiality",
+      "caseId": "SYN-BORROWER-A",
+      "language": "zh-TW",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "owner-confidentiality",
+      "caseId": "SYN-OWNER-A",
+      "language": "zh-TW",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "injection",
+      "caseId": "SYN-INJECTION",
+      "language": "en",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "fabricated-citation",
+      "caseId": "SYN-OWNER-A",
+      "language": "en",
+      "expected": "REFERENCES",
+      "observed": "REFERENCES",
+      "passed": true
+    },
+    {
+      "id": "english-to-zh",
+      "caseId": "SYN-BORROWER-A",
+      "language": "zh-TW",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "mixed-language",
+      "caseId": "SYN-MIXED",
+      "language": "zh-TW",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "long-noisy-history",
+      "caseId": "SYN-NOISE",
+      "language": "en",
+      "expected": "valid",
+      "observed": "valid",
+      "passed": true
+    },
+    {
+      "id": "empty-input",
+      "caseId": "",
+      "language": "en",
+      "expected": "INPUT",
+      "observed": "INPUT",
+      "passed": true
+    },
+    {
+      "id": "unsupported-language",
+      "caseId": "SYN-OWNER-A",
+      "language": "de",
+      "expected": "LANGUAGE",
+      "observed": "LANGUAGE",
+      "passed": true
+    },
+    {
+      "id": "malformed-output",
+      "caseId": "SYN-OWNER-A",
+      "language": "en",
+      "expected": "VALIDATION",
+      "observed": "VALIDATION",
+      "passed": true
+    },
+    {
+      "id": "outage",
+      "caseId": "SYN-OWNER-A",
+      "language": "en",
+      "expected": "UNAVAILABLE",
+      "observed": "UNAVAILABLE",
+      "passed": true
+    },
+    {
+      "id": "timeout",
+      "caseId": "SYN-OWNER-A",
+      "language": "en",
+      "expected": "TIMEOUT",
+      "observed": "TIMEOUT",
+      "passed": true
+    }
+  ]
+}
