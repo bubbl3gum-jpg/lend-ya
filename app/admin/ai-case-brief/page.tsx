@@ -1,3 +1,4 @@
+import { buildManifest, caseDirectory } from "@/lib/ai-case-brief/manifest";
 import { notFound } from "next/navigation";
 import { requireAdminPage } from "@/lib/admin/auth";
 import { syntheticBriefEnabled } from "@/lib/ai-case-brief/config";
@@ -10,5 +11,5 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
   if (!syntheticBriefEnabled()) notFound();
   await requireAdminPage();
   if (Object.keys(await searchParams).length) notFound();
-  return <SyntheticCaseBrief initialLocale={await readLocale()} initialTheme={await readAppearance()} />;
+  return <SyntheticCaseBrief directory={caseDirectory()} initialManifest={buildManifest("SYN-BORROWER-A", await readLocale())} initialLocale={await readLocale()} initialTheme={await readAppearance()} />;
 }

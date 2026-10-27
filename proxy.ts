@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
-  if ((request.nextUrl.pathname === "/admin/ai-case-brief" || request.nextUrl.pathname.startsWith("/admin/ai-case-brief/")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_AI_CASE_BRIEF_DEMO !== "synthetic-only" || [...request.nextUrl.searchParams.keys()].some(key => key !== "_rsc")))
+  if ((request.nextUrl.pathname === "/api/admin/ai-case-brief" || request.nextUrl.pathname === "/admin/ai-case-brief" || request.nextUrl.pathname.startsWith("/admin/ai-case-brief/")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_AI_CASE_BRIEF_DEMO !== "synthetic-only" || (request.nextUrl.pathname.startsWith("/admin/") && [...request.nextUrl.searchParams.keys()].some(key => key !== "_rsc"))))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store","X-Content-Type-Options":"nosniff"}});
   if ((request.nextUrl.pathname === "/dev/announcements" || request.nextUrl.pathname.startsWith("/dev/announcements/")) && (process.env.NODE_ENV!=="development" || process.env.HUSTLEN_ANNOUNCEMENT_CANDIDATE!=="owned-informational-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});

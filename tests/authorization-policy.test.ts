@@ -365,6 +365,7 @@ test("production source never imports shadow policy and all Admin API routes rem
     ).adminApiRoutes,
     JSON.parse(readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_10A.json", "utf8")).adminApiRoutes,
     JSON.parse(readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_10B.json", "utf8")).adminApiRoutes,
+    JSON.parse(readFileSync("docs/admin/ADMIN_ENTRYPOINTS_BATCH_12B.json", "utf8")).adminApiRoutes,
   ) as { file: string; sha256: string }[];
   assert.deepEqual(
     files("app/api/admin")
@@ -400,6 +401,12 @@ test("production source never imports shadow policy and all Admin API routes rem
         readFileSync("lib/admin/locations.ts", "utf8"),
         /user.role !== "ADMIN" \|\| user.accountStatus !== "ACTIVE"/,
       );
+    } else if (file === "app/api/admin/ai-case-brief/route.ts") {
+      const source=readFileSync(file,"utf8");
+      assert.match(source,/if\(!syntheticBriefEnabled\(\)\)/);
+      assert.match(source,/if\(!user\)return reply\(\{code:"SESSION"\},401\)/);
+      assert.match(source,/user.role!=="ADMIN"\|\|user.accountStatus!=="ACTIVE"/);
+      assert.ok((source.match(/await actor\(\)/g)??[]).length>=3);
     } else
       assert.match(
         readFileSync(file, "utf8"),

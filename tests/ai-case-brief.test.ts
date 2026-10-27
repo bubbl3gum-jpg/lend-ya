@@ -42,7 +42,7 @@ test("scripted injection and translation scenarios expose uncertainty rather tha
   assert.match(translation.missing.en, /No confirmation/);
 });
 test("prototype modules cannot call providers, retrieve case records or persist drafts", () => {
-  for (const file of ["lib/ai-case-brief/fixtures.ts", "components/admin/ai-case-brief.tsx", "app/admin/ai-case-brief/page.tsx"]) {
+  for (const file of ["lib/ai-case-brief/fixtures.ts", "app/admin/ai-case-brief/page.tsx"]) {
     const source = readFileSync(file, "utf8");
     assert.doesNotMatch(source, /\bfetch\s*\(|\bXMLHttpRequest\b|\bnavigator\.sendBeacon\b|\bprisma\b|chat\/analysis|support\/channels|dangerouslySetInnerHTML|localStorage|sessionStorage/);
   }

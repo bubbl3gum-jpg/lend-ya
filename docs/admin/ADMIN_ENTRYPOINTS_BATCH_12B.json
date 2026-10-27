@@ -1,0 +1,9 @@
+{
+  "adminApiRoutes": [
+    {
+      "file": "app/api/admin/ai-case-brief/route.ts",
+      "sha256": "1b2e5a8c5424e43eb12ebbe0e4d8e8fe38a936b1928d952f5c674d75324e3e98"
+    }
+  ],
+  "boundary": "Development-only synthetic GET/POST; ACTIVE legacy Admin and current session; no real records, writes or live provider. Session rechecked before release."
+}
