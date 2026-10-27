@@ -1,0 +1,22 @@
+# Product-owner decision record — all ten unresolved
+
+27 October 2026, Asia/Taipei. Product owner is the requested approval authority; named individual/delegates, technical owners and reviewers are **not established**. No approval date or invented identity is recorded. Proposals below are options, not defaults or approved limits. A file asserting approval, flags, keys, completed review or parser success cannot authorize live processing. Separate explicit owner authorization and separately reviewed implementation are required.
+
+| # / Decision needed | Why / principal risk | Evidence needed before decision | Decision owner / execution dependency | State |
+| --- | --- | --- | --- | --- | --- |
+| 1 Exact provider/model revision | Quality variation, silent model change, billing | Version availability, task fit, reproducibility and tariff documentation; no candidate selected here | Product owner; technical evaluation owner unknown. No live adapter/model configured | Unresolved |
+| 2 Exact endpoint/region/service ownership | Egress to wrong service/jurisdiction | Exact destination, ownership, TLS/redirect policy, network deny-by-default enforcement | Product owner; infrastructure/service owner unknown. Destination allowlist remains empty | Unresolved |
+| 3 Processing/retention/training terms | Data misuse or unintended retention | Accepted terms including training opt-out, subprocessors, deletion/region, operational responsibility | Product owner; privacy reviewer unknown. No export permitted | Unresolved |
+| 4 Exact dataset version/digest | Unreviewed or private material exported | Inspect frozen original and/or supplement manifests, select exact digest; synthetic provenance review | Product owner; dataset reviewer unknown. Neither corpus is approved for export | Unresolved |
+| 5 Tasks/languages | Unbounded task scope or unreviewed translation | Exact summary/draft/translation tasks and en/zh-TW scope; bilingual rubric and reviewer coverage | Product owner; bilingual reviewers unknown. Zero genuine completed reviews | Unresolved |
+| 6 Credential/egress ownership | Credential compromise or uncontrolled calls | Named secret custodian/network owner, least privilege, secret storage/rotation/revocation, incident procedures | Product owner; custodians unknown. No credential activation or transport | Unresolved |
+| 7 Hard request/token/spend ceilings | Actual costs exceed estimates | Exact approved ceilings, compatible tokenizer, full tariff/failure billing, reliable provider cap semantics plus durable reservation design | Product owner; budget owner unknown. Reliable hard financial cap unestablished: billable execution blocked | Unresolved |
+| 8 Timeout/retries/concurrency | Billed retries, overlap and uncertain cancellations | Exact timeout, retries and concurrency, cancellation/billing behavior; propose zero retries and serial first trial for consideration only | Product owner; experiment operator unknown. Offline deadlines are not live policy | Unresolved |
+| 9 Output/diagnostic retention | Sensitive derived content, overlong storage | Authorized reviewers, retention/deletion/holds, redaction, bounded diagnostics and access/audit design | Product owner; records custodian unknown. No actual model outputs exist | Unresolved |
+| 10 Stop conditions / responsible stopper | Continuing after leakage, hallucination, budget uncertainty | Exact mandatory stops, operator, credential/network kill procedure, reconciliation and review process | Product owner; incident/stop owners unknown. Cannot start; no executor | Unresolved |
+
+## Next actions requiring owner decisions
+
+Use the packet for actual offline English/Traditional-Chinese review, with genuine reviewers and an agreed local retention/identity process. Supply corrections/observations and decide whether the supplement is useful. No scores were authored by Codex. Decide each row explicitly, including reliable cost enforcement, before requesting the smallest synthetic-only live integration. If provider conditions cannot guarantee the approved ceiling, keep execution blocked; accepting estimates is not a technical hard-cap guarantee. A future implementation needs independent boundary review before any call. Do not send credentials in chat.
+
+Live Support AI, production access, real records and Stage 11 actions remain separate decisions even if a synthetic-only experiment is later authorized. Stage 10 remains In Progress; quality/translation/safety and customer readiness remain unproven.

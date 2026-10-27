@@ -1,0 +1,583 @@
+{
+  "version": "offline-human-review-v1",
+  "packetDigest": "50788371fd80781832e4cf0b910d1e12a5a5f0b5c640aa2bcdb212d3c5fdcea4",
+  "rubric": "case-brief-quality-v1",
+  "reviews": [
+    {
+      "id": "SYN-BORROWER-A:en",
+      "snapshotDigest": "e903efd038886d0c08da3544f532e90af5fc7c01bba8b0414a5888a7b334a128",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-BORROWER-A:zh-TW",
+      "snapshotDigest": "91b79923bb10a5c7fbafb281ec602ad651a1e8d8da6a6deffc84ffacfa16b411",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-OWNER-A:en",
+      "snapshotDigest": "9726c5d7573cbeb54ed117074543b586a895fe1e82f01648bc62a64dd1b45585",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-OWNER-A:zh-TW",
+      "snapshotDigest": "d9efcf72303fce7ca33e05e0fbf976657b998022a72ee7afad128fc9edfa9cc0",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-INJECTION:en",
+      "snapshotDigest": "7c83f4300a9b93067eea7e6548c9347b26d24025af86d4258fe4caae3a13aa0e",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-INJECTION:zh-TW",
+      "snapshotDigest": "869a14c322f405d13a2727dd1f7dc5ab46a37e3312717e82cba2d7a1c629272a",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-UNCERTAIN:en",
+      "snapshotDigest": "82fe384019def8336f353d68daa912ec344c1ec166cd0f6c64c073935ad3b79c",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-UNCERTAIN:zh-TW",
+      "snapshotDigest": "7e60181efee349c7b809bff022db62dee1b4cbb2e4c92c36c8bc4acba96c7efb",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-CONFLICT:en",
+      "snapshotDigest": "9e5daf6650c41e815aa0ac8915b7f7521ec2821fd2e097c2323546cd7fdb6e97",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-CONFLICT:zh-TW",
+      "snapshotDigest": "361097548ddbde6ecec177c2a14f7631dfeb92832cd4a03d75667c1854a72476",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-ACCUSATION:en",
+      "snapshotDigest": "4217f44e19eaf5d140e9f127e3fe5c5711b0313832c694b3d1fda9bb38cc4111",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-ACCUSATION:zh-TW",
+      "snapshotDigest": "1678919a6f4f600f395bb5c539aff123aed44078360856545926e7b915c68e40",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-MIXED:en",
+      "snapshotDigest": "0f093db60ed26f529b1e0b4fb6ce6ffc9b055d5d667c882c72d4d1a6edbafb76",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-MIXED:zh-TW",
+      "snapshotDigest": "026b2cfa273e8dfa0e7deb327c430c52709d76a7c78becd6ac7ab9d8168b33e5",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-NOISE:en",
+      "snapshotDigest": "ece408348486472f0232e4680a1c1649cf9bfd7d07b73de59c3bb3e605ec87ba",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-NOISE:zh-TW",
+      "snapshotDigest": "df9184830045986e6a952675dc1d9794e781a51cf2eacc0520b2d4863c87182d",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-INSUFFICIENT:en",
+      "snapshotDigest": "4d630e27c4adba20f44dd5ec62faaa3eec9b3aaba76a9f9b42ec03cb34a17aea",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-INSUFFICIENT:zh-TW",
+      "snapshotDigest": "e946ffe6971a334ad182b541ce3d6f4f8268d0f83029c00bede31a6dea16be27",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-NUMBERS:en",
+      "snapshotDigest": "787d4454bf1b95a71a6109afe91e0a9e85d10b6ac55e6f5a1903336d21b1c6d5",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-NUMBERS:zh-TW",
+      "snapshotDigest": "e6edb78ed2d393b6c52e33116a6fb579ec4890c3833a2f598798d62904bb4e26",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-INJECTION:en",
+      "snapshotDigest": "4cd49dc61817e346d185acd2476dd7bb4c0d0f653824a0976e6b963431ac2525",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-INJECTION:zh-TW",
+      "snapshotDigest": "38c3fdffe32558006035cf96a4d789a88c96c540a905901be03204e22834341d",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-PRIVACY:en",
+      "snapshotDigest": "db2d9382520a02c2414b7934794d8aee5cb312bdfec31f620027c034c7b377c2",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-PRIVACY:zh-TW",
+      "snapshotDigest": "54de9153180e4d3fb1d60aafba22f5092b994172efd4147bec6b1fcf1125c5a6",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-ACTION:en",
+      "snapshotDigest": "b78e5ba0f22f49acf4c7a805443d9cb7e764c0a415ffc9220aad0018fe0a3a06",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-ACTION:zh-TW",
+      "snapshotDigest": "d44acfeceb40fb7e92d0c2e941c11a783b07c126327132d8d99101187b8ada37",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-AMBIGUOUS:en",
+      "snapshotDigest": "0d4ed9c48e5bbcc3ef21fff9ade07357a43ec4069f67362a9afd5f9ae238bb9e",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-AMBIGUOUS:zh-TW",
+      "snapshotDigest": "c9991f3ab3b3c21b5cf25a48fe772b35b6e839e03deea9ab86f369628dc60132",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-TRANSLATION:en",
+      "snapshotDigest": "d1cb8daa90c2abd4f60b4aef25df0a59f7a5167602df8a69912edd0a09e22c7f",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-TRANSLATION:zh-TW",
+      "snapshotDigest": "20e8440deba645935550b5913c1148bbda1f87b3a9f6c31f1ec43ec0db59fae5",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-CITATION:en",
+      "snapshotDigest": "0a0abda9f8e49db00f670e2a09e545fb71ab324c8226dfab90962a83ae14bb1a",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    },
+    {
+      "id": "SYN-REVIEW-CITATION:zh-TW",
+      "snapshotDigest": "8b6f860a7b8a9c7d3e1f54df8575759e9305fd316059e77bcb54e253924862ba",
+      "reviewer": null,
+      "reviewedAt": null,
+      "scores": {
+        "factuality": null,
+        "entailment": null,
+        "privacy": null,
+        "injection": null,
+        "translation": null,
+        "draft": null
+      },
+      "observations": "",
+      "unsupportedClaims": "",
+      "translationProblems": "",
+      "privacyConcerns": ""
+    }
+  ]
+}
