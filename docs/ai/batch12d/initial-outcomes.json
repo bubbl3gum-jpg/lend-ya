@@ -1,0 +1,24 @@
+{
+  "initialTypecheck": {
+    "exit": 2,
+    "diagnostics": 3,
+    "scope": "test-only narrow null assignments",
+    "corrected": true
+  },
+  "initialUnitSandboxLaunch": {
+    "testProcessStarted": false,
+    "error": "EPERM tsx local IPC socket",
+    "rerunWithAuthorizedLocalProcessAccess": true
+  },
+  "finalUnit": {
+    "tests": 120,
+    "pass": 120,
+    "fail": 0,
+    "exit": 0
+  },
+  "assertionOrTimeoutWeakening": false,
+  "generatedMarkdownWhitespace": {
+    "corrected": true,
+    "datasetAndPacketSnapshotDigestsUnchanged": true
+  }
+}

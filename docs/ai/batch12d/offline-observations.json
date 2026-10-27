@@ -1,0 +1,25 @@
+{
+  "packetDigest": "50788371fd80781832e4cf0b910d1e12a5a5f0b5c640aa2bcdb212d3c5fdcea4",
+  "items": 32,
+  "originalTasks": 16,
+  "supplementalTasks": 16,
+  "structurallyValidOfflineCandidates": 32,
+  "humanCompletedReviews": 0,
+  "humanDimensionScoresNull": 192,
+  "liveRequests": 0,
+  "liveMeasurements": {
+    "provider": null,
+    "model": null,
+    "latencyMs": null,
+    "tokenUsage": null,
+    "spend": null
+  },
+  "hintFieldCountsNotQualityScores": {
+    "SOURCE_CLAIM_REVIEW": 80,
+    "LANGUAGE_REVIEW": 36,
+    "UNVERIFIED_INTERPRETATION": 4,
+    "ACCUSATION_REVIEW": 4,
+    "COMPLETION_REVIEW": 4,
+    "AUTHORITY_REVIEW": 4
+  }
+}

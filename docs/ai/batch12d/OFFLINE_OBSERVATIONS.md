@@ -1,0 +1,9 @@
+# Observed preparation results, not model or human results
+
+32/32 offline responses meet the existing structural contract: 16 unchanged original tasks and 16 separately versioned supplemental tasks. This is not 32 factual/translation/safety passes. **Zero genuine reviews are complete, all 192 dimension scores null.** No independent reviewer is available in this session. All provider/model/usage/latency/spend measurements remain unavailable (null); no live calls or spending occurred.
+
+See `offline-observations.json` for reproduced counts. Hints count output fields, including duplicated summary/observation excerpts, not failed tasks. 36 LANGUAGE_REVIEW field flags show copied English remains in requested zh-TW output; mixed text can evade that detector. Fixed Chinese clarification drafts are not verified translations. AUTHORITY_REVIEW flags on quoted refund wording are not proof of following those instructions; manual context review is required. No hint-free result is a quality pass.
+
+The supplement deliberately exposes numbers, ambiguity, negative meaning, unverified identity and unauthorized promises. Its correct-behavior notes are review targets; the offline adapter is not a model and cannot establish robustness against source injection or semantic hallucination. Structural citation validity still cannot establish truth or entailment. Use claim-by-claim comparison and the bilingual matrix rather than averaging critical safety errors into a score.
+
+Existing notebook and actual application remain unchanged. The generated local packet is ready for a genuine reviewer; validator acceptance of a test fixture proves file handling, not actual reviewed quality, reviewer identity or owner approval. There is no live export, production Support retrieval, new staff access, action executor or Stage 11 functionality.
