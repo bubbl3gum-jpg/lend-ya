@@ -388,7 +388,7 @@ test(
                 );
                 assert.equal(
                   response.status,
-                  file === "app/api/admin/locations/lab/[operation]/route.ts" ? 404 : actor ? 403 : 401,
+                  ["app/api/admin/locations/lab/[operation]/route.ts", "app/api/admin/ai-case-brief/route.ts"].includes(file) ? 404 : actor ? 403 : 401,
                   `${method} ${url} / ${actor?.role ?? "ordinary/anonymous"}`,
                 );
                 assert.ok(
