@@ -33,7 +33,7 @@ export const adminNavigationGroups = [
   },
 ];
 export const adminLinks = adminNavigationGroups.flatMap((group) => group.links);
-export function AdminNavigation({ passkeyPilot = false }: { passkeyPilot?: boolean }) {
+export function AdminNavigation({ passkeyPilot = false, syntheticBrief = false }: { passkeyPilot?: boolean; syntheticBrief?: boolean }) {
   const pathname = usePathname();
   return (
     <nav aria-label="Administration" className="space-y-6">
@@ -44,7 +44,7 @@ export function AdminNavigation({ passkeyPilot = false }: { passkeyPilot?: boole
           </p>
           <ul className="space-y-1">
             {(group.label === "System" && passkeyPilot
-              ? [{ href: "/admin/security", label: "Passkey pilot" }, ...group.links] : group.links).map((link) => {
+              ? [{ href: "/admin/security", label: "Passkey pilot" }, ...group.links] : group.links).concat(group.label === "Community" && syntheticBrief ? [{ href: "/admin/ai-case-brief", label: "Case Brief · synthetic" }] : []).map((link) => {
               const active =
                 pathname === link.href ||
                 (link.href !== "/admin" &&

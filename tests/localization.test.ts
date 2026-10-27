@@ -9,7 +9,7 @@ import {
   formatTime,
 } from "../lib/i18n/core";
 test("exact locales, complete typed catalogues and matching interpolation contracts", () => {
-  assert.equal(Object.keys(en).length, 230);
+  assert.equal(Object.keys(en).length, 268);
   assert.deepEqual(Object.keys(en).sort(), Object.keys(zhTW).sort());
   for (const value of [
     undefined,

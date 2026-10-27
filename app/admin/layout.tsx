@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { syntheticBriefEnabled } from "@/lib/ai-case-brief/config";
 import { passkeyPilotAvailable } from "@/lib/passkey-pilot";
 import { requireAdminPage } from "@/lib/admin/auth";
 import {
@@ -29,13 +30,13 @@ export default async function AdminLayout({
         </Link>
         <p className="mb-8 mt-2 text-xs text-slate-400">Control Center</p>
         <div className="hidden lg:block">
-          <AdminNavigation passkeyPilot={passkeyPilot} />
+          <AdminNavigation passkeyPilot={passkeyPilot} syntheticBrief={syntheticBriefEnabled()} />
         </div>
         <details className="lg:hidden">
           <summary className="mb-3 cursor-pointer rounded-xl border border-slate-700 px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300">
             Admin navigation
           </summary>
-          <AdminNavigation passkeyPilot={passkeyPilot} />
+          <AdminNavigation passkeyPilot={passkeyPilot} syntheticBrief={syntheticBriefEnabled()} />
         </details>
         <Link href="/" className="mt-6 block text-sm text-slate-400">
           Open marketplace
