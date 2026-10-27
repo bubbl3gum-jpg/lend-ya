@@ -1,0 +1,19 @@
+{
+  "group": "test:authorization",
+  "start": "2026-10-27T06:32:48.134Z",
+  "end": "2026-10-27T06:33:05.361Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/2229ea24ade7b28ce678088c",
+  "tests": [
+    "ℹ tests 8"
+  ],
+  "passes": [
+    "ℹ pass 6"
+  ],
+  "fails": [
+    "ℹ fail 2"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-12b/test:authorization.log"
+}

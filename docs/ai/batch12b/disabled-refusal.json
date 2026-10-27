@@ -1,0 +1,8 @@
+{
+  "production": false,
+  "flagConfigured": false,
+  "route404": true,
+  "linkAbsent": true,
+  "caseStateUnchanged": true,
+  "noModelExecuted": true
+}

@@ -1,0 +1,13 @@
+{
+  "group": "test:ai-case-brief-production",
+  "start": "2026-10-27T06:28:45.714Z",
+  "end": "2026-10-27T06:29:06.849Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/900fafa85201f19d679506db",
+  "tests": null,
+  "passes": null,
+  "fails": null,
+  "cleanup": true,
+  "log": "/tmp/hustlen-12b/test:ai-case-brief-production.log"
+}

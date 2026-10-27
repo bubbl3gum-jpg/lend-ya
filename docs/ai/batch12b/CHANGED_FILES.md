@@ -1,0 +1,67 @@
+# Complete changed-file inventory
+
+Compared with clean 12A HEAD `993967f4363a4a1218ac9be978e844f6ee182158`. Core implementation `bf14fe83f66cbbc529b824e3ea51589133f0cb9a` changes 23 source/test/planning files. Final tested implementation revision `b921a3c36120ac3fd711a940e61125cf5d0c2eb0` adds only the exact disabled-route observation correction in exhaustive authorization coverage. Closeout adds evidence; the final index commit records exact closeout SHA. No schema, migration, dependency or lockfile changes.
+
+61 total changed/added paths:
+
+- `AGENTS.md`
+- `app/admin/ai-case-brief/page.tsx`
+- `app/api/admin/ai-case-brief/route.ts`
+- `components/admin/ai-case-brief.tsx`
+- `docs/admin/ADMIN_ENTRYPOINTS_BATCH_12B.json`
+- `docs/ai/AI_INTEGRATION_REVIEW_BATCH_12B.md`
+- `docs/ai/batch12b/CHANGED_FILES.md`
+- `docs/ai/batch12b/CONTRACT_AND_BOUNDARIES.md`
+- `docs/ai/batch12b/EVALUATION_AND_HUMAN_REVIEW.md`
+- `docs/ai/batch12b/INITIAL_FAILURES_AND_SCOPE.md`
+- `docs/ai/batch12b/LIVE_EXPERIMENT_DECISIONS.md`
+- `docs/ai/batch12b/SCREENSHOTS.md`
+- `docs/ai/batch12b/SETUP_AND_TEST_SCOPE.md`
+- `docs/ai/batch12b/VERIFICATION.md`
+- `docs/ai/batch12b/browser-evidence.json`
+- `docs/ai/batch12b/cache-maintenance.json`
+- `docs/ai/batch12b/camera-pickup.json`
+- `docs/ai/batch12b/camera-return.json`
+- `docs/ai/batch12b/cleanup.json`
+- `docs/ai/batch12b/disabled-refusal.json`
+- `docs/ai/batch12b/evaluation.json`
+- `docs/ai/batch12b/initial-authorization-observation.json`
+- `docs/ai/batch12b/initial-production-type-failure.json`
+- `docs/ai/batch12b/initial-types.log`
+- `docs/ai/batch12b/initial-unit-summary.json`
+- `docs/ai/batch12b/production-refusal.json`
+- `docs/ai/batch12b/regression-ledger.json`
+- `docs/ai/batch12b/roadmap-preservation.json`
+- `docs/ai/batch12b/screenshots/case-brief-canceled.png`
+- `docs/ai/batch12b/screenshots/case-brief-en-dark-desktop.png`
+- `docs/ai/batch12b/screenshots/case-brief-en-dark-mobile.png`
+- `docs/ai/batch12b/screenshots/case-brief-en-dark-tablet.png`
+- `docs/ai/batch12b/screenshots/case-brief-en-light-desktop.png`
+- `docs/ai/batch12b/screenshots/case-brief-en-light-mobile.png`
+- `docs/ai/batch12b/screenshots/case-brief-en-light-tablet.png`
+- `docs/ai/batch12b/screenshots/case-brief-previous-draft.png`
+- `docs/ai/batch12b/screenshots/case-brief-session-expired.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-TW-dark-desktop.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-TW-dark-mobile.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-TW-dark-tablet.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-TW-light-desktop.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-TW-light-mobile.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-TW-light-tablet.png`
+- `docs/ai/batch12b/screenshots/case-brief-zh-output-review.png`
+- `docs/ai/batch12b/source-preservation.json`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/ai-case-brief/contracts.ts`
+- `lib/ai-case-brief/evaluation.ts`
+- `lib/ai-case-brief/manifest.ts`
+- `lib/ai-case-brief/service.ts`
+- `lib/ai-case-brief/validation.ts`
+- `lib/i18n/catalogues.ts`
+- `package.json`
+- `proxy.ts`
+- `tests/ai-case-brief-pipeline.test.ts`
+- `tests/ai-case-brief.integration.test.ts`
+- `tests/ai-case-brief.test.ts`
+- `tests/authorization-policy.test.ts`
+- `tests/authorization.integration.test.ts`
+- `tests/localization.test.ts`
+- `tests/run-isolated.ts`

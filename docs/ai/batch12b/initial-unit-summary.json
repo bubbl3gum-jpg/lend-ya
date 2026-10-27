@@ -1,0 +1,11 @@
+{
+  "kind": "INITIAL_UNIT_FAILURE",
+  "cause": "New Admin route absent from exact inventory; corrected with additive hash-pinned inventory and explicit guard assertions.",
+  "retainedSummaryLines": [
+    "\u2716 production source never imports shadow policy and all Admin API routes remain guarded (20.432777ms)",
+    "\u2139 tests 108",
+    "\u2139 pass 107",
+    "\u2139 fail 1",
+    "\u2716 production source never imports shadow policy and all Admin API routes remain guarded (20.432777ms)"
+  ]
+}
