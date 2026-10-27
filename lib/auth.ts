@@ -1,9 +1,4 @@
-import {
-  createHash,
-  randomBytes,
-  scrypt,
-  timingSafeEqual,
-} from "node:crypto";
+import { createHash, randomBytes, scrypt, timingSafeEqual } from "node:crypto";
 import { Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
@@ -64,7 +59,9 @@ export async function persistSession(
   });
 }
 
-export async function setSessionCookie(credential: SessionCredential): Promise<void> {
+export async function setSessionCookie(
+  credential: SessionCredential,
+): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set(sessionCookieName, credential.token, {
     httpOnly: true,
@@ -101,9 +98,43 @@ export async function verifyPassword(
   return timingSafeEqual(actualKey, expectedKey);
 }
 
-export async function createSession(userId: number): Promise<void> {
+export class CredentialChangedError extends Error {
+  constructor() {
+    super("Credentials changed; sign in again.");
+  }
+}
+/** Shared serialization point for password-authenticated issuers and credential revocation.
+ * Never use a browser-supplied hash. The caller supplies the exact server-verified snapshot.
+ */
+export async function lockPasswordAccount(
+  tx: Prisma.TransactionClient,
+  userId: number,
+) {
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(1105001,${userId})`;
+}
+export async function persistVerifiedSession(
+  userId: number,
+  verifiedHash: string,
+  credential: SessionCredential,
+  db = prisma,
+): Promise<void> {
+  await db.$transaction(async (tx) => {
+    await lockPasswordAccount(tx, userId);
+    const current = await tx.user.findUnique({
+      where: { id: userId },
+      select: { passwordHash: true },
+    });
+    if (!current || current.passwordHash !== verifiedHash)
+      throw new CredentialChangedError();
+    await persistSession(userId, credential, tx);
+  });
+}
+export async function createSession(
+  userId: number,
+  verifiedHash: string,
+): Promise<void> {
   const credential = newSessionCredential();
-  await persistSession(userId, credential);
+  await persistVerifiedSession(userId, verifiedHash, credential);
   await setSessionCookie(credential);
 }
 

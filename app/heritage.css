@@ -1145,3 +1145,17 @@
 .heritage .heritage-browse .heritage-header-logout button {
   color: var(--rail-ink);
 }
+
+/* 11E: existing account controls; no discovery effects on credentials. */
+.password-fields {
+  display: grid;
+  gap: 1rem;
+  min-inline-size: 0;
+}
+.password-fields > label {
+  display: block;
+}
+.password-fields > button {
+  justify-self: start;
+  min-height: 44px;
+}

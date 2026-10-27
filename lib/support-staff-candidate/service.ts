@@ -8,7 +8,11 @@ import type {
 import { createStaffWebAuthnFoundation } from "../authorization/mfa/service";
 import { supportCommand } from "./commands";
 import { assertSupportOwnership, supportStaffConfig } from "./config";
-import { newSessionCredential, persistSession, verifyPassword } from "../auth";
+import {
+  newSessionCredential,
+  persistVerifiedSession,
+  verifyPassword,
+} from "../auth";
 import { parseEmail, parsePassword } from "../api-validation";
 import { logOperationalError } from "../operational-error";
 /** Restricted principal has only these entry points; no table SELECT or audit INSERT. */
@@ -89,7 +93,12 @@ export function supportWorkerService(
       if (!user || !valid || user.accountStatus !== "ACTIVE")
         throw Error("Invalid login");
       const credential = newSessionCredential();
-      await persistSession(user.id, credential, mfaDb);
+      await persistVerifiedSession(
+        user.id,
+        user.passwordHash,
+        credential,
+        mfaDb,
+      );
       return {
         token: credential.token,
         expiresAt: credential.expiresAt.toISOString(),

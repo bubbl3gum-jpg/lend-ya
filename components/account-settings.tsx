@@ -6,9 +6,11 @@ import { useLocale } from "@/components/i18n/locale";
 import type { MessageId } from "@/lib/i18n/catalogues";
 export function AccountSettings({
   name,
+  readOnly = false,
   onSessionExpired,
 }: {
   name: string;
+  readOnly?: boolean;
   onSessionExpired?: () => void;
 }) {
   const { locale, t } = useLocale();
@@ -28,6 +30,7 @@ export function AccountSettings({
       aria-busy={busy}
       onSubmit={async (event) => {
         event.preventDefault();
+        if (readOnly) return;
         setNotice(null);
         setReference("");
         if (!value.trim() || value.length > 100) {
@@ -79,6 +82,7 @@ export function AccountSettings({
       <input
         ref={input}
         id="account-name"
+        readOnly={readOnly}
         name="name"
         autoComplete="nickname"
         value={value}
@@ -105,7 +109,7 @@ export function AccountSettings({
         <button
           type="submit"
           className="catalogue-button heritage-press"
-          disabled={busy}
+          disabled={busy || readOnly}
         >
           {t(busy ? "form.saving" : "form.save")}
           <span aria-hidden="true"> →</span>

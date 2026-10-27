@@ -1,14 +1,17 @@
 "use client";
+import { PasswordChange } from "@/components/password-change";
 import { useState } from "react";
 import Link from "next/link";
 import { useLocale } from "@/components/i18n/locale";
 import { AccountSettings } from "@/components/account-settings";
 export function AccountDetails({
+  passwordCandidate = false,
   name,
   email,
   suspended,
   adminSecurity,
 }: {
+  passwordCandidate?: boolean;
   name: string;
   email: string;
   suspended: boolean;
@@ -16,6 +19,8 @@ export function AccountDetails({
 }) {
   const { t } = useLocale();
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [revoked, setRevoked] = useState(false);
+  const [passwordBusy, setPasswordBusy] = useState(false);
   return (
     <>
       <section className="catalogue-section" aria-labelledby="details-title">
@@ -44,13 +49,23 @@ export function AccountDetails({
           </div>
         </dl>
         <AccountSettings
+          readOnly={revoked || passwordBusy}
           name={name}
           onSessionExpired={() => setSessionExpired(true)}
         />
       </section>
+      {passwordCandidate && (
+        <PasswordChange
+          onBusyChange={setPasswordBusy}
+          onRevoked={() => {
+            setSessionExpired(true);
+            setRevoked(true);
+          }}
+        />
+      )}
       <section className="catalogue-section account-security-note">
         <h2>{t("account.security")}</h2>
-        <p>{t("account.passwordUnavailable")}</p>
+        {!passwordCandidate && <p>{t("account.passwordUnavailable")}</p>}
         <p>{t("account.sessionUnavailable")}</p>
         {adminSecurity && !sessionExpired ? (
           <Link href="/admin/account-security">

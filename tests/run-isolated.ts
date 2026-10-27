@@ -99,6 +99,7 @@ async function main() {
     if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
     if(process.argv.includes("--meetup-camera")) env.MRT_TEST_CAMERA_ONLY="1";
     const legacyGroup = [
+      "password-change-migration",
       "platform-settings-migration",
       "announcements-migration",
       "support-staff",
@@ -130,6 +131,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "password-change-migration": "tests/password-change-migration.test.ts",
           "platform-settings-migration": "tests/platform-settings-migration.test.ts",
           "announcements-migration": "tests/announcements-migration.test.ts",
           "support-staff": "tests/support-staff.integration.test.ts",
@@ -173,7 +175,7 @@ async function main() {
     if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (!["platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
+      if (!["password-change-migration","platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",
@@ -207,7 +209,8 @@ async function main() {
           env.HUSTLEN_PASSKEY_PILOT_ORIGIN = env.TEST_BASE_URL;
         }
         if (process.argv.includes("--mfa-pilot-disabled")) env.HUSTLEN_PASSKEY_PILOT = "disabled";
-        const productionPilot = process.argv.includes("--platform-settings-production") || process.argv.includes("--announcements-production") || process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        if(process.argv.includes("--password-change")||process.argv.includes("--password-change-production")){env.HUSTLEN_PASSWORD_CHANGE_CANDIDATE="owned-password-only";env.HUSTLEN_PASSWORD_CHANGE_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_PASSWORD_CHANGE_USER_IDS="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20";}
+        const productionPilot = process.argv.includes("--password-change-production") || process.argv.includes("--platform-settings-production") || process.argv.includes("--announcements-production") || process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
         if(process.argv.includes("--platform-settings") || process.argv.includes("--platform-settings-production")){env.HUSTLEN_SETTINGS_CANDIDATE="owned-display-only";env.HUSTLEN_SETTINGS_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_SETTINGS_ADMIN_IDS="1";env.HUSTLEN_ANNOUNCEMENT_CANDIDATE="owned-informational-only";env.HUSTLEN_ANNOUNCEMENT_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ANNOUNCEMENT_ADMIN_IDS="1,3";}
         if(process.argv.includes("--announcements") || process.argv.includes("--announcements-production")){env.HUSTLEN_ANNOUNCEMENT_CANDIDATE="owned-informational-only";env.HUSTLEN_ANNOUNCEMENT_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ANNOUNCEMENT_ADMIN_IDS="1";}
         if(process.argv.includes("--locations") || process.argv.includes("--locations-production")){env.HUSTLEN_GEOFENCING_LAB="owned-self-only";env.HUSTLEN_GEOFENCING_LAB_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_GEOFENCING_LAB_ADMIN_IDS="1";}
@@ -256,7 +259,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--discovery-localization"))
+        if (process.argv.includes("--password-change")||process.argv.includes("--password-change-production"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/password-change.integration.test.ts"]);
+        else if (process.argv.includes("--discovery-localization"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/discovery-localization.integration.test.ts"]);
         else if (process.argv.includes("--localization"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/localization.integration.test.ts"]);

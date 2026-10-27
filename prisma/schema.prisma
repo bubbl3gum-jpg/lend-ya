@@ -91,6 +91,7 @@ model User {
   listingReports    ListingReport[]
   bookingsAsOwner   Booking[]              @relation("BookingOwner")
   bookingsAsRenter  Booking[]              @relation("BookingRenter")
+  accountSecurityEvents AccountSecurityEvent[]
   authSessions      AuthSession[]
   handoffsPerformed Handoff[]              @relation("HandoffPerformer")
   handoffsConfirmed Handoff[]              @relation("HandoffConfirmer")
@@ -1198,4 +1199,14 @@ model DevDisplaySettingEvent {
  requestHash String @db.Char(64)
  createdAt DateTime @default(now()) @db.Timestamptz(3)
  @@unique([key,version])
+}
+
+model AccountSecurityEvent {
+ id String @id @db.Uuid
+ actorId Int
+ action String @db.VarChar(40)
+ revokedSessions Int
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamp(3)
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ @@index([actorId,createdAt])
 }
