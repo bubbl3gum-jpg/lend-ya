@@ -85,6 +85,6 @@
       "Compiling /dashboard; navigation had not finished at assertion"
     ],
     "rootCause": "historical overlap login/navigation timing remains unresolved; no causal attribution to13D auth changes (none)",
-    "noCredentialOrRawSnapshotRetention": true
+    "committedDiagnosticExcludesCredentialValuesAndRawSnapshots": true
   }
 }
