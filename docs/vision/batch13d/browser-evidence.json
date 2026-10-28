@@ -1,0 +1,19 @@
+{
+  "nativeLogin": true,
+  "actualMultipartReview": true,
+  "saved": false,
+  "realProtectedEvidenceImages": true,
+  "noOverflow": true,
+  "keyboardFocus": true,
+  "locales": [
+    "en",
+    "zh-TW"
+  ],
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "errors": [],
+  "externalOrigins": []
+}

@@ -1,0 +1,44 @@
+# Complete changed-file inventory
+
+Relative to clean 13C HEAD `a7286ab0ba6958504d580723bb5051789b49e6f8`. 40 files. No schema, migration, lockfile or dependency changes.
+
+- `AGENTS.md`
+- `app/api/dev/item-documentation/route.ts`
+- `app/dev/item-documentation/page.tsx`
+- `app/heritage.css`
+- `components/documentation-workspace.tsx`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `docs/vision/VISION_DOCUMENTATION_REVIEW_BATCH_13D.md`
+- `docs/vision/batch13d/ARCHITECTURE_AND_GAPS.md`
+- `docs/vision/batch13d/CHANGED_FILES.md`
+- `docs/vision/batch13d/CONTRACT_AND_PRIVACY.md`
+- `docs/vision/batch13d/SCREENSHOTS.md`
+- `docs/vision/batch13d/SETUP_AND_LIMITATIONS.md`
+- `docs/vision/batch13d/VERIFICATION.md`
+- `docs/vision/batch13d/browser-evidence.json`
+- `docs/vision/batch13d/camera-pickup.json`
+- `docs/vision/batch13d/camera-return.json`
+- `docs/vision/batch13d/cleanup.json`
+- `docs/vision/batch13d/initial-outcomes.json`
+- `docs/vision/batch13d/lint.log`
+- `docs/vision/batch13d/migration-evidence.json`
+- `docs/vision/batch13d/preservation.json`
+- `docs/vision/batch13d/prisma.log`
+- `docs/vision/batch13d/regression-ledger.json`
+- `docs/vision/batch13d/screenshots/documentation-comparison-desktop.png`
+- `docs/vision/batch13d/screenshots/documentation-comparison-mobile-zh.png`
+- `docs/vision/batch13d/screenshots/documentation-comparison-tablet-zh.png`
+- `docs/vision/batch13d/screenshots/documentation-owner-desktop.png`
+- `docs/vision/batch13d/screenshots/documentation-owner-mobile-zh.png`
+- `docs/vision/batch13d/screenshots/documentation-owner-tablet-zh.png`
+- `docs/vision/batch13d/types.log`
+- `docs/vision/batch13d/unit.log`
+- `lib/i18n/documentation.ts`
+- `lib/item-documentation/checklists.ts`
+- `lib/item-documentation/service.ts`
+- `lib/item-documentation/vision-contract.ts`
+- `package.json`
+- `proxy.ts`
+- `tests/item-documentation.integration.test.ts`
+- `tests/item-documentation.test.ts`
+- `tests/run-isolated.ts`

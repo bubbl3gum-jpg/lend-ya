@@ -1,0 +1,90 @@
+{
+  "browserRuns": [
+    {
+      "group": "test:item-documentation",
+      "start": "2026-10-28T14:17:34.795Z",
+      "end": "2026-10-28T14:18:24.968Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/3841db52b9995c2440338798",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:item-documentation",
+      "start": "2026-10-28T14:19:26.333Z",
+      "end": "2026-10-28T14:19:49.663Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a802242b37295cbdbaba5cb3",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:item-documentation",
+      "start": "2026-10-28T14:34:16.610Z",
+      "end": "2026-10-28T14:34:50.660Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/51db41e8ed3174c8fd959ecd",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:item-documentation",
+      "start": "2026-10-28T14:36:33.294Z",
+      "end": "2026-10-28T14:36:59.380Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/03f6ac4da6758a162a278cc1",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    }
+  ],
+  "initialType": "TS7022 fetch response annotation in test corrected; initial application-only type check passed",
+  "initialLint": "passed; no rules disabled",
+  "initialBrowser": "accessible Record type exact-label timeout; corrected explicit selector aria-labels, same deadlines",
+  "overlapFailure": {
+    "condition": "unit, tsc and lint running alongside dev browser",
+    "assertion": "unchanged 5000ms login URL assertion",
+    "serverTrace": [
+      "GET /login 200 in 468ms",
+      "POST /api/auth/login 200 in 2.2s (compilation 2.0s, application 123ms)",
+      "Compiling /dashboard; navigation had not finished at assertion"
+    ],
+    "rootCause": "historical overlap login/navigation timing remains unresolved; no causal attribution to13D auth changes (none)",
+    "noCredentialOrRawSnapshotRetention": true
+  }
+}
