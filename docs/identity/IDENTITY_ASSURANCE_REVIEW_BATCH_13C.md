@@ -9,7 +9,7 @@
 - Verified ancestor implementation: `fa5b3e3dc81b4727c063aad6fe50ba601b0734fd`; font fix `4a723a95d7fe712ea0c648307f3fe14983aa7f05`; evidence `b74870afdeef5937de471a3fbf0a99e9b6a08599`.
 - New branch: `feature/identity-assurance-foundation-batch-13c`.
 - Implementation: `13b114330535c0ba8a9066230dba29d9a8f23666`.
-- Separate evidence closeout: this separate evidence commit; exact SHA is indexed after commit creation.
+- Separate evidence closeout: `f639e074005a59a146ba2f8c9318b84d9709712c`.
 
 No push, merge, deployment, existing application database mutation, schema/migration/lockfile/dependency change, real ID/biometric processing, provider/AI call, new staff access or production participation restriction. No subsequent batch started.
 
