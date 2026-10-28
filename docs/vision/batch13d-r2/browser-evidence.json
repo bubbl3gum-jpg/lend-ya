@@ -1,0 +1,21 @@
+{
+  "exactVersionHash": "cba7913cf365065b3b7890852cc13564228bd5c02ccb697e1f49bcdd401240ac",
+  "bookingId": 4,
+  "atomicOwnerAcceptance": true,
+  "legacyUnknown": true,
+  "changedBeforeAcceptanceBlocked": true,
+  "subsequentEditsPreserveAgreement": true,
+  "realBrowserSubmission": true,
+  "locales": [
+    "en",
+    "zh-TW"
+  ],
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "errors": [],
+  "externalOrigins": [],
+  "noFinancialOrCustodyWrite": true
+}

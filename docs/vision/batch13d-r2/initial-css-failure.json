@@ -1,0 +1,19 @@
+{
+  "group": "test:rental-documentation",
+  "start": "2026-10-28T16:41:15.302Z",
+  "end": "2026-10-28T16:42:06.305Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/598e09c0647b9217bfe4f99a",
+  "tests": [
+    "ℹ tests 1"
+  ],
+  "passes": [
+    "ℹ pass 0"
+  ],
+  "fails": [
+    "ℹ fail 1"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-13dr2/test:rental-documentation.log"
+}

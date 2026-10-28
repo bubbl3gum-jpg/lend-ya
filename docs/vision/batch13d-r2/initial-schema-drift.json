@@ -1,0 +1,13 @@
+{
+  "group": "test:migration",
+  "start": "2026-10-28T17:02:54.685Z",
+  "end": "2026-10-28T17:03:00.142Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/7ed203759c70514ca9694dfc",
+  "tests": null,
+  "passes": null,
+  "fails": null,
+  "cleanup": true,
+  "log": "/tmp/hustlen-13dr2/test:migration.log"
+}

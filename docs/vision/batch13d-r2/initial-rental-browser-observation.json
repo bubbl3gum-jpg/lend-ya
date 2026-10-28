@@ -1,0 +1,19 @@
+{
+  "group": "test:rental-browser",
+  "start": "2026-10-28T16:54:29.580Z",
+  "end": "2026-10-28T16:55:18.727Z",
+  "exit": 1,
+  "signal": null,
+  "artifact": ".test-artifacts/a5cd751a55d61160c064e315",
+  "tests": [
+    "ℹ tests 4"
+  ],
+  "passes": [
+    "ℹ pass 2"
+  ],
+  "fails": [
+    "ℹ fail 2"
+  ],
+  "cleanup": true,
+  "log": "/tmp/hustlen-13dr2/test:rental-browser.log"
+}

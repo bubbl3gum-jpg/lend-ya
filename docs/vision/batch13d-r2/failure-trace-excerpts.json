@@ -1,0 +1,25 @@
+{
+  "diskFailureArtifact": ".test-artifacts/a2eb5238f7443c4c2e17580b",
+  "diskTrace": [
+    "- No space left on device (os error 28)",
+    "- No space left on device (os error 28)",
+    "- No space left on device (os error 28)",
+    "- No space left on device (os error 28)",
+    "- No space left on device (os error 28)] {"
+  ],
+  "rentalBrowserArtifact": ".test-artifacts/a5cd751a55d61160c064e315",
+  "lateRentalBrowserTrace": [
+    " GET /bookings/2 200 in 102ms (next.js: 26ms, application-code: 76ms)",
+    " GET /bookings/2 200 in 89ms (next.js: 3ms, application-code: 86ms)",
+    " GET /bookings/2 200 in 188ms (next.js: 2ms, application-code: 186ms)",
+    "\u2713 Compiled in 217ms",
+    " GET /api/bookings/2/meetup/status 200 in 157ms (next.js: 49ms, proxy.ts: 6ms, application-code: 103ms)",
+    "[browser] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. ",
+    " GET /bookings/2 200 in 182ms (next.js: 7ms, application-code: 176ms)",
+    " GET /bookings/2 200 in 278ms (next.js: 55ms, application-code: 222ms)",
+    " GET /api/bookings/2/meetup/status 200 in 28ms (next.js: 8ms, proxy.ts: 5ms, application-code: 15ms)",
+    " GET /api/bookings/2/meetup/status 200 in 73ms (next.js: 31ms, proxy.ts: 4ms, application-code: 38ms)",
+    " GET /api/bookings/2/meetup/status 200 in 48ms (next.js: 8ms, proxy.ts: 14ms, application-code: 26ms)"
+  ],
+  "interpretation": "No second acceptance PATCH appears. HMR and a pre-mount warning coincide; observation retained, source-frozen rerun required. Not proof of an authorization defect."
+}

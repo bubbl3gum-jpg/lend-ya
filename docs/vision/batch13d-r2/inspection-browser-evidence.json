@@ -1,0 +1,20 @@
+{
+  "actualLogin": true,
+  "realGeofenceQrAndPhysicalReceipt": true,
+  "manualCodeNotCameraClaim": true,
+  "window24Hours": true,
+  "reloadStable": true,
+  "scanAloneInsufficient": true,
+  "crossAccountDenied": true,
+  "evidenceAuthorization": true,
+  "originalEvidenceDigestPreserved": true,
+  "realLogoutSessionRevocation": true,
+  "suspendedParticipantObligationsPreserved": true,
+  "explicitLegacyDisputeOnly": true,
+  "disputeDoesNotReverseReturn": true,
+  "borrowerUnsentDisagreement": true,
+  "noNotificationDeadlineActivated": true,
+  "noFinancialAction": true,
+  "noExternalAI": true,
+  "responsiveViewports": 3
+}

@@ -1,0 +1,109 @@
+{
+  "implementation": "847a947a5a0b1ab1fff546f2df4e673a7f2af920",
+  "files": [
+    {
+      "file": "app/api/bookings/[id]/route.ts",
+      "sha256": "694bfa87bfd23998b992cac9ce5aaf065e2adfcf1884ea5176e82bc79398d0ae"
+    },
+    {
+      "file": "app/api/bookings/route.ts",
+      "sha256": "59dd25f32c6d8714fb402c0b0757b8d447aa1c2d3cf4c961512ebd6ed3968544"
+    },
+    {
+      "file": "app/api/dev/rental-documentation/photos/[id]/route.ts",
+      "sha256": "4739457f97dd788b133c1dd27e848d6fc84a78141a873b578cd4febc33130402"
+    },
+    {
+      "file": "app/api/dev/rental-documentation/route.ts",
+      "sha256": "f50d973d374f6b28548e2f974a17a1aef7b7192ee29e753618a46dc24c0518f8"
+    },
+    {
+      "file": "app/bookings/[id]/page.tsx",
+      "sha256": "62536de928726a176b2f1d9c057d7c70a5b0a2be9bddf6add0052b70a57424d3"
+    },
+    {
+      "file": "app/dev/inspection/page.tsx",
+      "sha256": "772228ff53c197a269d4c897bd412b5daf9eae2c719d2fdd8b409de0f20e6b86"
+    },
+    {
+      "file": "app/dev/item-documentation/page.tsx",
+      "sha256": "f711277c0b065372c7c3112637f1be330abddbcb95053a93f6f558736a91ece6"
+    },
+    {
+      "file": "app/dev/item-studio/page.tsx",
+      "sha256": "dc984effd93f94e20af5dbba0e626f526321fc4462b8cfbc36023d3fe7017ce6"
+    },
+    {
+      "file": "app/heritage.css",
+      "sha256": "ac984efcfbfaf979b6ba8971226e87383aba5a119b16bc9a935e9729c1e35180"
+    },
+    {
+      "file": "app/listings/[id]/page.tsx",
+      "sha256": "f66460ae89e3d2ffc814b69d8478fd8dc033df813c9503141e2fa68fc5dbe193"
+    },
+    {
+      "file": "components/booking-actions.tsx",
+      "sha256": "b0d9f88e13f314bf1ee9da30f1c552e61cf9ec5d4aa258d98369525d3ffd6fbd"
+    },
+    {
+      "file": "components/booking-form.tsx",
+      "sha256": "6d91e93fe88efb1bfb990bb58840154f6d4132fefbe47ac907d533087e872de8"
+    },
+    {
+      "file": "components/documentation-agreement.tsx",
+      "sha256": "8d9cf5a0e400443a3c1c1be17365994d607fb4b8a57a7f7173bf1e516d92c436"
+    },
+    {
+      "file": "components/documentation-workspace.tsx",
+      "sha256": "cc5f1b5d93b014a17930fff03fad494213eca9f2b499a9b2969d800ae9e47271"
+    },
+    {
+      "file": "components/inspection-workspace.tsx",
+      "sha256": "339f69df6f9febbb72b5aace212df8e582bc717ae86f16febb06089e68cf2ab8"
+    },
+    {
+      "file": "components/item-studio.tsx",
+      "sha256": "b19971d747becc6a74665257374f5c19287e05bc54ab6f918890f7b3c2dfc857"
+    },
+    {
+      "file": "components/saved-rental-documentation.tsx",
+      "sha256": "fef4c3d0d2d6a74aed9cec8e5ca46fb6f73cb165316c050de93c772120ee67a4"
+    },
+    {
+      "file": "lib/i18n/agreement.ts",
+      "sha256": "93a352f302379bfcc96cdc15f5874a4609aa6bb730565c9b942ba4b77962f7f2"
+    },
+    {
+      "file": "lib/rental-documentation/contracts.ts",
+      "sha256": "6e14373e2e9411c9b9268e89e5a298df96397b8a7d80922be1627fbd0fc90a51"
+    },
+    {
+      "file": "lib/rental-documentation/service.ts",
+      "sha256": "ea0d836daa5d74d99b8a72d737a98ba14fa73004578d22af0ec6c98ab745ff35"
+    },
+    {
+      "file": "prisma/migrations/20261029090000_owned_rental_documentation/migration.sql",
+      "sha256": "3f4b344ba05c63fa6433f2c8f084af83974a38977036acb1ac47a244364ef9e7"
+    },
+    {
+      "file": "proxy.ts",
+      "sha256": "9a3c1da6874b4b402dc30ea741c1e30bad630e0bd9a32a108d9cb2a68c899bf2"
+    },
+    {
+      "file": "tests/rental-documentation-migration.test.ts",
+      "sha256": "6b7344eafad0bbafb70740cc98e950c7ed538a6c3b35a8a86f050fe311941998"
+    },
+    {
+      "file": "tests/rental-documentation.integration.test.ts",
+      "sha256": "c9dbf40c838019273bf354455abae298febc0f7093d6af4b13162b5944f3783d"
+    },
+    {
+      "file": "tests/rental-documentation.test.ts",
+      "sha256": "e85c46632f080925a0071e71f62e87bc77241cee702d49227bd07541c03da9ab"
+    },
+    {
+      "file": "tests/run-isolated.ts",
+      "sha256": "dc0793109909a03133c3feff509afa543ed3de64ddcba88bb9c6b01889410567"
+    }
+  ]
+}
