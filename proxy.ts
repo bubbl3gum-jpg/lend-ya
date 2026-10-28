@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname === "/api/dev/item-documentation" || request.nextUrl.pathname === "/dev/item-documentation") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_DOCUMENTATION_CANDIDATE !== "owned-preview-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname === "/api/dev/identity" || request.nextUrl.pathname === "/account/identity" || request.nextUrl.pathname.startsWith("/account/identity/")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_IDENTITY_CANDIDATE !== "owned-synthetic-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store","X-Content-Type-Options":"nosniff"}});
   if ((request.nextUrl.pathname === "/api/dev/inspection" || request.nextUrl.pathname === "/dev/inspection") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_INSPECTION_CANDIDATE !== "owned-preview-only"))
@@ -60,4 +62,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/account/identity/:path*","/dev/inspection","/dev/support-companion/:path*","/admin/ai-case-brief/:path*","/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
+export const config = { matcher: ["/dev/item-documentation","/account/identity/:path*","/dev/inspection","/dev/support-companion/:path*","/admin/ai-case-brief/:path*","/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
