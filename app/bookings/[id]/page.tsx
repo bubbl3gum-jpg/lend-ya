@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { parsePathId } from "@/lib/api-validation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { inspectionEnabled } from "@/lib/inspection/service";
 
 function formatDate(date: Date | string) {
   return formatRentalTime(date);
@@ -151,6 +152,7 @@ export default async function BookingPage({
       <SiteHeader />
       <div className="mx-auto max-w-4xl px-6 py-12">
         <div className="mb-6">
+          {inspectionEnabled() && <p><Link href="/dev/inspection">Open development inspection register (non-submitting)</Link></p>}
           <Link
             href="/dashboard"
             className="text-sm font-medium text-slate-600"

@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname === "/api/dev/inspection" || request.nextUrl.pathname === "/dev/inspection") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_INSPECTION_CANDIDATE !== "owned-preview-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname === "/api/dev/support-companion" || request.nextUrl.pathname === "/dev/support-companion" || request.nextUrl.pathname.startsWith("/dev/support-companion/")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_SUPPORT_ASSISTANT_CANDIDATE !== "offline-only" || process.env.HUSTLEN_SUPPORT_STAFF_CANDIDATE !== "owned-synthetic-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store","X-Content-Type-Options":"nosniff"}});
   if ((request.nextUrl.pathname === "/api/admin/ai-case-brief" || request.nextUrl.pathname === "/admin/ai-case-brief" || request.nextUrl.pathname.startsWith("/admin/ai-case-brief/")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_AI_CASE_BRIEF_DEMO !== "synthetic-only" || (request.nextUrl.pathname.startsWith("/admin/") && [...request.nextUrl.searchParams.keys()].some(key => key !== "_rsc"))))
@@ -56,4 +58,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/dev/support-companion/:path*","/admin/ai-case-brief/:path*","/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
+export const config = { matcher: ["/dev/inspection","/dev/support-companion/:path*","/admin/ai-case-brief/:path*","/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };

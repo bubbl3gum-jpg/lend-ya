@@ -89,6 +89,8 @@ test(
           env: {
             ...process.env,
             NODE_ENV: "development",
+            HUSTLEN_INSPECTION_CANDIDATE:"owned-preview-only",
+            HUSTLEN_INSPECTION_ORIGIN:base,
             NEXT_PUBLIC_HUSTLEN_CAMERA_DIAGNOSTICS: "owned-test",
             MEETUP_TEST_LOCATION_ENABLED: temporary ? "true" : "false",
             MEETUP_TEST_LOCATION_USER_IDS: temporary ? ids.join(",") : "",
@@ -915,6 +917,51 @@ test(
           );
         },
       );
+      await t.test("13B real return authority, inspection window, private evidence and unsent participant previews",async()=>{
+        const sample=await rental();await op(sample.id,"enroll",owner);await check(sample.id,owner);await check(sample.id,borrower);
+        const withPhoto=async(stage:string,a:Actor,extra:object={})=>{const form=new FormData();form.set("payload",JSON.stringify({...evidence,...extra}));form.append("photos",new File([new Uint8Array(photo)],"original.png",{type:"image/png"}));return api(`/api/bookings/${sample.id}/${stage}`,a,"POST",form);};
+        assert.equal((await withPhoto("handoff",owner)).status,200);
+        const read=async(a?:Actor)=>{const r=await fetch(base+`/api/dev/inspection?bookingId=${sample.id}`,{headers:a?{Cookie:a.cookie}:{}});return {status:r.status,value:await r.json()};};
+        const draft={bookingId:sample.id,mode:"CLAIM",component:"Camera body",concern:"POSSIBLE_DIFFERENCE",description:"A possible surface difference requires human comparison.",evidenceIds:[] as string[],missingEvidence:true};
+        const preview=async(body:object,a:Actor,headers:Record<string,string>={})=>api("/api/dev/inspection",a,"POST",body,{Origin:base,"X-Hustlen-Inspection":"1",...headers});
+        assert.equal((await read()).status,401);assert.equal((await read(outsider)).status,404);assert.equal((await read(owner)).value.returnedAt,null);assert.equal((await preview(draft,owner)).status,409);
+        const pickup=(await op(sample.id,"issue",owner,{purpose:"PICKUP"})).json;
+        assert.equal((await op(sample.id,"verify",borrower,{purpose:"PICKUP",challengeId:pickup.challengeId,manualCode:pickup.manualCode,requestKey:randomUUID()})).status,200);
+        assert.equal((await withPhoto("handoff",borrower,{meetupChallengeId:pickup.challengeId,physicalReceipt:true})).status,200);
+        assert.equal((await withPhoto("return",borrower)).status,200);await check(sample.id,owner,"RETURN");await check(sample.id,borrower,"RETURN");
+        const returned=(await op(sample.id,"issue",borrower,{purpose:"RETURN"})).json;
+        assert.equal((await op(sample.id,"verify",owner,{purpose:"RETURN",challengeId:returned.challengeId,manualCode:returned.manualCode,requestKey:randomUUID()})).status,200);
+        assert.equal((await read(owner)).value.returnedAt,null,"scan alone is not physical receipt");
+        assert.equal((await api(`/api/bookings/${sample.id}`,owner,"PATCH",{action:"inspect",meetupChallengeId:returned.challengeId,physicalReceipt:true})).status,200);
+        const state=(await read(owner)).value;
+        assert.equal(state.physicalCustody,"RETURN_ACKNOWLEDGED");assert(state.inspectionOpen);assert.equal(Date.parse(state.inspectionDeadline)-Date.parse(state.returnedAt),24*3600000);assert.equal((await read(owner)).value.inspectionDeadline,state.inspectionDeadline);assert(state.evidence.length>=3);
+        const before=(await db.query(`SELECT id,stage,"uploaderId","createdAt",md5(data) digest FROM "BookingEvidencePhoto" WHERE "bookingId"=$1 ORDER BY id`,[sample.id])).rows;
+        draft.evidenceIds=[state.evidence[0].id];assert.equal((await preview(draft,borrower)).status,409);assert.equal((await preview(draft,owner,{Origin:"https://wrong.invalid"})).status,403);assert.equal((await preview({...draft,verified:true},owner)).status,400);assert.equal((await preview({...draft,evidenceIds:[randomUUID()]},owner)).status,403);
+        const prepared=await preview(draft,owner);assert.equal(prepared.status,200);assert.match(prepared.raw,/"submitted":false/);assert.equal((await detail(sample.id)).json.booking.status,"INSPECTION");
+        const evidenceUrl=`/api/bookings/${sample.id}/evidence/${state.evidence[0].id}`;
+        assert.equal((await api(evidenceUrl,outsider)).status,403);assert.equal((await api(evidenceUrl,borrower)).status,200);
+        const b=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH,headless:true,args:["--no-sandbox","--disable-dev-shm-usage"]});
+        async function inspectBrowser(a:Actor,label:string){const ctx=await b.newContext();const page=await ctx.newPage();const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text());});page.on("response",r=>{if(r.status()>=400)errors.push(String(r.status())+" "+new URL(r.url()).pathname);});
+          await page.goto(base+"/login");await page.getByLabel("Email address").fill(a.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click();await expect(page).not.toHaveURL(/\/login$/);
+          await page.goto(base+"/dev/inspection");await page.getByLabel("Your booking ID",{exact:true}).fill(String(sample.id));await page.getByRole("button",{name:"Load permitted rental",exact:true}).click();await expect(page.getByText(/Physical return acknowledged/)).toBeVisible();
+          await page.getByLabel("Factual description",{exact:true}).fill(label==="owner"?"A possible surface difference, not an established finding.":"I disagree; the accessory return needs clarification.");if(label==="owner")await page.getByLabel("Affected item or component",{exact:true}).fill("Camera body");
+          for(const [name,width,height]of [["desktop",1440,1000],["tablet",820,1180],["mobile",390,844]] as const){await page.setViewportSize({width,height});await page.getByLabel("Factual description",{exact:true}).focus();await expect(page.getByLabel("Factual description",{exact:true})).toBeFocused();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:path.join(artifact,`inspection-${label}-${name}.png`),fullPage:true});}
+          await page.getByRole("button",{name:"Validate unsent preview",exact:true}).click();await expect(page.getByRole("heading",{name:"Validated, NOT submitted",exact:true})).toBeVisible();assert.deepEqual(errors,[]);await ctx.close();}
+        await inspectBrowser(owner,"owner");
+        // Explicit existing participant operation creates a legacy TEST dispute, never the preview endpoint.
+        const dispute=await api(`/api/bookings/${sample.id}/dispute`,owner,"POST",{reason:"Synthetic possible condition difference",description:"A participant allegation, not a finding."});assert.equal(dispute.status,201);
+        const disputed=(await read(borrower)).value;assert.equal(disputed.physicalCustody,"RETURN_ACKNOWLEDGED");assert.equal(disputed.returnedAt,state.returnedAt);assert.equal(disputed.legacyStatus,"DISPUTED");assert.equal(disputed.responseDeadline,null);assert.equal((await preview(draft,owner)).status,409);
+        const response={bookingId:sample.id,mode:"RESPONSE",description:"I disagree and ask for evidence clarification.",evidenceIds:draft.evidenceIds,accessoryState:"UNKNOWN",disagree:true,requestHuman:true};assert.equal((await preview(response,borrower)).status,200);assert.equal((await preview(response,owner)).status,409);
+        await db.query(`UPDATE "User" SET "accountStatus"='SUSPENDED' WHERE id=$1`,[borrower.id]);assert.equal((await read(borrower)).status,200);assert.equal((await preview(response,borrower)).status,200);await db.query(`UPDATE "User" SET "accountStatus"='ACTIVE' WHERE id=$1`,[borrower.id]);
+        await inspectBrowser(borrower,"borrower");await b.close();
+        const after=(await db.query(`SELECT id,stage,"uploaderId","createdAt",md5(data) digest FROM "BookingEvidencePhoto" WHERE "bookingId"=$1 ORDER BY id`,[sample.id])).rows;assert.deepEqual(after,before);
+        const freshLogin=await api("/api/auth/login",undefined,"POST",{email:owner.email,password});assert.equal(freshLogin.status,200);
+        const revoked={...owner,cookie:freshLogin.cookie};assert.equal((await read(revoked)).status,200);assert.equal((await api("/api/auth/logout",revoked,"POST",{})).status,200);assert.equal((await read(revoked)).status,401);
+        const expired={...owner,cookie:"p2p_session=invalid-synthetic-session"};assert.equal((await read(expired)).status,401);
+        const latest=(await read(owner)).value;assert.equal(latest.financialState,"NOT_IMPLEMENTED");assert.equal(latest.disputes.length,1);
+        await writeFile(path.join(artifact,"inspection-browser-evidence.json"),JSON.stringify({actualLogin:true,realGeofenceQrAndPhysicalReceipt:true,manualCodeNotCameraClaim:true,window24Hours:true,reloadStable:true,scanAloneInsufficient:true,crossAccountDenied:true,evidenceAuthorization:true,originalEvidenceDigestPreserved:true,realLogoutSessionRevocation:true,suspendedParticipantObligationsPreserved:true,explicitLegacyDisputeOnly:true,disputeDoesNotReverseReturn:true,borrowerUnsentDisagreement:true,noNotificationDeadlineActivated:true,noFinancialAction:true,noExternalAI:true,responsiveViewports:3},null,2));
+      });
+
       await t.test(
         "manual guessing limits and audit survive rotation; expired/replayed and cancelled/disputed paths fail closed",
         async () => {

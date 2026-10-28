@@ -1243,3 +1243,7 @@
 .companion-check{display:flex!important;gap:.75rem;align-items:center;min-height:44px}.companion-check input{width:20px;height:20px}
 .companion-sources{list-style:none;padding:0}.companion-sources li{border-top:1px solid var(--rule);padding:1rem 0}.companion-sources li p:last-child{white-space:pre-wrap;background:var(--sheet);padding:1rem}
 @media(max-width:760px){.companion-columns{grid-template-columns:1fr;gap:0}.companion-modes button{width:100%}}
+
+/* Inspection register inherits the companion's clean paper controls and ruled sections. */
+.companion-page>form{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}.companion-page>form input{padding:.7rem;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);max-width:100%;min-height:44px}
+.companion-section dl dt{font-weight:600;margin-top:1rem}.companion-section dl dd{margin:.35rem 0;line-height:1.6}.companion-section fieldset{border-top:1px solid var(--rule);padding:1rem 0}.companion-section fieldset label{line-height:1.8}.companion-page summary{min-height:44px;cursor:pointer}
