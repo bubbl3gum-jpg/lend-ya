@@ -2,7 +2,7 @@
 
 28 October 2026 · Asia/Taipei · Stage 10 — AI Assistant, Stage 1, with Stage 7 dependency.
 
-Branch `feature/customer-service-companion-batch-13a`. Tested implementation **`02d36698ec4482f6eb676f985362447e8e8dff5d`**. Separate evidence revision recorded at closeout. Clean baseline `911fc303d604514d92cbe8238884b0e1bbaebb97`, verified ancestry from supplied Batch 12D implementation `008acb786898a39c6e9edd37b5e3020d17fa4c18` and evidence `e40b240105fa7e252b34b14664f19d543e4074f3`.
+Branch `feature/customer-service-companion-batch-13a`. Tested implementation **`02d36698ec4482f6eb676f985362447e8e8dff5d`**. Evidence closeout **`a4c66ebc65e08eeeb10aa5e18a059daf2e01b399`**. This final report-index revision records that reference only. Clean baseline `911fc303d604514d92cbe8238884b0e1bbaebb97`, verified ancestry from supplied Batch 12D implementation `008acb786898a39c6e9edd37b5e3020d17fa4c18` and evidence `e40b240105fa7e252b34b14664f19d543e4074f3`.
 
 ## Delivered working checkpoint
 
