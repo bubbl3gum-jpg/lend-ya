@@ -1,0 +1,35 @@
+# Authentication, identity and participation audit — Batch 13C
+
+Baseline `6ff743df3871cc58437a72f5f36bc595fbffe9ea`, branch `feature/trust-evidence-inspection-batch-13b`, initially clean. `fa5b3e3dc81b4727c063aad6fe50ba601b0734fd` (13B implementation), `4a723a95d7fe712ea0c648307f3fe14983aa7f05` (font correction) and `b74870afdeef5937de471a3fbf0a99e9b6a08599` (evidence) are ancestors. New isolated branch `feature/identity-assurance-foundation-batch-13c`.
+
+This audit describes source behavior, not a certification of the complete authentication system. Production eligibility remains unchanged.
+
+| Area | Actual source / existing contract | eKYC gap / future enforcement point |
+| --- | --- | --- |
+| Register | `app/api/auth/register/route.ts`: exact server-created USER, UNVERIFIED, existing scrypt hash, persisted session; `lib/api-validation.ts`, `lib/auth-rate-limit.ts` enforce existing input/abuse rules | Registration stays available without eKYC; no duplicate auth service |
+| Login | `app/api/auth/login/route.ts`: existing password verification and rate limit; credential snapshot issuance lock; restricted owned Support login branch | Login stays available; never infer eKYC from authentication/passkey/staff identity |
+| Sessions | `lib/auth.ts`: random cookie, SHA-256 token hash lookup in AuthSession, seven-day expiry, deletion on logout; `persistVerifiedSession` serializes credential issuance with password change | Simulator resolves current actual user and exact persisted session incarnation; new login gets separate state; no token/session ID returned |
+| Account | `app/account/layout.tsx`, `components/account-settings.tsx`, `app/api/account/route.ts`, `app/api/account/password/route.ts` | Preserve name/password/appearance/locale flow; add optional owned-test link from existing Verification page |
+| Legacy trust | `prisma/schema.prisma` User.verificationStatus and identityVerified, `lib/trust-profile.ts`, `components/trust-profile.tsx`, `app/account/verification/page.tsx` | Existing badges/strings lack provider authenticity/liveness/match provenance, expiry and invalidation. **Never promote these fields into eKYC authority.** They remain unchanged |
+| Staff verified humans | StaffPerson / StaffAccountAssociation / StaffMembership and existing staff/MFA services | Administrative human association is separate from marketplace eKYC; no cross-promotion or new evidence access |
+| Public discovery | `app/api/listings/route.ts` GET; `app/listings/page.tsx`; existing public listing GET | Browse remains available, subject to existing eligible listing visibility. Identity not required |
+| Create listing | `app/api/listings/route.ts` POST: multipart, photos, bounded metadata, valid stations, ACTIVE account; transaction creates **ACTIVE** listing with stored media | Creation currently publishes; there is no persisted listing DRAFT status. Future eKYC must check before media persistence/publication and again atomically with the authoritative create. Do not invent a draft route or block read-only browsing |
+| Reactivate listing | `app/api/listings/[id]/route.ts` PATCH: actual owner/ACTIVE account, status ACTIVE or INACTIVE, photo required before ACTIVE | Future check for publication/reactivation; define already-ACTIVE content-edit policy explicitly. Do not accidentally require verification to unpublish or fulfill obligations |
+| Admin listing mutation | `app/api/admin/listings/[id]/route.ts`, `app/api/admin/listings/[id]/moderation/route.ts` | Review every route capable of reactivation at future cutover; restoring moderation state must not silently bypass then-authoritative publication policy. No runtime changes now |
+| Rental request | `app/api/bookings/route.ts` POST: current user, active participant locks, listing lock, eligibility/overlap/station/time/price checks, quote-only branch, request-key replay, then Booking.create | Future check **new submission** inside transaction before Booking.create. Quote, browse and read-only replay must be distinguished from new request; decide revalidation on retries without duplicate bookings. No new production restriction now |
+| Participation | `lib/marketplace-permissions.ts`, booking detail/meetup/return/inspection/dispute/evidence routes | Owner/borrower/resource checks remain primary. Suspension restricts new activity but preserves existing return/inspection/Support obligations. New optional simulator ACTIVE-only is not a new rental restriction |
+| Existing handoff security | `lib/meetup/service.ts`, booking handoff/return routes, `lib/rental-evidence.ts` | GPS/QR/camera/consent/physical receipt unchanged. Synthetic identity challenge never creates MeetupEvent, Handoff, Return or evidence |
+| Evidence / Support | Original participant evidence route; scoped Support worker and per-channel policies | Item evidence is separate from future identity material. Neither legacy ADMIN nor Support/AI automatically receives ID or face access |
+| 13B future contract | `lib/inspection/future-contracts.ts`: identityAuthorizationUnavailable always throws | Preserved. 13C adds contract/simulator, not a replacement production verification path |
+| Logging / history | Existing bounded `lib/operational-error.ts`; durable domain audit services elsewhere | Simulator uses safe fixed failure context, bounded ephemeral history only; **not** immutable production verification audit |
+| Development guard | Existing disposable URL/effective-target validation in `lib/disposable-database-url.ts` / `lib/prisma.ts` plus candidate actual database name/ownership marker | 13C reuses this boundary with its own flag; NODE_ENV must be development, exact test URLs/run marker/session. Not merely a feature flag or test-looking DB name |
+
+## Classification and complexity
+
+- Existing and verified by selected regressions: legacy login/session/logout, participation/meetup and scoped Support behavior. Preserve these services; no duplicated password system.
+- Existing but needs future modification: listing publication/reactivation and new rental-request transactional checks (medium, requires production migration/cutover policy).
+- Partially implemented candidate: identity account journey, typed outcome/attempt contract, synthetic transitions and booking-scoped synthetic challenge (small/medium, test-only).
+- Missing: approved identity provider, validated callbacks, real document authenticity/liveness/match, lawful processing policy, durable outcome/history/revocation, restricted manual review, delivery/appeal/accessibility implementation (large; not authorized here).
+- Future/deferred: evaluated randomized live challenges, real production eligibility, multi-country support, duplicate-identity/recovery policy. No provider or production activation approved.
+
+Existing broad legacy publication behavior is not newly secured by a simulator. A safe future cutover must inventory all writers, serialize eligibility/result revocation with transactional operations, support existing obligations, and test expiry/revocation/provider outages before activation.

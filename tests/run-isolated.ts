@@ -213,7 +213,8 @@ async function main() {
         if (process.argv.includes("--ai-case-brief") || process.argv.includes("--ai-case-brief-disabled")) Object.assign(env, { NODE_ENV: "development" });
         if (process.argv.includes("--ai-case-brief") || process.argv.includes("--ai-case-brief-production")) { env.HUSTLEN_AI_CASE_BRIEF_DEMO = "synthetic-only"; env.HUSTLEN_AI_BRIEF_ORIGIN = env.TEST_BASE_URL; }
         if (process.argv.includes("--ai-case-brief-production")) Object.assign(env, { HUSTLEN_AI_PROVIDER_KEY: "synthetic-unused-not-a-real-key", HUSTLEN_AI_LIVE_APPROVED: "true", HUSTLEN_AI_PROVIDER_ENDPOINT: "https://not-approved.invalid/" });
-        const productionPilot = process.argv.includes("--ai-case-brief-production") || process.argv.includes("--password-change-production") || process.argv.includes("--platform-settings-production") || process.argv.includes("--announcements-production") || process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        if (process.argv.includes("--identity") || process.argv.includes("--identity-production")) { env.HUSTLEN_IDENTITY_CANDIDATE="owned-synthetic-only"; env.HUSTLEN_IDENTITY_ORIGIN=env.TEST_BASE_URL; env.HUSTLEN_EKYC_PROVIDER_ENDPOINT="https://not-authorized.invalid/"; env.HUSTLEN_EKYC_PROVIDER_KEY="synthetic-unused-not-a-credential"; }
+        const productionPilot = process.argv.includes("--identity-production") || process.argv.includes("--ai-case-brief-production") || process.argv.includes("--password-change-production") || process.argv.includes("--platform-settings-production") || process.argv.includes("--announcements-production") || process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
         if(process.argv.includes("--platform-settings") || process.argv.includes("--platform-settings-production")){env.HUSTLEN_SETTINGS_CANDIDATE="owned-display-only";env.HUSTLEN_SETTINGS_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_SETTINGS_ADMIN_IDS="1";env.HUSTLEN_ANNOUNCEMENT_CANDIDATE="owned-informational-only";env.HUSTLEN_ANNOUNCEMENT_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ANNOUNCEMENT_ADMIN_IDS="1,3";}
         if(process.argv.includes("--announcements") || process.argv.includes("--announcements-production")){env.HUSTLEN_ANNOUNCEMENT_CANDIDATE="owned-informational-only";env.HUSTLEN_ANNOUNCEMENT_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ANNOUNCEMENT_ADMIN_IDS="1";}
         if(process.argv.includes("--locations") || process.argv.includes("--locations-production")){env.HUSTLEN_GEOFENCING_LAB="owned-self-only";env.HUSTLEN_GEOFENCING_LAB_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_GEOFENCING_LAB_ADMIN_IDS="1";}
@@ -262,7 +263,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.some(flag => ["--ai-case-brief", "--ai-case-brief-production", "--ai-case-brief-disabled"].includes(flag)))
+        if (process.argv.includes("--identity") || process.argv.includes("--identity-production"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/identity.integration.test.ts"]);
+        else if (process.argv.some(flag => ["--ai-case-brief", "--ai-case-brief-production", "--ai-case-brief-disabled"].includes(flag)))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/ai-case-brief.integration.test.ts"]);
         else if (process.argv.includes("--login-contention"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/login-contention.integration.test.ts"]);
