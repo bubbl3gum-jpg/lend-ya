@@ -8,7 +8,7 @@
 - Clean starting HEAD: `8528ac146a67bc22d24513fa6dab87fab4058c58` on `feature/durable-owner-studio-batch-13d-r1`.
 - Supplied R1 implementation `c3bbfedf4209c1855d2a223a8381b84a132fbf83` and evidence `4e16630e8aafcd6187a3b86f6331438ccf1e9aee` are verified ancestors.
 - Tested implementation: 847a947a5a0b1ab1fff546f2df4e673a7f2af920.
-- Separate evidence closeout: CLOSEOUT_SHA_PENDING (this report is subsequently indexed with that exact commit).
+- Separate evidence closeout: 00d75e1192f27b4a507679a61e00692c4e6ffbb9 (this report is subsequently indexed with that exact commit).
 - Final documentation index changes no implementation.
 
 ## Result
