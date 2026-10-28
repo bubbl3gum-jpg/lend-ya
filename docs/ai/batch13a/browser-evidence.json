@@ -1,0 +1,19 @@
+{
+  "actualCustomerBrowser": true,
+  "actualStaffBrowser": true,
+  "nativeSessionAndPasskey": true,
+  "existingIntakeManuallyUsed": true,
+  "noAutoTicket": true,
+  "noAutoReply": true,
+  "reviewedCopyOnly": true,
+  "cancelClearedAndFenced": true,
+  "scopedBorrowerChannel": true,
+  "ownerPrivateAbsent": true,
+  "lexicalConflictShown": true,
+  "englishAndChinese": true,
+  "draftPreservedOnLocaleChange": true,
+  "revokedAssignmentDeniedAndCleared": true,
+  "viewports": 3,
+  "keyboardFocus": true,
+  "noExternalHttp": true
+}

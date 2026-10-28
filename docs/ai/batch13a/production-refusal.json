@@ -1,0 +1,12 @@
+{
+  "runId": "60b65475db9ac87ad4d12e56",
+  "actualProductionBuildAndStart": true,
+  "testFontFallback": true,
+  "developmentCandidateFlagsConfigured": true,
+  "newPageAndApiBoth404": true,
+  "oldSupportRoutesStill404": true,
+  "noActiveStaffMemberships": true,
+  "supportCandidateTablesEmpty": true,
+  "verifiedBy": "tests/support-staff-production.test.ts",
+  "testExit": 0
+}

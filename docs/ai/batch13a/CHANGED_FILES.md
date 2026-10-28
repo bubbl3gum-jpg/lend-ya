@@ -1,0 +1,48 @@
+# Complete Batch 13A changed-file inventory
+
+Against clean Batch 12D final documentation HEAD `911fc303d604514d92cbe8238884b0e1bbaebb97`. 44 paths across implementation, evidence and report index. No migration/schema/lockfile/dependency change.
+
+- `AGENTS.md`
+- `app/api/dev/support-companion/route.ts`
+- `app/dev/support-agent/page.tsx`
+- `app/dev/support-companion/page.tsx`
+- `app/dev/support-requester/page.tsx`
+- `app/heritage.css`
+- `components/support-candidate-workbench.tsx`
+- `components/support-companion.tsx`
+- `docs/ai/CUSTOMER_SERVICE_COMPANION_REVIEW_BATCH_13A.md`
+- `docs/ai/batch13a/ARCHITECTURE_AND_BOUNDARIES.md`
+- `docs/ai/batch13a/CHANGED_FILES.md`
+- `docs/ai/batch13a/GUIDANCE_SOURCE_AUDIT.md`
+- `docs/ai/batch13a/INITIAL_FAILURES.md`
+- `docs/ai/batch13a/SCREENSHOTS.md`
+- `docs/ai/batch13a/SETUP_AND_ACCEPTANCE.md`
+- `docs/ai/batch13a/VERIFICATION.md`
+- `docs/ai/batch13a/browser-evidence.json`
+- `docs/ai/batch13a/camera-pickup.json`
+- `docs/ai/batch13a/camera-return.json`
+- `docs/ai/batch13a/cleanup.json`
+- `docs/ai/batch13a/initial-outcomes.json`
+- `docs/ai/batch13a/production-refusal.json`
+- `docs/ai/batch13a/regression-ledger.json`
+- `docs/ai/batch13a/roadmap-preservation.json`
+- `docs/ai/batch13a/screenshots/companion-copilot-zh-desktop.png`
+- `docs/ai/batch13a/screenshots/companion-copilot-zh-mobile.png`
+- `docs/ai/batch13a/screenshots/companion-copilot-zh-tablet.png`
+- `docs/ai/batch13a/screenshots/companion-customer-desktop.png`
+- `docs/ai/batch13a/screenshots/companion-customer-mobile.png`
+- `docs/ai/batch13a/screenshots/companion-customer-tablet.png`
+- `docs/ai/batch13a/source-preservation.json`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/assistant/compose.ts`
+- `lib/assistant/contracts.ts`
+- `lib/assistant/guidance.ts`
+- `lib/assistant/messages.ts`
+- `lib/assistant/server.ts`
+- `package.json`
+- `proxy.ts`
+- `tests/assistant.test.ts`
+- `tests/run-isolated.ts`
+- `tests/support-staff-production.test.ts`
+- `tests/support-staff.integration.test.ts`
+- `tests/support/offline-font-responses.cjs`

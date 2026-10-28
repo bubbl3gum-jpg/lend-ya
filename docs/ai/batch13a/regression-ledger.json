@@ -1,0 +1,459 @@
+{
+  "testedImplementationSha": "02d36698ec4482f6eb676f985362447e8e8dff5d",
+  "selectedIsolatedGroups": 17,
+  "allFinalChildExitsZero": true,
+  "testFontFallbackDisclosed": true,
+  "normalUnconfiguredProductionBuild": "FAILED_REMOTE_FONT_PROXY_403",
+  "newHumanScoresRecorded": false,
+  "realModelRequests": 0,
+  "groups": [
+    {
+      "group": "test:integration",
+      "start": "2026-10-28T03:07:42.515Z",
+      "end": "2026-10-28T03:08:26.502Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/89006bcfd15d0b87a37fa96e",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:integration.log",
+      "ownership": {
+        "runId": "89006bcfd15d0b87a37fa96e",
+        "database": "hustlen_test_13a_test_integration_20357_mvrjaq7n",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-28T03:08:26.504Z",
+      "end": "2026-10-28T03:09:07.306Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/41b9680fb2fb3a40489e5dd9",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:meetup-session.log",
+      "ownership": {
+        "runId": "41b9680fb2fb3a40489e5dd9",
+        "database": "hustlen_test_13a_test_meetup_session_20357_mvrjbo5k",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-28T03:09:07.306Z",
+      "end": "2026-10-28T03:13:14.434Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/291a53e85c8b5f9dfb37183f",
+      "tests": [
+        "\u2139 tests 11"
+      ],
+      "passes": [
+        "\u2139 pass 11"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:meetup.log",
+      "ownership": {
+        "runId": "291a53e85c8b5f9dfb37183f",
+        "database": "hustlen_test_13a_test_meetup_20357_mvrjcjmy",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-28T03:13:14.434Z",
+      "end": "2026-10-28T03:13:36.804Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/476f632e33ab6b03a170d38f",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:login-readiness.log",
+      "ownership": {
+        "runId": "476f632e33ab6b03a170d38f",
+        "database": "hustlen_test_13a_test_login_readiness_20357_mvrjhubm",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-28T03:13:36.804Z",
+      "end": "2026-10-28T03:14:12.525Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1e72a54523badc3e5de60b33",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:authorization.log",
+      "ownership": {
+        "runId": "1e72a54523badc3e5de60b33",
+        "database": "hustlen_test_13a_test_authorization_20357_mvrjibl0",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:staff-session",
+      "start": "2026-10-28T03:14:12.525Z",
+      "end": "2026-10-28T03:14:16.465Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/bc956601437f6e6eab8431dc",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:staff-session.log",
+      "ownership": {
+        "runId": "bc956601437f6e6eab8431dc",
+        "database": "hustlen_test_13a_test_staff_session_20357_mvrjj359",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:mfa",
+      "start": "2026-10-28T03:14:16.465Z",
+      "end": "2026-10-28T03:14:24.164Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/39186b7206dea4f248150696",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:mfa.log",
+      "ownership": {
+        "runId": "39186b7206dea4f248150696",
+        "database": "hustlen_test_13a_test_mfa_20357_mvrjj66p",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-28T03:14:24.165Z",
+      "end": "2026-10-28T03:15:06.168Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/44b0fcd288532bdd218b9303",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:admin.log",
+      "ownership": {
+        "runId": "44b0fcd288532bdd218b9303",
+        "database": "hustlen_test_13a_test_admin_20357_mvrjjc4l",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-28T03:15:06.169Z",
+      "end": "2026-10-28T03:15:33.897Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1b78b291393d2be9a9cbce94",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:rental-api.log",
+      "ownership": {
+        "runId": "1b78b291393d2be9a9cbce94",
+        "database": "hustlen_test_13a_test_rental_api_20357_mvrjk8jc",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:account-security-ux",
+      "start": "2026-10-28T03:15:33.898Z",
+      "end": "2026-10-28T03:16:00.631Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/bc090a29eb415f8513a71698",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:account-security-ux.log",
+      "ownership": {
+        "runId": "bc090a29eb415f8513a71698",
+        "database": "hustlen_test_13a_test_account_security_ux_20357_mvrjktxm",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-28T03:15:37.656Z",
+      "end": "2026-10-28T03:16:33.741Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1c2dcb0a5a6481b899326543",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 15"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff.log",
+      "ownership": {
+        "runId": "1c2dcb0a5a6481b899326543",
+        "database": "hustlen_test_13a_test_support_staff_30259_mvrjkwu0",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-28T03:16:00.631Z",
+      "end": "2026-10-28T03:17:30.935Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/84c39cda16d4a3cf5469b8bc",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:chat.log",
+      "ownership": {
+        "runId": "84c39cda16d4a3cf5469b8bc",
+        "database": "hustlen_test_13a_test_chat_20357_mvrjlek7",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-28T03:16:33.742Z",
+      "end": "2026-10-28T03:16:52.803Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/60b65475db9ac87ad4d12e56",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff-production.log",
+      "ownership": {
+        "runId": "60b65475db9ac87ad4d12e56",
+        "database": "hustlen_test_13a_test_support_staff_produ_30259_mvrjm43y",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-28T03:16:52.803Z",
+      "end": "2026-10-28T03:17:02.025Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/4036d5f85ad2ed63230d1d9c",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/build:verify.log",
+      "ownership": {
+        "runId": "4036d5f85ad2ed63230d1d9c",
+        "database": "hustlen_test_13a_build_verify_30259_mvrjmitf",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:support-channels",
+      "start": "2026-10-28T03:17:30.935Z",
+      "end": "2026-10-28T03:18:02.163Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/74ecf180c56d643d921de92c",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-channels.log",
+      "ownership": {
+        "runId": "74ecf180c56d643d921de92c",
+        "database": "hustlen_test_13a_test_support_channels_20357_mvrjnc8n",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:ai-case-brief",
+      "start": "2026-10-28T03:18:02.165Z",
+      "end": "2026-10-28T03:18:27.485Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9b9a8f891a38d42e7a7d5f6b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:ai-case-brief.log",
+      "ownership": {
+        "runId": "9b9a8f891a38d42e7a7d5f6b",
+        "database": "hustlen_test_13a_test_ai_case_brief_20357_mvrjo0c5",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    },
+    {
+      "group": "test:ai-case-brief-production",
+      "start": "2026-10-28T03:18:27.486Z",
+      "end": "2026-10-28T03:18:42.652Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ab82098fb9de4bad3756b59d",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:ai-case-brief-production.log",
+      "ownership": {
+        "runId": "ab82098fb9de4bad3756b59d",
+        "database": "hustlen_test_13a_test_ai_case_brief_produ_20357_mvrjojvi",
+        "passed": true,
+        "preserved": false
+      },
+      "fontResourceFixture": "tests/support/offline-font-responses.cjs"
+    }
+  ],
+  "checks": {
+    "unit": {
+      "exit": 0,
+      "tests": 125,
+      "pass": 125,
+      "fail": 0
+    },
+    "typescript": {
+      "exit": 0
+    },
+    "lint": {
+      "exit": 0,
+      "warnings": 0
+    },
+    "prismaValidation": {
+      "exit": 0
+    }
+  }
+}

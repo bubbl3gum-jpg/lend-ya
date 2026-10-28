@@ -1,0 +1,103 @@
+{
+  "initialAndIntermediateRuns": [
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-28T03:01:58.203Z",
+      "end": "2026-10-28T03:02:07.518Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/136dbb905308ce9d61bc705b",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff-production.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-28T03:01:19.875Z",
+      "end": "2026-10-28T03:01:58.202Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/2904519d12682310e6b1e065",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-28T03:03:40.630Z",
+      "end": "2026-10-28T03:04:19.405Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/d8bb3850cf4b8bb76b135b82",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-28T03:04:59.960Z",
+      "end": "2026-10-28T03:06:10.537Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/f29e20d4721e9b176b3eadef",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 2"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-28T03:04:43.458Z",
+      "end": "2026-10-28T03:04:54.285Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/240157e72543c252bee82633",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/build:verify.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-28T03:04:35.969Z",
+      "end": "2026-10-28T03:04:43.456Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/6b4792cc9fda037eeb19a076",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13a/test:support-staff-production.log"
+    }
+  ],
+  "finalSuccessfulRunsIn": "regression-ledger.json",
+  "normalBuildRemainsBlockedWithoutFontFixture": true,
+  "noAssertionsOrTimeoutsRelaxed": true
+}
