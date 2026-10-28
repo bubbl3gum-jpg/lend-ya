@@ -9,7 +9,7 @@
 - Supplied implementation `3b5c964772a9e140eeb34900f80d47535acf0227` and closeout `8476e2157a985669a2d3730b3117c70f6d213bc4` verified ancestors.
 - New isolated branch: `feature/durable-owner-studio-batch-13d-r1`.
 - Tested implementation: `c3bbfedf4209c1855d2a223a8381b84a132fbf83`.
-- Separate evidence closeout: this separate evidence commit; exact SHA indexed after creation.
+- Separate evidence closeout: `4e16630e8aafcd6187a3b86f6331438ccf1e9aee`.
 
 No push, merge, deployment or existing application database operation. No live provider, biometric/eKYC processing, production participation/publication requirement, staff/Support activation, financial action or autonomous decision.
 
@@ -41,8 +41,8 @@ Existing inspection and comparison views include a real saved-documentation pane
 
 ## Verification and evidence
 
--142/142 unit tests; TypeScript, lint without warnings, Prisma validation and normal production build pass.
--19/19 final selected owned-isolated command groups pass. [Exact regression ledger](batch13d-r1/regression-ledger.json) records commands, artifact/run IDs, times, exits and cleanup. Not every historical command or workload condition was rerun.
+- 142/142 unit tests; TypeScript, lint without warnings, Prisma validation and normal production build pass.
+- 19/19 final selected owned-isolated command groups pass. [Exact regression ledger](batch13d-r1/regression-ledger.json) records commands, artifact/run IDs, times, exits and cleanup. Not every historical command or workload condition was rerun.
 - Real manual-first save/reload, photo-first creation, actual server decode/quality, owner declarations, protected byte hashes, explicit confirmation, preserved earlier versions after subsequent edits and listing changes, concurrent conflicting saves, foreign references/users, missing/media/CSRF/forged-field rejection, actual expiry/logout and pending-write revocation.
 - Main test listing: draft revision12 with12 attributed events, two immutable confirmed versions and five protected photos (including two real browser uploads). Separate photo-first listing also saved. [Persistence evidence](batch13d-r1/persistence-evidence.json).
 - SQL tamper tests reject version/photo/event changes/deletes/truncation and a valid-context draft update without its required event. Audit-failure injection503 rolls back, rather than removing operational evidence.
