@@ -1226,3 +1226,20 @@
 @media (max-width: 1050px) { .ai-ledger-layout { grid-template-columns: minmax(0, 1fr); } .ai-source-ledger { border-right: 0; border-bottom: 1px solid var(--rule); } }
 /* 12C: native disclosure controls for the read-only experiment checklist/rubric. */
 .ai-notebook details > summary { min-height: 44px; padding: .6rem 0; cursor: pointer; }
+
+/* Scoped Support companion: ruled field notes; no sensory effects or chat simulation. */
+.companion-page{max-width:1240px;margin:auto;padding:clamp(1rem,3vw,3rem);color:var(--ink)}
+.companion-masthead{padding:1.5rem 0;border-top:4px solid var(--rule);border-bottom:3px double var(--rule);margin:1.5rem 0}
+.companion-masthead h1{font-family:var(--display);font-size:clamp(2rem,4vw,3.5rem);line-height:1.1;margin:.5rem 0}
+.companion-columns{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr);gap:2rem}
+.companion-section{min-width:0;border-top:1px solid var(--rule);padding:1.5rem 0;overflow-wrap:anywhere}
+.companion-section h2,.companion-section h3{font-family:var(--display);margin:1.25rem 0 .5rem;font-size:1.5rem}
+.companion-section p,.companion-section ul{margin:.7rem 0;line-height:1.7}
+.companion-section label{display:block;margin:1rem 0}.companion-section input:not([type=checkbox]),.companion-section textarea,.companion-section select{display:block;width:100%;margin-top:.5rem;padding:.7rem;background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:3px;min-height:44px}
+.companion-page button,.companion-language select{min-height:44px;padding:.6rem 1rem;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);border-radius:3px}
+.companion-page button:disabled{opacity:.55;cursor:not-allowed}.companion-page button[aria-pressed=true]{border-bottom:3px solid var(--action)}
+.companion-page :is(button,input,textarea,select,a):focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.companion-modes,.companion-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}.companion-language{display:flex;align-items:center;gap:1rem}
+.companion-check{display:flex!important;gap:.75rem;align-items:center;min-height:44px}.companion-check input{width:20px;height:20px}
+.companion-sources{list-style:none;padding:0}.companion-sources li{border-top:1px solid var(--rule);padding:1rem 0}.companion-sources li p:last-child{white-space:pre-wrap;background:var(--sheet);padding:1rem}
+@media(max-width:760px){.companion-columns{grid-template-columns:1fr;gap:0}.companion-modes button{width:100%}}

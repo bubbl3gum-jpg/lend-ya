@@ -12,6 +12,8 @@ test(
         "/api/dev/support-requester",
         "/dev/support-agent",
         "/dev/support-requester",
+        "/dev/support-companion",
+        "/api/dev/support-companion",
       ])
         for (const method of ["GET", "POST"]) {
           if (method === "POST" && route.startsWith("/dev")) continue;

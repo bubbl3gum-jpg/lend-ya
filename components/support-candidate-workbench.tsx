@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { enrollPasskey, verifyPasskey } from "@/lib/webauthn-browser";
 import type {
   PublicKeyCredentialCreationOptionsJSON,
@@ -31,8 +32,10 @@ const time = (date: string) =>
   }).format(new Date(date)) + " (Asia/Taipei)";
 export function SupportCandidateWorkbench({
   kind,
+  companionAvailable = false,
 }: {
   kind: "staff" | "requester";
+  companionAvailable?: boolean;
 }) {
   const [tickets, setTickets] = useState<Ticket[]>([]),
     [ticket, setTicket] = useState<Ticket | null>(null),
@@ -145,6 +148,7 @@ export function SupportCandidateWorkbench({
           committed audit. Passkey verification alone is not staff
           authorization.
         </p>
+        {companionAvailable && <Link href="/dev/support-companion">Open offline Support companion (no model)</Link>}
       </header>
       {kind === "staff" ? (
         <section
