@@ -1,0 +1,15 @@
+{
+  "group": "build:verify",
+  "start": "2026-10-28T06:53:18.422Z",
+  "end": "2026-10-28T06:53:29.640Z",
+  "exit": 0,
+  "signal": null,
+  "artifact": ".test-artifacts/1bb4813441fcb3a03db1c3d2",
+  "tests": null,
+  "passes": null,
+  "fails": null,
+  "cleanup": true,
+  "log": "/tmp/hustlen-13b/build:verify.log",
+  "fontSubstitution": false,
+  "commit": "4a723a95d7fe712ea0c648307f3fe14983aa7f05"
+}

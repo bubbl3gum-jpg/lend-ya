@@ -1,0 +1,9 @@
+{
+  "actualProductionBuildAndStart": true,
+  "inspectionAndSupportFlagsConfigured": true,
+  "pageAndApi404": true,
+  "fontSubstitutionUsed": false,
+  "verifiedBy": "tests/support-staff-production.test.ts",
+  "runId": "758097f4bc24b5ad296fa983",
+  "testExit": 0
+}

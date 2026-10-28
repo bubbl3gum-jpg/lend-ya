@@ -1,0 +1,48 @@
+# Complete Batch 13B file inventory
+
+Against clean baseline `e4070a7d3a79916a899f564d9901016968fe502f`. 44 paths across separate font fix, feature implementation, evidence and report index. No schema/migration/dependency-lock change.
+
+- `AGENTS.md`
+- `app/api/dev/inspection/route.ts`
+- `app/bookings/[id]/page.tsx`
+- `app/dev/inspection/page.tsx`
+- `app/globals.css`
+- `app/heritage.css`
+- `app/layout.tsx`
+- `components/inspection-workspace.tsx`
+- `docs/inspection/TRUST_EVIDENCE_REVIEW_BATCH_13B.md`
+- `docs/inspection/batch13b/AUDIT_AND_GAPS.md`
+- `docs/inspection/batch13b/CHANGED_FILES.md`
+- `docs/inspection/batch13b/FONT_BUILD_FIX.md`
+- `docs/inspection/batch13b/FUTURE_INTERFACES.md`
+- `docs/inspection/batch13b/SCREENSHOTS.md`
+- `docs/inspection/batch13b/SETUP_AND_NEXT_STEPS.md`
+- `docs/inspection/batch13b/STATE_AND_SECURITY_CONTRACT.md`
+- `docs/inspection/batch13b/VERIFICATION.md`
+- `docs/inspection/batch13b/browser-evidence.json`
+- `docs/inspection/batch13b/camera-pickup.json`
+- `docs/inspection/batch13b/camera-return.json`
+- `docs/inspection/batch13b/cleanup.json`
+- `docs/inspection/batch13b/font-build-verification.json`
+- `docs/inspection/batch13b/initial-outcomes.json`
+- `docs/inspection/batch13b/production-refusal.json`
+- `docs/inspection/batch13b/regression-ledger.json`
+- `docs/inspection/batch13b/roadmap-preservation.json`
+- `docs/inspection/batch13b/screenshots/inspection-borrower-desktop.png`
+- `docs/inspection/batch13b/screenshots/inspection-borrower-mobile.png`
+- `docs/inspection/batch13b/screenshots/inspection-borrower-tablet.png`
+- `docs/inspection/batch13b/screenshots/inspection-owner-desktop.png`
+- `docs/inspection/batch13b/screenshots/inspection-owner-mobile.png`
+- `docs/inspection/batch13b/screenshots/inspection-owner-tablet.png`
+- `docs/inspection/batch13b/source-preservation.json`
+- `docs/product/HUSTLEN_AI_PRODUCT_BLUEPRINT.md`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/inspection/contracts.ts`
+- `lib/inspection/future-contracts.ts`
+- `lib/inspection/service.ts`
+- `package.json`
+- `proxy.ts`
+- `tests/inspection.test.ts`
+- `tests/meetup.integration.test.ts`
+- `tests/run-isolated.ts`
+- `tests/support-staff-production.test.ts`
