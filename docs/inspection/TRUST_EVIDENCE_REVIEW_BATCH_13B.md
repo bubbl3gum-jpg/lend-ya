@@ -6,7 +6,7 @@ Branch `feature/trust-evidence-inspection-batch-13b`.
 
 - Tested feature implementation: **`fa5b3e3dc81b4727c063aad6fe50ba601b0734fd`**.
 - Separate font-build fix: **`4a723a95d7fe712ea0c648307f3fe14983aa7f05`**.
-- Separate evidence closeout: recorded after evidence commit.
+- Separate evidence closeout: **`b74870afdeef5937de471a3fbf0a99e9b6a08599`**. This final report-index revision records that reference only.
 - Clean starting HEAD **`e4070a7d3a79916a899f564d9901016968fe502f`**, documentation branch `docs/ai-product-trust-blueprint-v01`. Verified ancestry from supplied 13A implementation `02d36698ec4482f6eb676f985362447e8e8dff5d`, evidence `a4c66ebc65e08eeeb10aa5e18a059daf2e01b399` and final index `b9df4dc2fedff2ca8b43da3e21f940ef1ef11bd1`. Newer working-blueprint documentation preserved; no work discarded.
 
 ## Delivered application behavior
