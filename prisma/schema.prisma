@@ -51,6 +51,10 @@ enum DisputeStatus {
 }
 
 model User {
+  itemDrafts DevItemDraft[]
+  itemPhotos DevItemPhoto[]
+  itemVersions DevItemVersion[]
+  itemEvents DevItemEvent[]
   displaySettingChanges DevDisplaySetting[] @relation("DisplaySettingActor")
   displaySettingEvents DevDisplaySettingEvent[] @relation("DisplaySettingEventActor")
   announcementsCreated Announcement[] @relation("AnnouncementCreator")
@@ -133,6 +137,10 @@ model MrtStation {
 }
 
 model Listing {
+  itemDraft DevItemDraft?
+  itemPhotos DevItemPhoto[]
+  itemVersions DevItemVersion[]
+  itemEvents DevItemEvent[]
   supportTickets SupportTicket[] @relation("SupportListing")
 
   id              Int           @id @default(autoincrement())
@@ -1209,4 +1217,65 @@ model AccountSecurityEvent {
  createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamp(3)
  actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
  @@index([actorId,createdAt])
+}
+
+
+// Isolated development documentation. No production eligibility or booking agreement authority.
+model DevItemDraft {
+ listingId Int @id
+ ownerId Int
+ revision Int
+ category String @db.VarChar(64)
+ checklist Json
+ data Json
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ updatedAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+}
+model DevItemPhoto {
+ id String @id @db.Uuid
+ listingId Int
+ ownerId Int
+ revision Int
+ areaId String @db.VarChar(40)
+ mimeType String @db.VarChar(32)
+ data Bytes
+ inputHash String @db.Char(64)
+ storedHash String @db.Char(64)
+ quality Json
+ source String @default("OWNER_SELECTION_NOT_RENTAL_EVIDENCE") @db.VarChar(48)
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ @@index([listingId,createdAt])
+}
+model DevItemVersion {
+ events DevItemEvent[]
+ id String @id @db.Uuid
+ listingId Int
+ ownerId Int
+ revision Int
+ category String @db.VarChar(64)
+ checklist Json
+ data Json
+ sourceCreatedAt DateTime @db.Timestamptz(3)
+ confirmedAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ @@unique([listingId,revision])
+}
+model DevItemEvent {
+ id String @id @db.Uuid
+ listingId Int
+ actorId Int
+ previousRevision Int
+ revision Int
+ action String @db.VarChar(16)
+ versionId String? @db.Uuid
+ version DevItemVersion? @relation(fields:[versionId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ @@unique([listingId,revision])
 }
