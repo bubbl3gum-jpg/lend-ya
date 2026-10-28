@@ -1,3 +1,6 @@
+import {issueDocumentationReview,bindDocumentationRequest,documentationFailure} from "@/lib/rental-documentation/service";
+import {acknowledgement} from "@/lib/rental-documentation/contracts";
+import {DocumentationError} from "@/lib/rental-documentation/service";
 import { createHash } from "node:crypto";
 import { isSerializationConflict } from "@/lib/database-conflicts";
 import { stationSelect, eligibleStationWhere } from "@/lib/mrt/network";
@@ -132,8 +135,10 @@ export async function POST(request: Request): Promise<Response> {
       (typeof body.notes !== "string" || body.notes.length > 2000)
     )
       return apiError("Notes must be text of at most 2000 characters.", 400);
+    let normalizedDocumentation;
+    if(body.documentation!==undefined){try{normalizedDocumentation=acknowledgement(body.documentation);}catch{throw new DocumentationError("DOCUMENTATION_ACK_REQUIRED",400);}}
     requestHash = body.quote === true ? undefined : createHash("sha256")
-      .update(JSON.stringify({ listingId, startAt: startAt.toISOString(), endAt: endAt.toISOString(), meetingStationId, canonicalStationId: body.canonicalStationId ?? null, notes: notes || null }))
+      .update(JSON.stringify({ listingId, startAt: startAt.toISOString(), endAt: endAt.toISOString(), meetingStationId, canonicalStationId: body.canonicalStationId ?? null, notes: notes || null, ...(body.documentation!==undefined?{documentation:normalizedDocumentation}:{}) }))
       .digest("hex");
     // Replays return the original persisted request even after acceptance or price changes.
     // No mutation is performed by replay; permission is still scoped to the authenticated actor.
@@ -262,8 +267,11 @@ export async function POST(request: Request): Promise<Response> {
           throw new Error("BOOKING_OVERLAP");
         }
 
-        if (body.quote === true)
+        const documentationTerms={listingId,borrowerId:currentUser.id,startAt:startAt.toISOString(),endAt:endAt.toISOString(),stationId:meetingStationId,dailyPrice:listing.price.toString(),totalPrice:totalPrice.toString(),deposit:listing.deposit?.toString()??null,notes:notes||null};
+        if (body.quote === true) {
+          const documentationReview=await issueDocumentationReview(transaction,currentUser.id,request,documentationTerms);
           return Response.json({
+            ...(documentationReview?{documentationReview}:{}),
             quote: {
               title: listing.title,
               startAt,
@@ -275,6 +283,7 @@ export async function POST(request: Request): Promise<Response> {
               meetingStationId,
             },
           });
+        }
         if (
           body.expectedQuote !== undefined &&
           body.expectedQuote !==
@@ -284,8 +293,10 @@ export async function POST(request: Request): Promise<Response> {
             "The listing price changed. Review a new quotation before submitting.",
             409,
           );
+        const documentationBinding=await bindDocumentationRequest(transaction,currentUser.id,request,documentationTerms,body.documentation,body);
         const booking = await transaction.booking.create({
           data: {
+            ...documentationBinding,
             listingId,
             ...(requestKey && requestHash ? { requestKey, requestHash } : {}),
             ownerId: listing.ownerId,
@@ -307,6 +318,7 @@ export async function POST(request: Request): Promise<Response> {
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
   } catch (error) {
+    const documentationError=documentationFailure(error);if(documentationError)return documentationError;
     if (requestKey && (isSerializationConflict(error) ||
       (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"))) {
       const repeated = await replay();

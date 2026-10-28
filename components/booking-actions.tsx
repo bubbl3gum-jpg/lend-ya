@@ -5,6 +5,7 @@ import { MeetupVerification } from "@/components/meetup-verification";
 import { RentalEvidenceForm } from "@/components/rental-evidence-form";
 
 type BookingActionsProps = {
+  documentationPilot?:boolean;
   bookingId: number;
   currentUserId: number;
   ownerId: number;
@@ -15,6 +16,7 @@ type BookingActionsProps = {
   inspectionRecorded?: boolean;
 };
 export function BookingActions({
+  documentationPilot=false,
   bookingId,
   currentUserId,
   ownerId,
@@ -62,7 +64,7 @@ export function BookingActions({
           : `/api/bookings/${bookingId}`,
         {
           method: action === "dispute" ? "POST" : "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json",...(documentationPilot?{"X-Hustlen-Documentation-Agreement":"1"}:{}) },
           body: JSON.stringify({ action, ...body }),
         },
       );

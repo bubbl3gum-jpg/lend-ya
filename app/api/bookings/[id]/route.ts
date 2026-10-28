@@ -1,3 +1,4 @@
+import {acceptDocumentation,documentationFailure} from "@/lib/rental-documentation/service";
 import { receiveReturn } from "@/lib/meetup/service";
 import { isSerializationConflict } from "@/lib/database-conflicts";
 import { stationSelect } from "@/lib/mrt/network";
@@ -310,6 +311,7 @@ export async function PATCH(
           listing.reports.length
         )
           throw new Error("RESERVATION_CONFLICT");
+        await acceptDocumentation(transaction,bookingId,currentUser.id,request);
         const conflict = await transaction.booking.findFirst({
           where: {
             listingId: record.listingId,
@@ -370,6 +372,7 @@ export async function PATCH(
         : null,
     });
   } catch (error) {
+    const documentationError=documentationFailure(error);if(documentationError)return documentationError;
     if (error instanceof Error && error.message === "RESERVATION_CONFLICT")
       return apiError(
         "This item is unavailable or already reserved. Refresh and choose another period.",

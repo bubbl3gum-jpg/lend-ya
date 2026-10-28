@@ -1257,3 +1257,11 @@
 .documentation-workspace img{width:auto;height:auto}.documentation-workspace pre{white-space:pre-wrap;overflow-wrap:anywhere}.documentation-areas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.documentation-areas input{width:100%}@media(max-width:960px){.documentation-areas{grid-template-columns:1fr}}
 
 .studio-workspace{overflow-wrap:anywhere}.studio-workspace section{border-top:1px solid var(--rule);padding-block:1rem}.studio-workspace details{border:1px solid var(--rule);padding:1rem;margin-block:1rem}.studio-workspace details a{display:block}.studio-workspace button{margin:.4rem}.studio-workspace summary{cursor:pointer;min-height:44px}
+
+.documentation-ledger{border-block:3px double var(--rule,#9c8665);padding:1rem;margin-block:1rem;overflow-wrap:anywhere;background:var(--sheet,#f7efdd);color:var(--ink,#342e25)}
+.documentation-ledger h3,.documentation-ledger h4{font-family:Georgia,serif;margin-block:1rem .5rem}
+.documentation-ledger img{max-width:100%;width:auto;height:auto;max-height:300px;object-fit:contain}
+.documentation-digest{font-size:.8rem;overflow-wrap:anywhere}
+.documentation-ledger label{display:block}
+
+.catalogue.documentation-agreement-surface{min-height:0}

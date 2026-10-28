@@ -51,6 +51,9 @@ enum DisputeStatus {
 }
 
 model User {
+  docSelections DevDocSelection[]
+  docSelectionEvents DevDocSelectionEvent[]
+  docReviewContexts DevDocReviewContext[]
   itemDrafts DevItemDraft[]
   itemPhotos DevItemPhoto[]
   itemVersions DevItemVersion[]
@@ -137,6 +140,9 @@ model MrtStation {
 }
 
 model Listing {
+  docSelection DevDocSelection?
+  docSelectionEvents DevDocSelectionEvent[]
+  docReviewContexts DevDocReviewContext[]
   itemDraft DevItemDraft?
   itemPhotos DevItemPhoto[]
   itemVersions DevItemVersion[]
@@ -177,6 +183,10 @@ model ListingStation {
 }
 
 model Booking {
+  documentationContextId String? @unique @db.Uuid
+  documentationContext DevDocReviewContext? @relation(fields:[documentationContextId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+  documentationAcknowledgedAt DateTime? @db.Timestamptz(3)
+  documentationAcceptedAt DateTime? @db.Timestamptz(3)
   supportTickets SupportTicket[] @relation("SupportBooking")
 
   id                 Int           @id @default(autoincrement())
@@ -1251,6 +1261,7 @@ model DevItemPhoto {
  @@index([listingId,createdAt])
 }
 model DevItemVersion {
+ selections DevDocSelectionEvent[]
  events DevItemEvent[]
  id String @id @db.Uuid
  listingId Int
@@ -1278,4 +1289,47 @@ model DevItemEvent {
  listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
  actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
  @@unique([listingId,revision])
+}
+
+model DevDocSelection {
+ listingId Int @id
+ ownerId Int
+ revision Int
+ eventId String @unique @db.Uuid
+ event DevDocSelectionEvent @relation(fields:[eventId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+}
+model DevDocSelectionEvent {
+ id String @id @db.Uuid
+ listingId Int
+ ownerId Int
+ revision Int
+ versionId String? @db.Uuid
+ version DevItemVersion? @relation(fields:[versionId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ title String @db.VarChar(200)
+ digest String? @db.Char(64)
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ current DevDocSelection?
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ contexts DevDocReviewContext[]
+ @@unique([listingId,revision])
+}
+model DevDocReviewContext {
+ id String @id @db.Uuid
+ listingId Int
+ borrowerId Int
+ sessionId Int
+ selectionEventId String @db.Uuid
+ selection DevDocSelectionEvent @relation(fields:[selectionEventId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ terms Json
+ termsDigest String @db.Char(64)
+ policy String @default("owned-documentation-agreement-v1") @db.VarChar(48)
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ expiresAt DateTime @default(dbgenerated("(clock_timestamp() + '00:10:00'::interval)")) @db.Timestamptz(3)
+ listing Listing @relation(fields:[listingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ borrower User @relation(fields:[borrowerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ booking Booking?
+ @@index([borrowerId,createdAt])
 }

@@ -1,3 +1,8 @@
+import {LocaleProvider} from "@/components/i18n/locale";
+import {readLocale} from "@/lib/i18n/server";
+import {readAppearance} from "@/lib/heritage/appearance";
+import {agreementEnabled} from "@/lib/rental-documentation/service";
+import {AgreedRentalDocumentation} from "@/components/documentation-agreement";
 import { stationSelect, stationLabel } from "@/lib/mrt/network";
 import { RentalEvidence } from "@/components/rental-evidence";
 import { formatRentalTime, rentalDays } from "@/lib/booking-time";
@@ -388,7 +393,8 @@ export default async function BookingPage({
             <VerifiedReviewForm bookingId={booking.id} />
           ) : null}
           <div className="mt-8">
-            <BookingActions
+            {agreementEnabled()&&<div className="catalogue heritage documentation-agreement-surface" data-theme={await readAppearance()}><LocaleProvider initialLocale={await readLocale()}><AgreedRentalDocumentation key={bookingId} bookingId={bookingId}/></LocaleProvider></div>}
+      <BookingActions documentationPilot={agreementEnabled()}
               bookingId={booking.id}
               currentUserId={currentUser.id}
               ownerId={booking.ownerId}

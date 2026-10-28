@@ -1,3 +1,4 @@
+import {agreementEnabled} from "@/lib/rental-documentation/service";
 import { T } from "@/components/i18n/locale";
 import {
   DiscoveryRegion,
@@ -250,7 +251,7 @@ export default async function ListingDetailPage({
                     <T id="journey.transactionEnglish" />
                   </p>
                   <div lang="en">
-                    <BookingForm
+                    <BookingForm documentationPilot={agreementEnabled()}
                       listing={{
                         id: listing.id,
                         title: listing.title,

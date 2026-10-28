@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/api/dev/rental-documentation") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_RENTAL_DOCUMENTATION !== "owned-agreement-only"))
+    return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname.startsWith("/api/dev/item-studio") || request.nextUrl.pathname === "/dev/item-studio") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_ITEM_STUDIO !== "owned-studio-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname === "/api/dev/item-documentation" || request.nextUrl.pathname === "/dev/item-documentation") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_DOCUMENTATION_CANDIDATE !== "owned-preview-only"))

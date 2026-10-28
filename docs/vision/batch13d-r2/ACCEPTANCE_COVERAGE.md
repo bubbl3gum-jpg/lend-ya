@@ -1,0 +1,19 @@
+# Acceptance coverage and limits
+
+| Required behavior | Executable evidence |
+|---|---|
+| Owner confirms; only designated version shared; private drafts remain private | `tests/rental-documentation.integration.test.ts` creates real saved/confirmed R1 docs; quote without designation has no document; explicit designation enables exact projection; borrower cannot use private studio photo endpoint. `test:item-studio` retains private-version/ownership tests. |
+| Eligible actual listing, exact condition/accessories and checkbox | Native browser login, real listing/station selector/quote/submit; disabled submit until exact acknowledgement; desktop1440/en, tablet820 and mobile390/zh-TW. |
+| Missing, fabricated, foreign or stale version/actor/terms | Actual API rejects missing ack, random version, cross-listing designation, forged extra borrower field, other borrower context and changed notes; unit closed contract rejects forged hash/time/role. |
+| Exact digest/timestamp and authoritative request/acceptance | Persisted context/immutable event/version chain and DB acknowledgement/acceptance timestamps checked from actual PostgreSQL and participant API. |
+| Expiry, session switch, Origin/custom-header CSRF | Separate unsubmitted owned context is aged only through a controlled SQL fixture with trigger restored before HTTP; request denied. New same-user session cannot reuse old context. Wrong Origin and absent custom header denied. No application clock override. |
+| Charger change before submission/acceptance | Included→excluded new owner version; prior ack submission and pending owner acceptance409; old request remains PENDING, then canceled; new reviewed version requested and really accepted. |
+| Atomic failure/retry/concurrency | Injected AFTER INSERT fixture trigger raises; no Booking/ack survives. Same key replay and concurrent exact retries return same Booking; changed parameters and new key using consumed context denied. |
+| Immutable accepted history | Direct SQL attempts to clear context, change amount or delete documented Booking rejected. Later title/condition/selection changes leave participant projection deep-equal; withdrawal does not erase accepted agreement. |
+| Legacy compatibility | Real legacy request before designation remains UNKNOWN/null; actual owner acceptance succeeds after designation with nonoverlapping original terms. Populated R1 upgrade verifies historical data/session/role/audit/reviewer preservation and no backfill. |
+| Authorized participant media; unrelated denial | Context media same session200 vs unrelated404; exact agreed media participant200; unrelated Booking DTO404; logout/expired session401. |
+| Suspended accounts | New acknowledgement403 under actual account contract; obligation reads remain existing participant scope. |
+| Pickup/return/custody/inspection independence | Existing full `test:meetup`, `test:rental-api`, `test:rental-browser`, `test:integration` retained unchanged; original private evidence source hashes preserved. The new R2 browser exercises real request submission; owner acceptance is tested through real HTTP, not simulated browser-success state. |
+| No reactivation/publication/fake eKYC/AI/financial/dispute authority | R1/13C/13B regressions, unchanged protected source hashes, only additive docs/Booking fields, no new executor/provider/payment/evidence/state authority. |
+
+The focused test is one composite node:test scenario with many actual HTTP/SQL/browser assertions, not dozens of independently counted tests. Positive browser collector stays strict; intentionally denied API calls use a separate HTTP client. No existing assertion timeout, protected API guard or browser-error filter is relaxed. Passing serial tests do not resolve the historical overlapping-workload login issue or certify production accessibility/security.

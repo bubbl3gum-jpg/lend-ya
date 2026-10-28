@@ -1,5 +1,9 @@
 "use client";
 
+import {DocumentLedger,type DocumentationReview} from "@/components/documentation-agreement";
+import {useLocale} from "@/components/i18n/locale";
+import {agreementText} from "@/lib/i18n/agreement";
+import {formatTime} from "@/lib/i18n/core";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -7,6 +11,7 @@ import { MRTStationSelector } from "./mrt/MRTStationSelector";
 import { stationLabel, type DatabaseStation } from "@/lib/mrt/network";
 
 type BookingFormProps = {
+  documentationPilot?:boolean;
   listing: {
     id: number;
     title: string;
@@ -16,7 +21,9 @@ type BookingFormProps = {
   };
 };
 
-export function BookingForm({ listing }: BookingFormProps) {
+export function BookingForm({ listing,documentationPilot=false }: BookingFormProps) {
+  const {locale}=useLocale(),docText=agreementText(locale);
+  const [documentation,setDocumentation]=useState<DocumentationReview|null>(null),[ack,setAck]=useState("");
   const router = useRouter();
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
@@ -37,6 +44,7 @@ export function BookingForm({ listing }: BookingFormProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    if(documentation&&reviewed===selection&&ack!==selection+documentation.contextId)return;
     setLoading(true);
 
     try {
@@ -46,7 +54,7 @@ export function BookingForm({ listing }: BookingFormProps) {
         requestIdentity.current = { selection, key: crypto.randomUUID() };
       const response = await fetch("/api/bookings", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Idempotency-Key": requestIdentity.current.key },
+        headers: { ...(documentationPilot?{"X-Hustlen-Documentation-Agreement":"1"}:{}),"Content-Type": "application/json", "Idempotency-Key": requestIdentity.current.key },
         body: JSON.stringify({
           listingId: listing.id,
           startAt,
@@ -57,6 +65,7 @@ export function BookingForm({ listing }: BookingFormProps) {
           )?.station.canonicalId,
           notes,
           quote: reviewed !== selection,
+          ...(reviewed===selection&&documentation?{documentation:{contextId:documentation.contextId,versionId:documentation.document.versionId,acknowledged:true}}:{}),
           ...(reviewed === selection && quote
             ? {
                 expectedQuote: `${quote.dailyPrice}:${quote.totalPrice}:${quote.deposit}`,
@@ -67,6 +76,7 @@ export function BookingForm({ listing }: BookingFormProps) {
 
       const result = await response.json();
       if (!response.ok) {
+        if(result.code?.startsWith("DOCUMENTATION_")){setDocumentation(null);setAck("");setReviewed("");throw new Error(docText.changed);}
         if (result.code === "STATION_UNAVAILABLE") {
           setMeetingStationId("");
           setQuote(null);
@@ -77,6 +87,7 @@ export function BookingForm({ listing }: BookingFormProps) {
 
       if (result.quote) {
         setQuote(result.quote);
+        setDocumentation(result.documentationReview??null);setAck("");
         setReviewed(selection);
         return;
       }
@@ -88,7 +99,7 @@ export function BookingForm({ listing }: BookingFormProps) {
           ? err.message
           : "Unable to create booking request.";
       setError(message);
-      setReviewed("");
+      if(!documentation)setReviewed("");
     } finally {
       setLoading(false);
     }
@@ -177,11 +188,12 @@ export function BookingForm({ listing }: BookingFormProps) {
           </p>
         </div>
       ) : null}
+      {documentation&&reviewed===selection&&<div lang={locale}><p>{docText.expiry}: {formatTime(locale,documentation.expiresAt)}</p><DocumentLedger document={documentation.document} digest={documentation.contentDigest} mediaQuery={`contextId=${documentation.contextId}`}/><label><input type="checkbox" checked={ack===selection+documentation.contextId} onChange={e=>setAck(e.target.checked?selection+documentation.contextId:"")}/>{docText.ack}</label></div>}
       {error ? <p className="mt-4 text-sm text-rose-600">{error}</p> : null}
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading||(reviewed===selection&&!!documentation&&ack!==selection+documentation.contextId)}
         className="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading
