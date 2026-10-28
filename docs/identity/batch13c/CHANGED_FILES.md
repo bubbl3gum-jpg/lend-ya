@@ -1,0 +1,45 @@
+# Complete changed-file inventory
+
+Relative to clean 13B HEAD `6ff743df3871cc58437a72f5f36bc595fbffe9ea`. 41 files. No schema, migration, lockfile or dependency changes.
+
+- `AGENTS.md`
+- `app/account/identity/page.tsx`
+- `app/account/verification/page.tsx`
+- `app/api/dev/identity/route.ts`
+- `app/heritage.css`
+- `components/account-shell.tsx`
+- `components/identity-workspace.tsx`
+- `docs/identity/IDENTITY_ASSURANCE_REVIEW_BATCH_13C.md`
+- `docs/identity/batch13c/AUTHENTICATION_AND_ELIGIBILITY_AUDIT.md`
+- `docs/identity/batch13c/CHANGED_FILES.md`
+- `docs/identity/batch13c/CONTRACT_AND_SECURITY.md`
+- `docs/identity/batch13c/PRIVACY_DOCUMENTS_AND_OPERATIONS.md`
+- `docs/identity/batch13c/SCREENSHOTS.md`
+- `docs/identity/batch13c/SETUP_AND_ACCEPTANCE.md`
+- `docs/identity/batch13c/VERIFICATION.md`
+- `docs/identity/batch13c/browser-evidence.json`
+- `docs/identity/batch13c/camera-pickup.json`
+- `docs/identity/batch13c/camera-return.json`
+- `docs/identity/batch13c/cleanup.json`
+- `docs/identity/batch13c/initial-outcomes.json`
+- `docs/identity/batch13c/lint.log`
+- `docs/identity/batch13c/migration-evidence.json`
+- `docs/identity/batch13c/preservation.json`
+- `docs/identity/batch13c/prisma.log`
+- `docs/identity/batch13c/regression-ledger.json`
+- `docs/identity/batch13c/screenshots/identity-desktop-en.png`
+- `docs/identity/batch13c/screenshots/identity-mobile-zh.png`
+- `docs/identity/batch13c/screenshots/identity-tablet-zh.png`
+- `docs/identity/batch13c/types.log`
+- `docs/identity/batch13c/unit.log`
+- `docs/product/HUSTLEN_AI_PRODUCT_BLUEPRINT.md`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/i18n/identity.ts`
+- `lib/identity/contracts.ts`
+- `lib/identity/service.ts`
+- `lib/identity/simulation.ts`
+- `package.json`
+- `proxy.ts`
+- `tests/identity.integration.test.ts`
+- `tests/identity.test.ts`
+- `tests/run-isolated.ts`

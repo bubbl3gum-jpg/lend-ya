@@ -1,0 +1,44 @@
+{
+  "realBrowserRuns": [
+    {
+      "group": "test:identity",
+      "start": "2026-10-28T08:53:29.147Z",
+      "end": "2026-10-28T08:53:52.893Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/78165f84a52d95012d84dbe1",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:identity",
+      "start": "2026-10-28T08:54:56.518Z",
+      "end": "2026-10-28T08:55:19.330Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/606fffd01094df586c7e4c0b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    }
+  ],
+  "initialUnit": "5/6: static regex matched crypto.update; corrected Prisma-path assertion",
+  "initialType": "two errors; bounded JSON-reader signature and explicit union narrowing corrected",
+  "initialLint": "one effect-state error plus cleanup warning; corrected using server-authorized initial snapshot",
+  "captureFailureCause": "Playwright injected caret style before shell hydration ready; fixed by awaiting existing aria-busy=false; strict collector unchanged"
+}

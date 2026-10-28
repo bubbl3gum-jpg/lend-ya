@@ -1,0 +1,15 @@
+{
+  "actualNativeLogin": true,
+  "isolatedNewSession": true,
+  "scriptedEnrollmentNotRealVerification": true,
+  "bilingual": true,
+  "viewports": [
+    1440,
+    820,
+    390
+  ],
+  "noOverflow": true,
+  "keyboardFocus": true,
+  "browserErrors": [],
+  "externalOrigins": []
+}
