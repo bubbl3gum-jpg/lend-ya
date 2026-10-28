@@ -1,0 +1,82 @@
+{
+  "runs": [
+    {
+      "group": "test:item-studio",
+      "start": "2026-10-28T15:17:05.383Z",
+      "end": "2026-10-28T15:17:15.603Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/0e4d8550446762c99e8b2b4d",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:item-studio",
+      "start": "2026-10-28T15:17:54.144Z",
+      "end": "2026-10-28T15:18:04.556Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/d9cfd30414f4028c5ac0aec4",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:item-studio",
+      "start": "2026-10-28T15:19:24.442Z",
+      "end": "2026-10-28T15:19:48.821Z",
+      "exit": 1,
+      "signal": null,
+      "artifact": ".test-artifacts/0a867d1145dd62f13f172d53",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 0"
+      ],
+      "fails": [
+        "\u2139 fail 1"
+      ],
+      "cleanup": true
+    },
+    {
+      "group": "test:item-studio",
+      "start": "2026-10-28T15:20:58.959Z",
+      "end": "2026-10-28T15:21:23.275Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/cc782b87db42928cdae4e6e5",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true
+    }
+  ],
+  "type": "JsonValue/InputJsonValue conversion corrected",
+  "firstApi": "Prisma P2010 on returned void advisory lock; executeRaw lock convention corrected",
+  "secondApi": "generic deferred function referenced table-specific NEW fields in boolean AND; nested table branches corrected",
+  "browser": "exact textarea label included existing content; explicit aria-label corrected, unchanged deadlines",
+  "expectedNegativeAuditFailure": "Injected event rejection503 rolled back actual draft; passing negative test, not hidden regression",
+  "historicalLoginOverlap": "Not claimed resolved; selected current login checks passed"
+}

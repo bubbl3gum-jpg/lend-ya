@@ -1,0 +1,139 @@
+{
+  "at": "2026-10-28T15:35:18.842Z",
+  "sourceAdminCommit": "18529a30bb7da3c3db08baca614ef1fe2764eb10",
+  "adminMigrations": [
+    {
+      "migration_name": "20261002105848_init",
+      "checksum": "10d15eda85c796155df0213be9f6916d5b8b044b7d6079a0475c3cb3e8325f12"
+    },
+    {
+      "migration_name": "20261002110330_set_currency_precision",
+      "checksum": "2a46f73e2b0025bf252ef9e1f24f1b55ec72bf7fa426d8416db989822ed5bee6"
+    },
+    {
+      "migration_name": "20261002112754_add_auth_sessions",
+      "checksum": "3ee297957335154d7bf9f080a23ebfa3013e7120747869fa9bbda20f4d4bd5d9"
+    },
+    {
+      "migration_name": "20261002130231_add_transaction_handoffs",
+      "checksum": "5289b9110c3270feaaab010a965c351bc0904758aa70457d8eabb02941c9d2c5"
+    },
+    {
+      "migration_name": "20261006150000_booking_lifecycle_backbone",
+      "checksum": "80262e1a4bd4eb60fd97b582cf260bbadf97ca3e21870f498a5d4b61b14032b9"
+    },
+    {
+      "migration_name": "20261012120000_physical_listing_media_reports",
+      "checksum": "f13e3e6ab87d263196913ac9fc641f4dba9577625d1e5db8c89bc3ffddc7e031"
+    },
+    {
+      "migration_name": "20261012150000_trust_profiles",
+      "checksum": "5473ab2ad6b4f2721f1cd74cb61627dd83b8828eea24dfeecccf2f05f688a992"
+    },
+    {
+      "migration_name": "20261013080000_booking_cancellation",
+      "checksum": "854951df0c137141ddc190e606cffc992454057d7f28067503bc9643f067c050"
+    },
+    {
+      "migration_name": "20261013100000_private_rental_evidence",
+      "checksum": "0cacf72d9e91589c37f50a0342d004c8112177aed62c42193359fc175db0dc90"
+    },
+    {
+      "migration_name": "20261014010000_admin_moderation",
+      "checksum": "a5e0281f999bf62a7f061808dad02f935c4cdf68e4db974e1b51ff11d128be60"
+    },
+    {
+      "migration_name": "20261014020000_dispute_case_history",
+      "checksum": "488af1cc7cc05398c282abf6a621b21ae16810361a4b7326d240bf87171e9cde"
+    },
+    {
+      "migration_name": "20261014030000_mvp_security",
+      "checksum": "741a48d67c33158a127ac9ff13122330a04cb32fba105e62bde252c03d77e00f"
+    },
+    {
+      "migration_name": "20261019090000_booking_request_idempotency",
+      "checksum": "2b025ecdf2aeae96c43fa8b498ed839be74b869e3e89faade5ce6c6546b751e0"
+    },
+    {
+      "migration_name": "20261019120000_private_chat_safety",
+      "checksum": "935358d65c8db5af17acd2236dc6579accd673a9bf03aad9454ca71849eb20f2"
+    },
+    {
+      "migration_name": "20261019150000_chat_activity_order",
+      "checksum": "85f230192eee6c04855c769cec3e14a3a61db262fe2dcc7cb2b4b2937d9c506a"
+    },
+    {
+      "migration_name": "20261019180000_chat_shadow_analysis",
+      "checksum": "0a4efe6f568c0a126eb7d2f2432e896698f9f813782f88a67857f377d6fd5328"
+    },
+    {
+      "migration_name": "20261019210000_mrt_meetup_verification",
+      "checksum": "719f53fbb9f537d2d94889623983441775eda9d95fe102e334b37059ca04b8e5"
+    },
+    {
+      "migration_name": "20261020090000_meetup_confirmation_window",
+      "checksum": "02249b7a98c1aa9e356d81094967dceaa9ec32009503be81ec6a3b4a56b55e21"
+    },
+    {
+      "migration_name": "20261024090000_staff_identity_foundation",
+      "checksum": "06b35cf9ef131285d5fc156efa4bd49f68b3a4b83044d9b54dba7ac8835f5b73"
+    },
+    {
+      "migration_name": "20261024140000_staff_session_audit_foundation",
+      "checksum": "cb6687e3718c3afb6f804e2b8d2f2050550fb6625757e0b0d955560525f9ed87"
+    },
+    {
+      "migration_name": "20261024160000_independent_approval_foundation",
+      "checksum": "b3a19f7bc03e7859988e991cab868575b9fe5b5b726eca55fd8443442f5a2231"
+    },
+    {
+      "migration_name": "20261024180000_staff_webauthn_foundation",
+      "checksum": "4053d08a15b49c92033b53bbea6d8d45a1646300f00da56e731d2644abccb26c"
+    },
+    {
+      "migration_name": "20261025090000_support_ticket_candidate",
+      "checksum": "5f36be4367f6d78d55c77e207192c033d8b4d642281bb3a29d20275fecc6c322"
+    },
+    {
+      "migration_name": "20261025160000_support_private_channel_candidate",
+      "checksum": "0d7c71d7590123cb2852e8026f644aec375105e766b479420d400400529193b6"
+    },
+    {
+      "migration_name": "20261026010000_scoped_support_candidate",
+      "checksum": "562be0f2aa322645c9973f3d7a0935e68b2ceb3dd4d50b463d28c8212fcce7ce"
+    },
+    {
+      "migration_name": "20261026090000_announcement_candidate",
+      "checksum": "4ecb7a797089903ae635972d79f6901d72c3bd1a4efe8cb4d76fefa913f06be5"
+    },
+    {
+      "migration_name": "20261026100000_typed_display_settings_candidate",
+      "checksum": "8fb83dec3cd18cec97b856d59fa13fc3c557bdc712b6bfcbeb66cb3bd3bec9aa"
+    },
+    {
+      "migration_name": "20261027090000_account_password_security_event",
+      "checksum": "355bce3f30cbfa013c733b9afe6842fe435baf318e049fc32199d9bfc5db7ce4"
+    },
+    {
+      "migration_name": "20261028160000_owned_item_documentation",
+      "checksum": "6fff7013e7e5888e3d8d0a6d4857c02abcdd8d3cbd8fa0a6191571231836f357"
+    }
+  ],
+  "pendingBeforeUpgrade": [
+    "20261016100000_official_mrt_stations"
+  ],
+  "totalApplied": 30,
+  "passed": [
+    "Real Prisma deploy to Admin/MVP state (all five divergent migrations)",
+    "Only official MRT migration pending before upgrade",
+    "Every prior row preserved across all 14 history/security tables",
+    "Admin restriction true preserved",
+    "Cancellation and private evidence bytes preserved",
+    "Resolved and open dispute case history and immutable admin audits preserved",
+    "Five legacy station primary keys and all booking/listing foreign keys preserved",
+    "120 physical locations and 136 line codes",
+    "Two imports preserve existing application data",
+    "No migration checksum changed",
+    "Combined Prisma schema diff empty"
+  ]
+}

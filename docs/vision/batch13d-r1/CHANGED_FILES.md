@@ -1,0 +1,49 @@
+# Complete changed-file inventory
+
+Relative to clean13D HEAD `bfc01b4b79b6d1dc10af6781cdb8d5e3f25697d8`. 45 files; one new additive migration, no historical migration or lockfile/dependency change.
+
+- `AGENTS.md`
+- `app/api/dev/item-studio/photos/[id]/route.ts`
+- `app/api/dev/item-studio/route.ts`
+- `app/dev/inspection/page.tsx`
+- `app/dev/item-documentation/page.tsx`
+- `app/dev/item-studio/page.tsx`
+- `app/heritage.css`
+- `components/documentation-workspace.tsx`
+- `components/inspection-workspace.tsx`
+- `components/item-studio.tsx`
+- `components/saved-rental-documentation.tsx`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `docs/vision/DURABLE_OWNER_STUDIO_REVIEW_BATCH_13D_R1.md`
+- `docs/vision/batch13d-r1/AUDIT_BEFORE_IMPLEMENTATION.md`
+- `docs/vision/batch13d-r1/CHANGED_FILES.md`
+- `docs/vision/batch13d-r1/PERSISTENCE_AND_SECURITY.md`
+- `docs/vision/batch13d-r1/SCREENSHOTS.md`
+- `docs/vision/batch13d-r1/VERIFICATION_AND_SETUP.md`
+- `docs/vision/batch13d-r1/browser-evidence.json`
+- `docs/vision/batch13d-r1/camera-pickup.json`
+- `docs/vision/batch13d-r1/camera-return.json`
+- `docs/vision/batch13d-r1/cleanup.json`
+- `docs/vision/batch13d-r1/initial-outcomes.json`
+- `docs/vision/batch13d-r1/lint.log`
+- `docs/vision/batch13d-r1/migration-evidence.json`
+- `docs/vision/batch13d-r1/persistence-evidence.json`
+- `docs/vision/batch13d-r1/preservation.json`
+- `docs/vision/batch13d-r1/prisma.log`
+- `docs/vision/batch13d-r1/regression-ledger.json`
+- `docs/vision/batch13d-r1/screenshots/studio-desktop-en.png`
+- `docs/vision/batch13d-r1/screenshots/studio-inspection-desktop.png`
+- `docs/vision/batch13d-r1/screenshots/studio-mobile-zh.png`
+- `docs/vision/batch13d-r1/screenshots/studio-tablet-zh.png`
+- `docs/vision/batch13d-r1/types.log`
+- `docs/vision/batch13d-r1/unit.log`
+- `lib/i18n/studio.ts`
+- `lib/item-studio/contracts.ts`
+- `lib/item-studio/service.ts`
+- `package.json`
+- `prisma/migrations/20261028160000_owned_item_documentation/migration.sql`
+- `prisma/schema.prisma`
+- `proxy.ts`
+- `tests/item-studio.integration.test.ts`
+- `tests/item-studio.test.ts`
+- `tests/run-isolated.ts`

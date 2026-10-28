@@ -1,0 +1,13 @@
+{
+  "draftRevision": 12,
+  "events": 12,
+  "confirmedVersions": 2,
+  "photosPersisted": 5,
+  "originalVersionPreserved": true,
+  "photoBytesProtected": true,
+  "eventFailureRollback": true,
+  "immutableHistorySqlChecks": true,
+  "snapshotBlocked": true,
+  "noPublication": true,
+  "scope": "Main owner listing; separate photo-first listing also persisted"
+}

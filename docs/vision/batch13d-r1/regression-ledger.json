@@ -1,0 +1,461 @@
+{
+  "commands": [
+    {
+      "group": "test:item-studio",
+      "start": "2026-10-28T15:49:28.679Z",
+      "end": "2026-10-28T15:49:56.040Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7cb4160f64c5832c06bbe7f9",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "7cb4160f64c5832c06bbe7f9",
+        "database": "hustlen_test_13dr1_test_item_studio_136089_mvsaidbb",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:item-studio-production",
+      "start": "2026-10-28T15:21:23.277Z",
+      "end": "2026-10-28T15:21:54.903Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c22d8c21a5508b5dc6b56533",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "c22d8c21a5508b5dc6b56533",
+        "database": "hustlen_test_13dr1_test_item_studio_product_118686_mvs9i8ul",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:item-documentation",
+      "start": "2026-10-28T15:21:54.903Z",
+      "end": "2026-10-28T15:22:19.972Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/6854cdc0e7c80428111bb74d",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "6854cdc0e7c80428111bb74d",
+        "database": "hustlen_test_13dr1_test_item_documentation_118686_mvs9ix93",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:identity",
+      "start": "2026-10-28T15:22:19.973Z",
+      "end": "2026-10-28T15:22:44.264Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3a2178d2c2b5ebdbc13b3db5",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "3a2178d2c2b5ebdbc13b3db5",
+        "database": "hustlen_test_13dr1_test_identity_118686_mvs9jglh",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-28T15:22:44.265Z",
+      "end": "2026-10-28T15:23:25.367Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/5ad6d0d8d10ccfcfa1cfe276",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "5ad6d0d8d10ccfcfa1cfe276",
+        "database": "hustlen_test_13dr1_test_integration_118686_mvs9jzc9",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-28T15:23:25.368Z",
+      "end": "2026-10-28T15:24:08.452Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/4b3c6c86a58e61a858681761",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "4b3c6c86a58e61a858681761",
+        "database": "hustlen_test_13dr1_test_meetup_session_118686_mvs9kv20",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-28T15:24:08.453Z",
+      "end": "2026-10-28T15:24:33.728Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9f1187025d57f0b37c25b8f3",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "9f1187025d57f0b37c25b8f3",
+        "database": "hustlen_test_13dr1_test_login_readiness_118686_mvs9lsat",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-28T15:24:33.728Z",
+      "end": "2026-10-28T15:25:08.039Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/cfceac9c4a722f7b839c785d",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "cfceac9c4a722f7b839c785d",
+        "database": "hustlen_test_13dr1_test_authorization_118686_mvs9mbsw",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:mfa",
+      "start": "2026-10-28T15:25:08.039Z",
+      "end": "2026-10-28T15:25:17.583Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/dfa6c4b3689a2586f48bf545",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "dfa6c4b3689a2586f48bf545",
+        "database": "hustlen_test_13dr1_test_mfa_118686_mvs9n29z",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-28T15:25:17.584Z",
+      "end": "2026-10-28T15:26:05.707Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f0246d0116a71729bbf6e560",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "f0246d0116a71729bbf6e560",
+        "database": "hustlen_test_13dr1_test_admin_118686_mvs9n9n4",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-28T15:26:05.712Z",
+      "end": "2026-10-28T15:26:37.673Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/26501ad0f8f56afd2430b7e0",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "26501ad0f8f56afd2430b7e0",
+        "database": "hustlen_test_13dr1_test_rental_api_118686_mvs9oas0",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:rental-browser",
+      "start": "2026-10-28T15:26:37.674Z",
+      "end": "2026-10-28T15:27:35.927Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/bb27528978db505090a22555",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "bb27528978db505090a22555",
+        "database": "hustlen_test_13dr1_test_rental_browser_118686_mvs9ozfu",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:account-security-ux",
+      "start": "2026-10-28T15:27:35.928Z",
+      "end": "2026-10-28T15:27:57.093Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/df8864c7c9893bd44f819325",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "df8864c7c9893bd44f819325",
+        "database": "hustlen_test_13dr1_test_account_security_ux_118686_mvs9q8e0",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-28T15:27:57.094Z",
+      "end": "2026-10-28T15:29:25.800Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/557f5500d0ffbe5ef65a3a90",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "557f5500d0ffbe5ef65a3a90",
+        "database": "hustlen_test_13dr1_test_chat_118686_mvs9qopy",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:support-channels",
+      "start": "2026-10-28T15:29:25.800Z",
+      "end": "2026-10-28T15:30:00.858Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/85b5e4599a3ece7c1cb0778e",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "85b5e4599a3ece7c1cb0778e",
+        "database": "hustlen_test_13dr1_test_support_channels_118686_mvs9sl60",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-28T15:30:00.858Z",
+      "end": "2026-10-28T15:30:37.174Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/4d9f5bcbf01c271401f01111",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 15"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "4d9f5bcbf01c271401f01111",
+        "database": "hustlen_test_13dr1_test_support_staff_118686_mvs9tc7u",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-28T15:30:37.175Z",
+      "end": "2026-10-28T15:35:12.132Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2fd70ec113a48aedba3b9e8f",
+      "tests": [
+        "\u2139 tests 12"
+      ],
+      "passes": [
+        "\u2139 pass 12"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "2fd70ec113a48aedba3b9e8f",
+        "database": "hustlen_test_13dr1_test_meetup_118686_mvs9u48n",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "test:migration",
+      "start": "2026-10-28T15:35:12.132Z",
+      "end": "2026-10-28T15:35:18.907Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d62a4d0279279d578f05de9b",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "d62a4d0279279d578f05de9b",
+        "database": "hustlen_test_13dr1_test_migration_118686_mvsa00ec",
+        "passed": true,
+        "preserved": false
+      }
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-28T15:49:56.042Z",
+      "end": "2026-10-28T15:50:05.890Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/26826ad6b86f20ae4681b1ed",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "ownershipCleanup": {
+        "runId": "26826ad6b86f20ae4681b1ed",
+        "database": "hustlen_test_13dr1_build_verify_136089_mvsaiyfe",
+        "passed": true,
+        "preserved": false
+      }
+    }
+  ],
+  "normalBuildFontSubstitution": false,
+  "unit": {
+    "command": "npm run test:unit",
+    "exit": 0,
+    "tests": 142
+  },
+  "types": {
+    "command": "npx tsc --noEmit",
+    "exit": 0
+  },
+  "lint": {
+    "command": "npm run lint",
+    "exit": 0
+  },
+  "prisma": {
+    "command": "npx prisma validate",
+    "exit": 0
+  },
+  "scope": "19 selected final groups; initial failures retained; historical overlap login issue unresolved"
+}

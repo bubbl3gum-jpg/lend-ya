@@ -1,0 +1,17 @@
+{
+  "nativeLogin": true,
+  "saveReload": true,
+  "explicitConfirmation": true,
+  "immutableVersionHistory": true,
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "locales": [
+    "en",
+    "zh-TW"
+  ],
+  "errors": [],
+  "externalOrigins": []
+}

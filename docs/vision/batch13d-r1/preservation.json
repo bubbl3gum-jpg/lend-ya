@@ -1,0 +1,584 @@
+{
+  "baseline": "bfc01b4b79b6d1dc10af6781cdb8d5e3f25697d8",
+  "unchangedFileCount": 114,
+  "files": [
+    {
+      "file": "app/api/auth/admin-passkeys/route.ts",
+      "sha256": "44711125f6c37bce472c92ec206a1be6646ce00503443b26f33f4d6f9a8728a7",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/auth/forgot-password/route.ts",
+      "sha256": "6de4f35f7b4ccede5ac6be59ab0da7cd820967e509937d29a6c0848f0dd78a8b",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/auth/login/route.ts",
+      "sha256": "3dd0cb2a5f91727b59ce93e1934537ae8f9cf1ad2261c8f2dc9a8a2d1adcafa0",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/auth/logout/route.ts",
+      "sha256": "de2ebed54e4707759557a2b0399db1861909eff6b62a2875aef768166cb71b39",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/auth/me/route.ts",
+      "sha256": "c2514de596bf1e7dfefdfb9fbc1d68d46670da0ebbd49ea68efb933ac856780e",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/auth/register/route.ts",
+      "sha256": "00d7b2464a2cb6235b896e05fc68a0b2ebe7ef70b3c437b57f86616450668afc",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/dispute/route.ts",
+      "sha256": "a941ecd10c3494c2cef0f2a3b8c04acb485e71145ea334f1cfacb5d5341242e6",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/evidence/[photoId]/route.ts",
+      "sha256": "217a87827fc08ef55a535b5c2ded757b2000f3e4c849a4e6138d288fbead6895",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/handoff/route.ts",
+      "sha256": "e3da61d8cf7f36808935235a2b15c3b928f4cba7811a7628aeac07fbec521c32",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/inspection/route.ts",
+      "sha256": "590f83e52aa7b103e0c8442c785e97eed3edadabaa801ce3ac3a83bbdc16be6f",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/meetup/[operation]/route.ts",
+      "sha256": "041b737dac0e917fa21b27f736a1c07bd2ab94f1c7e3d4dcbdd8573f8b487e61",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/return/route.ts",
+      "sha256": "29eef1b974c7cf9e1e16d6b912a2fa867bf0e16b8290c2527d197ce06b36e75a",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/reviews/route.ts",
+      "sha256": "3cdab78a5d7087529f183c9abc25e04a9bb0e5222d2b607997f8a5f066d7f45b",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/[id]/route.ts",
+      "sha256": "315147ca3134b42169ff2caeacaf79d11ed842c46793cc04c65b65a92886c56a",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/bookings/route.ts",
+      "sha256": "b357f85c9ec80da5f2c46f9db105605a6a8e91c979995791473bcfee8fb4163c",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/listings/[id]/report/route.ts",
+      "sha256": "a4b45ce2b6fcb7fcf9f25ad2c27f2d31d5e649f88035386ba89db1ef3b00d3db",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/listings/[id]/route.ts",
+      "sha256": "d7f6338bd72abe0decb102bdba9197667182007fa60d7f65da18e382114931ea",
+      "unchanged": true
+    },
+    {
+      "file": "app/api/listings/route.ts",
+      "sha256": "a46a764904daf39e8a3d139e3c5cd723e252015970246c9e7a6f63ef4a777443",
+      "unchanged": true
+    },
+    {
+      "file": "app/layout.tsx",
+      "sha256": "dedaf6e549426184a25ff79b7eb886a1fa2f0e096818e1ce4bf4582c84343858",
+      "unchanged": true
+    },
+    {
+      "file": "docs/ai/batch12d/review-packet/REVIEW.md",
+      "sha256": "0e0e7ef3e582eaf7135417f6029f70a4b09e1184514f1f3dbb35cf7a92b4cbd7",
+      "unchanged": true
+    },
+    {
+      "file": "docs/ai/batch12d/review-packet/packet.json",
+      "sha256": "036fd803225e425e28423c2f586776bee8b86aeb0bd7262966964ca273e6a907",
+      "unchanged": true
+    },
+    {
+      "file": "docs/ai/batch12d/review-packet/review.json",
+      "sha256": "5b8082a6836bd081bb5711b6a45150d9bd61402f548008c139c670a42c35f078",
+      "unchanged": true
+    },
+    {
+      "file": "docs/product/HUSTLEN_AI_PRODUCT_BLUEPRINT.md",
+      "sha256": "fc356d9e5fc69e6936008686fc13c31a70744f96ea0e49a08507ae10a8e86d9e",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/config.ts",
+      "sha256": "d08858ffcfa1e6ec6c5f28da8fdb738602042d6001611df5ef251c2144913f49",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/contracts.ts",
+      "sha256": "b322f2768dfe3d24d311c96047df88930914fb60f28747387b18cfe5661abdb1",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/evaluation.ts",
+      "sha256": "d49219526f9fefc3debdbf209623fc2c3f48c379d1e1525c782befb54a257885",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/experiment-contract.ts",
+      "sha256": "aa50db2cc478400db64047503204cc5056ec691b4290034c7dbfebd301cb4fa6",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/experiment.ts",
+      "sha256": "a5a9737b6be400ee9058c44710e6bf02f65a5dc23c39eb2064a739ac41643bd5",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/fixtures.ts",
+      "sha256": "5e196b8cf832316f3cf5807310b9a57e1f2c55ca387e63945e44af1cea6fbda0",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/manifest.ts",
+      "sha256": "696c8bb1e0fcfef40c42b6c86f1d08b8f37cfa118c062d4c4d9755bf93a8c6bc",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/quality.ts",
+      "sha256": "5f1deeefae82da9981f9a03c6f180962497f825509bf495c6cd238dbb7460dfa",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/review-corpus.ts",
+      "sha256": "91d477e2b500d67e9c896070d9a4186ef710faee7ef3063386d739334ef43b06",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/review-packet.ts",
+      "sha256": "e34124fea5c940692d1563619cc442e64a62d230a18038f6fad528f37b4c30dc",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/service.ts",
+      "sha256": "7d6ce0acab492934ea0d9b08c423e0a1b0efed31a131706ae75090fd69ffd46b",
+      "unchanged": true
+    },
+    {
+      "file": "lib/ai-case-brief/validation.ts",
+      "sha256": "58fb740ff54ea78ce5ebb9b0cd6d9056ef1992d8f6ae744c99706453b436a379",
+      "unchanged": true
+    },
+    {
+      "file": "lib/auth-rate-limit.ts",
+      "sha256": "6697953e317325510d6e9dffcd39603460eb55ff257ce413136c20e2f3c41e9b",
+      "unchanged": true
+    },
+    {
+      "file": "lib/auth-request.ts",
+      "sha256": "1a36e44027f716e8fd55d389b084e1bd382f5cd7240b3c2c223ff34929e65fdf",
+      "unchanged": true
+    },
+    {
+      "file": "lib/auth.ts",
+      "sha256": "cc1d66b878f57c40e6b35386d9e8e6ed8d010928b057fea2efc7d510fafb2bf0",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/approvals/candidate.ts",
+      "sha256": "b7dc78a56c87953a552f0e00405546c7ab970b5acc1ea8c08ba5a6316457d3f3",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/approvals/execution-contracts.ts",
+      "sha256": "9fa915abf8df290c444c414ff87cd264611dd0e95ee08804e66882bd45a1ce8b",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/approvals/service.ts",
+      "sha256": "bd131df503a0d2ae32a9b77945634df58bc874509692a7d2af96658060fc9cd3",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/mfa/config.ts",
+      "sha256": "33254c20e18b74e68bc93a7be6cafc1b5aeb33bb3482c90f396830a88339412f",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/mfa/service.ts",
+      "sha256": "f30a671a8466a69ed5dbae852b6b22399602288ed9d78d0f7256820c94223159",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/policy.ts",
+      "sha256": "e65af652d1867bae899cb71d14e81c3674435464c3e3793c7e8805bd099776f8",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/registry.ts",
+      "sha256": "552d87d20bfcb42302e958c6baa04cb20dd826a6d221293169e10b2edf8e92dd",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/scoped/identity.ts",
+      "sha256": "4fe7b4cc2de642927fa849a51a6fdd2aaa68d70c4452f7233ad6d7088e972c27",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/scoped/reads.ts",
+      "sha256": "d05d5076d29b8c9311a6b8b4e167615779f13e55b8d9babb912f700b7c9ca78c",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/scoped/session-audit.ts",
+      "sha256": "d395c280111c0184b973b1354eee0fc8aea7fa181c6acd505777445834a96fa5",
+      "unchanged": true
+    },
+    {
+      "file": "lib/authorization/server.ts",
+      "sha256": "d403858b64a5080d105884b644a30546c2391ba9b3caf41186ee2fd2dec2a572",
+      "unchanged": true
+    },
+    {
+      "file": "lib/booking-evidence.ts",
+      "sha256": "cc086fdf0c6dd835784080d3cb6448bf68ee3838f2f2a6a5e25e6cd586a0f27b",
+      "unchanged": true
+    },
+    {
+      "file": "lib/identity/contracts.ts",
+      "sha256": "651b63330131ed747e6b1b9ade0de780efe0d330153b5f256b12735797a0e108",
+      "unchanged": true
+    },
+    {
+      "file": "lib/identity/service.ts",
+      "sha256": "5536bdd520f223444d3443f75cce9b429506e39bb76b899da0bf990cb65039f1",
+      "unchanged": true
+    },
+    {
+      "file": "lib/identity/simulation.ts",
+      "sha256": "baca3ef7f4bed2137eaf960805f10f4e6437ac90c2cc62191b488734c4af1f45",
+      "unchanged": true
+    },
+    {
+      "file": "lib/inspection/contracts.ts",
+      "sha256": "f4376bf289def917edd9c947158fa42039a33157cc82ee2de44e2108b0c5ec7b",
+      "unchanged": true
+    },
+    {
+      "file": "lib/inspection/future-contracts.ts",
+      "sha256": "9dd1186ada5e57911deb662853b2c6020ca6dc51f250b71818e5c89ca6a2a64e",
+      "unchanged": true
+    },
+    {
+      "file": "lib/inspection/service.ts",
+      "sha256": "ea921f158869cf4124ff624e24ac364a9fc6c44dbc7c733d703351762203bcb4",
+      "unchanged": true
+    },
+    {
+      "file": "lib/item-documentation/checklists.ts",
+      "sha256": "6380374ca6ebcf6338f5d8d9940d15ac40be2e7ba8dbc7d7ced95a41b8364008",
+      "unchanged": true
+    },
+    {
+      "file": "lib/item-documentation/service.ts",
+      "sha256": "de008eecfd12a178cd35768a5c83f51ce408a13e623132bf9216d5ec6b00fe96",
+      "unchanged": true
+    },
+    {
+      "file": "lib/item-documentation/vision-contract.ts",
+      "sha256": "21e0850ea4c8fd71e165cea5a6aaf3bfd2bba12fad12dd2927b2f6e2d5e85935",
+      "unchanged": true
+    },
+    {
+      "file": "lib/listing-media.ts",
+      "sha256": "944d84cb4df399d2aa615ad365bbac7181d3f7fb73cc1cca0e7fcd598aad1178",
+      "unchanged": true
+    },
+    {
+      "file": "lib/meetup/config.ts",
+      "sha256": "70e31caa95dc3696ed43f15ff6cc4a1f154107bb4beb378b1a6210f789f49753",
+      "unchanged": true
+    },
+    {
+      "file": "lib/meetup/location.ts",
+      "sha256": "24db8138f62405b401989c157e1061a3a2162837689e2e9c9a5403e27a0f7dc5",
+      "unchanged": true
+    },
+    {
+      "file": "lib/meetup/service.ts",
+      "sha256": "eff2e423a2518e5707813875043df85cc04612dfa5c1baefca456e8c07ce182d",
+      "unchanged": true
+    },
+    {
+      "file": "lib/meetup/test-location.ts",
+      "sha256": "0ae7d95c29a046d581f2fc156b7d762eb72806ff8a0866e181223ed69a7cc46a",
+      "unchanged": true
+    },
+    {
+      "file": "lib/rental-checklist.ts",
+      "sha256": "425624f93be228ac654e4fe451aaa1fda94050f8d55e848037a571acf58dbfd9",
+      "unchanged": true
+    },
+    {
+      "file": "lib/staff-read-pilot/bridge.ts",
+      "sha256": "65ecd7b133208f60d0b7aeedfe2705b4d93bac66d59f3fdea759d588d78fe4aa",
+      "unchanged": true
+    },
+    {
+      "file": "lib/staff-read-pilot/config.ts",
+      "sha256": "4802596413bb1901af8f16fa18c073ffb56f1fed1f09f7b1f9a13640c685a445",
+      "unchanged": true
+    },
+    {
+      "file": "lib/staff-read-pilot/read.ts",
+      "sha256": "c8487c30d79a315944cea1935e19181d345934b4c87b62571e654b6620580229",
+      "unchanged": true
+    },
+    {
+      "file": "lib/staff-read-pilot/worker-service.ts",
+      "sha256": "8f3e46c1c1c40a42266d37503deef038b50c7457883d39d103db17368ea42cbb",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support-staff-candidate/bridge.ts",
+      "sha256": "0d5854d1fa6aaa7ab0edb455ddf2d1bf7ce841b76695c62f817413c6e187d94a",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support-staff-candidate/commands.ts",
+      "sha256": "8f899341bf00943d5c975dd19f2eee9cc6d6b3c7b745d6137bf97971029adbea",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support-staff-candidate/config.ts",
+      "sha256": "44e03a52c779afaf17aad1f01b160ee768b128dd517a6161b6ffc91989d1dbd5",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support-staff-candidate/login.ts",
+      "sha256": "5e648b07e0f3fc6ce709f413ee9bea7497324dbbc4c99039cbfe11d14b613b4c",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support-staff-candidate/page.ts",
+      "sha256": "9a0e38609543ab4b8979040d57d4370b56d6c5efe27edd16ca239bde7a9d17a2",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support-staff-candidate/service.ts",
+      "sha256": "803ab879f9a86004033b0d4218b1c9b692cd03afdd96c0a8104ef6b3d160d564",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support/channel-config.ts",
+      "sha256": "22f1d778b8f5778569b2c5050f42bc28eb3b36813b3525599075d9a393718865",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support/channel-input.ts",
+      "sha256": "868d4c741dfbd7f8cb30c4756b91d3fed3a230ea9d89dc2e06da070a7284ba36",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support/channels.ts",
+      "sha256": "ed36936f4643c11c41d19d78d1249adae2cf2f48207b521a540cadcc39627f1b",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support/config.ts",
+      "sha256": "7cc4421dacffc51f08420d22e15a5771b6614fb928c493ea5206665eda103c36",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support/input.ts",
+      "sha256": "c78d65aef0638c44ecd15d914928ef822d219d36664d997ae0c1db7a0269c017",
+      "unchanged": true
+    },
+    {
+      "file": "lib/support/tickets.ts",
+      "sha256": "138f0d6e8b5061f5817a57e646dcbab5684db099c15016064504042890c51557",
+      "unchanged": true
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "a11a98f1790709e63ed85038bfecabc2e5f2b7153da6b182b869351b7b5e9a2d",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261002105848_init/migration.sql",
+      "sha256": "10d15eda85c796155df0213be9f6916d5b8b044b7d6079a0475c3cb3e8325f12",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261002110330_set_currency_precision/migration.sql",
+      "sha256": "2a46f73e2b0025bf252ef9e1f24f1b55ec72bf7fa426d8416db989822ed5bee6",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261002112754_add_auth_sessions/migration.sql",
+      "sha256": "3ee297957335154d7bf9f080a23ebfa3013e7120747869fa9bbda20f4d4bd5d9",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261002130231_add_transaction_handoffs/migration.sql",
+      "sha256": "5289b9110c3270feaaab010a965c351bc0904758aa70457d8eabb02941c9d2c5",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261006150000_booking_lifecycle_backbone/migration.sql",
+      "sha256": "80262e1a4bd4eb60fd97b582cf260bbadf97ca3e21870f498a5d4b61b14032b9",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261012120000_physical_listing_media_reports/migration.sql",
+      "sha256": "f13e3e6ab87d263196913ac9fc641f4dba9577625d1e5db8c89bc3ffddc7e031",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261012150000_trust_profiles/migration.sql",
+      "sha256": "5473ab2ad6b4f2721f1cd74cb61627dd83b8828eea24dfeecccf2f05f688a992",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261013080000_booking_cancellation/migration.sql",
+      "sha256": "854951df0c137141ddc190e606cffc992454057d7f28067503bc9643f067c050",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261013100000_private_rental_evidence/migration.sql",
+      "sha256": "0cacf72d9e91589c37f50a0342d004c8112177aed62c42193359fc175db0dc90",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261014010000_admin_moderation/migration.sql",
+      "sha256": "a5e0281f999bf62a7f061808dad02f935c4cdf68e4db974e1b51ff11d128be60",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261014020000_dispute_case_history/migration.sql",
+      "sha256": "488af1cc7cc05398c282abf6a621b21ae16810361a4b7326d240bf87171e9cde",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261014030000_mvp_security/migration.sql",
+      "sha256": "741a48d67c33158a127ac9ff13122330a04cb32fba105e62bde252c03d77e00f",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261016100000_official_mrt_stations/migration.sql",
+      "sha256": "944d20a67d5fc19b31a36fc144d147d5b86b509abef376d1ec4ba596f4f374d1",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261019090000_booking_request_idempotency/migration.sql",
+      "sha256": "2b025ecdf2aeae96c43fa8b498ed839be74b869e3e89faade5ce6c6546b751e0",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261019120000_private_chat_safety/migration.sql",
+      "sha256": "935358d65c8db5af17acd2236dc6579accd673a9bf03aad9454ca71849eb20f2",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261019150000_chat_activity_order/migration.sql",
+      "sha256": "85f230192eee6c04855c769cec3e14a3a61db262fe2dcc7cb2b4b2937d9c506a",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261019180000_chat_shadow_analysis/migration.sql",
+      "sha256": "0a4efe6f568c0a126eb7d2f2432e896698f9f813782f88a67857f377d6fd5328",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261019210000_mrt_meetup_verification/migration.sql",
+      "sha256": "719f53fbb9f537d2d94889623983441775eda9d95fe102e334b37059ca04b8e5",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261020090000_meetup_confirmation_window/migration.sql",
+      "sha256": "02249b7a98c1aa9e356d81094967dceaa9ec32009503be81ec6a3b4a56b55e21",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261024090000_staff_identity_foundation/migration.sql",
+      "sha256": "06b35cf9ef131285d5fc156efa4bd49f68b3a4b83044d9b54dba7ac8835f5b73",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261024140000_staff_session_audit_foundation/migration.sql",
+      "sha256": "cb6687e3718c3afb6f804e2b8d2f2050550fb6625757e0b0d955560525f9ed87",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261024160000_independent_approval_foundation/migration.sql",
+      "sha256": "b3a19f7bc03e7859988e991cab868575b9fe5b5b726eca55fd8443442f5a2231",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261024180000_staff_webauthn_foundation/migration.sql",
+      "sha256": "4053d08a15b49c92033b53bbea6d8d45a1646300f00da56e731d2644abccb26c",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261025090000_support_ticket_candidate/migration.sql",
+      "sha256": "5f36be4367f6d78d55c77e207192c033d8b4d642281bb3a29d20275fecc6c322",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261025160000_support_private_channel_candidate/migration.sql",
+      "sha256": "0d7c71d7590123cb2852e8026f644aec375105e766b479420d400400529193b6",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261026010000_scoped_support_candidate/migration.sql",
+      "sha256": "562be0f2aa322645c9973f3d7a0935e68b2ceb3dd4d50b463d28c8212fcce7ce",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261026090000_announcement_candidate/migration.sql",
+      "sha256": "4ecb7a797089903ae635972d79f6901d72c3bd1a4efe8cb4d76fefa913f06be5",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261026100000_typed_display_settings_candidate/migration.sql",
+      "sha256": "8fb83dec3cd18cec97b856d59fa13fc3c557bdc712b6bfcbeb66cb3bd3bec9aa",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/20261027090000_account_password_security_event/migration.sql",
+      "sha256": "355bce3f30cbfa013c733b9afe6842fe435baf318e049fc32199d9bfc5db7ce4",
+      "unchanged": true
+    },
+    {
+      "file": "prisma/migrations/migration_lock.toml",
+      "sha256": "99836963713b4f5b269ad49af0ed3d7b0b2e336115c2f92dc9ac683d139d0900",
+      "unchanged": true
+    },
+    {
+      "file": "tests/meetup.integration.test.ts",
+      "sha256": "6eac096d2fbdbe12fce2b3c76df26c8e0033b227fff3bfe267672097e7d9d97f",
+      "unchanged": true
+    },
+    {
+      "file": "tests/support/browser.ts",
+      "sha256": "c0ee724573e4a2d9438dd7bf5e378a4083c39de3fa7e161570375551645d8700",
+      "unchanged": true
+    }
+  ],
+  "legacySchemaUnchangedExceptReverseRelationsAndNewModels": true,
+  "roadmap14StagesAndObjectivesUnchanged": true,
+  "stages6to9Unchanged": true,
+  "newMigrations": [
+    "20261028160000_owned_item_documentation"
+  ],
+  "historicalMigrationsModified": false,
+  "newDependencies": []
+}
