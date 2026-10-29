@@ -1,0 +1,91 @@
+[
+  {
+    "group": "test:condition-claims",
+    "start": "2026-10-29T04:24:01.769Z",
+    "end": "2026-10-29T04:24:27.359Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/dc60cabc365e90ae4bf8715b",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 0"
+    ],
+    "fails": [
+      "\u2139 fail 1"
+    ],
+    "cleanup": true,
+    "log": "/tmp/hustlen-13br1/test:condition-claims.log"
+  },
+  {
+    "group": "test:condition-claims",
+    "start": "2026-10-29T04:15:10.991Z",
+    "end": "2026-10-29T04:16:02.947Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/05a35c475a883ad42bd3bb8f",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 0"
+    ],
+    "fails": [
+      "\u2139 fail 1"
+    ],
+    "cleanup": true,
+    "log": "/tmp/hustlen-13br1/test:condition-claims.log"
+  },
+  {
+    "group": "test:condition-claims",
+    "start": "2026-10-29T04:14:13.947Z",
+    "end": "2026-10-29T04:14:31.896Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/da3c70a86f2c25aa5e3654af",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 0"
+    ],
+    "fails": [
+      "\u2139 fail 1"
+    ],
+    "cleanup": true,
+    "log": "/tmp/hustlen-13br1/test:condition-claims.log"
+  },
+  {
+    "group": "test:condition-claims-migration",
+    "start": "2026-10-29T04:13:51.636Z",
+    "end": "2026-10-29T04:13:54.021Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/f8a8d5b6edfd8890fc7d5c40",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 0"
+    ],
+    "fails": [
+      "\u2139 fail 1"
+    ],
+    "cleanup": true,
+    "log": "/tmp/hustlen-13br1/test:condition-claims-migration.log"
+  },
+  {
+    "group": "test:condition-claims",
+    "start": "2026-10-29T04:12:33.815Z",
+    "end": "2026-10-29T04:12:35.653Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/0d3fe5fc3c516e8b7ae79c20",
+    "tests": null,
+    "passes": null,
+    "fails": null,
+    "cleanup": true,
+    "log": "/tmp/hustlen-13br1/test:condition-claims.log"
+  }
+]

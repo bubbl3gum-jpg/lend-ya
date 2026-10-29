@@ -1,0 +1,73 @@
+{
+  "implementation": "a6c8705e78fa0948210e23a9b6f940f711f55e9c",
+  "files": [
+    {
+      "file": "app/account/activity/page.tsx",
+      "sha256": "0f6953c18ed521d05cd1915e6a7a85505996c0756e89ac549771e70e1e7af458"
+    },
+    {
+      "file": "app/api/bookings/[id]/dispute/route.ts",
+      "sha256": "35d31db625d347a3e5b338f54ad44defb808bc63735ac33056ca372bf295174a"
+    },
+    {
+      "file": "app/api/dev/condition-cases/route.ts",
+      "sha256": "5938bc5869ea0e4e23997f54451ea83d536e1a1bcd71ffd6acab7e33088f56b5"
+    },
+    {
+      "file": "app/dev/condition-cases/page.tsx",
+      "sha256": "3a27dd61a266ef7c1f06a19e1a991ccb73421864ffa82521fdd22cee6bfd9437"
+    },
+    {
+      "file": "app/dev/inspection/page.tsx",
+      "sha256": "3c64182d9e4b618a3cce38400a3972d8b53bc27e33ffbf0fe33b3c8126268725"
+    },
+    {
+      "file": "components/condition-case-workspace.tsx",
+      "sha256": "003f5507ddf525cb97c2b3a627fbdf98f1aa417292129b3bfae03664d7923354"
+    },
+    {
+      "file": "components/inspection-workspace.tsx",
+      "sha256": "c23195353126beb2f7b8550db6eb7126da29ca3a01c12313f8d63ba413567f6f"
+    },
+    {
+      "file": "lib/condition-claims/contracts.ts",
+      "sha256": "0726c8ce761932aa4681fdc8c810e830f4f6967a32225d99386849baeb664980"
+    },
+    {
+      "file": "lib/condition-claims/service.ts",
+      "sha256": "8ae481aa1e78e94b8ecf805b54c5b92bd57a42cb7a44cc2196b0267bff2f1679"
+    },
+    {
+      "file": "lib/i18n/condition-claims.ts",
+      "sha256": "1aa617b525b685d98d420dd240dea4e11e13d4f42b9350593d103c1eded93227"
+    },
+    {
+      "file": "lib/inspection/service.ts",
+      "sha256": "7cbff20cd23a0369e6cb17f7fc033d0f56402fbaa56f45947ddcc309b622d6c5"
+    },
+    {
+      "file": "prisma/migrations/20261029110000_owned_condition_claims/migration.sql",
+      "sha256": "53213e3558a84da0d8735fb8390ee426a371a339a966cfcd2a85f5caaad881d1"
+    },
+    {
+      "file": "proxy.ts",
+      "sha256": "f43fdd763a5d2025dd94b7e255af63b01746d1ee5769c5cba6c837e14bbfcb6d"
+    },
+    {
+      "file": "tests/condition-claims-migration.test.ts",
+      "sha256": "d5a51b97400fc3c7cbd1f282d6a5b5d4f3b369ae8b23dd958c719979909f9a82"
+    },
+    {
+      "file": "tests/condition-claims.integration.test.ts",
+      "sha256": "e4223e417f9eb75f7ce2fe23fa5393b34b2db613c7ffcbaf56026f69bc05a8f5"
+    },
+    {
+      "file": "tests/condition-claims.test.ts",
+      "sha256": "c726e8597c507a305998b7fd19b281daa18628e6b3df037f02c75974495393d9"
+    },
+    {
+      "file": "tests/run-isolated.ts",
+      "sha256": "c3574297d5904048304e3d29c99bfec07709f346c3048e34608edaa8a6f33a1c"
+    }
+  ]
+}

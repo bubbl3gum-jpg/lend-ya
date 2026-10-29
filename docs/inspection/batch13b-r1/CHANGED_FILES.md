@@ -1,0 +1,48 @@
+# Complete Batch 13B-R1 changed-file inventory
+
+Compared with clean baseline `95785a8c5ce777785bdf2fbb3871b5e617557705`. 44 files across implementation and evidence/index documentation. No dependency/lockfile change, historical migration edit or production operation.
+
+- `AGENTS.md`
+- `app/account/activity/page.tsx`
+- `app/api/bookings/[id]/dispute/route.ts`
+- `app/api/dev/condition-cases/route.ts`
+- `app/dev/condition-cases/page.tsx`
+- `app/dev/inspection/page.tsx`
+- `components/condition-case-workspace.tsx`
+- `components/inspection-workspace.tsx`
+- `docs/inspection/DURABLE_DISPUTE_RESPONSE_REVIEW_BATCH_13B_R1.md`
+- `docs/inspection/batch13b-r1/ACCEPTANCE_COVERAGE.md`
+- `docs/inspection/batch13b-r1/AUDIT_BEFORE_IMPLEMENTATION.md`
+- `docs/inspection/batch13b-r1/CHANGED_FILES.md`
+- `docs/inspection/batch13b-r1/CONTRACT_AND_SETUP.md`
+- `docs/inspection/batch13b-r1/SCREENSHOTS.md`
+- `docs/inspection/batch13b-r1/SUPPORT_SOURCE_CONTRACT.md`
+- `docs/inspection/batch13b-r1/VERIFICATION.md`
+- `docs/inspection/batch13b-r1/browser-evidence.json`
+- `docs/inspection/batch13b-r1/camera-pickup.json`
+- `docs/inspection/batch13b-r1/camera-return.json`
+- `docs/inspection/batch13b-r1/cleanup.json`
+- `docs/inspection/batch13b-r1/final-results.json`
+- `docs/inspection/batch13b-r1/implementation-source-hashes.json`
+- `docs/inspection/batch13b-r1/initial-outcomes.json`
+- `docs/inspection/batch13b-r1/inspection-browser-evidence.json`
+- `docs/inspection/batch13b-r1/migration-evidence.json`
+- `docs/inspection/batch13b-r1/preservation.json`
+- `docs/inspection/batch13b-r1/screenshots/claim-borrower-desktop.png`
+- `docs/inspection/batch13b-r1/screenshots/claim-borrower-mobile-zh.png`
+- `docs/inspection/batch13b-r1/screenshots/claim-borrower-tablet-zh.png`
+- `docs/inspection/batch13b-r1/screenshots/claim-owner-desktop.png`
+- `docs/product/HUSTLEN_AI_PRODUCT_BLUEPRINT.md`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/condition-claims/contracts.ts`
+- `lib/condition-claims/service.ts`
+- `lib/i18n/condition-claims.ts`
+- `lib/inspection/service.ts`
+- `package.json`
+- `prisma/migrations/20261029110000_owned_condition_claims/migration.sql`
+- `prisma/schema.prisma`
+- `proxy.ts`
+- `tests/condition-claims-migration.test.ts`
+- `tests/condition-claims.integration.test.ts`
+- `tests/condition-claims.test.ts`
+- `tests/run-isolated.ts`
