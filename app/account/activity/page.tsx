@@ -1,3 +1,5 @@
+import {claimsEnabled} from "@/lib/condition-claims/service";
+import {readLocale} from "@/lib/i18n/server";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -84,7 +86,7 @@ export default async function ActivityPage() {
     .sort((a, b) => b.at.getTime() - a.at.getTime());
   return (
     <div>
-      <h1 className="mb-6 text-3xl font-semibold">Activity logs</h1>
+      <h1 className="mb-6 text-3xl font-semibold">Activity logs</h1>{claimsEnabled()&&<p><Link href="/dev/condition-cases">{await readLocale()==="zh-TW"?"物況案件與通知（開發測試）":"Condition cases and notices (development)"}</Link></p>}
       {!events.length && <p>No transaction activity yet.</p>}
       <ul className="space-y-3">
         {events.map((event, i) => (

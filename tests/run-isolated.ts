@@ -99,6 +99,7 @@ async function main() {
     if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
     if(process.argv.includes("--meetup-camera")) env.MRT_TEST_CAMERA_ONLY="1";
     const legacyGroup = [
+      "condition-claims-migration",
       "rental-documentation-migration",
       "password-change-migration",
       "platform-settings-migration",
@@ -132,6 +133,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "condition-claims-migration": "tests/condition-claims-migration.test.ts",
           "rental-documentation-migration": "tests/rental-documentation-migration.test.ts",
           "password-change-migration": "tests/password-change-migration.test.ts",
           "platform-settings-migration": "tests/platform-settings-migration.test.ts",
@@ -177,7 +179,7 @@ async function main() {
     if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (!["rental-documentation-migration","password-change-migration","platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
+      if (!["condition-claims-migration","rental-documentation-migration","password-change-migration","platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",
@@ -218,8 +220,9 @@ async function main() {
         if (process.argv.includes("--identity") || process.argv.includes("--identity-production")) { env.HUSTLEN_IDENTITY_CANDIDATE="owned-synthetic-only"; env.HUSTLEN_IDENTITY_ORIGIN=env.TEST_BASE_URL; env.HUSTLEN_EKYC_PROVIDER_ENDPOINT="https://not-authorized.invalid/"; env.HUSTLEN_EKYC_PROVIDER_KEY="synthetic-unused-not-a-credential"; }
         if (process.argv.includes("--item-documentation") || process.argv.includes("--item-documentation-production")) { env.HUSTLEN_DOCUMENTATION_CANDIDATE="owned-preview-only"; env.HUSTLEN_DOCUMENTATION_ORIGIN=env.TEST_BASE_URL; }
         if (process.argv.includes("--item-studio") || process.argv.includes("--item-studio-production")) { env.HUSTLEN_ITEM_STUDIO="owned-studio-only"; env.HUSTLEN_ITEM_STUDIO_ORIGIN=env.TEST_BASE_URL; env.HUSTLEN_DOCUMENTATION_CANDIDATE="owned-preview-only"; env.HUSTLEN_DOCUMENTATION_ORIGIN=env.TEST_BASE_URL; env.HUSTLEN_INSPECTION_CANDIDATE="owned-preview-only"; }
+        if (process.argv.includes("--condition-claims") || process.argv.includes("--condition-claims-production")) {env.HUSTLEN_CONDITION_CLAIMS="owned-dispute-only";env.HUSTLEN_CONDITION_CLAIMS_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_RENTAL_DOCUMENTATION="owned-agreement-only";env.HUSTLEN_RENTAL_DOCUMENTATION_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ITEM_STUDIO="owned-studio-only";env.HUSTLEN_ITEM_STUDIO_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_INSPECTION_CANDIDATE="owned-preview-only";env.HUSTLEN_INSPECTION_ORIGIN=env.TEST_BASE_URL;}
         if (process.argv.includes("--rental-documentation") || process.argv.includes("--rental-documentation-production")) { env.HUSTLEN_RENTAL_DOCUMENTATION="owned-agreement-only"; env.HUSTLEN_RENTAL_DOCUMENTATION_ORIGIN=env.TEST_BASE_URL; env.HUSTLEN_ITEM_STUDIO="owned-studio-only"; env.HUSTLEN_ITEM_STUDIO_ORIGIN=env.TEST_BASE_URL; }
-        const productionPilot = process.argv.includes("--rental-documentation-production") || process.argv.includes("--item-studio-production") || process.argv.includes("--item-documentation-production") || process.argv.includes("--identity-production") || process.argv.includes("--ai-case-brief-production") || process.argv.includes("--password-change-production") || process.argv.includes("--platform-settings-production") || process.argv.includes("--announcements-production") || process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
+        const productionPilot = process.argv.includes("--condition-claims-production") || process.argv.includes("--rental-documentation-production") || process.argv.includes("--item-studio-production") || process.argv.includes("--item-documentation-production") || process.argv.includes("--identity-production") || process.argv.includes("--ai-case-brief-production") || process.argv.includes("--password-change-production") || process.argv.includes("--platform-settings-production") || process.argv.includes("--announcements-production") || process.argv.includes("--locations-production") || process.argv.includes("--support-staff-production") || process.argv.includes("--mfa-pilot-production") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channel-production");
         if(process.argv.includes("--platform-settings") || process.argv.includes("--platform-settings-production")){env.HUSTLEN_SETTINGS_CANDIDATE="owned-display-only";env.HUSTLEN_SETTINGS_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_SETTINGS_ADMIN_IDS="1";env.HUSTLEN_ANNOUNCEMENT_CANDIDATE="owned-informational-only";env.HUSTLEN_ANNOUNCEMENT_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ANNOUNCEMENT_ADMIN_IDS="1,3";}
         if(process.argv.includes("--announcements") || process.argv.includes("--announcements-production")){env.HUSTLEN_ANNOUNCEMENT_CANDIDATE="owned-informational-only";env.HUSTLEN_ANNOUNCEMENT_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_ANNOUNCEMENT_ADMIN_IDS="1";}
         if(process.argv.includes("--locations") || process.argv.includes("--locations-production")){env.HUSTLEN_GEOFENCING_LAB="owned-self-only";env.HUSTLEN_GEOFENCING_LAB_ORIGIN=env.TEST_BASE_URL;env.HUSTLEN_GEOFENCING_LAB_ADMIN_IDS="1";}
@@ -268,7 +271,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--rental-documentation") || process.argv.includes("--rental-documentation-production"))
+        if (process.argv.includes("--condition-claims") || process.argv.includes("--condition-claims-production"))
+          await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/condition-claims.integration.test.ts"]);
+        else if (process.argv.includes("--rental-documentation") || process.argv.includes("--rental-documentation-production"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/rental-documentation.integration.test.ts"]);
         else if (process.argv.includes("--item-studio") || process.argv.includes("--item-studio-production"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/item-studio.integration.test.ts"]);

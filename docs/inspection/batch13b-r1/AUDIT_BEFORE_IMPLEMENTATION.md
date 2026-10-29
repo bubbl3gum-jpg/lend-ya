@@ -1,0 +1,13 @@
+# Pre-implementation authority audit — 29 October 2026, Asia/Taipei
+
+Clean baseline `95785a8c5ce777785bdf2fbb3871b5e617557705`, branch `feature/rental-documentation-agreement-batch-13d-r2`. Supplied implementation `847a947a5a0b1ab1fff546f2df4e673a7f2af920` and evidence `00d75e1192f27b4a507679a61e00692c4e6ffbb9` are ancestors. New isolated branch `feature/durable-disputes-responses-batch-13b-r1`.
+
+`app/api/bookings/[id]/dispute/route.ts` is the actual participant dispute writer: authenticated participant, IN_USE/RETURN_PENDING/INSPECTION, booking row lock, creates Dispute and changes Booking to DISPUTED atomically. Dispute is the authoritative case identity. No typed allegations, immutable participant response or qualifying notification exists there. Existing legacy behavior must remain unchanged when the new independent pilot is off. Extend this original boundary for explicit typed pilot requests rather than introduce a second case identity or parallel booking-state writer.
+
+`lib/inspection/service.ts` derives physical return only from owner PHYSICAL_RECEIPT_ACK linked to a consumed/completed RETURN challenge plus matching owner/borrower handoff and return records. `inspectionWindow` is half-open [return, return+24h). Existing previews deliberately do not persist. Reuse that return definition inside the transaction and never derive return from legacy DISPUTED or a borrower-submitted return alone.
+
+`BookingEvidencePhoto` and original `/api/bookings/[id]/evidence/[photoId]` retain participant-only byte access and source timestamps. New claim/response references must be exact authorized booking refs; no identity documents, copied image bytes or replacement uploads. `DevDocReviewContext` on Booking and its immutable R2 selected event/version/digest supply agreed documentation only if owner acceptance is recorded; no latest-version guess or historical backfill.
+
+Existing notification-like chat outbox/Support streams are domain-specific, not authoritative condition-claim delivery. Do not reuse insertion/queue/view as approved delivery. Introduce subordinate immutable participant event history tied to the existing Dispute, with durable created/queued/viewed states and explicit test-only failed/delivery fixtures. No enforceable48h clock or external channel.
+
+Existing Support worker requires exact assignment/action/assurance and audit; its tickets/streams have no approved structured-dispute access capability. Prepare source attribution but do not grant new access or feed new private material to the Companion. Legacy Admin dispute authority stays as-is; new structured reads remain participant-only with no ADMIN OR STAFF shortcut. Original rental receipt, custody, audit, eKYC/AI and financial boundaries unchanged.

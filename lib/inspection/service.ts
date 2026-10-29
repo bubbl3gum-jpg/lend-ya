@@ -1,4 +1,5 @@
 import "server-only";
+import type {Prisma} from "@prisma/client";
 import {prisma} from "../prisma";
 import {getCurrentUser} from "../auth";
 import {disposableDatabaseUrl} from "../disposable-database-url";
@@ -16,11 +17,11 @@ export async function inspectionActor(){
  const user=await getCurrentUser();if(!user)throw new InspectionDenied(401);
  return user;
 }
-export async function inspectionSummary(id:number,userId:number){
- const b=await prisma.booking.findFirst({where:{id,OR:[{ownerId:userId},{renterId:userId}]},select:{id:true,ownerId:true,renterId:true,status:true,listing:{select:{title:true,categoryDetails:true}},handoff:{select:{performedBy:true,confirmedBy:true,conditionConfirmed:true,ownerConditionConfirmed:true}},return:{select:{initiatedBy:true,returnConfirmed:true,inspectedAt:true,inspectionAccepted:true}},evidencePhotos:{where:{stage:{in:["HANDOFF_OWNER","HANDOFF_BORROWER","RETURN_BORROWER","INSPECTION_OWNER"]}},select:{id:true,stage:true,mimeType:true,uploaderId:true,createdAt:true},orderBy:{createdAt:"asc"},take:100},disputes:{select:{id:true,openedBy:true,reason:true,description:true,status:true,createdAt:true},orderBy:{createdAt:"desc"},take:20}}});
+export async function inspectionSummary(id:number,userId:number,db:Pick<Prisma.TransactionClient,"booking"|"meetupEvent"|"meetupChallenge">=prisma){
+ const b=await db.booking.findFirst({where:{id,OR:[{ownerId:userId},{renterId:userId}]},select:{id:true,ownerId:true,renterId:true,status:true,listing:{select:{title:true,categoryDetails:true}},handoff:{select:{performedBy:true,confirmedBy:true,conditionConfirmed:true,ownerConditionConfirmed:true}},return:{select:{initiatedBy:true,returnConfirmed:true,inspectedAt:true,inspectionAccepted:true}},evidencePhotos:{where:{stage:{in:["HANDOFF_OWNER","HANDOFF_BORROWER","RETURN_BORROWER","INSPECTION_OWNER"]}},select:{id:true,stage:true,mimeType:true,uploaderId:true,createdAt:true},orderBy:{createdAt:"asc"},take:100},disputes:{select:{id:true,openedBy:true,reason:true,description:true,status:true,createdAt:true},orderBy:{createdAt:"desc"},take:20}}});
  if(!b)throw new InspectionDenied(404);
- const receipt=await prisma.meetupEvent.findFirst({where:{bookingId:id,purpose:"RETURN",kind:"PHYSICAL_RECEIPT_ACK",actorId:b.ownerId,challengeId:{not:null}},orderBy:{createdAt:"asc"},select:{challengeId:true,createdAt:true}});
- const challenge=receipt?.challengeId?await prisma.meetupChallenge.findFirst({where:{id:receipt.challengeId,bookingId:id,purpose:"RETURN",verifierId:b.ownerId,issuerId:b.renterId,consumedAt:{not:null},completedAt:{not:null},completionHash:{not:null}},select:{completedAt:true}}):null;
+ const receipt=await db.meetupEvent.findFirst({where:{bookingId:id,purpose:"RETURN",kind:"PHYSICAL_RECEIPT_ACK",actorId:b.ownerId,challengeId:{not:null}},orderBy:{createdAt:"asc"},select:{challengeId:true,createdAt:true}});
+ const challenge=receipt?.challengeId?await db.meetupChallenge.findFirst({where:{id:receipt.challengeId,bookingId:id,purpose:"RETURN",verifierId:b.ownerId,issuerId:b.renterId,consumedAt:{not:null},completedAt:{not:null},completionHash:{not:null}},select:{completedAt:true}}):null;
  const valid=b.return?.initiatedBy===b.renterId&&b.return?.returnConfirmed&&b.handoff?.performedBy===b.ownerId&&b.handoff?.confirmedBy===b.renterId&&b.handoff?.conditionConfirmed&&b.handoff?.ownerConditionConfirmed;
  const window=inspectionWindow(valid&&challenge?.completedAt?challenge.completedAt.toISOString():null,new Date());
  const details=b.listing.categoryDetails;

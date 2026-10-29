@@ -51,6 +51,11 @@ enum DisputeStatus {
 }
 
 model User {
+  ownedConditionClaims DevConditionClaim[] @relation("ConditionOwner")
+  borrowedConditionClaims DevConditionClaim[] @relation("ConditionBorrower")
+  conditionEvents DevConditionEvent[]
+  conditionNotices DevConditionNotice[]
+
   docSelections DevDocSelection[]
   docSelectionEvents DevDocSelectionEvent[]
   docReviewContexts DevDocReviewContext[]
@@ -183,6 +188,8 @@ model ListingStation {
 }
 
 model Booking {
+  conditionClaim DevConditionClaim?
+
   documentationContextId String? @unique @db.Uuid
   documentationContext DevDocReviewContext? @relation(fields:[documentationContextId],references:[id],onDelete:Restrict,onUpdate:NoAction)
   documentationAcknowledgedAt DateTime? @db.Timestamptz(3)
@@ -279,6 +286,8 @@ model Return {
 }
 
 model Dispute {
+  conditionClaim DevConditionClaim?
+
   supportTickets SupportTicket[] @relation("SupportDispute")
 
   id          Int           @id @default(autoincrement())
@@ -1317,6 +1326,8 @@ model DevDocSelectionEvent {
  @@unique([listingId,revision])
 }
 model DevDocReviewContext {
+  conditionClaims DevConditionClaim[]
+
  id String @id @db.Uuid
  listingId Int
  borrowerId Int
@@ -1332,4 +1343,49 @@ model DevDocReviewContext {
  borrower User @relation(fields:[borrowerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
  booking Booking?
  @@index([borrowerId,createdAt])
+}
+
+model DevConditionClaim {
+ disputeId Int @id
+ bookingId Int @unique
+ ownerId Int
+ borrowerId Int
+ original Json
+ requestKey String @unique @db.Uuid
+ requestHash String @db.Char(64)
+ returnedAt DateTime @db.Timestamptz(3)
+ inspectionDeadline DateTime @db.Timestamptz(3)
+ submittedAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ agreementContextId String? @db.Uuid
+ policy String @default("owned-condition-claim-v1") @db.VarChar(40)
+ revision Int
+ dispute Dispute @relation(fields:[disputeId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ booking Booking @relation(fields:[bookingId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ owner User @relation("ConditionOwner",fields:[ownerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ borrower User @relation("ConditionBorrower",fields:[borrowerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ agreement DevDocReviewContext? @relation(fields:[agreementContextId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ events DevConditionEvent[]
+ notice DevConditionNotice?
+}
+model DevConditionEvent {
+ id String @id @db.Uuid
+ disputeId Int
+ actorId Int
+ revision Int
+ kind String @db.VarChar(32)
+ payload Json
+ requestKey String @db.Uuid
+ requestHash String @db.Char(64)
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ claim DevConditionClaim @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ @@unique([disputeId,revision])
+ @@unique([disputeId,actorId,requestKey])
+}
+model DevConditionNotice {
+ disputeId Int @id
+ borrowerId Int
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ claim DevConditionClaim @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
+ borrower User @relation(fields:[borrowerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
 }

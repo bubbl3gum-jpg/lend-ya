@@ -1,3 +1,4 @@
+import {submitStructuredClaim} from "@/lib/condition-claims/service";
 import { isSerializationConflict } from "@/lib/database-conflicts";
 import { Prisma } from "@prisma/client";
 import {
@@ -28,6 +29,7 @@ export async function POST(
   if (!body) {
     return apiError("Request body must be a valid JSON object.", 400);
   }
+  if (Object.hasOwn(body,"structured")) return submitStructuredClaim(request,bookingId,currentUser.id,body);
   const reason = parseRequiredString(body.reason, 120);
   const description = parseRequiredString(body.description, 2000);
   if (!reason || !description) {
