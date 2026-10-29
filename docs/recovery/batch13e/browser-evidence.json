@@ -1,0 +1,26 @@
+{
+  "actualCaseId": 1,
+  "originalAgreementContext": "041cdc6a-2bde-4285-b067-48823fe1f818",
+  "twoRealBrowserSessions": true,
+  "borrowerProposedOwnerAccepted": true,
+  "acceptedProposalId": "29fcb703-4513-4e5d-8d7c-3a5c90768098",
+  "immutableTerms": true,
+  "reopenAfterLogoutLogin": true,
+  "originalClaimResponseReceiptAgreementBytesUnchanged": true,
+  "caseRemainsOpen": true,
+  "completionRecorded": false,
+  "financialAction": false,
+  "deliveryClaimed": false,
+  "responseDeadlineEnforceable": false,
+  "errors": [],
+  "externalOrigins": [],
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "locales": [
+    "en",
+    "zh-TW"
+  ]
+}

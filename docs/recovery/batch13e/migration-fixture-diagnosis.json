@@ -1,0 +1,23 @@
+{
+  "initialArtifact": ".test-artifacts/74bdaa2c9ac1f323832c0c46",
+  "target": "20261029110000_owned_condition_claims",
+  "successor": "20261029140000_owned_recovery_room",
+  "initialStagedCount": 32,
+  "initialTargetAbsent": true,
+  "initialSuccessorIncorrectlyPresent": true,
+  "initialLastMigrations": [
+    "20261028160000_owned_item_documentation",
+    "20261029090000_owned_rental_documentation",
+    "20261029140000_owned_recovery_room"
+  ],
+  "correctedArtifact": ".test-artifacts/29c82efef6f215f44c49fe3d",
+  "correctedStagedCount": 31,
+  "correctedAllBeforeTarget": true,
+  "correctedLastMigrations": [
+    "20261027090000_account_password_security_event",
+    "20261028160000_owned_item_documentation",
+    "20261029090000_owned_rental_documentation"
+  ],
+  "preservationAssertionsRetained": true,
+  "allTargetAndSuccessorAppliedAssertionAdded": true
+}

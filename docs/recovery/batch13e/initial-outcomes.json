@@ -1,0 +1,21 @@
+[
+  {
+    "group": "test:condition-claims-migration",
+    "start": "2026-10-29T05:40:54.756Z",
+    "end": "2026-10-29T05:40:56.824Z",
+    "exit": 1,
+    "signal": null,
+    "artifact": ".test-artifacts/74bdaa2c9ac1f323832c0c46",
+    "tests": [
+      "\u2139 tests 1"
+    ],
+    "passes": [
+      "\u2139 pass 0"
+    ],
+    "fails": [
+      "\u2139 fail 1"
+    ],
+    "cleanup": true,
+    "log": "/tmp/hustlen-13e/test:condition-claims-migration.log"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "baselineMigrations": 32,
+  "additiveMigrations": 1,
+  "populatedLegacyPreserved": true,
+  "sessionRoleUnchanged": true,
+  "noBackfill": true,
+  "partialSqlRollback": true,
+  "replay": true,
+  "historicalChecksumsUnchanged": true
+}

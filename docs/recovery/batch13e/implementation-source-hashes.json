@@ -1,0 +1,109 @@
+{
+  "implementation": "b9297ff86f09482ddfef2937a5dd9daff10ba440",
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "sha256": "5fcbdf257ca56e6ef743df70c88bdd02d01727fe80b6ea76878c5c539e7107eb"
+    },
+    {
+      "file": "app/api/dev/recovery-room/route.ts",
+      "sha256": "9945622c30c146d2e8dbbe48dd5e9c6dc54584401ae7081ced614493a461688f"
+    },
+    {
+      "file": "app/dev/condition-cases/page.tsx",
+      "sha256": "866564f9f9d0f99cde72606f62eb5b7497e51b217d1c6264b9df9d95fa93a10e"
+    },
+    {
+      "file": "app/dev/recovery-room/page.tsx",
+      "sha256": "5244568e6b0e3dbc09021310c82d31b6848ee227539362c476cc5acdb3eb756c"
+    },
+    {
+      "file": "components/condition-case-workspace.tsx",
+      "sha256": "3fc627cfe2836c01820e7bbfd0d6234a8d39804e453ec874c33360a88f723350"
+    },
+    {
+      "file": "components/recovery-room-workspace.tsx",
+      "sha256": "e2b818d3a9dd6a5856bb2f58eef22ed6184a9c51552811089d02aa78b0c7c206"
+    },
+    {
+      "file": "docs/product/HUSTLEN_AI_PRODUCT_BLUEPRINT.md",
+      "sha256": "08516b1caa466675c35d51fb545590d7ffe7fe3fb00bcf3a0480851f26ba0143"
+    },
+    {
+      "file": "docs/recovery/batch13e/ACCEPTANCE_COVERAGE.md",
+      "sha256": "b96035fce02b87a85709f342dbb6efe722398eb24e8aa82fe14ce3a0e938b1fc"
+    },
+    {
+      "file": "docs/recovery/batch13e/AUDIT_BEFORE_IMPLEMENTATION.md",
+      "sha256": "90f0dd45ff73f06204680e83b6667b30d0f38f6f9b428064881de0248a76f38b"
+    },
+    {
+      "file": "docs/recovery/batch13e/CONTRACT_AND_SETUP.md",
+      "sha256": "b466fbccb73b28721f1bb3531d8d01acb8169a22a8866d950e47532458d424e2"
+    },
+    {
+      "file": "docs/recovery/batch13e/POLICY_AND_FUTURE_ASSISTANCE.md",
+      "sha256": "68d2f50a7ad75dfe129ad856fd135559a95dbbc7616df004a657adcf305cff20"
+    },
+    {
+      "file": "docs/roadmap/MASTER_ROADMAP_14_STAGES.md",
+      "sha256": "3bb985c214234dac56b56aa2f9d8bb0db35f0c92cfc5415cb200c5c3f594e4af"
+    },
+    {
+      "file": "lib/i18n/recovery-room.ts",
+      "sha256": "0d3ac4343936b9831d5a81775e0b38b39da7c4d77839514219ebcfb75dac1a1c"
+    },
+    {
+      "file": "lib/recovery-room/contracts.ts",
+      "sha256": "45b919aa50b9a29caa49c70c7ef2cd4d8d903d82d6f91c1ceb1be67a512f7323"
+    },
+    {
+      "file": "lib/recovery-room/service.ts",
+      "sha256": "6674ae1762d9b37dd83fd30014c53150ddf1e977010596e573e83b6005fd00c3"
+    },
+    {
+      "file": "package.json",
+      "sha256": "4df993d4fe3e56efeee5a97bd3cb35d8c75f3d42daa2101956dd70e27b38fcee"
+    },
+    {
+      "file": "prisma/migrations/20261029140000_owned_recovery_room/migration.sql",
+      "sha256": "aa6661097bf37de27b17a903c73c9a82566e1413018cfaa9b6fd5b6c12fea300"
+    },
+    {
+      "file": "prisma/schema.prisma",
+      "sha256": "f8dccad6e6719344ecb940292ff9f93b4b758f9a85645ea8c8d6e84f03e96b9f"
+    },
+    {
+      "file": "proxy.ts",
+      "sha256": "27e4d6a3ab559e42fee205f7422326a4a2cc63f8d58cd62ce97f9db223507891"
+    },
+    {
+      "file": "tests/condition-claims-migration.test.ts",
+      "sha256": "ec35833c51110a09896111d885a9e1446f1d4d90cc5af2d6be7ec67a9b40b957"
+    },
+    {
+      "file": "tests/recovery-room-migration.test.ts",
+      "sha256": "3d987f09d1cda12a035ab86f1f3c378f1479d7cd5666ffa52b9bd17f5e49dd74"
+    },
+    {
+      "file": "tests/recovery-room.integration.test.ts",
+      "sha256": "fb1085c01e5e66e6a32466fa6591f6b2aa25be85eff66dddd66fbcae67bcfc2f"
+    },
+    {
+      "file": "tests/recovery-room.test.ts",
+      "sha256": "052cca191bdb1f05167d5322e5295266d4bfc91ad255551cc7f21e1ad1be2675"
+    },
+    {
+      "file": "tests/rental-documentation-migration.test.ts",
+      "sha256": "d2bfe514f8509b8465b971fdc2dbbd744f403e3c8f028bf405457b81fa8e411b"
+    },
+    {
+      "file": "tests/run-isolated.ts",
+      "sha256": "097eb8ae62953811989b76c97361cf8fda162ba9347fafb6e03ca1e643aa1dfa"
+    },
+    {
+      "file": "tests/support/recovery-fixture.ts",
+      "sha256": "cb200a6d33473c57c675801403e13423db1029ba4bdf1f1a7a6db0270fee6dd7"
+    }
+  ]
+}

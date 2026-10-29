@@ -1,0 +1,48 @@
+# Batch 13E changed-file inventory
+
+Baseline `748698710a1e9b98eb43b6e3d4f11f0577a53003`; implementation `b9297ff86f09482ddfef2937a5dd9daff10ba440`. 44 files including implementation and review evidence. No dependency/lockfile or historical migration edits.
+
+- `AGENTS.md`
+- `app/api/dev/recovery-room/route.ts`
+- `app/dev/condition-cases/page.tsx`
+- `app/dev/recovery-room/page.tsx`
+- `components/condition-case-workspace.tsx`
+- `components/recovery-room-workspace.tsx`
+- `docs/product/HUSTLEN_AI_PRODUCT_BLUEPRINT.md`
+- `docs/recovery/RESOLUTION_ROOM_REVIEW_BATCH_13E.md`
+- `docs/recovery/batch13e/ACCEPTANCE_COVERAGE.md`
+- `docs/recovery/batch13e/AUDIT_BEFORE_IMPLEMENTATION.md`
+- `docs/recovery/batch13e/CHANGED_FILES.md`
+- `docs/recovery/batch13e/CONTRACT_AND_SETUP.md`
+- `docs/recovery/batch13e/POLICY_AND_FUTURE_ASSISTANCE.md`
+- `docs/recovery/batch13e/SCREENSHOTS.md`
+- `docs/recovery/batch13e/VERIFICATION.md`
+- `docs/recovery/batch13e/browser-evidence.json`
+- `docs/recovery/batch13e/camera-pickup.json`
+- `docs/recovery/batch13e/camera-return.json`
+- `docs/recovery/batch13e/cleanup.json`
+- `docs/recovery/batch13e/final-results.json`
+- `docs/recovery/batch13e/implementation-source-hashes.json`
+- `docs/recovery/batch13e/initial-outcomes.json`
+- `docs/recovery/batch13e/migration-evidence.json`
+- `docs/recovery/batch13e/migration-fixture-diagnosis.json`
+- `docs/recovery/batch13e/preservation.json`
+- `docs/recovery/batch13e/screenshots/resolution-borrower-desktop-en.png`
+- `docs/recovery/batch13e/screenshots/resolution-borrower-mobile-zh.png`
+- `docs/recovery/batch13e/screenshots/resolution-borrower-tablet-zh.png`
+- `docs/recovery/batch13e/screenshots/resolution-owner-desktop-en.png`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/i18n/recovery-room.ts`
+- `lib/recovery-room/contracts.ts`
+- `lib/recovery-room/service.ts`
+- `package.json`
+- `prisma/migrations/20261029140000_owned_recovery_room/migration.sql`
+- `prisma/schema.prisma`
+- `proxy.ts`
+- `tests/condition-claims-migration.test.ts`
+- `tests/recovery-room-migration.test.ts`
+- `tests/recovery-room.integration.test.ts`
+- `tests/recovery-room.test.ts`
+- `tests/rental-documentation-migration.test.ts`
+- `tests/run-isolated.ts`
+- `tests/support/recovery-fixture.ts`
