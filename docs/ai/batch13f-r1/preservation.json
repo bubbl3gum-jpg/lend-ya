@@ -1,0 +1,11 @@
+{
+  "baseline": "f926659c128e85af6935e3cb72c6ab1ad4d65270",
+  "unchangedBaselineFiles": 1861,
+  "historicalMigrationsUnchanged": 33,
+  "schemaAndAllAuthorizationLibrariesUnchanged": true,
+  "promptAndInferenceRequestOptionsUnchanged": true,
+  "advisoryFormatSchemaUnchanged": true,
+  "existingCommandsAndTestTimeoutsUnchanged": true,
+  "sourceManifestsAndCanonicalRoadmapUnchanged": true,
+  "protectedManifestSha256": "2edb1e0ea5d7cdc2ebd085fc9779939a631d2bd2b7e4b2aa46c51ce15b67cd1f"
+}

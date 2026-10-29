@@ -1,0 +1,232 @@
+{
+  "implementation": "8e097ddb33a15307cedae78a7a10390b46af7a4e",
+  "selectedGroups": 15,
+  "localGenuineQwenRequests": 0,
+  "results": [
+    {
+      "group": "build:verify",
+      "start": "2026-10-29T19:09:34.218Z",
+      "end": "2026-10-29T19:09:42.600Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8dea07af0f3bd44c83ce2d1e",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/build:verify.log"
+    },
+    {
+      "group": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "start": "2026-10-29T19:03:39.409Z",
+      "end": "2026-10-29T19:04:07.786Z"
+    },
+    {
+      "group": "prisma-validation",
+      "command": "node_modules/.bin/prisma validate --config prisma7.config.ts",
+      "exit": 0,
+      "start": "2026-10-29T19:03:39.412Z",
+      "end": "2026-10-29T19:03:41.516Z"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-29T19:01:58.708Z",
+      "end": "2026-10-29T19:02:30.958Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/68bdcef1c0225c6a0cfe66ae",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:authorization.log"
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-29T19:00:17.766Z",
+      "end": "2026-10-29T19:00:55.095Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/dce9f4206c92cb3ce1b93c0c",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:integration.log"
+    },
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-29T19:08:44.644Z",
+      "end": "2026-10-29T19:09:01.693Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8d639dedace1677128df59fc",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:local-ai-diagnostics.log"
+    },
+    {
+      "group": "test:local-ai",
+      "start": "2026-10-29T19:09:01.695Z",
+      "end": "2026-10-29T19:09:18.768Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0495d5c2919b32a2b6a03d58",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:local-ai.log"
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-29T19:01:38.573Z",
+      "end": "2026-10-29T19:01:58.708Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ad8e044c6f68c430790676c6",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:login-readiness.log"
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-29T19:00:55.096Z",
+      "end": "2026-10-29T19:01:38.573Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/117bdb1fcba354d18b34d855",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:meetup-session.log"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-29T19:03:37.877Z",
+      "end": "2026-10-29T19:08:28.396Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/834f36d62443d746c4f6c943",
+      "tests": [
+        "\u2139 tests 12"
+      ],
+      "passes": [
+        "\u2139 pass 12"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:meetup.log"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-29T19:02:30.959Z",
+      "end": "2026-10-29T19:03:03.616Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/42b3736bebf56007f49e0e95",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:rental-api.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-29T19:09:18.769Z",
+      "end": "2026-10-29T19:09:34.217Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d44210fcf41d86a301829eed",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:support-staff-production.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-29T19:03:03.616Z",
+      "end": "2026-10-29T19:03:37.877Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/5c9e313749af68ba75ac903e",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 15"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13fr1/test:support-staff.log"
+    },
+    {
+      "group": "typecheck",
+      "command": "node_modules/.bin/tsc --noEmit",
+      "exit": 0,
+      "start": "2026-10-29T19:03:39.407Z",
+      "end": "2026-10-29T19:04:10.585Z"
+    },
+    {
+      "group": "unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "start": "2026-10-29T19:03:39.410Z",
+      "end": "2026-10-29T19:03:50.680Z"
+    }
+  ]
+}

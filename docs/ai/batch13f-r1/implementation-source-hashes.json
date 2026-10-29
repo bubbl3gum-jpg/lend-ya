@@ -1,0 +1,41 @@
+{
+  "implementation": "8e097ddb33a15307cedae78a7a10390b46af7a4e",
+  "files": [
+    {
+      "file": "docs/ai/batch13f-r1/DIAGNOSIS_AND_MAC_REPRODUCTION.md",
+      "sha256": "27aff702aef1e82450738e2cdc0fb88a19931e8807e6834ead476a4ad60da7f3"
+    },
+    {
+      "file": "lib/local-inference/contracts.ts",
+      "sha256": "292065d75c6830b06beebada854ddfb9a2bf4f16b25af0c8e02e8d72914ba004"
+    },
+    {
+      "file": "lib/local-inference/gateway.ts",
+      "sha256": "21a7e5bf2d36e34107ad6c5c1398f37dca2b55324dfe481117b944869f1a060c"
+    },
+    {
+      "file": "lib/local-inference/server.ts",
+      "sha256": "fb15c0348784ff38577071e9bcfed64c38c456494692107b386a50dccc60bcb8"
+    },
+    {
+      "file": "package.json",
+      "sha256": "563fa792bfa3197ba2803ffb996b756a89e9ce23f97adff972c220e0f2d3b6ef"
+    },
+    {
+      "file": "tests/local-ai-real.test.ts",
+      "sha256": "c9c65470d7a9a29b8b1add02c5d384a23d0411b7ff70525c84b21d87c19ac10c"
+    },
+    {
+      "file": "tests/local-ai.integration.test.ts",
+      "sha256": "bd0ef8d14b0b953d17ed8f1fe0d0db568c54acdabb7de6a0ec4e5819261afa04"
+    },
+    {
+      "file": "tests/local-inference.test.ts",
+      "sha256": "649c81657ee999108f6465f67cad096b4bf84c95ba48e1c9025f021e29ce455e"
+    },
+    {
+      "file": "tests/run-isolated.ts",
+      "sha256": "66855342cd6a3a80cdf03cbf9436f93da002e82e2842f387d6c410f9ff97823c"
+    }
+  ]
+}
