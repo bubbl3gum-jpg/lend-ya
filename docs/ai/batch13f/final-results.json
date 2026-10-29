@@ -1,0 +1,590 @@
+{
+  "implementation": "b20f638cbaaa6e538a296d43f4d981a5ba0a0769",
+  "selectedDistinctGroups": 34,
+  "allFinalSelectedPassed": true,
+  "genuineOllamaRun": "NOT_RUN_NO_ATTACHED_MAC",
+  "realModelRequests": 0,
+  "humanModelReviews": 0,
+  "results": [
+    {
+      "group": "build:verify",
+      "start": "2026-10-29T07:43:36.612Z",
+      "end": "2026-10-29T07:44:00.746Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/5ccdd815129bf0c3c746011c",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/build:verify.log"
+    },
+    {
+      "group": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "start": "2026-10-29T07:48:30.599Z",
+      "end": "2026-10-29T07:48:59.673Z"
+    },
+    {
+      "group": "prisma-validation",
+      "command": "node_modules/.bin/prisma validate --config prisma7.config.ts",
+      "exit": 0,
+      "start": "2026-10-29T07:48:30.602Z",
+      "end": "2026-10-29T07:48:32.646Z"
+    },
+    {
+      "group": "test:account-security-ux",
+      "start": "2026-10-29T07:49:29.559Z",
+      "end": "2026-10-29T07:49:49.139Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e731baaf672b701f3ec20b62",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:account-security-ux.log"
+    },
+    {
+      "group": "test:admin",
+      "start": "2026-10-29T07:41:31.419Z",
+      "end": "2026-10-29T07:42:14.684Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/df5e81bd33eca3dc773a0f85",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:admin.log"
+    },
+    {
+      "group": "test:ai-case-brief-disabled",
+      "start": "2026-10-29T07:45:11.700Z",
+      "end": "2026-10-29T07:45:24.493Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/19baa87c4a3f93bf6155f654",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:ai-case-brief-disabled.log"
+    },
+    {
+      "group": "test:ai-case-brief-production",
+      "start": "2026-10-29T07:44:57.137Z",
+      "end": "2026-10-29T07:45:11.700Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a1ceb348c1fadd7307161794",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:ai-case-brief-production.log"
+    },
+    {
+      "group": "test:ai-case-brief",
+      "start": "2026-10-29T07:44:33.104Z",
+      "end": "2026-10-29T07:44:57.136Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3a0d8c30c10296197896ad58",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:ai-case-brief.log"
+    },
+    {
+      "group": "test:announcements",
+      "start": "2026-10-29T07:42:22.930Z",
+      "end": "2026-10-29T07:42:47.396Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/22a8fa0fb69181e39aaa8783",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:announcements.log"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-29T07:41:00.973Z",
+      "end": "2026-10-29T07:41:31.418Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d5a55a57ed2bc7e15e9c550c",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:authorization.log"
+    },
+    {
+      "group": "test:chat",
+      "start": "2026-10-29T07:46:17.096Z",
+      "end": "2026-10-29T07:47:35.875Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/415cc475eb4e24b8e6841d5f",
+      "tests": [
+        "\u2139 tests 14"
+      ],
+      "passes": [
+        "\u2139 pass 14"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:chat.log"
+    },
+    {
+      "group": "test:condition-claims",
+      "start": "2026-10-29T07:40:35.420Z",
+      "end": "2026-10-29T07:41:00.973Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/09e9bce49f0d3a01ddac3df2",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:condition-claims.log"
+    },
+    {
+      "group": "test:database-principals",
+      "start": "2026-10-29T07:48:08.211Z",
+      "end": "2026-10-29T07:48:15.149Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/78ef40a25e9d3edd24eafc31",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:database-principals.log"
+    },
+    {
+      "group": "test:identity",
+      "start": "2026-10-29T07:39:13.175Z",
+      "end": "2026-10-29T07:39:35.101Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/05436df6b2d5ff6f8452ffe4",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:identity.log"
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-29T07:31:20.851Z",
+      "end": "2026-10-29T07:31:57.808Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e66f50465926a6957e73a68c",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:integration.log"
+    },
+    {
+      "group": "test:item-documentation",
+      "start": "2026-10-29T07:39:35.102Z",
+      "end": "2026-10-29T07:39:56.631Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b87e36eae26bc926721a66ef",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:item-documentation.log"
+    },
+    {
+      "group": "test:local-ai",
+      "start": "2026-10-29T07:44:17.263Z",
+      "end": "2026-10-29T07:44:33.103Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a2f72aaba15c3eae1d851feb",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:local-ai.log"
+    },
+    {
+      "group": "test:locations",
+      "start": "2026-10-29T07:43:06.635Z",
+      "end": "2026-10-29T07:43:30.746Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/de8a63edc97661ff1e33f777",
+      "tests": [
+        "\u2139 tests 7"
+      ],
+      "passes": [
+        "\u2139 pass 7"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:locations.log"
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-29T07:32:49.721Z",
+      "end": "2026-10-29T07:33:10.591Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/efc742f61a2a5f85c2578e86",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:login-readiness.log"
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-29T07:31:57.808Z",
+      "end": "2026-10-29T07:32:49.721Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/faa2ada53f5d4e09f14f033a",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:meetup-session.log"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-29T07:34:46.296Z",
+      "end": "2026-10-29T07:39:13.174Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f028f4b65601834b6f1eca99",
+      "tests": [
+        "\u2139 tests 12"
+      ],
+      "passes": [
+        "\u2139 pass 12"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:meetup.log"
+    },
+    {
+      "group": "test:mfa",
+      "start": "2026-10-29T07:42:14.684Z",
+      "end": "2026-10-29T07:42:22.930Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b1b44199aefebbfa98133298",
+      "tests": [
+        "\u2139 tests 16"
+      ],
+      "passes": [
+        "\u2139 pass 16"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:mfa.log"
+    },
+    {
+      "group": "test:migration",
+      "start": "2026-10-29T07:43:30.746Z",
+      "end": "2026-10-29T07:43:36.612Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1df17c0999eba2fdf2233e3a",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:migration.log"
+    },
+    {
+      "group": "test:moderation",
+      "start": "2026-10-29T07:48:15.149Z",
+      "end": "2026-10-29T07:49:29.559Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/92913a80cf2bcc963bfea5b4",
+      "tests": [
+        "\u2139 tests 10"
+      ],
+      "passes": [
+        "\u2139 pass 10"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:moderation.log"
+    },
+    {
+      "group": "test:platform-settings",
+      "start": "2026-10-29T07:42:47.397Z",
+      "end": "2026-10-29T07:43:06.634Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9f79aa7808f5bc9b31b95baf",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:platform-settings.log"
+    },
+    {
+      "group": "test:recovery-room",
+      "start": "2026-10-29T07:34:17.383Z",
+      "end": "2026-10-29T07:34:46.295Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0d5f29738d65bb6991c00abf",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:recovery-room.log"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-29T07:33:10.591Z",
+      "end": "2026-10-29T07:33:41.759Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/40d7c9ca709708dac27c6bb6",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:rental-api.log"
+    },
+    {
+      "group": "test:rental-browser",
+      "start": "2026-10-29T07:45:24.493Z",
+      "end": "2026-10-29T07:46:17.095Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3cf59de23f5c3a8a2948dc53",
+      "tests": [
+        "\u2139 tests 4"
+      ],
+      "passes": [
+        "\u2139 pass 4"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:rental-browser.log"
+    },
+    {
+      "group": "test:rental-documentation",
+      "start": "2026-10-29T07:39:56.631Z",
+      "end": "2026-10-29T07:40:35.418Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b4e96a33ec72b14ec08399ce",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:rental-documentation.log"
+    },
+    {
+      "group": "test:support-channels",
+      "start": "2026-10-29T07:47:35.876Z",
+      "end": "2026-10-29T07:48:08.211Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d5d7487f53085e1d784b19f6",
+      "tests": [
+        "\u2139 tests 9"
+      ],
+      "passes": [
+        "\u2139 pass 9"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:support-channels.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-29T07:44:00.746Z",
+      "end": "2026-10-29T07:44:14.573Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/58f71233d7d21b50e818fbc6",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:support-staff-production.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-29T07:33:41.759Z",
+      "end": "2026-10-29T07:34:17.382Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/13cc72a287468953d63f40fb",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 15"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-13f/test:support-staff.log"
+    },
+    {
+      "group": "typecheck",
+      "command": "node_modules/.bin/tsc --noEmit",
+      "exit": 0,
+      "start": "2026-10-29T07:48:30.597Z",
+      "end": "2026-10-29T07:49:03.398Z"
+    },
+    {
+      "group": "unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "start": "2026-10-29T07:48:30.600Z",
+      "end": "2026-10-29T07:48:41.627Z"
+    }
+  ]
+}

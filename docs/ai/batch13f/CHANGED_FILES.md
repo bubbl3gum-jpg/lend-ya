@@ -1,0 +1,42 @@
+# Batch13F complete changed-file inventory
+
+Baseline `f6a4dfb43f85eb72a442ee317dbce48ae45e558c`; implementation `b20f638cbaaa6e538a296d43f4d981a5ba0a0769`. 38 files including source and evidence. Evidence/index commits change documentation only. No historical migration, schema, lockfile or existing private-data/authorization library modified.
+
+- `AGENTS.md`
+- `app/api/dev/support-companion/local/route.ts`
+- `app/dev/support-companion/page.tsx`
+- `components/local-assistance.tsx`
+- `components/support-companion.tsx`
+- `docs/ai/LOCAL_AI_CUSTOMER_SERVICE_REVIEW_BATCH_13F.md`
+- `docs/ai/batch13f/ARCHITECTURE_AND_BOUNDARIES.md`
+- `docs/ai/batch13f/CHANGED_FILES.md`
+- `docs/ai/batch13f/EVALUATION_STATUS.md`
+- `docs/ai/batch13f/SCREENSHOTS.md`
+- `docs/ai/batch13f/SETUP_AND_REAL_EVALUATION.md`
+- `docs/ai/batch13f/VERIFICATION.md`
+- `docs/ai/batch13f/browser-evidence.json`
+- `docs/ai/batch13f/camera-pickup.json`
+- `docs/ai/batch13f/camera-return.json`
+- `docs/ai/batch13f/catalogue-validation.json`
+- `docs/ai/batch13f/cleanup.json`
+- `docs/ai/batch13f/final-results.json`
+- `docs/ai/batch13f/implementation-source-hashes.json`
+- `docs/ai/batch13f/initial-failures.json`
+- `docs/ai/batch13f/preservation.json`
+- `docs/ai/batch13f/screenshots/local-ai-desktop.png`
+- `docs/ai/batch13f/screenshots/local-ai-mobile.png`
+- `docs/ai/batch13f/screenshots/local-ai-tablet.png`
+- `docs/roadmap/MASTER_ROADMAP_14_STAGES.md`
+- `lib/local-inference/catalogue.ts`
+- `lib/local-inference/contracts.ts`
+- `lib/local-inference/gateway.ts`
+- `lib/local-inference/recovery-fixture.ts`
+- `lib/local-inference/server.ts`
+- `package.json`
+- `proxy.ts`
+- `scripts/local-ai-evaluate.ts`
+- `tests/local-ai-real.test.ts`
+- `tests/local-ai.integration.test.ts`
+- `tests/local-inference.test.ts`
+- `tests/run-isolated.ts`
+- `tests/support-staff-production.test.ts`

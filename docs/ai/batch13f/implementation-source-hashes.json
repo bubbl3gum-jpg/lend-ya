@@ -1,0 +1,93 @@
+{
+  "implementation": "b20f638cbaaa6e538a296d43f4d981a5ba0a0769",
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "sha256": "b3b9d7618cd46107cfb5c0f2f78aae9bb25a79dbbbf6e9e7d1542c1cd114cfb5"
+    },
+    {
+      "file": "app/api/dev/support-companion/local/route.ts",
+      "sha256": "5191ca3b979b4a28b58a03258c00d3a5f5556431b9d174223741d969948fed52"
+    },
+    {
+      "file": "app/dev/support-companion/page.tsx",
+      "sha256": "95fb1e9cc57606f770a9f6a7912be6fa21981dce2b822e1678f58a35ccb832de"
+    },
+    {
+      "file": "components/local-assistance.tsx",
+      "sha256": "c7402e379f8dbce1ef402258d09da1d81ebb9ae2413581f6d599d0e86d903a10"
+    },
+    {
+      "file": "components/support-companion.tsx",
+      "sha256": "4027c378a6633b6793778639741178f60a4f46765c5a823dfeff0c341a45ed3a"
+    },
+    {
+      "file": "docs/ai/batch13f/ARCHITECTURE_AND_BOUNDARIES.md",
+      "sha256": "1d3e4d165ee0baeb80a45097841fb9d1fd2a3edf284a6a97581f0a1c365f6b1a"
+    },
+    {
+      "file": "docs/ai/batch13f/EVALUATION_STATUS.md",
+      "sha256": "840d18c0017306002af01765be95b324f614714f237eed787136cf22f9c14075"
+    },
+    {
+      "file": "docs/ai/batch13f/SETUP_AND_REAL_EVALUATION.md",
+      "sha256": "c6191ac14c54d884077742dcf71059da34e4fb5daf970a0b1ff81dd89b9370d3"
+    },
+    {
+      "file": "docs/roadmap/MASTER_ROADMAP_14_STAGES.md",
+      "sha256": "a8897d348cc06acf899b426729b88426f9671331a69bb4dd96a8f9a34238f2d4"
+    },
+    {
+      "file": "lib/local-inference/catalogue.ts",
+      "sha256": "05b1f1da5670e820592a2bfbc414da0e5b96ff5093ae391986c303f0d99b2e0c"
+    },
+    {
+      "file": "lib/local-inference/contracts.ts",
+      "sha256": "8593d947515e724e3c9f9622104e514ebc39e90273fa146d9d75852d72f90711"
+    },
+    {
+      "file": "lib/local-inference/gateway.ts",
+      "sha256": "f013c7a088bddc89616eb2f884e2308914cd5f15e4f81e671c21481c270abd18"
+    },
+    {
+      "file": "lib/local-inference/recovery-fixture.ts",
+      "sha256": "64dfa1b23f9fc586256847c01246c8c16f617cb1dc5a53f642dcf687c32d199d"
+    },
+    {
+      "file": "lib/local-inference/server.ts",
+      "sha256": "cc47495c585d77173270d6f170168b22731375f4888ec6ffb6188f3454de5c6f"
+    },
+    {
+      "file": "package.json",
+      "sha256": "f887577fed7cb429f2b154c8313d691b6ce6cb87dfd33b12b83fd74f58f9ab3e"
+    },
+    {
+      "file": "proxy.ts",
+      "sha256": "1b98ab876fe656ac589b0071b9f1351bf0cf07b8d6c79878bb8de73304b1c8f1"
+    },
+    {
+      "file": "scripts/local-ai-evaluate.ts",
+      "sha256": "da05eec57aa38831a872b64f11c6a79d443034a5633d758c1fdd9b1ae832da94"
+    },
+    {
+      "file": "tests/local-ai-real.test.ts",
+      "sha256": "e66c0d1926d35ea5ed308817717e10cafb1a1c802b75bfed0474b3acdccb5280"
+    },
+    {
+      "file": "tests/local-ai.integration.test.ts",
+      "sha256": "270dcf4a36244e97c7b683489c68afc2ec16e3dd7b71eb5cc23d2232b11baead"
+    },
+    {
+      "file": "tests/local-inference.test.ts",
+      "sha256": "5f58c1ac7fc1426ef2c1268c9840efee6eb4c2ac14c872d0bd0f2287d4f54da6"
+    },
+    {
+      "file": "tests/run-isolated.ts",
+      "sha256": "daa90b9fee22986e1f9d4e74103919269ac149d736f31384ff14cf9e7bd80077"
+    },
+    {
+      "file": "tests/support-staff-production.test.ts",
+      "sha256": "6780b6117e03063b7d7bbc8be9c9fe51e1abf72218eef88491d0d7caefcac638"
+    }
+  ]
+}

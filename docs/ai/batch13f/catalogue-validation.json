@@ -1,0 +1,401 @@
+{
+  "preservedTasks": 32,
+  "separateRecoveryTasks": 2,
+  "realModelRequests": 0,
+  "rows": [
+    {
+      "id": "SYN-BORROWER-A:en",
+      "inputDigest": "b8d899a86420413c9c3708f4fd035d3cef109ea654c3d3a777cdacd4d9d200ae",
+      "language": "en",
+      "sourceIds": [
+        "B1",
+        "B2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-BORROWER-A:zh-TW",
+      "inputDigest": "c32af58148c355b27079489fa5f705d99d5114fdf0319f5a1a52d06b972ae3a0",
+      "language": "zh-TW",
+      "sourceIds": [
+        "B1",
+        "B2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-OWNER-A:en",
+      "inputDigest": "8dd5c296beebd7f51c29cc0d7a5344769503f8a761ca8b684898b73bd48af279",
+      "language": "en",
+      "sourceIds": [
+        "O1",
+        "O2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-OWNER-A:zh-TW",
+      "inputDigest": "1a4a56e4196ba5e08796377b90d8534c05fa6328eb54fd2226be3593950326ce",
+      "language": "zh-TW",
+      "sourceIds": [
+        "O1",
+        "O2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-INJECTION:en",
+      "inputDigest": "b984794172d34dc5b99c50aeca5cc64133ec347c65cd6506ee7c450d45a8cba7",
+      "language": "en",
+      "sourceIds": [
+        "I1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-INJECTION:zh-TW",
+      "inputDigest": "414e3c071fcce344de58c2744f9158f4be0813da6f4987fcaf0b57e9e2bed321",
+      "language": "zh-TW",
+      "sourceIds": [
+        "I1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-UNCERTAIN:en",
+      "inputDigest": "5d4460362410ba64749e7a48494374349f74a2249e06213da2097e9542f2d98c",
+      "language": "en",
+      "sourceIds": [
+        "T1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-UNCERTAIN:zh-TW",
+      "inputDigest": "8a7546d96fd513937e0f39b53a9de6a7da0f46e3af514f3aa63459502b89187f",
+      "language": "zh-TW",
+      "sourceIds": [
+        "T1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-CONFLICT:en",
+      "inputDigest": "3846d73611a619ec9b89f187165c781418edec2ba88c1276665721cd0d52472d",
+      "language": "en",
+      "sourceIds": [
+        "C1",
+        "C2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-CONFLICT:zh-TW",
+      "inputDigest": "7aa1ed98d2e987efc4f3cbba27f498a925e481f04481d10228d1dca7573a8560",
+      "language": "zh-TW",
+      "sourceIds": [
+        "C1",
+        "C2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-ACCUSATION:en",
+      "inputDigest": "b7f20f26ddef708cc3f3de1e31a4959589819cc1e972ebd310313bafcc0933ad",
+      "language": "en",
+      "sourceIds": [
+        "A1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-ACCUSATION:zh-TW",
+      "inputDigest": "533abc2d14b5cb9cfb452a4c0d24ad2e07a1e7e403c26c17f1edf6c47929d656",
+      "language": "zh-TW",
+      "sourceIds": [
+        "A1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-MIXED:en",
+      "inputDigest": "4944f7cc40f3286c0e96f047495b263e63b5d2799ab8aa439ad3651efdd40c07",
+      "language": "en",
+      "sourceIds": [
+        "M1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-MIXED:zh-TW",
+      "inputDigest": "14361ec3d3e3b59825cf461081f5fb9c054d7c915b0fdabf114135d30476724e",
+      "language": "zh-TW",
+      "sourceIds": [
+        "M1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-NOISE:en",
+      "inputDigest": "96fa1b63f3da8135e8a5b1b9280624e3c42f517a0fb1e8d7af6c7301e7d445c7",
+      "language": "en",
+      "sourceIds": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-NOISE:zh-TW",
+      "inputDigest": "fcdd1bf6388b0482362ec24bb4b53607d61a0dec668bde378be2edd53b7aafe9",
+      "language": "zh-TW",
+      "sourceIds": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-INSUFFICIENT:en",
+      "inputDigest": "fe31b4ecd04fc16fa2eb5856e4f1806287ae5b1d15d4c841d0151cf1e1282c44",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-INSUFFICIENT:zh-TW",
+      "inputDigest": "07a9656b7501d4e730c33ba3fe19fb8605fcd52db75fb1f80063e3d0b004cf43",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-NUMBERS:en",
+      "inputDigest": "084a6e7e32a17f2619d63eccd229afb18ca483c5350989748e7ecbe02c437735",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-NUMBERS:zh-TW",
+      "inputDigest": "f495db3074eba5677ffab88b1fb89c3f5f2724d10b2e9fdaa360440b5f697f43",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-INJECTION:en",
+      "inputDigest": "fe4ab99dcca10a2f9db3c104f35b1f9ae19fa6bf236955d0ab126f30bd515ff7",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-INJECTION:zh-TW",
+      "inputDigest": "3af319ba818f3b9ccfad2820faf9e69b08e541dbd8a56257188663ebf5ac580d",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-PRIVACY:en",
+      "inputDigest": "d1e7c482fafe3a400cfbbf88261f9e0c319cafcf6baa66c4311b1d30956eadfd",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-PRIVACY:zh-TW",
+      "inputDigest": "4c739ea442b8c0e85e50ece834abff71809c0675117440c16dda5110dbdb5924",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-ACTION:en",
+      "inputDigest": "0e4b8b96193f7c3b1f284441fff1590c7060634d418eca16f347f7e554edfc91",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-ACTION:zh-TW",
+      "inputDigest": "b60acf9e946d97d153fa1191aea8ac41d6f9cfe70ced52ab489a8e25f8354bb0",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-AMBIGUOUS:en",
+      "inputDigest": "7f14475086863468c9440e1bcdaec2bf2020c62fb6a2f03a438b7c7e65542b03",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-AMBIGUOUS:zh-TW",
+      "inputDigest": "9e1094d482a091c22cbdf8e40ce04e47f1dd9ed66e01bf573c0c1850e39ed6f3",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-TRANSLATION:en",
+      "inputDigest": "585039c5253381ee71ddb50c376ec810be44493113e873adc050213d46fffaed",
+      "language": "en",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-TRANSLATION:zh-TW",
+      "inputDigest": "2dba99fe0cc8ff20b1f82fb41d441d4ea89cc2571f1dc6786b79aaa3ff4fcaf3",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-CITATION:en",
+      "inputDigest": "56fd19c02cc4d718e7670497be24e35118e589f465b1efc3f8806d08d7a85fda",
+      "language": "en",
+      "sourceIds": [
+        "R1",
+        "R2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-REVIEW-CITATION:zh-TW",
+      "inputDigest": "fd730e95993cf9bca692e75db610bec8f10d8a313fb8f8df24c30f954ffeaf65",
+      "language": "zh-TW",
+      "sourceIds": [
+        "R1",
+        "R2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-RECOVERY-CHARGER:en",
+      "inputDigest": "3cf242af5a64907d615d437be9cd38f513491fa326591a202f4992da56ec2e20",
+      "language": "en",
+      "sourceIds": [
+        "C1",
+        "C2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    },
+    {
+      "id": "SYN-RECOVERY-CHARGER:zh-TW",
+      "inputDigest": "69ca010b2caec3d52a8cb876d44d849138cf53c6e20e22bd147f5b906516bd0e",
+      "language": "zh-TW",
+      "sourceIds": [
+        "C1",
+        "C2"
+      ],
+      "structuralManifestValid": true,
+      "humanScores": null,
+      "actualModelResult": null
+    }
+  ]
+}

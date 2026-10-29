@@ -1,0 +1,23 @@
+{
+  "mockedTransport": true,
+  "realQwen": false,
+  "calls": 7,
+  "nativeLogin": true,
+  "fixedSyntheticOnly": true,
+  "noBrowserInferenceOrExternalRequests": true,
+  "thinkingOmitted": true,
+  "malformedRejected": true,
+  "originAndSessionDenied": true,
+  "editedDraftNeverSent": true,
+  "widths": [
+    1440,
+    820,
+    390
+  ],
+  "languages": [
+    "en",
+    "zh-TW"
+  ],
+  "errors": [],
+  "consoleErrors": []
+}

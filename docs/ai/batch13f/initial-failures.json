@@ -1,0 +1,145 @@
+{
+  "scope": "Initial outcomes retained separately; final success does not erase these failures",
+  "outcomes": [
+    {
+      "cause": "New browser fixture used Email instead of actual Email address. Corrected to existing control; timeout unchanged.",
+      "result": {
+        "group": "test:local-ai",
+        "start": "2026-10-29T07:23:34.929Z",
+        "end": "2026-10-29T07:24:14.121Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/f05bb62fe97a162431bed0b2",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 0"
+        ],
+        "fails": [
+          "\u2139 fail 1"
+        ],
+        "cleanup": true,
+        "log": "/tmp/hustlen-13f/test:local-ai.log"
+      }
+    },
+    {
+      "cause": "New browser fixture used Sign in instead of actual Log in. Corrected existing control selector.",
+      "result": {
+        "group": "test:local-ai",
+        "start": "2026-10-29T07:24:33.906Z",
+        "end": "2026-10-29T07:25:15.494Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/69426951efa0684d5d40602c",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 0"
+        ],
+        "fails": [
+          "\u2139 fail 1"
+        ],
+        "cleanup": true,
+        "log": "/tmp/hustlen-13f/test:local-ai.log"
+      }
+    },
+    {
+      "cause": "Fixture omitted the existing private Support worker required by native login (actual login500), and expected / rather than existing /dashboard redirect. Started the unchanged worker/restricted runtime and used actual redirect. No auth bypass or production change.",
+      "result": {
+        "group": "test:local-ai",
+        "start": "2026-10-29T07:25:40.441Z",
+        "end": "2026-10-29T07:26:20.035Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/4cd7f728893137adfd1a4536",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 0"
+        ],
+        "fails": [
+          "\u2139 fail 1"
+        ],
+        "cleanup": true,
+        "log": "/tmp/hustlen-13f/test:local-ai.log"
+      }
+    },
+    {
+      "cause": "New wrapped draft label had an ambiguous accessible name. Added explicit localized aria-label and retained native textarea.",
+      "result": {
+        "group": "test:local-ai",
+        "start": "2026-10-29T07:27:02.757Z",
+        "end": "2026-10-29T07:27:46.642Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/7f8782eb9ab87685c193fcd2",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 0"
+        ],
+        "fails": [
+          "\u2139 fail 1"
+        ],
+        "cleanup": true,
+        "log": "/tmp/hustlen-13f/test:local-ai.log"
+      }
+    },
+    {
+      "cause": "New wrapped scenario-select label was ambiguous with option text. Added explicit localized aria-label.",
+      "result": {
+        "group": "test:local-ai",
+        "start": "2026-10-29T07:30:03.675Z",
+        "end": "2026-10-29T07:30:48.533Z",
+        "exit": 1,
+        "signal": null,
+        "artifact": ".test-artifacts/55088504bc02c294c319cf68",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 0"
+        ],
+        "fails": [
+          "\u2139 fail 1"
+        ],
+        "cleanup": true,
+        "log": "/tmp/hustlen-13f/test:local-ai.log"
+      }
+    },
+    {
+      "cause": "New test environment vectors inferred NODE_ENV as string; made config validation accept a record of optional strings, retaining actual strict runtime values.",
+      "result": {
+        "group": "typecheck",
+        "command": "node_modules/.bin/tsc --noEmit",
+        "exit": 2,
+        "start": "2026-10-29T07:24:18.243Z",
+        "end": "2026-10-29T07:24:42.722Z"
+      }
+    },
+    {
+      "cause": "New worker fixture NODE_ENV inferred string, causing spawn overload/narrowing errors; literal development as const corrected typing.",
+      "result": {
+        "group": "typecheck",
+        "command": "node_modules/.bin/tsc --noEmit",
+        "exit": 2,
+        "start": "2026-10-29T07:32:11.533Z",
+        "end": "2026-10-29T07:32:40.258Z"
+      }
+    },
+    {
+      "cause": "New test response local was never reassigned; changed let to const.",
+      "result": {
+        "group": "lint",
+        "command": "npm run lint",
+        "exit": 1,
+        "start": "2026-10-29T07:24:18.246Z",
+        "end": "2026-10-29T07:24:39.505Z"
+      }
+    }
+  ]
+}
