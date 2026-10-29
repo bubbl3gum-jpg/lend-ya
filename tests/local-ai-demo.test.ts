@@ -40,6 +40,9 @@ test("interactive local AI launcher: headed native auth, manual success/failure,
   const sentinelRun=testRunId();await admin.query(`CREATE DATABASE "${name}"`);await admin.query(`COMMENT ON DATABASE "${name}" IS 'hustlen-mrt-test:${sentinelRun}'`);
   const sentinel=await connectTestDatabaseTarget(url);try{await assertOwnedDatabase(sentinel,url,sentinelRun);await sentinel.query("CREATE TABLE untouched(v integer);INSERT INTO untouched VALUES(7)");assert.equal((await closed(launch())).code,1);assert.equal((await sentinel.query("SELECT v FROM untouched")).rows[0].v,7);await assertOwnedDatabase(sentinel,url,sentinelRun);}finally{await sentinel.end();}
   await admin.query(`DROP DATABASE "${name}"`);
+  const starting=launch();const startupDone=closed(starting);
+  for(let n=0;n<100&&!output.includes("Preparing fresh owned database");n++){assert.equal(starting.exitCode,null);await new Promise(r=>setTimeout(r,50));}
+  assert.match(output,/Preparing fresh owned database/);stop();await startupDone;assert.match(output,/Removed this run's marked disposable database/);await absent();
   const portServer=net.createServer();await new Promise<void>(r=>portServer.listen(0,"127.0.0.1",r));const port=(portServer.address()as net.AddressInfo).port;await new Promise<void>(r=>portServer.close(()=>r()));
   const binary=process.env.MRT_BROWSER_PATH??process.env.CHROMIUM_PATH??chromium.executablePath();
   const quote=(s:string)=>"'"+s.replaceAll("'","'\\''")+"'";

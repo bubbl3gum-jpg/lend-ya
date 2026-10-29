@@ -27,7 +27,9 @@ async function main(){
  const artifact=path.resolve(".test-artifacts",runId);
  let stopping=false,failed=false,release!:()=>void;
  const stopped=new Promise<void>(resolve=>{release=resolve;});
- const requestStop=()=>{stopping=true;release();};
+ const requestStop=()=>{const first=!stopping;stopping=true;release();
+  if(first&&migration&&migration.exitCode===null&&migration.signalCode===null)void stopChild(migration).catch(e=>{failed=true;logOperationalError("demo.local_ai.setup_stop",e);});
+ };
  const signals=["SIGINT","SIGTERM"] as const;for(const s of signals)process.on(s,requestStop);
  const check=()=>{if(stopping)throw Error("Demo stopped");};
  let admin:Awaited<ReturnType<typeof connectTestDatabaseTarget>>|undefined,owner:typeof admin,fixture:Fixture|undefined;
