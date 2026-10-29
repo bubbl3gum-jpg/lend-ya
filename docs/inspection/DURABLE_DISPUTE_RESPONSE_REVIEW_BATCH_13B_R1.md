@@ -8,7 +8,7 @@
 - Clean baseline: `95785a8c5ce777785bdf2fbb3871b5e617557705` on the R2 branch.
 - Supplied R2 implementation `847a947a5a0b1ab1fff546f2df4e673a7f2af920` and evidence `00d75e1192f27b4a507679a61e00692c4e6ffbb9` are verified ancestors.
 - Tested implementation: `a6c8705e78fa0948210e23a9b6f940f711f55e9c`.
-- Separate evidence closeout: `CLOSEOUT_SHA_PENDING`; indexed by a subsequent documentation-only commit.
+- Separate evidence closeout: `28145c4263b5a97341d4639005e44447c24c732a`; indexed by a subsequent documentation-only commit.
 
 An actual authenticated owner can review and submit a specific structured claim in the owned-development environment. The real borrower can find that same saved case through account activity/inbox, inspect authorized references and submit/reopen an immutable factual response. This is persisted application behavior, not another unsent preview. The existing Dispute remains the case identity and Booking remains the existing lifecycle authority.
 
