@@ -6,7 +6,7 @@ Branch `fix/local-qwen-validation-diagnostics-batch-13f-r1`. Clean baseline `f92
 
 Implementation `8e097ddb33a15307cedae78a7a10390b46af7a4e`.
 
-Evidence closeout **EVIDENCE_SHA_PENDING**, indexed by a subsequent documentation-only commit.
+Evidence closeout **fbd7f54f32e5509e0b697f914fed60d378c31f6e**, indexed by a subsequent documentation-only commit.
 
 The owner reports genuine9b inference: English injection200/25,458ms/400 tokens; Chinese translation502/VALIDATION/~23s, with fresh migrations/native auth/cleanup successful. These are supplied observations, not locally reproduced measurements. The starting implementation collapsed every validation condition into one code, so exact cause cannot be recovered from those facts alone.
 
