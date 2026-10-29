@@ -51,6 +51,10 @@ enum DisputeStatus {
 }
 
 model User {
+  recoveryProposals DevRecoveryProposal[]
+  recoveryEvents DevRecoveryEvent[]
+  recoveryNotices DevRecoveryNotice[]
+
   ownedConditionClaims DevConditionClaim[] @relation("ConditionOwner")
   borrowedConditionClaims DevConditionClaim[] @relation("ConditionBorrower")
   conditionEvents DevConditionEvent[]
@@ -1346,6 +1350,8 @@ model DevDocReviewContext {
 }
 
 model DevConditionClaim {
+  recoveryRoom DevRecoveryRoom?
+
  disputeId Int @id
  bookingId Int @unique
  ownerId Int
@@ -1383,9 +1389,73 @@ model DevConditionEvent {
  @@unique([disputeId,actorId,requestKey])
 }
 model DevConditionNotice {
+  recoveryNotices DevRecoveryNotice[]
+
  disputeId Int @id
  borrowerId Int
  createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
  claim DevConditionClaim @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
  borrower User @relation(fields:[borrowerId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+}
+
+model DevRecoveryRoom {
+ disputeId Int @id
+ revision Int
+ openedAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ policy String @default("owned-recovery-room-v1") @db.VarChar(40)
+ claim DevConditionClaim @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
+ proposals DevRecoveryProposal[]
+ events DevRecoveryEvent[]
+}
+model DevRecoveryProposal {
+ id String @id @db.Uuid
+ disputeId Int
+ authorId Int
+ revision Int @default(1)
+ category String @db.VarChar(32)
+ terms Json
+ scheduledAt DateTime? @db.Timestamptz(3)
+ lifetimeHours Int
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ expiresAt DateTime @db.Timestamptz(3)
+ supersedesId String? @db.Uuid
+ supersedes DevRecoveryProposal? @relation("RecoveryCounter",fields:[supersedesId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ successors DevRecoveryProposal[] @relation("RecoveryCounter")
+ room DevRecoveryRoom @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
+ author User @relation(fields:[authorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ events DevRecoveryEvent[]
+ @@index([disputeId,createdAt])
+}
+model DevRecoveryEvent {
+ id String @id @db.Uuid
+ disputeId Int
+ actorId Int
+ revision Int
+ kind String @db.VarChar(32)
+ proposalId String? @db.Uuid
+ noticeId String? @db.Uuid
+ payload Json
+ requestKey String @db.Uuid
+ requestHash String @db.Char(64)
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ room DevRecoveryRoom @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
+ actor User @relation(fields:[actorId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ proposal DevRecoveryProposal? @relation(fields:[proposalId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ notice DevRecoveryNotice? @relation("RecoveryViews",fields:[noticeId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ activityNotice DevRecoveryNotice? @relation("RecoveryActivity")
+ @@unique([disputeId,revision])
+ @@unique([disputeId,actorId,requestKey])
+}
+model DevRecoveryNotice {
+ id String @id @db.Uuid
+ disputeId Int
+ recipientId Int
+ eventId String @unique @db.Uuid
+ createdAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ queuedAt DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+ root DevConditionNotice @relation(fields:[disputeId],references:[disputeId],onDelete:Restrict,onUpdate:NoAction)
+ recipient User @relation(fields:[recipientId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ event DevRecoveryEvent @relation("RecoveryActivity",fields:[eventId],references:[id],onDelete:Restrict,onUpdate:NoAction)
+ views DevRecoveryEvent[] @relation("RecoveryViews")
+ @@index([disputeId,recipientId])
 }

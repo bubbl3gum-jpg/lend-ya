@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname.startsWith("/api/dev/recovery-room") || request.nextUrl.pathname === "/dev/recovery-room") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_RECOVERY_ROOM !== "owned-recovery-only")) return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if ((request.nextUrl.pathname.startsWith("/api/dev/condition-cases") || request.nextUrl.pathname === "/dev/condition-cases") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_CONDITION_CLAIMS !== "owned-dispute-only")) return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
   if (request.nextUrl.pathname.startsWith("/api/dev/rental-documentation") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_RENTAL_DOCUMENTATION !== "owned-agreement-only"))
     return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
