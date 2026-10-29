@@ -10,7 +10,7 @@ Clean starting HEAD `f6a4dfb43f85eb72a442ee317dbce48ae45e558c`; requested13E imp
 
 Implementation: `b20f638cbaaa6e538a296d43f4d981a5ba0a0769`.
 
-Evidence closeout: **EVIDENCE_SHA_PENDING**, indexed by a later documentation-only commit.
+Evidence closeout: **707071607f3460a8ffc2634a06cce938da6a3877**, indexed by a later documentation-only commit.
 
 Nothing pushed, merged or deployed. No existing application database changed.
 
