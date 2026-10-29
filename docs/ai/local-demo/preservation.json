@@ -1,0 +1,8 @@
+{
+  "baseline": "4fa6eb98379c63262953407efc1259a0425a8c85",
+  "unchangedPriorFiles": 1879,
+  "historicalMigrationsUnchanged": 33,
+  "existingCommandsDependenciesAndLockfileUnchanged": true,
+  "applicationGatewayValidationAuthOwnershipFixturesSchemaAndRoadmapUnchanged": true,
+  "protectedManifestSha256": "c3c33fb6d24765b300313f2d1c91e713f443f46f271ffda42adfab90f3ff1c4f"
+}

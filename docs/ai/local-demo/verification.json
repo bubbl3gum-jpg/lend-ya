@@ -1,0 +1,255 @@
+{
+  "implementation": "df35b122a18f398347586e1c928fdf2618b4ec46",
+  "selectedFinalGroups": 14,
+  "unitTests": 154,
+  "realQwenEvaluatedHere": false,
+  "results": [
+    {
+      "group": "build:verify",
+      "start": "2026-10-29T19:52:11.903Z",
+      "end": "2026-10-29T19:52:19.831Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9ae5bd48d3dc306129933ebd",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    },
+    {
+      "group": "lint",
+      "command": "npm run lint",
+      "exit": 0,
+      "start": "2026-10-29T19:52:42.799Z",
+      "end": "2026-10-29T19:53:06.148Z"
+    },
+    {
+      "group": "prisma-validation",
+      "command": "node_modules/.bin/prisma validate --config prisma7.config.ts",
+      "exit": 0,
+      "start": "2026-10-29T19:52:42.802Z",
+      "end": "2026-10-29T19:52:45.750Z"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-29T19:50:31.895Z",
+      "end": "2026-10-29T19:51:11.821Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/88fdb8736197f35d52c48a15",
+      "tests": [
+        "\u2139 tests 8"
+      ],
+      "passes": [
+        "\u2139 pass 8"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:authorization.log"
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-29T19:48:57.380Z",
+      "end": "2026-10-29T19:49:43.352Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/641636087c42edbf6ff46ad4",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:integration.log"
+    },
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-29T19:47:49.127Z",
+      "end": "2026-10-29T19:48:15.297Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c655d55450aae62be78537f4",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+    },
+    {
+      "group": "test:local-ai",
+      "start": "2026-10-29T19:48:15.300Z",
+      "end": "2026-10-29T19:48:35.666Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c85f879a9875fa207f9854fe",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai.log"
+    },
+    {
+      "group": "test:login-readiness",
+      "start": "2026-10-29T19:51:11.821Z",
+      "end": "2026-10-29T19:51:37.267Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/76e573aee991670be8e1e303",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:login-readiness.log"
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-29T19:49:43.353Z",
+      "end": "2026-10-29T19:50:31.895Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/7a2a744fc42f232a3ab211db",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:meetup-session.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-29T19:48:35.667Z",
+      "end": "2026-10-29T19:48:57.380Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/6cd0aa1c115c446ed203a393",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-29T19:51:37.267Z",
+      "end": "2026-10-29T19:52:11.903Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1328d6c6dbea7126826cd5c7",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 15"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff.log"
+    },
+    {
+      "group": "typecheck",
+      "command": "node_modules/.bin/tsc --noEmit",
+      "exit": 0,
+      "start": "2026-10-29T19:52:42.796Z",
+      "end": "2026-10-29T19:53:09.486Z"
+    },
+    {
+      "group": "unit",
+      "command": "npm run test:unit",
+      "exit": 0,
+      "start": "2026-10-29T19:52:42.800Z",
+      "end": "2026-10-29T19:52:54.937Z"
+    },
+    {
+      "group": "test:local-ai-demo",
+      "start": "2026-10-29T19:53:51.493Z",
+      "end": "2026-10-29T19:54:10.429Z",
+      "exit": 0,
+      "headed": true,
+      "display": "Linux test-only Xorg dummy display",
+      "mockedOllama": true,
+      "realQwen": false
+    }
+  ],
+  "initialOutcomes": {
+    "headedDialogFailure": "First launcher version let Playwright auto-dismiss confirm; corrected with passive native-dialog listener. Initial headed integration failed; final runs passed.",
+    "testHelperTyping": "Corrected new test helper ProcessEnv default typing; runtime guards unchanged.",
+    "externalCoordinatorNameGuard": "Temporary regression coordinator generated database names >63 characters. Guard refused before connection/creation. Shortened only that temporary generator; no guard relaxation.",
+    "refusedInitialGroups": [
+      {
+        "group": "test:local-ai-diagnostics",
+        "start": "2026-10-29T19:47:23.812Z",
+        "end": "2026-10-29T19:47:24.089Z",
+        "exit": 1,
+        "signal": null,
+        "tests": null,
+        "passes": null,
+        "fails": null,
+        "cleanup": false,
+        "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+      },
+      {
+        "group": "test:local-ai",
+        "start": "2026-10-29T19:47:24.091Z",
+        "end": "2026-10-29T19:47:40.116Z",
+        "exit": 0,
+        "signal": null,
+        "artifact": ".test-artifacts/17b431ba055c56530ec020cf",
+        "tests": [
+          "\u2139 tests 1"
+        ],
+        "passes": [
+          "\u2139 pass 1"
+        ],
+        "fails": [
+          "\u2139 fail 0"
+        ],
+        "cleanup": true,
+        "log": "/tmp/hustlen-ai-demo-regression/test:local-ai.log"
+      },
+      {
+        "group": "test:support-staff-production",
+        "start": "2026-10-29T19:47:40.117Z",
+        "end": "2026-10-29T19:47:40.434Z",
+        "exit": 1,
+        "signal": null,
+        "tests": null,
+        "passes": null,
+        "fails": null,
+        "cleanup": false,
+        "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+      }
+    ]
+  }
+}

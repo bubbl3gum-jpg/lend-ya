@@ -1,0 +1,21 @@
+{
+  "implementation": "df35b122a18f398347586e1c928fdf2618b4ec46",
+  "files": [
+    {
+      "file": "docs/ai/local-demo/START_HERE.md",
+      "sha256": "1d446b51c279d5fcfdabe8ef3067220b07bff2d83964caaa587c1ce0a8f91fdb"
+    },
+    {
+      "file": "package.json",
+      "sha256": "b3fddfaa2235cf9127735e86f4b9aa913a771522f0d597d824e03ee7b2138f13"
+    },
+    {
+      "file": "scripts/local-ai-demo.ts",
+      "sha256": "9b4b6b3171f56e796cdc65c5d9e83b4703a57eee63a55243ad8de82f7f2d2463"
+    },
+    {
+      "file": "tests/local-ai-demo.test.ts",
+      "sha256": "a00476c3927cebbeb132c90b68664ba308f606fb1bb370bd8792751cfb034b37"
+    }
+  ]
+}
