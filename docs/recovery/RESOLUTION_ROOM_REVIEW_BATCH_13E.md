@@ -10,7 +10,7 @@ Verified prior implementation `a6c8705e78fa0948210e23a9b6f940f711f55e9c` and evi
 
 Tested implementation: `b9297ff86f09482ddfef2937a5dd9daff10ba440`.
 
-Evidence closeout: **EVIDENCE_SHA_PENDING** (indexed by a subsequent documentation-only commit).
+Evidence closeout: **7a986c96ab4bde7325fd71479b44987495162d7c** (indexed by a subsequent documentation-only commit).
 
 No push, merge, deployment, existing application database operation or production activation.
 

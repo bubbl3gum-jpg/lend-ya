@@ -18,7 +18,7 @@ No security timeouts, browser collectors, camera requirements or meaningful asse
 |---|---|---:|---|---|
 | `npm run build:verify` | PASS | — | 2026-10-29T06:04:51.227Z | True |
 | `npm run lint` | PASS | — | 2026-10-29T05:59:21.955Z | not applicable |
-| `npm run prisma-validation` | PASS | — | 2026-10-29T05:59:21.957Z | not applicable |
+| `npx prisma validate --config prisma7.config.ts` | PASS | — | 2026-10-29T05:59:21.957Z | not applicable |
 | `npm run test:account-security-ux` | PASS | ['ℹ tests 1'] | 2026-10-29T05:46:50.330Z | True |
 | `npm run test:admin` | PASS | ['ℹ tests 7'] | 2026-10-29T05:44:46.162Z | True |
 | `npm run test:announcements` | PASS | ['ℹ tests 9'] | 2026-10-29T05:54:27.994Z | True |
@@ -49,8 +49,8 @@ No security timeouts, browser collectors, camera requirements or meaningful asse
 | `npm run test:rental-documentation` | PASS | ['ℹ tests 1'] | 2026-10-29T05:40:56.825Z | True |
 | `npm run test:support-channels` | PASS | ['ℹ tests 9'] | 2026-10-29T05:48:25.418Z | True |
 | `npm run test:support-staff` | PASS | ['ℹ tests 15'] | 2026-10-29T05:48:55.916Z | True |
-| `npm run typecheck` | PASS | — | 2026-10-29T05:59:21.953Z | not applicable |
-| `npm run unit` | PASS | — | 2026-10-29T05:59:21.951Z | not applicable |
+| `npx tsc --noEmit` | PASS | — | 2026-10-29T05:59:21.953Z | not applicable |
+| `npm run test:unit` | PASS | — | 2026-10-29T05:59:21.951Z | not applicable |
 
 ## Evidence limits and preservation
 
