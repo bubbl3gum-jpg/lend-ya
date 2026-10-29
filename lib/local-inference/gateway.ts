@@ -15,9 +15,9 @@ export async function ollamaTransport(body: string, signal: AbortSignal): Promis
   const req=request({hostname:"127.0.0.1",port:11434,path:"/api/chat",method:"POST",signal,headers:{"Content-Type":"application/json","Content-Length":Buffer.byteLength(body)}},res=>{
    if (res.statusCode!==200) {reject(new InferenceError(res.statusCode===429 || res.statusCode===503?"LIMIT":"UNAVAILABLE"));res.destroy();req.destroy();return;}
    let bytes=0;const chunks:Buffer[]=[];
-   res.on("data",(b:Buffer)=>{bytes+=b.length;if(bytes>65536)req.destroy(new InferenceError("VALIDATION"));else chunks.push(b);});
+   res.on("data",(b:Buffer)=>{bytes+=b.length;if(bytes>65536){reject(new InferenceError("VALIDATION","RESPONSE_SIZE","provider"));req.destroy();}else chunks.push(b);});
    res.on("error",()=>reject(new InferenceError("UNAVAILABLE")));
-   res.on("end",()=>{try {resolve(JSON.parse(Buffer.concat(chunks).toString("utf8")));} catch {reject(new InferenceError("VALIDATION"));}});
+   res.on("end",()=>{try {resolve(JSON.parse(Buffer.concat(chunks).toString("utf8")));} catch {reject(new InferenceError("VALIDATION","PROVIDER_JSON","provider"));}});
   });
   req.on("error",e=>reject(e instanceof InferenceError?e:new InferenceError(signal.aborted?"CANCELED":"UNAVAILABLE")));
   req.end(body);
@@ -38,9 +38,12 @@ export async function runInference(manifest: Manifest, signal: AbortSignal, conf
   if(Buffer.byteLength(body)>24000)throw new InferenceError("INPUT");
   const raw=await transport(body,controller.signal) as Record<string,unknown>;
   if(controller.signal.aborted)throw new InferenceError(timedOut?"TIMEOUT":"CANCELED");
-  if(!raw || raw.model!==config.model || raw.done!==true || !raw.message || typeof raw.message!=="object" || typeof (raw.message as {content?:unknown}).content!=="string")throw new InferenceError("VALIDATION");
+  if(!raw || typeof raw!=="object" || Array.isArray(raw))throw new InferenceError("VALIDATION","PROVIDER_ENVELOPE","provider");
+  if(raw.model!==config.model)throw new InferenceError("VALIDATION","MODEL_MISMATCH","provider");
+  if(raw.done!==true)throw new InferenceError("VALIDATION","INCOMPLETE_RESPONSE","provider");
+  if(!raw.message || typeof raw.message!=="object" || Array.isArray(raw.message) || typeof (raw.message as {content?:unknown}).content!=="string")throw new InferenceError("VALIDATION","CONTENT_MISSING","provider");
   // Explicitly allowlist content; never return message.thinking or raw provider fields.
-  let parsed:unknown;try {parsed=JSON.parse((raw.message as {content:string}).content);}catch{throw new InferenceError("VALIDATION");}
+  let parsed:unknown;try {parsed=JSON.parse((raw.message as {content:string}).content);}catch{throw new InferenceError("VALIDATION",raw.done_reason==="length"?"CONTENT_JSON_LIMIT":"CONTENT_JSON","provider");}
   const output=validateAdvisory(parsed,manifest);
   const count=(v:unknown)=>typeof v==="number"&&Number.isSafeInteger(v)&&v>=0&&v<=1000000?v:null;
   return {output,provenance:"LOCAL_OLLAMA_INFERENCE" as const,model:config.model,latencyMs:Math.round(performance.now()-start),promptTokens:count(raw.prompt_eval_count),outputTokens:count(raw.eval_count),humanReviewed:false as const};

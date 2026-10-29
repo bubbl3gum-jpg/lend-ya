@@ -5,32 +5,45 @@ export type Advisory = {
  uncertainties: string[]; nextSteps: AdvisoryStatement[]; requiresAgreement: string[];
  humanReview: string[]; drafts: { en: string; "zh-TW": string };
 };
+export const validationReasons = ["PROVIDER_JSON","RESPONSE_SIZE","PROVIDER_ENVELOPE","MODEL_MISMATCH","INCOMPLETE_RESPONSE","CONTENT_MISSING","CONTENT_JSON","CONTENT_JSON_LIMIT","OBJECT_SHAPE","ARRAY_SHAPE","TEXT_INVALID","REFS_EMPTY","REFS_DUPLICATE","REFS_UNKNOWN","FACT_SOURCE_KIND"] as const;
+export type ValidationReason = typeof validationReasons[number];
+export const validationFields = ["provider","root","knownFacts","participantClaims","uncertainties","nextSteps","requiresAgreement","humanReview","drafts","drafts.en","drafts.zh-TW"] as const;
+export type ValidationField = typeof validationFields[number];
 export class InferenceError extends Error {
- constructor(public code: "INPUT" | "UNAVAILABLE" | "LIMIT" | "TIMEOUT" | "CANCELED" | "VALIDATION") { super(code); }
+ constructor(public code: "INPUT" | "UNAVAILABLE" | "LIMIT" | "TIMEOUT" | "CANCELED" | "VALIDATION",public reason?:ValidationReason,public field?:ValidationField) { super(code); }
 }
-function exact(x: unknown, keys: string[]): Record<string, unknown> {
- if (!x || typeof x !== "object" || Array.isArray(x) || Object.keys(x).sort().join() !== keys.sort().join()) throw new InferenceError("VALIDATION");
+/** Static allowlists only: never values, unknown keys, indices, refs, text, counts or provider diagnostics. */
+export function safeValidationDiagnostic(error:InferenceError) {
+ if(error.code!=="VALIDATION" || !validationReasons.includes(error.reason!) || !validationFields.includes(error.field!))return undefined;
+ return {version:"local-validation-v1" as const,reason:error.reason!,field:error.field!};
+}
+function fail(reason:ValidationReason,field:ValidationField):never { throw new InferenceError("VALIDATION",reason,field); }
+function exact(x: unknown, keys: string[],field:ValidationField): Record<string, unknown> {
+ if (!x || typeof x !== "object" || Array.isArray(x) || Object.keys(x).sort().join() !== keys.sort().join()) fail("OBJECT_SHAPE",field);
  return x as Record<string, unknown>;
 }
-function text(x: unknown): string {
- if (typeof x !== "string" || !x.trim() || x.length > 2000 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(x)) throw new InferenceError("VALIDATION");
+function text(x: unknown,field:ValidationField): string {
+ if (typeof x !== "string" || !x.trim() || x.length > 2000 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(x)) fail("TEXT_INVALID",field);
  return x;
 }
-function strings(x: unknown): string[] {
- if (!Array.isArray(x) || x.length > 12) throw new InferenceError("VALIDATION");
- return x.map(text);
+function strings(x: unknown,field:ValidationField): string[] {
+ if (!Array.isArray(x) || x.length > 12) fail("ARRAY_SHAPE",field);
+ return x.map(v=>text(v,field));
 }
 /** Shape/source membership only, NOT factual correctness, privacy certification or authority. */
 export function validateAdvisory(raw: unknown, manifest: Manifest): Advisory {
- const x=exact(raw,["knownFacts","participantClaims","uncertainties","nextSteps","requiresAgreement","humanReview","drafts"]);
- const statements=(raw: unknown, facts=false): AdvisoryStatement[]=>{
-  if (!Array.isArray(raw) || raw.length > 12) throw new InferenceError("VALIDATION");
-  return raw.map(v=>{const s=exact(v,["text","refs"]);const refs=strings(s.refs);
-   if (!refs.length || new Set(refs).size!==refs.length || refs.some(id=>!manifest.sources.some(source=>source.id===id && (!facts || source.kind==="CONTEXT")))) throw new InferenceError("VALIDATION");
-   return {text:text(s.text),refs};});
+ const x=exact(raw,["knownFacts","participantClaims","uncertainties","nextSteps","requiresAgreement","humanReview","drafts"],"root");
+ const statements=(raw: unknown,field:ValidationField,facts=false): AdvisoryStatement[]=>{
+  if (!Array.isArray(raw) || raw.length > 12) fail("ARRAY_SHAPE",field);
+  return raw.map(v=>{const s=exact(v,["text","refs"],field);const refs=strings(s.refs,field);
+   if (!refs.length)fail("REFS_EMPTY",field);
+   if (new Set(refs).size!==refs.length)fail("REFS_DUPLICATE",field);
+   if (refs.some(id=>!manifest.sources.some(source=>source.id===id)))fail("REFS_UNKNOWN",field);
+   if (facts && refs.some(id=>!manifest.sources.some(source=>source.id===id && source.kind==="CONTEXT")))fail("FACT_SOURCE_KIND",field);
+   return {text:text(s.text,field),refs};});
  };
- const drafts=exact(x.drafts,["en","zh-TW"]);
- return {knownFacts:statements(x.knownFacts,true),participantClaims:statements(x.participantClaims),uncertainties:strings(x.uncertainties),nextSteps:statements(x.nextSteps),requiresAgreement:strings(x.requiresAgreement),humanReview:strings(x.humanReview),drafts:{en:text(drafts.en),"zh-TW":text(drafts["zh-TW"])}};
+ const drafts=exact(x.drafts,["en","zh-TW"],"drafts");
+ return {knownFacts:statements(x.knownFacts,"knownFacts",true),participantClaims:statements(x.participantClaims,"participantClaims"),uncertainties:strings(x.uncertainties,"uncertainties"),nextSteps:statements(x.nextSteps,"nextSteps"),requiresAgreement:strings(x.requiresAgreement,"requiresAgreement"),humanReview:strings(x.humanReview,"humanReview"),drafts:{en:text(drafts.en,"drafts.en"),"zh-TW":text(drafts["zh-TW"],"drafts.zh-TW")}};
 }
 const list={type:"array",maxItems:12,items:{type:"string",minLength:1,maxLength:2000}};
 const statements={type:"array",maxItems:12,items:{type:"object",additionalProperties:false,required:["text","refs"],properties:{text:{type:"string",minLength:1,maxLength:2000},refs:{...list,minItems:1}}}};

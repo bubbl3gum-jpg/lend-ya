@@ -108,7 +108,8 @@
     "test:rental-documentation-production": "tsx tests/run-isolated.ts --rental-documentation-production",
     "test:local-ai": "tsx tests/run-isolated.ts --local-ai",
     "ai:local:evaluate": "tsx scripts/local-ai-evaluate.ts",
-    "test:local-ai-real": "tsx tests/run-isolated.ts --local-ai-real"
+    "test:local-ai-real": "tsx tests/run-isolated.ts --local-ai-real",
+    "test:local-ai-diagnostics": "HUSTLEN_LOCAL_AI_DIAGNOSTICS_TEST=1 tsx tests/run-isolated.ts --local-ai"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",
