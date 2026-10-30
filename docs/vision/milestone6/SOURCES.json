@@ -1,0 +1,250 @@
+{
+  "method": "Unauthenticated documentation GET only. No inference, images or credentials transmitted. Repository/API examples not executed. Hashes identify fetched bytes, not pinned provider versions.",
+  "sources": [
+    {
+      "id": "openai-sdk",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
+      "status": 200,
+      "bytes": 42529,
+      "checkedAtUTC": "2026-10-30T15:40:06.111161+00:00",
+      "sha256": "e22c0689d4253b02383aec329a1331e6850bd2f74e7b78500268120829743f39"
+    },
+    {
+      "id": "google-sdk",
+      "url": "https://raw.githubusercontent.com/googleapis/python-genai/main/README.md",
+      "status": 200,
+      "bytes": 57480,
+      "checkedAtUTC": "2026-10-30T15:40:06.111658+00:00",
+      "sha256": "9548e07e90f9f35aeed69c16e532c6156d40c103d3136c59e1640b86dd05e2e2"
+    },
+    {
+      "id": "claude-sdk",
+      "url": "https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/README.md",
+      "status": 200,
+      "bytes": 3525,
+      "checkedAtUTC": "2026-10-30T15:40:06.111832+00:00",
+      "sha256": "b2601659b9837cdb382582e6f292fb859cc6eb31432fc0ac71f26db461e5d588"
+    },
+    {
+      "id": "aws-detect",
+      "url": "https://raw.githubusercontent.com/awsdocs/amazon-rekognition-developer-guide/master/doc_source/images.md",
+      "status": 200,
+      "bytes": 1496,
+      "checkedAtUTC": "2026-10-30T15:40:06.111932+00:00",
+      "sha256": "fa3a587e46bd2995bff17b19d729c37a0434c6cfab141d816ef3bb1f08835eb7"
+    },
+    {
+      "id": "azure-sdk",
+      "url": "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/vision/azure-ai-vision-imageanalysis/README.md",
+      "status": 200,
+      "bytes": 21952,
+      "checkedAtUTC": "2026-10-30T15:40:06.111958+00:00",
+      "sha256": "95d0d3c7d8eebba8bcde42726eccf85f30fe44f956eff34dd1754ba53d34f128"
+    },
+    {
+      "id": "qwen",
+      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3-VL/main/README.md",
+      "status": 200,
+      "bytes": 52828,
+      "checkedAtUTC": "2026-10-30T15:40:06.111994+00:00",
+      "sha256": "fc21106258c51e0b91a652eef12f5925becb146ea8b8c79a4251ac2e89a2f1ac"
+    },
+    {
+      "id": "ollama-vision",
+      "url": "https://raw.githubusercontent.com/ollama/ollama/main/docs/api.md",
+      "status": 200,
+      "bytes": 54614,
+      "checkedAtUTC": "2026-10-30T15:40:06.112133+00:00",
+      "sha256": "96db03080e385dbabf5d70e75f298d41b75983bc30975cae56f7119f848dd0f5"
+    },
+    {
+      "id": "internvl",
+      "url": "https://raw.githubusercontent.com/OpenGVLab/InternVL/main/README.md",
+      "status": 200,
+      "bytes": 70862,
+      "checkedAtUTC": "2026-10-30T15:40:06.112241+00:00",
+      "sha256": "0d5338fba1508bf7ffc9ccb2479c852e20b195394376b3c648750706b1465e10"
+    },
+    {
+      "id": "openai-schema",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/response_input_image_param.py",
+      "status": 200,
+      "bytes": 1753,
+      "checkedAtUTC": "2026-10-30T15:40:06.112382+00:00",
+      "sha256": "a6110b76f8a2f47285b6848304340189f58728561c531764c1493d8d016ba637"
+    },
+    {
+      "id": "claude-image",
+      "url": "https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/src/anthropic/types/image_block_param.py",
+      "status": 200,
+      "bytes": 1220,
+      "checkedAtUTC": "2026-10-30T15:40:06.112401+00:00",
+      "sha256": "6821da89a4a2d83dfb2d001c73e370f0c42401362e9e27cbe0e97b07568eb1ac"
+    },
+    {
+      "id": "qwen-license",
+      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3-VL/main/LICENSE",
+      "status": 200,
+      "bytes": 11357,
+      "checkedAtUTC": "2026-10-30T15:40:06.112416+00:00",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "id": "aws-current-api",
+      "url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/rekognition/2016-06-27/service-2.json",
+      "status": 200,
+      "bytes": 465025,
+      "checkedAtUTC": "2026-10-30T15:40:06.112440+00:00",
+      "sha256": "d480fca1abad0125a9df7626677bca9b083c573233043c0dcdc1b975d48e2175"
+    },
+    {
+      "id": "claude-structured",
+      "url": "https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/src/anthropic/types/output_config_param.py",
+      "status": 200,
+      "bytes": 771,
+      "checkedAtUTC": "2026-10-30T15:40:06.113954+00:00",
+      "sha256": "55fd9fa7855463e780a6fe1b5e98a02cb46b0f69db56d7e2baaf219447919314"
+    },
+    {
+      "id": "openai-structured",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/response_format_text_json_schema_config_param.py",
+      "status": 200,
+      "bytes": 1604,
+      "checkedAtUTC": "2026-10-30T15:40:06.114005+00:00",
+      "sha256": "5d777e58da61fd5b7e1e601b60734af3513299a3225fdd879b10b8d3960ab5e6"
+    },
+    {
+      "id": "openai-pricing",
+      "url": "https://openai.com/api/pricing/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114025+00:00"
+    },
+    {
+      "id": "openai-vision",
+      "url": "https://platform.openai.com/docs/guides/images-vision",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114052+00:00"
+    },
+    {
+      "id": "openai-data",
+      "url": "https://platform.openai.com/docs/guides/your-data",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114062+00:00"
+    },
+    {
+      "id": "openai-countries",
+      "url": "https://help.openai.com/en/articles/5347006-openai-api-supported-countries-and-territories",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114070+00:00"
+    },
+    {
+      "id": "gemini-pricing",
+      "url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114079+00:00"
+    },
+    {
+      "id": "gemini-vision",
+      "url": "https://ai.google.dev/gemini-api/docs/image-understanding",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114087+00:00"
+    },
+    {
+      "id": "gemini-terms",
+      "url": "https://ai.google.dev/gemini-api/terms",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114095+00:00"
+    },
+    {
+      "id": "gemini-regions",
+      "url": "https://ai.google.dev/gemini-api/docs/available-regions",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114103+00:00"
+    },
+    {
+      "id": "vertex-data",
+      "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/data-governance",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114110+00:00"
+    },
+    {
+      "id": "claude-pricing",
+      "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114117+00:00"
+    },
+    {
+      "id": "claude-vision",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/vision",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114125+00:00"
+    },
+    {
+      "id": "claude-data",
+      "url": "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-data",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114131+00:00"
+    },
+    {
+      "id": "claude-countries",
+      "url": "https://www.anthropic.com/supported-countries",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114139+00:00"
+    },
+    {
+      "id": "aws-pricing",
+      "url": "https://aws.amazon.com/rekognition/pricing/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114145+00:00"
+    },
+    {
+      "id": "aws-regions",
+      "url": "https://docs.aws.amazon.com/general/latest/gr/rekognition.html",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114152+00:00"
+    },
+    {
+      "id": "aws-data",
+      "url": "https://aws.amazon.com/rekognition/faqs/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114158+00:00"
+    },
+    {
+      "id": "azure-pricing",
+      "url": "https://azure.microsoft.com/en-us/pricing/details/cognitive-services/computer-vision/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114165+00:00"
+    },
+    {
+      "id": "azure-vision",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114171+00:00"
+    },
+    {
+      "id": "azure-data",
+      "url": "https://learn.microsoft.com/en-us/legal/cognitive-services/computer-vision/image-analysis-data-privacy-security",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T15:40:06.114177+00:00"
+    }
+  ]
+}
