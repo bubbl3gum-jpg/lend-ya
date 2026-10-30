@@ -1,4 +1,5 @@
 "use client";
+import {SupportHandoff} from "./support-handoff";
 import {useId,useState} from "react";
 import {useLocale} from "@/components/i18n/locale";
 import type {Manifest} from "@/lib/ai-case-brief/contracts";
@@ -16,9 +17,9 @@ export function CaseNotesPanel({output,manifest}:{output:CaseAdvisory;manifest:M
  <h4>{zh?"優先釐清問題":"Focused clarification questions"}</h4><ul>{output.caseNotes.clarificationQuestions.map((q,i)=><li key={i}>{q}</li>)}</ul>
  <h4>{zh?"可行建議（未執行）":"Suggested next steps (not performed)"}</h4><ul>{output.nextSteps.map((s,i)=><li key={i}>{s.text} [{s.refs.join(", ")}]</li>)}</ul>
  <h4>{zh?"AI 的人工審查建議":"AI human-review recommendation"}</h4>{output.humanReview.length?<ul>{output.humanReview.map((s,i)=><li key={i}>{s}</li>)}</ul>:<p>{zh?"未提供人工審查建議。":"No human-review recommendation provided."}</p>}
- <p>{zh?"未提交客服案件，亦無人工已接收的確認。建議不等於已轉交。":"No Support ticket submitted or human receipt confirmed. A recommendation is not a transfer."}</p>
+ <p>{zh?"AI 建議本身不會轉交。摘要下方另列使用者確認提交的狀態。":"AI recommendations do not transfer a case. User-confirmed submission status appears separately below the summary."}</p>
  <button type="button" disabled={summary!==null} onClick={()=>{try{setSummary(prepareCaseSummary(manifest,output.caseNotes));setError(false);}catch{setError(true);}}}>{zh?"準備本機摘要草稿":"Prepare local summary draft"}</button>
  {error&&<p role="alert">{zh?"無法在目前限制內準備完整摘要，未送出任何內容。":"Cannot prepare a complete summary within the limit. Nothing was sent."}</p>}
- {summary!==null&&<><p role="status">{zh?"摘要已在本機準備，可編輯；未送出。":"Summary prepared locally; editable and not sent."}</p><label htmlFor={summaryId}>{zh?"本機案件摘要草稿":"Local case summary draft"}</label><textarea id={summaryId} className="catalogue-input" rows={7} maxLength={8000} value={summary} onChange={e=>setSummary(e.target.value)}/></>}
+ {summary!==null&&<><p role="status">{zh?"本機摘要草稿已準備，可編輯；提交狀態另列於下方。":"Local draft prepared and editable; submission status appears separately below."}</p><label htmlFor={summaryId}>{zh?"本機案件摘要草稿":"Local case summary draft"}</label><textarea id={summaryId} className="catalogue-input" rows={7} maxLength={8000} value={summary} onChange={e=>setSummary(e.target.value)}/><SupportHandoff summary={summary} zh={zh}/></>}
  </details>;
 }

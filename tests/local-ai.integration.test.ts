@@ -64,14 +64,51 @@ test("13F real application guards and browser with explicitly MOCKED loopback Ol
     await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(email);await page.getByLabel("Password",{exact:true}).fill(MFA_PASSWORD);await page.getByRole("button",{name:"Log in",exact:true}).click();await page.waitForURL(base+"/dashboard");await page.goto(base+"/dev/support-companion");
     await page.getByLabel("Enable fictional Case Notes",{exact:true}).check();await page.getByRole("button",{name:"Return & documentation",exact:true}).click();
     await page.getByLabel("Fictional situation or follow-up",{exact:true}).fill(request.messages[0]);const response=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local");await page.getByRole("button",{name:"Send fictional question",exact:true}).click();const r=await response;assert.equal(r.status(),200);const body=await r.json();assert.equal(body.output.caseNotes.issueCategory,"ACCESSORY");assert.equal(body.knowledge[0].id,"HUSTLEN-PROC-RETURN:v1");
-    await page.getByText("Case Notes (AI-inferred)",{exact:true}).click();await expect(page.getByText("Unavailable: no booking or verified case event was loaded. General procedures do not establish this rental's handoff or return.",{exact:true})).toBeVisible();await expect(page.getByText("No Support ticket submitted or human receipt confirmed. A recommendation is not a transfer.",{exact:true})).toBeVisible();assert.equal(await page.getByLabel("Local case summary draft",{exact:true}).count(),0);
+    await page.getByText("Case Notes (AI-inferred)",{exact:true}).click();await expect(page.getByText("Unavailable: no booking or verified case event was loaded. General procedures do not establish this rental's handoff or return.",{exact:true})).toBeVisible();await expect(page.getByText("AI recommendations do not transfer a case. User-confirmed submission status appears separately below the summary.",{exact:true})).toBeVisible();assert.equal(await page.getByLabel("Local case summary draft",{exact:true}).count(),0);
     await page.getByRole("button",{name:"Prepare local summary draft",exact:true}).focus();await page.keyboard.press("Enter");await expect(page.getByLabel("Local case summary draft",{exact:true})).toHaveValue(/Fictional missing accessory/);await page.getByLabel("Local case summary draft",{exact:true}).fill("EDITED_LOCAL_SUMMARY_NEVER_SENT");
     await page.getByLabel("Fictional situation or follow-up",{exact:true}).fill("Correction: loss is unconfirmed and no compensation was agreed.");const follow=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local");await page.getByRole("button",{name:"Send fictional question",exact:true}).click();assert.equal((await follow).status(),200);assert(!prompts.some(p=>p.includes("EDITED_LOCAL_SUMMARY_NEVER_SENT")));await expect(page.getByLabel("Local case summary draft",{exact:true})).toHaveValue("EDITED_LOCAL_SUMMARY_NEVER_SENT");
+    if(process.env.HUSTLEN_HANDOFF_TEST==="1"){
+     const intake=()=>db.query('SELECT id,description,"requesterUserId","bookingId","listingId","disputeId","reportId" FROM "SupportTicket"');
+     const before=(await intake()).rows.length;
+     await page.getByRole("button",{name:"Preview Support submission",exact:true}).click();
+     await expect(page.getByRole("button",{name:"Confirm fictional submission",exact:true})).toBeDisabled();
+     await page.getByRole("button",{name:"Cancel without submitting",exact:true}).click();assert.equal((await intake()).rows.length,before);
+     await page.getByRole("button",{name:"Preview Support submission",exact:true}).click();
+     await page.getByLabel("I reviewed the exact fictional payload above and confirm submission to test intake.",{exact:true}).check();
+     await page.getByLabel("Local case summary draft",{exact:true}).fill("Changed after confirmation");await expect(page.getByRole("button",{name:"Confirm fictional submission",exact:true})).toBeDisabled();
+     await page.getByLabel("Local case summary draft",{exact:true}).fill("EDITED_LOCAL_SUMMARY_NEVER_SENT");await page.getByLabel("I reviewed the exact fictional payload above and confirm submission to test intake.",{exact:true}).check();
+     await db.query('DELETE FROM hustlen_support_candidate.requester WHERE "userId"=$1',[actor.userId]);
+     const rejected=page.waitForResponse(r=>r.url()===base+"/api/dev/support-requester");await page.getByRole("button",{name:"Confirm fictional submission",exact:true}).click();assert.equal((await rejected).status(),403);
+     await expect(page.getByRole("region",{name:"Synthetic Support handoff",exact:true}).getByRole("alert")).toContainText("Submission rejected or outcome unconfirmed");assert.equal((await intake()).rows.length,before);await expect(page.getByText(/Synthetic ticket persisted:/)).toHaveCount(0);
+     await db.query('INSERT INTO hustlen_support_candidate.requester("userId")VALUES($1)',[actor.userId]);
+     const created=page.waitForResponse(r=>r.url()===base+"/api/dev/support-requester");
+     await page.getByRole("button",{name:"Confirm fictional submission",exact:true}).click();const receipt=await created;assert.equal(receipt.status(),200);const ticket=await receipt.json();
+     await expect(page.getByText(/Synthetic ticket persisted:/)).toContainText(ticket.id);
+     const rows=(await intake()).rows;assert.equal(rows.length,before+1);assert.equal(rows.at(-1)?.requesterUserId,actor.userId);assert(rows.some(x=>x.id===ticket.id&&x.description.includes("EDITED_LOCAL_SUMMARY_NEVER_SENT")&&[x.bookingId,x.listingId,x.reportId,x.disputeId].every(v=>v===null)));
+     const evt=await db.query('SELECT "eventType" FROM "SupportTicketEvent" WHERE "ticketId"=$1',[ticket.id]);assert.deepEqual(evt.rows,[{eventType:"TICKET_RECEIVED"}]);
+     await db.query(`CREATE FUNCTION public.test_handoff_event_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF EXISTS(SELECT 1 FROM public."SupportTicket" WHERE id=NEW."ticketId" AND subject='Fictional rollback') THEN RAISE EXCEPTION 'Test event failure'; END IF; RETURN NEW; END $$; CREATE TRIGGER test_handoff_event_failure BEFORE INSERT ON public."SupportTicketEvent" FOR EACH ROW EXECUTE FUNCTION public.test_handoff_event_failure()`);
+     const key=crypto.randomUUID(),payload={action:"create",categoryCode:"OTHER_SUPPORT",subject:"Fictional retry",description:"Fictional unverified claim",requestKey:key};
+     const submit=(b:unknown,token:string=actor.token,origin=base)=>fetch(base+"/api/dev/support-requester",{method:"POST",headers:{Origin:origin,"Content-Type":"application/json",Cookie:"p2p_session="+token},body:JSON.stringify(b)});
+     const dup=await Promise.all([submit(payload),submit(payload)]);assert(dup.every(x=>x.status===200));assert.equal((await dup[0].json()).id,(await dup[1].json()).id);
+     const countBeforeFailure=(await intake()).rows.length;
+     assert.equal((await submit({...payload,requestKey:crypto.randomUUID(),subject:"Fictional rollback"})).status,403);assert.equal((await intake()).rows.length,countBeforeFailure);
+     await db.query('DROP TRIGGER test_handoff_event_failure ON "SupportTicketEvent"; DROP FUNCTION public.test_handoff_event_failure()');
+     await db.query(`UPDATE "User" SET "accountStatus"='SUSPENDED' WHERE id=$1`,[actor.userId]);assert.equal((await submit(payload)).status,403);await db.query(`UPDATE "User" SET "accountStatus"='ACTIVE' WHERE id=$1`,[actor.userId]);
+     assert.equal((await submit({...payload,description:"Changed"})).status,403);
+     assert.equal((await submit({...payload,actorId:actor.userId})).status,400);
+     assert.equal((await submit({...payload,description:"x".repeat(2001)})).status,400);
+     assert.equal((await submit(payload,"invalid-session")).status,401);
+     assert.equal((await submit(payload,actor.token,"http://evil.test")).status,403);
+     await db.query('DELETE FROM hustlen_support_candidate.requester WHERE "userId"=$1',[actor.userId]);assert.equal((await submit(payload)).status,403);
+     await db.query('INSERT INTO hustlen_support_candidate.requester("userId")VALUES($1)',[actor.userId]);
+
+    }
     for(const [name,width,height]of [["desktop",1440,1000],["tablet",820,1180],["mobile",390,844]] as const){await page.setViewportSize({width,height});await page.screenshot({path:path.join(artifact,"case-notes-"+name+".png"),fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
     await page.getByRole("button",{name:"New conversation",exact:true}).click();await expect(page.getByLabel("Local case summary draft",{exact:true})).toHaveCount(0);await page.locator(".companion-language select").selectOption("zh-TW");await page.getByLabel("虛構情境或後續問題",{exact:true}).fill("虛構情境：尚未確認配件遺失，雙方尚未同意補償。");const zh=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local");await page.getByRole("button",{name:"送出虛構問題",exact:true}).click();assert.equal((await zh).status(),200);await page.getByText("案件筆記（AI 推測）",{exact:true}).click();await page.getByRole("button",{name:"準備本機摘要草稿",exact:true}).click();await expect(page.getByLabel("本機案件摘要草稿",{exact:true})).toHaveValue(/未送出/);
-    assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+    assert.deepEqual(errors,[]);if(process.env.HUSTLEN_HANDOFF_TEST==="1"){assert.equal(consoleErrors.length,1);assert.match(consoleErrors[0],/^Failed to load resource: the server responded with a status of 403 \(Forbidden\)$/);}else assert.deepEqual(consoleErrors,[]);
    }finally{await browser.close();}
-   for(const m of ["bad-notes","notes-procedure","fact-kind"]){mode=m;assert.equal((await post(request)).status,502);}mode="valid";assert.deepEqual(await snapshots(),original);
+   for(const m of ["bad-notes","notes-procedure","fact-kind"]){mode=m;assert.equal((await post(request)).status,502);}mode="valid";if(process.env.HUSTLEN_HANDOFF_TEST!=="1")assert.deepEqual(await snapshots(),original);else{const after=await snapshots();delete after.SupportTicket;const before={...original};delete before.SupportTicket;assert.deepEqual(after,before);}
+   if(process.env.HUSTLEN_HANDOFF_TEST==="1"){await db.query(`UPDATE "AuthSession" SET "expiresAt"=NOW()-interval '1 second' WHERE id=$1`,[actor.sessionId]);assert.equal((await post(request)).status,401);await db.query('DELETE FROM "AuthSession" WHERE id=$1',[actor.sessionId]);assert.equal((await post(request)).status,401);}
    await writeFile(path.join(artifact,"case-notes-evidence.json"),JSON.stringify({realQwen:false,mockedInference:true,notesOptIn:true,noVerifiedCaseLoaded:true,editableSummary:true,notSent:true,summaryNeverResent:true,resetClears:true,bilingual:true,widths:[1440,820,390],badClassificationAndProcedureBasisRejected:true,domainUnchanged:true},null,2));return;
   }
   if(process.env.HUSTLEN_GROUNDED_HELP_TEST==="1"){
