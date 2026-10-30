@@ -1,0 +1,159 @@
+{
+  "baseline": "823a128088c5d21df16ab0604ec416002e80b377",
+  "implementation": "1e85a4f514210d425552b7779c9d90d461e52952",
+  "unit": {
+    "command": "npm run test:unit",
+    "passed": 184,
+    "failed": 0
+  },
+  "staticChecks": [
+    "npx tsc --noEmit",
+    "npm run lint",
+    "git diff --check"
+  ],
+  "applicationChecks": [
+    {
+      "group": "test:vision-prototype",
+      "start": "2026-10-30T16:46:21.914Z",
+      "end": "2026-10-30T16:46:45.703Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/12fe7625f1678754c7913d65",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:vision-prototype.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T16:46:45.705Z",
+      "end": "2026-10-30T16:47:05.026Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/d872ba0f3b4eaa0242d72f6a",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T16:43:49.707Z",
+      "end": "2026-10-30T16:44:09.385Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/008c806f73318c5b5f2fead2",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:support-handoff",
+      "start": "2026-10-30T16:44:09.386Z",
+      "end": "2026-10-30T16:44:30.846Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/9daa618b58879b4d9e7138a0",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-handoff.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T16:47:05.027Z",
+      "end": "2026-10-30T16:47:14.189Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b993827fb558ff99740f3248",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "visionModelEvidence": "UNAVAILABLE",
+  "visionInferenceCalls": 0,
+  "visionWeightsDownloaded": false,
+  "textGatewayChanged": false,
+  "fixturePhotosSupplied": 0,
+  "groundTruthLabelsSupplied": 0,
+  "humanReviewsCompleted": 0,
+  "fixtureImageSource": "ORIGINAL_AUTHORED_SCHEMATICS_NOT_PHOTOGRAPHS",
+  "fixtureDigest": "629ee0b6b37f913656d2fb3d154a7fd3b9ffb9e387d5e8cec3df9668ebd706c9",
+  "uiEvidence": {
+    "root": ".test-artifacts/12fe7625f1678754c7913d65",
+    "screenshots": [
+      "vision-desktop.png",
+      "vision-tablet.png",
+      "vision-mobile.png"
+    ],
+    "mobileInspected": true,
+    "ownerVisualApproval": false
+  },
+  "initialCorrections": [
+    {
+      "issue": "TypeScript unknown-array narrowing after strict checks",
+      "resolved": true
+    },
+    {
+      "issue": "Browser attempted to inspect hidden lazy parent images; explicitly open disclosures/scroll/await normal load",
+      "resolved": true,
+      "artifact": ".test-artifacts/88987efe8a544c90eab53b39"
+    },
+    {
+      "issue": "New page missing explicit production proxy/matcher; Next404 cache header differed from strict test",
+      "resolved": "Added independent proxy refusal; retained original assertion",
+      "artifact": ".test-artifacts/268f030a7a30e6e55cae2d17"
+    }
+  ],
+  "databaseSafety": {
+    "freshOwnedDisposableOnly": true,
+    "allSelectedRunsCleanedUp": true,
+    "existingApplicationDatabaseModified": false,
+    "migrationsChanged": false
+  },
+  "preserved": [
+    "original evidence",
+    "canonical roadmap",
+    "M3 infrastructure",
+    "working text Qwen gateway and demo",
+    "existing stash",
+    "private configuration"
+  ],
+  "artifactConfirmation": "BLOCKED_BY_PROXY_403",
+  "macCompatibility": "UNTESTED",
+  "pushed": false,
+  "merged": false,
+  "deployed": false
+}
