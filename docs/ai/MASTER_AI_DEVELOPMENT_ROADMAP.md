@@ -119,3 +119,8 @@ Milestone1: **Implemented, owner-tested exploratory prototype; formal five-case 
 Observed quality issues: historical-photo retake advice, implied image examination, wrong borrower/counterparty perspective, vague steps, pickup/return temporal ambiguity and Traditional Chinese neutrality. Operational Vision remains unavailable. No prompt/model/schema/timeout/UI fix is made in this documentation audit.
 
 Detailed evidence and next-step plan: `MILESTONE_1_OWNER_ACCEPTANCE.md` (updated, attributed observations), `MILESTONE_2_CODE_ACCEPTANCE_AUDIT.md`, `MILESTONE_3_RELIABILITY_READINESS.md`, and the audit appendix in `MILESTONE_1_ROADMAP_CLOSEOUT.md`. The canonical14-stage roadmap and all prior production/visual blockers are unchanged. Stop here for owner review before M3A; no translation/Vision/provider, autonomous action or production access follows.
+
+
+### Milestone3A evaluation foundation checkpoint
+
+M3 remains **In Progress**. On30 October2026, the separately authorized M3A candidate adds `cs-advisory-eval-v1` (24 bilingual cases,32 prefix snapshots), exact Advisory-compatible result/heuristic contracts and an additive six-dimensional review format supporting honest partial/N/A judgments. See `milestone3a/REVIEW.md`. This is an offline foundation, not benchmark execution, scored human review, semantic certification or production readiness. Legacy corpora/review formats and application guards remain unchanged. Proposed numerical acceptance thresholds, review procedures and retention are pending owner approval. M3B is not started or authorized by this checkpoint; no prompt/model, translation, Vision, marketplace or autonomous action follows. M1 formal acceptance and M2 five-turn real-quality gaps remain as recorded.
