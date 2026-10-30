@@ -111,6 +111,7 @@
     "test:local-ai-real": "tsx tests/run-isolated.ts --local-ai-real",
     "test:local-ai-diagnostics": "HUSTLEN_LOCAL_AI_DIAGNOSTICS_TEST=1 tsx tests/run-isolated.ts --local-ai",
     "demo:local-ai": "tsx scripts/local-ai-demo.ts",
+    "test:local-ai-playground": "HUSTLEN_PLAYGROUND_TEST=1 tsx tests/run-isolated.ts --local-ai",
     "test:local-ai-demo": "tsx --test tests/local-ai-demo.test.ts"
   },
   "dependencies": {

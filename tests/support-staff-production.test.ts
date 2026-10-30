@@ -28,7 +28,7 @@ test(
             },
             ...(method === "POST"
               ? {
-                  body: JSON.stringify({
+                  body: JSON.stringify(route === "/api/dev/support-companion/local" ? {mode:"PLAYGROUND",side:"OWNER",language:"en",messages:["Fictional test only"]} : {
                     action: "reply",
                     role: "SUPPORT",
                     assurance: true,

@@ -5,6 +5,7 @@ import { useLocale } from "@/components/i18n/locale";
 import { guidance, local } from "@/lib/assistant/guidance";
 import { companionMessages } from "@/lib/assistant/messages";
 import { issues, type Issue, type AssistantResult } from "@/lib/assistant/contracts";
+import { LocalAiPlayground } from "@/components/local-ai-playground";
 import { LocalAssistance } from "@/components/local-assistance";
 export function SupportCompanion({localScenarios=[]}:{localScenarios?:{id:string,title:string}[]}){
  const {locale,setLocale}=useLocale(),t=companionMessages(locale);
@@ -29,10 +30,10 @@ export function SupportCompanion({localScenarios=[]}:{localScenarios?:{id:string
  }
  const inputClass="catalogue-input";
  return <main className="companion-page" id="companion-content">
- <Link href="/">{t.back}</Link><header className="companion-masthead"><p className="catalogue-kicker">{t.edition}</p><h1>{t.title}</h1><p>{localScenarios.length>0?(locale==="zh-TW"?"自有開發環境。可選的本機 AI 面板只使用固定合成案例；原有指引與受指派客服模式仍為離線預寫協助。未開放正式客服，也不會自動操作。":"Owned development only. The optional local AI panel uses fixed synthetic cases; existing guide and assigned-support modes remain offline assistance. No production Support or automatic actions."):t.notice}</p></header>
+ <Link href="/">{t.back}</Link><header className="companion-masthead"><p className="catalogue-kicker">{t.edition}</p><h1>{t.title}</h1><p>{localScenarios.length>0?(locale==="zh-TW"?"自有開發環境。可選的本機 AI 面板使用固定合成案例或明確標示的虛構互動情境；原有指引與受指派客服模式仍為離線預寫協助。未開放正式客服，也不會自動操作。":"Owned development only. The optional local AI panel uses fixed synthetic cases or clearly labelled fictional playground input; existing guide and assigned-support modes remain offline assistance. No production Support or automatic actions."):t.notice}</p></header>
  <label className="companion-language">Language / 語言<select value={locale} onChange={e=>setLocale(e.target.value)}><option value="en">English</option><option value="zh-TW">繁體中文</option></select></label>
  <nav aria-label={locale==="zh-TW"?"協助模式":"Assistance modes"} className="companion-modes">{(["GUIDE","COPILOT"] as const).map(m=><button key={m} type="button" aria-pressed={mode===m} onClick={()=>{if(mode!==m&&(!dirty||confirm(t.discard))){invalidate();setMode(m);setFeedback("");}}}>{m==="GUIDE"?t.guide:t.copilot}</button>)}</nav>
- {localScenarios.length>0&&<LocalAssistance scenarios={localScenarios}/>}
+ {localScenarios.length>0&&<><LocalAssistance scenarios={localScenarios}/><LocalAiPlayground/></>}
  <div className="companion-columns"><section className="companion-section"><form onSubmit={generate}>
  {mode==="GUIDE"?<><label>{t.issue}<select className={inputClass} value={issue} onChange={e=>setIssue(e.target.value as Issue)}>{issues.map(id=><option key={id} value={id}>{local(guidance[id].label,locale)}</option>)}</select></label><label>{t.report}<textarea className={inputClass} value={report} maxLength={1200} rows={5} onChange={e=>setReport(e.target.value)} aria-describedby="report-help"/></label><p id="report-help">{t.reportHelp}</p><p>{t.noSource}</p></>:<><p>{t.modeNotice}</p><Link href="/dev/support-agent">{t.staffSetup}</Link><label>{t.ticket}<input className={inputClass} value={ticketId} onChange={e=>{invalidate();setTicket(e.target.value);}} required autoComplete="off"/></label><label>{t.channel}<input className={inputClass} value={channelId} onChange={e=>{invalidate();setChannel(e.target.value);}} required autoComplete="off"/></label></>}
  <div className="companion-actions"><button className="catalogue-button" type="submit" disabled={busy}>{busy?t.busy:t.generate}</button>{busy&&<button type="button" onClick={()=>{invalidate();setFeedback(t.loadingFail);}}>{t.cancel}</button>}</div>

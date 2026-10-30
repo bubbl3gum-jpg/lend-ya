@@ -2,6 +2,7 @@ import "server-only";
 import { logOperationalError } from "../operational-error";
 import { companionActor } from "../assistant/server";
 import { readJsonObject } from "../api-response";
+import { playgroundTask } from "./playground";
 import { localTask } from "./catalogue";
 import { InferenceError, safeValidationDiagnostic } from "./contracts";
 import { localConfig, ollamaGateway } from "./gateway";
@@ -16,7 +17,7 @@ export async function localInferenceApi(request:Request){
   const url=new URL(request.url);
   if(url.search || url.origin!==actor.config.origin || request.headers.get("host")!==new URL(actor.config.origin).host || request.headers.get("origin")!==actor.config.origin || request.headers.get("sec-fetch-site")==="cross-site" || request.headers.get("x-hustlen-local-ai")!=="1")return reply({code:"DENIED"},403);
   if(request.headers.get("content-type")!=="application/json")throw new InferenceError("INPUT");
-  let task;try{task=localTask(await readJsonObject(request));}catch{throw new InferenceError("INPUT");}
+  let task;try{const input=await readJsonObject(request);task=input?.mode==="PLAYGROUND"?playgroundTask(input):localTask(input);}catch{throw new InferenceError("INPUT");}
   const now=Date.now();for(const [id,a]of attempts)if(now-a.at>=60000)attempts.delete(id);
   if(attempts.size>=1000&&!attempts.has(actor.user.id))throw new InferenceError("LIMIT");
   const counter=attempts.get(actor.user.id)??{at:now,n:0};counter.n++;attempts.set(actor.user.id,counter);if(counter.n>6)throw new InferenceError("LIMIT");
