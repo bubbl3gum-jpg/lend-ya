@@ -2,6 +2,18 @@
 
 30 October 2026, Asia/Taipei. Existing13F/R1 application; no new AI capability or translation API.
 
+## Get the published launcher
+
+The npm script is on `feature/playable-local-ai-demo`; older13F/R1 checkouts do not contain it. From your existing clone:
+
+```sh
+git fetch origin feature/playable-local-ai-demo
+git switch -c feature/playable-local-ai-demo FETCH_HEAD
+npm ci
+```
+
+Keep any uncommitted local work safe; do not reset/discard it to switch. For the first checkout, these commands work even when your clone fetches only one branch. If that local branch already exists, switch to it instead of running `switch -c` again. Confirm `package.json` contains `"demo:local-ai": "tsx scripts/local-ai-demo.ts"` before startup.
+
 ## Mac startup
 
 Use the same local PostgreSQL credentials/host that passed your genuine13F test, but choose a NEW nonexistent `hustlen_test_*` database name (at most63 characters). Keep your original application `DATABASE_URL` in the normal local environment; do not replace/reset that database.

@@ -1,0 +1,35 @@
+{
+  "branch": "feature/playable-local-ai-demo",
+  "reviewedImplementation": "df35b122a18f398347586e1c928fdf2618b4ec46",
+  "implementationCodeUnchanged": [
+    "package.json",
+    "scripts/local-ai-demo.ts",
+    "tests/local-ai-demo.test.ts"
+  ],
+  "freshChecks": {
+    "unit": {
+      "exit": 0,
+      "tests": 154
+    },
+    "typecheck": {
+      "exit": 0
+    },
+    "headedLauncher": {
+      "group": "test:local-ai-demo",
+      "start": "2026-10-30T02:32:03.928Z",
+      "end": "2026-10-30T02:32:28.536Z",
+      "exit": 0,
+      "headed": true,
+      "display": "Linux test-only Xorg dummy display",
+      "mockedOllama": true,
+      "realQwen": false
+    }
+  },
+  "cleanup": {
+    "maintenanceReadOnly": true,
+    "effectiveMaintenanceTargetVerified": true,
+    "remainingDemoAndRegressionDatabases": 0,
+    "remainingOwnedTestPrincipals": 0
+  },
+  "genuineQwenMeasuredHere": false
+}
