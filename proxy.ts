@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
+  if ((request.nextUrl.pathname === "/dev/vision-prototype" || request.nextUrl.pathname.startsWith("/api/dev/vision-fixtures")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_VISION_PROTOTYPE !== "fixture-only"))
+    return NextResponse.json({code:"UNAVAILABLE"},{status:404,headers:{"Cache-Control":"private, no-store","X-Content-Type-Options":"nosniff"}});
   if (request.nextUrl.pathname.startsWith("/api/dev/support-companion/local") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_LOCAL_AI !== "synthetic-ollama-only"))
     return NextResponse.json({code:"UNAVAILABLE"}, { status: 404, headers:{"Cache-Control":"private, no-store"} });
   if ((request.nextUrl.pathname.startsWith("/api/dev/recovery-room") || request.nextUrl.pathname === "/dev/recovery-room") && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_RECOVERY_ROOM !== "owned-recovery-only")) return NextResponse.json({error:"Not found."},{status:404,headers:{"Cache-Control":"private, no-store"}});
@@ -70,4 +72,4 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   return response;
 }
-export const config = { matcher: ["/dev/item-studio","/dev/item-documentation","/account/identity/:path*","/dev/inspection","/dev/support-companion/:path*","/admin/ai-case-brief/:path*","/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };
+export const config = { matcher: ["/dev/vision-prototype","/dev/item-studio","/dev/item-documentation","/account/identity/:path*","/dev/inspection","/dev/support-companion/:path*","/admin/ai-case-brief/:path*","/dev/announcements/:path*","/admin/locations/:path*", "/dev/support-agent/:path*", "/dev/support-requester/:path*", "/api/:path*", "/customer-service/tickets/:path*", "/uploads/listings/:path*", "/admin/security/:path*", "/admin/account-security/:path*", "/admin/workbench/:path*", "/admin/support/:path*", "/admin/bookings/:path*", "/admin/listings/:path*", "/admin/reports/:path*", "/admin/case-audit/:path*", "/admin/disputes/:path*", "/dev/staff-listing-inspection"] };

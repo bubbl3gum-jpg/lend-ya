@@ -1,0 +1,2 @@
+export function prototypeEnabled(env:Record<string,string|undefined>=process.env){return env.NODE_ENV==="development"&&env.HUSTLEN_VISION_PROTOTYPE==="fixture-only";}
+export function allowedActor(id:number,env:Record<string,string|undefined>=process.env){const raw=env.HUSTLEN_VISION_FIXTURE_ACTOR_IDS;return !!raw&&/^[1-9]\d*(,[1-9]\d*){0,19}$/.test(raw)&&raw.split(",").every(s=>Number.isSafeInteger(Number(s))&&Number(s)<=2147483647)&&raw.split(",").map(Number).includes(id);}

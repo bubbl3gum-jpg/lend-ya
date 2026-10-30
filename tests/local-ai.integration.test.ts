@@ -49,11 +49,35 @@ test("13F real application guards and browser with explicitly MOCKED loopback Ol
   let workerReady=false;worker.stdout?.on("data",b=>{if(String(b).includes("SUPPORT_WORKER_READY"))workerReady=true;});worker.stderr?.on("data",b=>void appendFile(path.join(artifact,"local-ai-worker.log"),b));
   worker.stdin!.end(JSON.stringify({mfaUrl:fixture.profile.url("mfa"),supportUrl:fixture.supportUrl,secret,socket}));
   for(let n=0;n<100&&!workerReady;n++)await new Promise(r=>setTimeout(r,50));assert(workerReady);
-  app=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",process.env.TEST_ADMIN_PORT!],{env:{PATH:process.env.PATH,NODE_ENV:"development",MRT_TEST_RUN_ID:process.env.MRT_TEST_RUN_ID,DATABASE_URL:runtime,TEST_DATABASE_URL:runtime,MRT_TEST_DATABASE_URL:runtime,HUSTLEN_SUPPORT_STAFF_CANDIDATE:"owned-synthetic-only",HUSTLEN_SUPPORT_ASSISTANT_CANDIDATE:"offline-only",HUSTLEN_SUPPORT_STAFF_ORIGIN:base,HUSTLEN_SUPPORT_STAFF_CHANNEL_KEY:secret,HUSTLEN_SUPPORT_STAFF_SOCKET:socket,HUSTLEN_LOCAL_AI:"synthetic-ollama-only",...(diagnostics?{HUSTLEN_LOCAL_AI_DIAGNOSTICS:"owned-test-categories-only"}:{})},stdio:["ignore","pipe","pipe"]});
+  app=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",process.env.TEST_ADMIN_PORT!],{env:{PATH:process.env.PATH,NODE_ENV:"development",MRT_TEST_RUN_ID:process.env.MRT_TEST_RUN_ID,DATABASE_URL:runtime,TEST_DATABASE_URL:runtime,MRT_TEST_DATABASE_URL:runtime,HUSTLEN_SUPPORT_STAFF_CANDIDATE:"owned-synthetic-only",HUSTLEN_SUPPORT_ASSISTANT_CANDIDATE:"offline-only",HUSTLEN_SUPPORT_STAFF_ORIGIN:base,HUSTLEN_SUPPORT_STAFF_CHANNEL_KEY:secret,HUSTLEN_SUPPORT_STAFF_SOCKET:socket,HUSTLEN_LOCAL_AI:"synthetic-ollama-only",...(process.env.HUSTLEN_VISION_PROTOTYPE_TEST==="1"?{HUSTLEN_VISION_PROTOTYPE:"fixture-only",HUSTLEN_VISION_FIXTURE_ACTOR_IDS:String(fixture.requester.userId)}:{}),...(diagnostics?{HUSTLEN_LOCAL_AI_DIAGNOSTICS:"owned-test-categories-only"}:{})},stdio:["ignore","pipe","pipe"]});
   for(const stream of [app.stdout,app.stderr])stream?.on("data",b=>void appendFile(path.join(artifact,"local-ai-app.log"),b));
   let ready=false;for(let n=0;n<120;n++){try{if((await fetch(base+"/login")).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,100));}assert(ready);
   const actor=fixture.requester;
   const post=async(body:unknown,token:string|undefined=actor.token,extra:Record<string,string>={})=>fetch(base+"/api/dev/support-companion/local",{method:"POST",headers:{Origin:base,"Content-Type":"application/json","X-Hustlen-Local-AI":"1",...(token?{Cookie:"p2p_session="+token}:{}),...extra},body:JSON.stringify(body)});
+  if(process.env.HUSTLEN_VISION_PROTOTYPE_TEST==="1"){
+   const image=base+"/api/dev/vision-fixtures?id=P1&variant=derived",pageUrl=base+"/dev/vision-prototype";
+   assert.equal((await fetch(image)).status,404);assert.equal((await fetch(pageUrl)).status,404);
+   const get=(url:string,token=actor.token,extra:Record<string,string>={})=>fetch(url,{headers:{Cookie:"p2p_session="+token,...extra}});
+   const r=await get(image);assert.equal(r.status,200);assert.match(r.headers.get("cache-control")!,/private, no-store/);assert.equal(r.headers.get("content-type"),"image/png");
+   const {createHash}=await import("node:crypto"),{default:manifest}=await import("../lib/vision-prototype/fixture.json");assert.equal(createHash("sha256").update(Buffer.from(await r.arrayBuffer())).digest("hex"),manifest.images[0].derivative.sha256);
+   for(const url of [image+"&id=R1",base+"/api/dev/vision-fixtures?id=foreign&variant=parent",base+"/api/dev/vision-fixtures?id=../secret&variant=parent",base+"/api/dev/vision-fixtures?id=P1&variant=raw",image+"&bookingId=1"])assert.equal((await get(url)).status,404);
+   assert.equal((await get(image,fixture.borrower.token)).status,404);assert.equal((await get(image,actor.token,{Origin:"http://evil.test"})).status,404);
+   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:["--no-sandbox"]});
+   try{const page=await browser.newPage(),errors:string[]=[],consoleErrors:string[]=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")consoleErrors.push(m.text());});
+    const email=(await db.query('SELECT email FROM "User" WHERE id=$1',[actor.userId])).rows[0].email;
+    await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(email);await page.getByLabel("Password",{exact:true}).fill(MFA_PASSWORD);await page.getByRole("button",{name:"Log in",exact:true}).click();await page.waitForURL(base+"/dashboard");await page.goto(pageUrl);
+    await expect(page.getByRole("heading",{name:"Vision provider: UNAVAILABLE",exact:true})).toBeVisible();
+    for(const summary of await page.getByText("Compare stored parent and derivative",{exact:true}).all())await summary.click();
+    for(const img of await page.locator('main img').all()){await img.scrollIntoViewIfNeeded();await expect.poll(()=>img.evaluate(el=>el instanceof HTMLImageElement&&el.complete&&el.naturalWidth>0)).toBe(true);}
+    for(const summary of await page.getByText("Compare stored parent and derivative",{exact:true}).all())await summary.click();
+    await page.getByText("Show MOCK/TEST panel (not model output)",{exact:true}).focus();await page.keyboard.press("Enter");await expect(page.getByText("MOCK_TEST_OUTPUT · REQUIRED",{exact:true})).toBeVisible();
+    for(const [name,width,height]of [["desktop",1440,1000],["tablet",820,1180],["mobile",390,844]]as const){await page.setViewportSize({width,height});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:path.join(artifact,"vision-"+name+".png"),fullPage:true});}
+    assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+   }finally{await browser.close();}
+   await db.query(`UPDATE "User" SET "accountStatus"='SUSPENDED' WHERE id=$1`,[actor.userId]);assert.equal((await get(image)).status,404);await db.query(`UPDATE "User" SET "accountStatus"='ACTIVE' WHERE id=$1`,[actor.userId]);
+   await db.query('DELETE FROM "AuthSession" WHERE id=$1',[actor.sessionId]);assert.equal((await get(image)).status,404);
+   assert.equal(calls,0);assert.deepEqual(await snapshots(),original);return;
+  }
   if(process.env.HUSTLEN_CASE_ASSISTANCE_TEST==="1"){
    const request={mode:"CASE_ASSISTANCE",topic:"RETURN",side:"OWNER",language:"en",messages:["Fictional missing accessory, not confirmed."]};
    assert.equal((await post(request,"")).status,401);assert.equal((await post({...request,sources:[]})).status,400);assert.equal((await post(request,actor.token,{Origin:"http://evil.test"})).status,403);assert.equal(calls,0);

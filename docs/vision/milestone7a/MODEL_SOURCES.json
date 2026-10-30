@@ -1,0 +1,41 @@
+{
+  "artifactConfirmed": false,
+  "weightsDownloaded": false,
+  "inferenceExecuted": false,
+  "sources": [
+    {
+      "id": "ollama-artifact",
+      "url": "https://ollama.com/library/qwen3-vl:8b-instruct-q4_K_M",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T16:46:07.960174+00:00"
+    },
+    {
+      "id": "ollama-manifest",
+      "url": "https://registry.ollama.ai/v2/library/qwen3-vl/manifests/8b-instruct-q4_K_M",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T16:46:07.960228+00:00"
+    },
+    {
+      "id": "qwen-card",
+      "url": "https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/raw/main/README.md",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checkedAtUTC": "2026-10-30T16:46:07.960242+00:00"
+    },
+    {
+      "id": "qwen-license",
+      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3-VL/main/LICENSE",
+      "status": 200,
+      "bytes": 11357,
+      "checkedAtUTC": "2026-10-30T16:46:07.960251+00:00",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "id": "qwen-runtime",
+      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3-VL/main/README.md",
+      "status": 200,
+      "bytes": 52828,
+      "checkedAtUTC": "2026-10-30T16:46:07.960313+00:00",
+      "sha256": "fc21106258c51e0b91a652eef12f5925becb146ea8b8c79a4251ac2e89a2f1ac"
+    }
+  ]
+}

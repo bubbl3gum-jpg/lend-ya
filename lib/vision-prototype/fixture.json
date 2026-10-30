@@ -1,0 +1,65 @@
+{
+  "version": "vision-fixture-v1",
+  "id": "SCHEMATIC-CAMERA-01",
+  "category": "Cameras",
+  "checklistId": "camera",
+  "checklistVersion": 1,
+  "images": [
+    {
+      "id": "P1",
+      "stage": "PICKUP",
+      "areaId": "body",
+      "source": "AUTHORED_SCHEMATIC_NOT_PHOTOGRAPH",
+      "capturedAt": null,
+      "parent": {
+        "id": "P1-stored",
+        "sha256": "0356583af936bf4b46cd64bcbfd3f4427241c187188cd22ef1eea4ca84cf88fb"
+      },
+      "derivative": {
+        "sha256": "f89192b0f02451c2680cfaf80b8cb75e1c5af737b85eae10c134e68c45177532",
+        "transform": {
+          "kind": "RESIZE",
+          "width": 480,
+          "height": 330
+        }
+      },
+      "limitations": [
+        "Not photographic evidence; no item condition can be inferred."
+      ]
+    },
+    {
+      "id": "R1",
+      "stage": "RETURN",
+      "areaId": "body",
+      "source": "AUTHORED_SCHEMATIC_NOT_PHOTOGRAPH",
+      "capturedAt": null,
+      "parent": {
+        "id": "R1-stored",
+        "sha256": "32c130fe6c16b92db26c4367bdb8ca8bbc9494d6b8dd0176e6fcec00e9a38762"
+      },
+      "derivative": {
+        "sha256": "118031df6350bd134f560579776eaff5077d01ed129b387e2818e490df68311b",
+        "transform": {
+          "kind": "RESIZE",
+          "width": 480,
+          "height": 330
+        }
+      },
+      "limitations": [
+        "Not photographic evidence; no item condition can be inferred."
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "pickupId": "P1",
+      "returnId": "R1",
+      "areaId": "body",
+      "matched": true,
+      "limitations": [
+        "Matching schematic layout is not a validated photographic comparison."
+      ]
+    }
+  ],
+  "groundTruth": null
+}
