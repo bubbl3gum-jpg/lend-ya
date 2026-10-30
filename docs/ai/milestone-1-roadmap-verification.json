@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-30",
+  "base": "eeb557de3829bbb1b328ba285c40af461139cbb4",
+  "documentationOnlyIncrement": true,
+  "realModelExecution": false,
+  "ownerAcceptance": "pending",
+  "unit": {
+    "tests": 157,
+    "pass": 157,
+    "fail": 0
+  },
+  "results": [
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T04:04:31.367Z",
+      "end": "2026-10-30T04:04:48.951Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/caee3c8942b5a06a8d47c7dc",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-30T04:04:48.953Z",
+      "end": "2026-10-30T04:05:04.290Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ac1485f2225f376fa582bede",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+    }
+  ]
+}
