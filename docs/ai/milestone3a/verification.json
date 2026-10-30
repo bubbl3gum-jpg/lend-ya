@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-30",
+  "implementation": "7f630635714f652d05ccb1f7a2870e6d4500204c",
+  "dataset": {
+    "version": "cs-advisory-eval-v1",
+    "cases": 24,
+    "turnSnapshots": 32,
+    "digest": "db9ac6f853bf8077982b2dc20e7f3c7c8ca701041a2fe6994dbf7ba7971355c5"
+  },
+  "realModelRequests": 0,
+  "completedHumanReviews": 0,
+  "focusedTests": {
+    "tests": 6,
+    "pass": 6
+  },
+  "unitTests": {
+    "tests": 163,
+    "pass": 163
+  },
+  "typecheck": "pass",
+  "lint": "pass",
+  "unexpectedFailures": 0,
+  "applicationEvidenceUsesMockInference": true,
+  "results": [
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-30T06:05:57.166Z",
+      "end": "2026-10-30T06:06:15.727Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/b56fe3941fa403391ac06296",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T06:07:36.119Z",
+      "end": "2026-10-30T06:07:45.874Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/52979b1e2f3c86de9decc275",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "productionApproval": false,
+  "milestone3bStarted": false
+}

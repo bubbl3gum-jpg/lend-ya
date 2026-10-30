@@ -73,3 +73,18 @@ Not implemented: authenticated real-model evaluation runner, application selecto
 Before M3B: owner separately authorizes its exact scope, reviews corpus expectations, benchmark repetitions/fixture lifetime/rate budget, runtime metadata and hashing, private-local output retention, reviewer workflow and proposed thresholds. Production/provider/translation/Vision/real-record processing remain separate. Recommended M3B reuses existing native authentication/owned DB harness and local endpoint, sequential bounded calls, no auto retry, exact result versioning and explicit failures. It must not bypass server classification or treat this dataset file as an activation token.
 
 No live Qwen, external inference, financial/custody/dispute action, marketplace migration or production change. Do not begin M3B automatically. Current launcher and fixed scenarios are unchanged.
+
+## Verification and changed-file inventory
+
+Implementation commit `7f630635714f652d05ccb1f7a2870e6d4500204c`.
+
+- `npm run test:advisory-evaluation`:6/6 pass; pinned dataset/hash,24 cases/32 prefixes, all invariant categories and case-specific expectations, source-aware valid/invalid facts, strict record/diagnostic/heuristic fields, result/case/prefix bindings, partial/N/A/null review handling and semantic-versus-structural separation.
+- `npm run test:unit`:163/163 pass, including legacy corpus digest and review-validator tests. No unexpected failure or assertion/timeout weakening.
+- `npx tsc --noEmit`:pass. `npm run lint`:pass.
+- `npm run test:local-ai-diagnostics`:1/1 pass through real protected app/native browser with explicitly mocked Ollama. No genuine inference or quality result.
+- `npm run build:verify`:pass, normal production build through fresh owned guarded disposable database. Diagnostic and build harnesses both reported owned-database/upload cleanup. No original application DB operation or new migration. Existing historical migrations were only replayed by unchanged disposable-test harnesses.
+- `git diff --check` and sensitive-pattern scan:pass. Legacy `lib/ai-case-brief`, local inference pipeline/prompt/settings, app/components/launcher, pinned legacy review material, dependency lockfile, migrations and canonical14-stage roadmap unchanged. The supplementary AI roadmap records M3A without claiming quality acceptance or starting M3B.
+
+Files changed: `lib/advisory-evaluation/dataset.ts`, `lib/advisory-evaluation/contracts.ts`, `tests/advisory-evaluation.test.ts`, `package.json` (test registration only), `docs/ai/milestone3a/dataset.json`, this review, `docs/ai/milestone3a/verification.json`, and `docs/ai/MASTER_AI_DEVELOPMENT_ROADMAP.md`.
+
+Full unrelated marketplace/camera suites and genuine Mac/Qwen benchmark were not run or claimed. No new human scores, generated inference transcripts, external requests, production permissions or activation. Test-only sample outputs/judgments are not real reviews. No push, merge or deployment; stop for review before M3B.
