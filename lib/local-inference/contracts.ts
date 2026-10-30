@@ -48,3 +48,20 @@ export function validateAdvisory(raw: unknown, manifest: Manifest): Advisory {
 const list={type:"array",maxItems:12,items:{type:"string",minLength:1,maxLength:2000}};
 const statements={type:"array",maxItems:12,items:{type:"object",additionalProperties:false,required:["text","refs"],properties:{text:{type:"string",minLength:1,maxLength:2000},refs:{...list,minItems:1}}}};
 export const advisorySchema={type:"object",additionalProperties:false,required:["knownFacts","participantClaims","uncertainties","nextSteps","requiresAgreement","humanReview","drafts"],properties:{knownFacts:statements,participantClaims:statements,uncertainties:list,nextSteps:statements,requiresAgreement:list,humanReview:list,drafts:{type:"object",additionalProperties:false,required:["en","zh-TW"],properties:{en:{type:"string",minLength:1,maxLength:2000},"zh-TW":{type:"string",minLength:1,maxLength:2000}}}}};
+
+/** Constrain generation from the server-selected manifest; validation remains independent. */
+export function sourceAwareAdvisorySchema(manifest: Manifest) {
+ const ids=manifest.sources.map(source=>source.id);
+ const contextIds=manifest.sources.filter(source=>source.kind==="CONTEXT").map(source=>source.id);
+ const scopedStatements=(allowed: string[])=>({
+  ...statements,
+  maxItems:allowed.length ? 12 : 0,
+  items:{...statements.items,properties:{...statements.items.properties,
+   refs:{...list,minItems:1,uniqueItems:true,items:{...list.items,...(allowed.length ? {enum:allowed} : {})}}
+  }}
+ });
+ return {...advisorySchema,properties:{...advisorySchema.properties,
+  knownFacts:scopedStatements(contextIds),
+  participantClaims:scopedStatements(ids),nextSteps:scopedStatements(ids)
+ }};
+}

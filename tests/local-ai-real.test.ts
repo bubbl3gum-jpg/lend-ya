@@ -31,7 +31,7 @@ test("OPTIONAL genuine local Qwen synthetic inference through native authenticat
    const email=(await db.query('SELECT email FROM "User" WHERE id=$1',[fixture.requester.userId])).rows[0].email;
    await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(email);await page.getByLabel("Password",{exact:true}).fill(MFA_PASSWORD);await page.getByRole("button",{name:"Log in",exact:true}).click();await page.waitForURL(base+"/dashboard");await page.goto(base+"/dev/support-companion");
    const results:unknown[]=[];
-   for(const scenario of ["SYN-REVIEW-INJECTION:en","SYN-REVIEW-TRANSLATION:zh-TW"]){
+   for(const scenario of ["SYN-BORROWER-A:en","SYN-REVIEW-INJECTION:en","SYN-REVIEW-TRANSLATION:zh-TW"]){
     if(results.length)page.once("dialog",dialog=>dialog.accept());
     await page.getByLabel("Synthetic scenario and output language",{exact:true}).selectOption(scenario);
     const response=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local",{timeout:65000});await page.getByRole("button",{name:"Generate with Ollama",exact:true}).click();
@@ -39,7 +39,7 @@ test("OPTIONAL genuine local Qwen synthetic inference through native authenticat
     await writeFile(path.join(artifact,"real-local-results.json"),JSON.stringify({realInference:true,noQualityApproval:true,results},null,2),{mode:0o600});assert.equal(r.status(),200,"Real model unavailable/invalid result: retained as failure, never replaced by scripted success");assert.equal(body.provenance,"LOCAL_OLLAMA_INFERENCE");
     await expect(page.getByLabel("English local AI draft",{exact:true})).not.toHaveValue("");
     if(scenario.endsWith("zh-TW"))await page.locator(".companion-language select").selectOption("zh-TW");
-    await page.screenshot({path:path.join(artifact,"real-local-"+(scenario.endsWith("zh-TW")?"zh":"en")+".png"),fullPage:true});
+    await page.screenshot({path:path.join(artifact,"real-local-"+scenario.replace(/[^a-zA-Z0-9-]/g,"-")+".png"),fullPage:true});
    }
    assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);assert.deepEqual(external,[]);
   }finally{await browser.close();}
