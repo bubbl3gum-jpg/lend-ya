@@ -1,0 +1,57 @@
+{
+  "checkedAtUTC": "2026-10-30T17:23:15.919202+00:00",
+  "ownerReportedListing": {
+    "model": "Qwen3-VL 8B Instruct",
+    "quantization": "Q4_K_M",
+    "size": "approximately6.2GB",
+    "licenseListing": "Apache2.0",
+    "independentlyVerified": false
+  },
+  "sources": [
+    {
+      "id": "ollama-listing",
+      "url": "https://ollama.com/library/qwen3-vl:8b-instruct-q4_K_M",
+      "status": "BLOCKED",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "registry-manifest",
+      "url": "https://registry.ollama.ai/v2/library/qwen3-vl/manifests/8b-instruct-q4_K_M",
+      "status": "BLOCKED",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "ollama-api",
+      "url": "https://raw.githubusercontent.com/ollama/ollama/main/docs/api.md",
+      "status": 200,
+      "bytes": 54614,
+      "sha256": "96db03080e385dbabf5d70e75f298d41b75983bc30975cae56f7119f848dd0f5"
+    },
+    {
+      "id": "qwen-readme",
+      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3-VL/main/README.md",
+      "status": 200,
+      "bytes": 52828,
+      "sha256": "fc21106258c51e0b91a652eef12f5925becb146ea8b8c79a4251ac2e89a2f1ac"
+    },
+    {
+      "id": "qwen-license",
+      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3-VL/main/LICENSE",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    }
+  ],
+  "ownerConfirmedHardware": {
+    "device": "MacBook Air",
+    "chip": "Apple M4",
+    "unifiedMemoryGB": 24,
+    "existingCustomerServiceModel": "qwen3.5:9b",
+    "candidate": "Qwen3-VL-8B-Instruct Q4_K_M",
+    "source": "OWNER_SUPPLIED",
+    "runtimeCompatibilityMeasured": false,
+    "peakMemoryMeasured": false,
+    "latencyMeasured": false,
+    "visualQualityEvaluated": false
+  }
+}
