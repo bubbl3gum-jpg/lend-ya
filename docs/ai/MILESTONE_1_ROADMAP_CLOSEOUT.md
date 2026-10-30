@@ -38,3 +38,21 @@ Transfer the supplied review bundle, retain private PostgreSQL credentials in th
 Security implications are unchanged: owned development only, claims not verified facts, no real records/private export, no model action authority or production activation. No database implications beyond isolated test creation/cleanup. Supplemental milestone statuses are not production permission. Stages6–9 unfinished blockers remain, Stage10 stays In Progress and Stage11 remains unapproved. Do not start M2, translation/Vision providers, Owner/Borrower AI or permissioned production integration before the appropriate separate review.
 
 No GitHub push, merge or deployment performed. A Git bundle contains only committed branch history relative to R2, never the stash or ignored environment files.
+
+## Documentation audit after owner exploratory testing
+
+30 October2026, Asia/Taipei. This appendix supersedes the earlier pending-owner state, without changing the historical test ledger above. Audited clean baseline `35c3df6b1882e6bab1982ef8079746fb763f7aab`; isolated branch `docs/ai-pilot-closeout-milestone-3-readiness`. Exact Mac checkout/session date not supplied. Existing troubleshooting stash preserved.
+
+The owner reported3 fictional scenarios/5 genuine local Qwen results including3-turn continuity. Full details, limitations, exact reported latencies and only actually inspected source attribution are recorded in the existing acceptance document. Formal five-case acceptance is incomplete. M2 core mechanisms already exist but five-turn genuine acceptance remains outstanding. M3 has a proposed24-case plan, not new implementation. No human scores/identity/approval or general reliability rate inferred.
+
+Changed documentation in this audit:
+
+- `docs/ai/MILESTONE_1_OWNER_ACCEPTANCE.md`: attributed exploratory closeout, earlier blank worksheet explicitly historical.
+- `docs/ai/MASTER_AI_DEVELOPMENT_ROADMAP.md`: current status/evidence and stop-before-M3 checkpoint.
+- `docs/ai/MILESTONE_2_CODE_ACCEPTANCE_AUDIT.md`: requirement/code/test/status/gap/risk/action table and performance hypotheses.
+- `docs/ai/MILESTONE_3_RELIABILITY_READINESS.md`: reusable infrastructure,24-case proposal, twelve-check mapping to established six dimensions, unapproved targets, protected real-run workflow, comparison/measurement, partial-review limitation, prioritized pilot weaknesses and recommended M3A sequence.
+- `docs/ai/MILESTONE_1_ROADMAP_CLOSEOUT.md`: this concise audit/verification appendix.
+
+Verification performed: fresh `npm run test:unit`157/157 pass,0 fail, no rerun; manual code/test/contract inspection; source/roadmap invariance, diff hygiene and document consistency checks. No runtime source changed. TypeScript/lint/build, fresh browser/DB suites and real Qwen were not rerun for this documentation-only audit; prior evidence remains explicitly historical. No database, migration, model configuration, API or production operation. All technical performance causes remain hypotheses; only supplied25–41s owner latency observations are actual reported measurements.
+
+Recommended next development batch: **M3A evaluation specification and versioned Advisory run/review contracts**, after owner reviews/approves scope, corpus, partial/N/A format, thresholds, reviewer availability and retention. Build no new inference provider or grader. Actual Mac evaluation and targeted prompt corrections are later separately reviewed increments. Do not begin M3 implementation in this task. No push/merge/deployment performed.

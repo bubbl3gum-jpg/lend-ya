@@ -6,7 +6,7 @@ The canonical project plan remains [`docs/roadmap/MASTER_ROADMAP_14_STAGES.md`](
 
 ## Execution checkpoint
 
-Build → Verify → Demonstrate → Review → Approve → Continue. One milestone at a time. Stop after Milestone1 for owner acceptance. Do not infer approval of later work from this roadmap.
+Build → Verify → Demonstrate → Review → Approve → Continue. One milestone at a time. Current checkpoint: owner stopped exploratory testing after three scenarios/five reported genuine results; formal M1 five-case acceptance remains incomplete. This increment audits M2 and plans M3 only; stop for owner review before M3 implementation. Do not infer approval of later work from this roadmap.
 
 Audited clean local branch before this documentation increment: `feature/interactive-local-ai-playground`, HEAD `eeb557de3829bbb1b328ba285c40af461139cbb4`. Playground implementation `34c0c722959e9f8a57da0745b8c1b9bd80cfeaad`; successful R2 reviewed ancestor `3b4e247a018265657074dc60e5934298a6358183`; playable-launcher ancestor `baad3b670fcdeaf925c96359cc293b35575ae8e9`. This is the latest inspected workspace state, not a claim about every remote branch. R2 was previously published; the subsequent playground branch has not been pushed. The owner reports genuine Qwen9b success for SYN-BORROWER-A:en, SYN-REVIEW-INJECTION:en and SYN-REVIEW-TRANSLATION:zh-TW. That is owner-reported fixed-scenario acceptance, not five-case playground acceptance or a comprehensive evaluation.
 
@@ -18,9 +18,9 @@ Use only **Not Started**, **Researching**, **In Progress**, **Implemented — Un
 
 | Milestone | Status | Existing implementation and evidence | Remaining acceptance/dependency |
 | --- | --- | --- | --- |
-| 1. Free-form Customer Service AI playground | Implemented — Unverified | Real protected UI, strict free-form manifest builder, existing local Qwen gateway. Three-turn mock/browser evidence in `playground/verification.json`. | Five distinct fictional cases through actual Qwen; inspect usefulness and attribution; owner acceptance. |
-| 2. Multi-turn conversational AI | Implemented — Unverified | Previously authorized playground already retains up to six user turns, displays AI separately and clears/reset-cancels. This directive adds no further implementation. | Five-turn genuine conversation, context/fidelity review, and explicit permission to proceed after M1. |
-| 3. AI reliability and evaluation | In Progress | Offline corpora, unscored rubric/review files, deterministic failure tests and owner-reported three fixed-model successes. | Reproducible actual model report, observed success/failure/latency, bilingual human judgments. No fabricated scores. |
+| 1. Free-form Customer Service AI playground | Implemented — Unverified | Real protected UI, strict free-form manifest builder, existing local Qwen gateway. Three-turn mock/browser evidence in `playground/verification.json`; owner-reported exploratory genuine-Qwen observations in `MILESTONE_1_OWNER_ACCEPTANCE.md`. | Owner-reported3 scenarios/5 generations; exploratory prototype tested, formal5-case acceptance incomplete. See owner closeout. |
+| 2. Multi-turn conversational AI | Implemented — Unverified | Previously authorized playground already retains up to six user turns, displays AI separately and clears/reset-cancels. This directive adds no further implementation. | Core implementation exists; owner demonstrated3 turns, not5. Role, temporal and image-wording weaknesses require evaluation. See M2 audit; no further implementation here. |
+| 3. AI reliability and evaluation | In Progress | Offline corpora, unscored rubric/review files, deterministic failure tests and owner-reported three fixed-model successes. | M3 readiness plan proposes24 cases, measurement and human calibration; not implemented. Five owner reports are exploratory, not a reliability study. Owner approval required before M3A. |
 | 4. Independent language translation | Not Started | Existing bilingual model drafts and interface localization are not a dedicated translation adapter. | Provider-independent interface first when this milestone is authorized; provider research, privacy/cost approval before external or paid processing. |
 | 5. Customer Service AI workflows | In Progress | Existing deterministic GUIDE/COPILOT and local advisory JSON/next-step/draft fields; restricted assigned-channel worker remains separate. | Validate supported policy grounding, clarification/escalation responsibilities and approved integration. No AI action authority. |
 | 6. Vision AI provider research and selection | Not Started | Inert provider-independent Vision contracts and documentation/camera preparation only. | Current primary-source comparison, costs/assumptions, privacy, evaluation plan and explicit provider/architecture approval. Research only. |
@@ -45,7 +45,7 @@ Implemented reuse (no duplicate system):
 
 The previously requested follow-up capability is already present. It resends **user turns only**, never previous AI replies as evidence. AI replies remain page-memory display only. Ambiguous references to earlier suggestions need clarification or restating the suggestion. No independent claim that this limited memory satisfies M2's genuine five-turn quality acceptance.
 
-Acceptance: five different fictional cases return actual LOCAL_OLLAMA_INFERENCE results through the real browser, pass validation and receive owner review. Status remains Implemented — Unverified until observed. See [owner acceptance sheet](MILESTONE_1_OWNER_ACCEPTANCE.md) and [candidate review](playground/REVIEW.md).
+Acceptance: five different fictional cases return actual LOCAL_OLLAMA_INFERENCE results through the real browser, pass validation and receive owner review. Status remains Implemented — Unverified against formal acceptance. Owner-tested exploratory status and five actual reported observations are recorded in the updated closeout; two original cases remain untested. See [owner acceptance sheet](MILESTONE_1_OWNER_ACCEPTANCE.md) and [candidate review](playground/REVIEW.md).
 
 ## 2. Multi-turn conversational AI
 
@@ -108,3 +108,14 @@ Before moving beyond owned development: security/privacy/legal review, cost/capa
 ## Delivery and verification
 
 This increment adds only the supplementary roadmap, M1 acceptance sheet and verification closeout. M1 application code is reused from the already committed candidate, not rebuilt. Exact current file/commit inventory and fresh test results are in `MILESTONE_1_ROADMAP_CLOSEOUT.md`. Prior complete candidate evidence is `playground/verification.json`; inherited R2 evidence is `batch13f-r2/verification.json`. No fresh production/model claim follows from inherited passing tests.
+
+
+## Owner exploratory closeout and M3 readiness checkpoint
+
+The owner's supplied report records3 distinct fictional scenarios and5 LOCAL_OLLAMA_INFERENCE results: camera OWNER/en3 turns (26892,30219,41414ms); missing charger BORROWER/zh-TW (25482ms); conflicting pickup BORROWER/en (26467ms). No failure was reported in these5 attempts, not a general reliability estimate. Only camera U2 expanded references were inspected: knownFacts empty, U1/U2 PARTICIPANT_CLAIM. Do not infer HTTP status, other references, scores, session date or exact Mac SHA. Unverified-return/zh-TW and cancellation/unsafe-authority/en remain untested.
+
+Milestone1: **Implemented, owner-tested exploratory prototype; formal five-case acceptance incomplete.** Keep formal table status Implemented — Unverified; exploratory testing is closed by owner choice, not by passing the original acceptance suite. M2 is already implemented but awaits five-turn acceptance, with user-only-history and reset-as-cancel limitations. M3 remains In Progress as an evaluation programme, but the proposed24-case implementation has **not started** and requires approval.
+
+Observed quality issues: historical-photo retake advice, implied image examination, wrong borrower/counterparty perspective, vague steps, pickup/return temporal ambiguity and Traditional Chinese neutrality. Operational Vision remains unavailable. No prompt/model/schema/timeout/UI fix is made in this documentation audit.
+
+Detailed evidence and next-step plan: `MILESTONE_1_OWNER_ACCEPTANCE.md` (updated, attributed observations), `MILESTONE_2_CODE_ACCEPTANCE_AUDIT.md`, `MILESTONE_3_RELIABILITY_READINESS.md`, and the audit appendix in `MILESTONE_1_ROADMAP_CLOSEOUT.md`. The canonical14-stage roadmap and all prior production/visual blockers are unchanged. Stop here for owner review before M3A; no translation/Vision/provider, autonomous action or production access follows.
