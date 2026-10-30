@@ -70,3 +70,16 @@ All modifying checks used new owned guarded disposable PostgreSQL databases; run
 ## File inventory
 
 `AGENTS.md`; `components/support-companion.tsx`; new `components/local-ai-playground.tsx`; new `lib/local-inference/playground.ts`; `lib/local-inference/server.ts`; `package.json`; `tests/local-inference.test.ts`; `tests/local-ai.integration.test.ts`; `tests/support-staff-production.test.ts`; this report, verification ledger and three mock-labelled browser screenshots. No dependency versions, historical migrations, fixed datasets or launcher files changed.
+
+## Offline branch transfer
+
+No GitHub push is included in this implementation task. A review bundle can transfer the committed branch without publishing it. Download `hustlen-interactive-local-ai-playground.bundle` into Downloads, then in the existing Mac checkout containing R2:
+
+```sh
+git bundle verify ~/Downloads/hustlen-interactive-local-ai-playground.bundle
+git fetch ~/Downloads/hustlen-interactive-local-ai-playground.bundle feature/interactive-local-ai-playground
+git switch -c feature/interactive-local-ai-playground FETCH_HEAD
+npm ci
+```
+
+Then use the same private owned-database startup wrapper and `npm run demo:local-ai` described above. This bundle requires the existing R2 ancestor; it does not contain environment files or the preserved troubleshooting stash. If this branch already exists locally, inspect it rather than resetting or overwriting local work.

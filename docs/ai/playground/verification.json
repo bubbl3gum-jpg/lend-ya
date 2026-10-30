@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-30",
+  "realQwen": false,
+  "mockInferenceOnly": true,
+  "unit": {
+    "tests": 157,
+    "pass": 157
+  },
+  "typecheck": "pass",
+  "lint": "pass",
+  "initialPlaygroundFailure": {
+    "cause": "Ambiguous alert selector matched Next route announcer; narrowed to intended visible validation alert",
+    "productAssertionsOrDeadlinesWeakened": false
+  },
+  "results": [
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T04:00:29.811Z",
+      "end": "2026-10-30T04:00:47.671Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ea9dedd8afccc81b10d3fcbb",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-30T03:58:37.057Z",
+      "end": "2026-10-30T03:58:56.450Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/905e0dc0efa79d4cee934fb5",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+    },
+    {
+      "group": "test:local-ai",
+      "start": "2026-10-30T03:58:56.450Z",
+      "end": "2026-10-30T03:59:11.888Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/44d05ee7bbb3ed554503ab0c",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai.log"
+    },
+    {
+      "group": "test:authorization",
+      "start": "2026-10-30T03:59:11.888Z",
+      "end": "2026-10-30T03:59:43.978Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0f85deb8fccab2d401fe8018",
+      "tests": [
+        "ℹ tests 8"
+      ],
+      "passes": [
+        "ℹ pass 8"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:authorization.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T04:00:47.673Z",
+      "end": "2026-10-30T04:01:01.922Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/dbd8ed197f3131653c08ba6b",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T04:00:06.021Z",
+      "end": "2026-10-30T04:00:13.669Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/acc24f3d05cc1a1a77ae74cc",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "launcher": {
+    "group": "test:local-ai-demo",
+    "start": "2026-10-30T04:01:53.927Z",
+    "end": "2026-10-30T04:02:15.884Z",
+    "exit": 0,
+    "headed": true,
+    "display": "Linux test-only Xorg dummy display",
+    "mockedOllama": true,
+    "realQwen": false
+  }
+}
