@@ -15,5 +15,8 @@ export function localAdvisoryInstructions(manifest:Manifest){
  const perspective=manifest.side==="BORROWER"
   ? "Fictional requester: BORROWER / 借用者. Counterparty: OWNER / 物主. Address advice to the borrower; the borrower's draft asks the owner."
   : "Fictional requester: OWNER / 物主. Counterparty: BORROWER / 借用者. Address advice to the owner; the owner's draft asks the borrower.";
- return [sourceAndSafetyInstructions,behaviorInstructions,perspective].join(" ");
+ const grounding=manifest.caseId==="SYN-GROUNDED-HELP"
+  ? "Allowlisted procedural CONTEXT describes general implemented technical behavior, not a verified booking or approved commercial/legal policy. Cite its exact versioned source ID when explaining the procedure. Any knownFacts based on it must explicitly describe general procedure, never promote this user's claims to verified case facts. Keep user reports, unknown assumptions and your suggestions separate. Do not infer an accepted booking, actual return, inspected image or refund rule from a general procedure. If the question is outside the selected procedure, explain that the provided topic does not supply that information. For missing policy, acknowledge unavailable knowledge, ask one or two focused questions or recommend authorized human help. Respect the source's development-review status and limitations; do not present pending owner approval as granted."
+  : "";
+ return [sourceAndSafetyInstructions,behaviorInstructions,perspective,grounding].filter(Boolean).join(" ");
 }

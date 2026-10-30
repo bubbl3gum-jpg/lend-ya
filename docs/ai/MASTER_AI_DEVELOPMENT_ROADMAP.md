@@ -129,3 +129,8 @@ M3 remains **In Progress**. On30 October2026, the separately authorized M3A cand
 ### Milestone3B protected evaluation runner candidate
 
 M3 stays **In Progress**. The separately authorized3B candidate adds bounded selection (default offline1-case plan;≤3 cases/7 requests), existing-route native authentication, chronological prefix execution and E10 fixed-context routing, strict result bindings, safe outcome/latency/source metadata, in-memory blank review packets and comparison helpers. See `milestone3b/REVIEW.md`. No genuine benchmark was run; mock tests are not Qwen evidence. Real-run scope and transcript retention/export remain pending owner approval; transcript persistence is disabled. No model/prompt/settings, production, schema migration or marketplace permission change. Stop for review before3C; future work should use a bounded baseline to improve assistant functionality, not rebuild evaluation systems.
+
+
+### Milestone5A — development-only procedural grounding candidate
+
+M5 remains **In Progress** within original Stage10, not a new master stage. The separately authorized5A candidate reuses the existing local playground/route with optional BOOKING/HANDOFF/RETURN procedural grounding. Three versioned, implementation-reviewed development entries are server-selected; user turns remain claims and no real records are read. See `milestone5a/KNOWLEDGE_AUDIT.md` and `milestone5a/REVIEW.md`. Knowledge wording/production policy acceptance remains pending; genuine behavior-refinement Qwen and M3B smoke testing remain owner-deferred, not accepted. M3 infrastructure/digests, source validator, launcher and all unfinished production gates are preserved. No provider, marketplace action or next batch follows automatically.

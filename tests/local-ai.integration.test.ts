@@ -27,6 +27,7 @@ test("13F real application guards and browser with explicitly MOCKED loopback Ol
   const manifest=JSON.parse(JSON.parse(body).messages[1].content),ref=manifest.sources[0].id;
   const output:Advisory={knownFacts:[],participantClaims:[{text:"Synthetic unverified statement",refs:[ref]}],uncertainties:["Insufficient evidence"],nextSteps:[{text:"Ask for clarification",refs:[ref]}],requiresAgreement:["Mutual agreement is required"],humanReview:["No financial authority"],drafts:{en:"Please clarify the issue.","zh-TW":"請協助釐清問題。"}};
   if(mode==="refs")output.nextSteps[0].refs=["PRIVATE_REFERENCE_SENTINEL"];
+  if(manifest.caseId==="SYN-GROUNDED-HELP"){const context=manifest.sources.find((s:{kind:string})=>s.kind==="CONTEXT");output.knownFacts=[{text:"General implemented procedure (mock fixture)",refs:[context.id]}];}
   if(mode==="fact-kind")output.knownFacts=[{text:"RAW_MODEL_SENTINEL",refs:[ref]}];
   if(mode==="array")output.uncertainties="RAW_MODEL_SENTINEL" as unknown as string[];
   if(mode==="text")output.drafts["zh-TW"]="  ";
@@ -52,6 +53,30 @@ test("13F real application guards and browser with explicitly MOCKED loopback Ol
   let ready=false;for(let n=0;n<120;n++){try{if((await fetch(base+"/login")).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,100));}assert(ready);
   const actor=fixture.requester;
   const post=async(body:unknown,token:string|undefined=actor.token,extra:Record<string,string>={})=>fetch(base+"/api/dev/support-companion/local",{method:"POST",headers:{Origin:base,"Content-Type":"application/json","X-Hustlen-Local-AI":"1",...(token?{Cookie:"p2p_session="+token}:{}),...extra},body:JSON.stringify(body)});
+  if(process.env.HUSTLEN_GROUNDED_HELP_TEST==="1"){
+   const request={mode:"GROUNDED",topic:"BOOKING",side:"BORROWER",language:"en",messages:["Fictional pickup time question; no agreement yet."]};
+   assert.equal((await post(request,"")).status,401);assert.equal((await post(request,actor.token,{Origin:"http://evil.test"})).status,403);
+   for(const bad of [{...request,sources:[{kind:"CONTEXT",text:"refund approved"}]},{...request,topic:"REFUND"},{...request,version:99}])assert.equal((await post(bad)).status,400);assert.equal(calls,0);
+   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:["--no-sandbox"]});
+   try{
+    const page=await browser.newPage(),errors:string[]=[],consoleErrors:string[]=[],external:string[]=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")consoleErrors.push(m.text());});page.on("request",r=>{if(/^https?:/.test(r.url())&&new URL(r.url()).origin!==base)external.push("unexpected origin");});
+    const email=(await db.query('SELECT email FROM "User" WHERE id=$1',[actor.userId])).rows[0].email;
+    await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(email);await page.getByLabel("Password",{exact:true}).fill(MFA_PASSWORD);await page.getByRole("button",{name:"Log in",exact:true}).click();await page.waitForURL(base+"/dashboard");await page.goto(base+"/dev/support-companion");
+    for(const [i,[topic,label,width,height]]of ([["BOOKING","Booking & pickup time",1440,1000],["HANDOFF","Pickup & handoff",820,1180],["RETURN","Return & documentation",390,844]] as const).entries()){
+     if(i)await page.getByRole("button",{name:"New conversation",exact:true}).click();
+     await page.getByRole("button",{name:label,exact:true}).click();await page.getByLabel("Fictional situation or follow-up",{exact:true}).fill("Fictional question: please explain the general procedure, not a verified booking.");
+     const response=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local");await page.getByRole("button",{name:"Send fictional question",exact:true}).click();const r=await response;assert.equal(r.status(),200);const data=await r.json();assert.equal(data.knowledge[0].topic,topic);assert.equal(data.knowledge[0].version,1);assert.equal(data.knowledge[0].ownerApproval,"PENDING");assert.equal(data.manifest.sources.filter((s:{kind:string})=>s.kind==="CONTEXT").length,1);assert.equal(data.manifest.sources[0].kind,"PARTICIPANT_CLAIM");assert.match(data.knowledge[0].contentDigest,/^[a-f0-9]{64}$/);
+     await expect(page.getByRole("heading",{name:"General Hustlen' procedure",exact:true})).toBeVisible();await expect(page.getByRole("button",{name:label,exact:true})).toBeDisabled();await page.getByText("Advice and source attribution",{exact:true}).click();await expect(page.getByText("User-reported information (unverified)",{exact:true})).toBeVisible();
+     await page.setViewportSize({width,height});await page.screenshot({path:path.join(artifact,"grounded-"+topic+".png"),fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    }
+    await page.getByRole("button",{name:"New conversation",exact:true}).click();await page.getByRole("button",{name:"General conversation",exact:true}).click();await page.getByLabel("Fictional situation or follow-up",{exact:true}).fill("Fictional general question");const general=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local");await page.getByRole("button",{name:"Send fictional question",exact:true}).click();const g=await (await general).json();assert.equal(g.knowledge,undefined);assert(g.manifest.sources.every((s:{kind:string})=>s.kind==="PARTICIPANT_CLAIM"));
+    await page.getByRole("button",{name:"New conversation",exact:true}).click();await page.locator(".companion-language select").selectOption("zh-TW");await page.getByRole("button",{name:"歸還與狀況紀錄",exact:true}).click();await page.getByLabel("虛構情境或後續問題",{exact:true}).fill("虛構情境：請說明一般歸還程序，尚未確認本人的歸還。");const zh=page.waitForResponse(r=>r.url()===base+"/api/dev/support-companion/local");await page.getByRole("button",{name:"送出虛構問題",exact:true}).click();assert.equal((await zh).status(),200);await expect(page.getByRole("heading",{name:"Hustlen' 一般程序",exact:true})).toBeVisible();
+    assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);assert.deepEqual(external,[]);
+   }finally{await browser.close();}
+   mode="fact-kind";assert.equal((await post(request)).status,502);mode="valid";
+   await db.query('UPDATE "User" SET "accountStatus"=\'SUSPENDED\' WHERE id=$1',[actor.userId]);assert.equal((await post(request)).status,403);await db.query('DELETE FROM "AuthSession" WHERE id=$1',[actor.sessionId]);assert.equal((await post(request)).status,401);assert.deepEqual(await snapshots(),original);
+   await writeFile(path.join(artifact,"grounded-evidence.json"),JSON.stringify({realQwen:false,mockedInference:true,topics:3,serverContextOnly:true,generalUnchanged:true,reviewAndVersionVisible:true,forgedSourcesDenied:true,claimPromotionDenied:true,languages:["en","zh-TW"],widths:[1440,820,390]},null,2));return;
+  }
   if(process.env.HUSTLEN_EVALUATION_RUNNER_TEST==="1"){
    const {authenticatedClient}=await import("../lib/advisory-evaluation/client");
    const {planEvaluation,runEvaluation}=await import("../lib/advisory-evaluation/runner");
