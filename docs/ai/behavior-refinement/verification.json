@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-30",
+  "baseline": "43217e182b2636b6196aa54ce5d16d02cba31635",
+  "implementation": "9d03547d1570086a8ec2a0cc16f5990035749e96",
+  "behaviorVersion": "cs-advice-behavior-v1",
+  "realModelRequests": 0,
+  "m3bBenchmarkRun": false,
+  "semanticQualityVerified": false,
+  "unit": {
+    "tests": 171,
+    "pass": 171
+  },
+  "typecheck": "pass",
+  "lint": "pass without warnings",
+  "unexpectedFailures": 0,
+  "originalSourceSafetyInstructions": "verbatim preserved",
+  "gatewayChanges": "instruction selection only",
+  "modelOptionsLimitsValidators": "unchanged",
+  "results": [
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-30T07:19:32.840Z",
+      "end": "2026-10-30T07:19:58.910Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/94a8ac70281261b040ca1bb5",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T07:19:58.912Z",
+      "end": "2026-10-30T07:20:16.343Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/687cb2fdee473b1875c48856",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T07:20:16.344Z",
+      "end": "2026-10-30T07:20:36.883Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c2f158c3e54825b1117d23a8",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T07:20:36.884Z",
+      "end": "2026-10-30T07:20:44.814Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2f6ce80ae3128467c3ca89ab",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "evidence": "mock application and deterministic contracts only",
+  "ownerMacAcceptance": "pending"
+}
