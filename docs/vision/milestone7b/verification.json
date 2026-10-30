@@ -1,0 +1,157 @@
+{
+  "baseline": "4b8a190e45bf7fd51c629fe980b90798be6328f4",
+  "implementation": "f38ed3e166833d266f30a32a1be0849b487fd4c7",
+  "verificationKind": "DETERMINISTIC_AND_MOCK_ONLY",
+  "unit": {
+    "command": "npm run test:unit",
+    "passed": 190,
+    "failed": 0
+  },
+  "adapter": {
+    "command": "npm run test:vision-adapter",
+    "passed": 6,
+    "failed": 0,
+    "includedInUnit": true
+  },
+  "staticChecks": [
+    "npx tsc --noEmit",
+    "npm run lint",
+    "git diff --check"
+  ],
+  "selectedApplicationChecks": [
+    {
+      "group": "test:vision-prototype",
+      "start": "2026-10-30T17:28:21.042Z",
+      "end": "2026-10-30T17:28:38.615Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8efa41c0fad7a0adf6a0d9f0",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:vision-prototype.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T17:28:38.617Z",
+      "end": "2026-10-30T17:28:56.480Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/8ae9f31ce3ca8be2e1798355",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T17:28:56.480Z",
+      "end": "2026-10-30T17:29:13.980Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/54ec45e793e9d9a23fcacdce",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:support-handoff",
+      "start": "2026-10-30T17:29:13.981Z",
+      "end": "2026-10-30T17:29:34.121Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/416e149d1e4c2feb4e7ae6f4",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-handoff.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T17:33:36.816Z",
+      "end": "2026-10-30T17:33:49.954Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e625dce74d5ce38b9dda9f5c",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "initialFailures": [],
+  "visionExecutionAuthorized": false,
+  "genuineVisionInferenceCalls": 0,
+  "modelWeightDownloads": 0,
+  "customerImagesAccessed": 0,
+  "humanReviewsCompleted": 0,
+  "genuineVisualQuality": "UNAVAILABLE",
+  "actualMacLatency": "UNAVAILABLE",
+  "actualMacPeakMemory": "UNAVAILABLE",
+  "modelArtifactMetadata": "OWNER_REPORTED_LISTING; INDEPENDENT_REGISTRY_FETCH_BLOCKED_403",
+  "ownerHardware": {
+    "device": "MacBook Air",
+    "chip": "Apple M4",
+    "unifiedMemoryGB": 24,
+    "existingTextModel": "qwen3.5:9b",
+    "runtimeCompatibilityTested": false
+  },
+  "resourceControls": {
+    "visionPerProcessInFlightLimit": 1,
+    "liveExecutionHardBlocked": true,
+    "crossTextVisionSchedulerImplemented": false,
+    "automaticTextModelUnload": false,
+    "memoryMonitoringImplemented": false,
+    "futurePlan": "owner-supervised sequential window; Activity Monitor memory/swap checks; no simultaneous text generation"
+  },
+  "unverifiedCodePath": "Live loopback metadata/chat transport not activated or claimed tested against Ollama",
+  "dataSafety": {
+    "freshOwnedDisposableDatabasesOnly": true,
+    "allSelectedRunsCleanedUp": true,
+    "existingApplicationDatabaseModified": false,
+    "historicalMigrationsChanged": false
+  },
+  "preservationVerified": [
+    "text-Qwen gateway",
+    "M7A mock contract and UI",
+    "fixture manifest and image bytes",
+    "existing authentication and Support guards",
+    "M3 evaluation infrastructure",
+    "canonical14-stage roadmap",
+    "existing stash and private configuration"
+  ],
+  "transcriptsPersisted": false,
+  "pushed": false,
+  "merged": false,
+  "deployed": false
+}

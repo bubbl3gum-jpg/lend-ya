@@ -106,3 +106,5 @@ Context-budget limitation: configured8192 context is a conservative request, not
 - `docs/vision/milestone7b/REVIEW.md`: architecture, provenance/privacy audit, M4/24GB owner update, limits, future smoke procedure and blockers.
 - `docs/vision/milestone7b/MODEL_SOURCES.json`: dated retrieval receipts, hashes and owner-supplied hardware/listing clearly distinguished.
 - `docs/vision/milestone7b/verification.json`: metadata-only closeout ledger; no inference transcripts/private images.
+
+Implementation commit: `f38ed3e166833d266f30a32a1be0849b487fd4c7`. Final selected verification:190/190 unit (includes6 adapter tests), focused adapter6/6, TypeScript/lint, Vision UI1/1, production refusal1/1, original playground1/1, M5C handoff1/1 and normal guarded build pass. No initial failing checks in this batch; final-source checks repeated after refinements. All selected test databases cleaned up. Next step is a separately approved, small photographic fixture/operator activation for exactly three calls, not another general evaluation framework.
