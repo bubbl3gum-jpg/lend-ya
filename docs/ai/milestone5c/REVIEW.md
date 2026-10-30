@@ -68,3 +68,5 @@ Final added UI failure assertion initially matched both our alert and Next.js ro
 - `package.json`: focused test command and unit-suite registration; dependency versions unchanged.
 - `docs/ai/milestone5c/REVIEW.md`: audit, feasibility, privacy, scope, testing, manual acceptance, blockers.
 - `docs/ai/milestone5c/verification.json`: metadata-only final ledger and commits; no credentials or generated Qwen transcripts.
+
+Implementation commit: `ef77a9c982c064d5050b8d68efbfe0a76145fb78`. Separate evidence closeout commit contains this final inventory and `verification.json`; obtain exact closeout with `git rev-parse HEAD` on the review branch. Final selected checks: 180/180 unit, TypeScript, lint, handoff1/1, Case Notes1/1, Support staff15/15, production refusal1/1, original playground1/1 and normal guarded production build all pass. All selected disposable database executions cleaned up. No full marketplace regression or real-model acceptance claimed.

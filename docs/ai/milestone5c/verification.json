@@ -1,0 +1,170 @@
+{
+  "baseline": "42d6ad35e8343f497dc22ed4552c47b733416d9f",
+  "implementation": "ef77a9c982c064d5050b8d68efbfe0a76145fb78",
+  "inference": "MOCKED_APPLICATION_TESTS_ONLY",
+  "realQwenRun": false,
+  "M3BRun": false,
+  "unit": {
+    "command": "npm run test:unit",
+    "passed": 180,
+    "failed": 0
+  },
+  "staticChecks": [
+    "npx tsc --noEmit",
+    "npm run lint",
+    "git diff --check"
+  ],
+  "selectedApplicationChecks": [
+    {
+      "group": "test:support-handoff",
+      "start": "2026-10-30T15:21:17.408Z",
+      "end": "2026-10-30T15:21:40.894Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/780a06bc5c38a1f0984f8bb9",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-handoff.log"
+    },
+    {
+      "group": "test:case-assistance",
+      "start": "2026-10-30T15:19:16.977Z",
+      "end": "2026-10-30T15:19:36.929Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/85ca1b4d4131b0b7d9304a6b",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:case-assistance.log"
+    },
+    {
+      "group": "test:support-staff",
+      "start": "2026-10-30T15:16:34.044Z",
+      "end": "2026-10-30T15:17:12.379Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ef8ad510735cebb9638d91da",
+      "tests": [
+        "\u2139 tests 15"
+      ],
+      "passes": [
+        "\u2139 pass 15"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T15:17:12.379Z",
+      "end": "2026-10-30T15:17:36.213Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2b093956eaba4e9e28715d2e",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T15:17:36.214Z",
+      "end": "2026-10-30T15:17:55.900Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2ab4d535f2b633c291e79874",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T15:20:24.168Z",
+      "end": "2026-10-30T15:20:34.406Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/64c3dc026c3380e81b80ca99",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "initialIssues": [
+    {
+      "type": "typecheck",
+      "issue": "Invalid token fixture required explicit string type, not inferred UUID type",
+      "resolved": true
+    },
+    {
+      "type": "lint",
+      "issue": "React refs read during render; attempted payload moved to state",
+      "resolved": true
+    },
+    {
+      "type": "test",
+      "issue": "Expired session is deleted by auth; test must expire last, not UPDATE a deleted row",
+      "artifact": ".test-artifacts/2df4827918d4916ea118f30a",
+      "resolved": true
+    },
+    {
+      "type": "test",
+      "issue": "Ambiguous alert selector matched Next route announcer; scoped to named handoff region",
+      "artifact": ".test-artifacts/b62350a2d17ed177c5e40b58",
+      "resolved": true
+    }
+  ],
+  "databaseSafety": {
+    "freshOwnedDisposableOnly": true,
+    "originalDatabaseModified": false,
+    "historicalMigrationsChanged": false,
+    "newMigrations": false,
+    "testEventFailureTrigger": "fresh disposable fixture only; dropped after rollback assertion"
+  },
+  "preserved": [
+    "existing stash",
+    "playable launcher",
+    "model settings and source validator",
+    "M3 evaluation infrastructure",
+    "canonical roadmap",
+    "private local configuration"
+  ],
+  "productionSupportActivated": false,
+  "pushed": false,
+  "merged": false,
+  "deployed": false
+}
