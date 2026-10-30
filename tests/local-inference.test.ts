@@ -121,3 +121,41 @@ test("playground bounds, forged classifications and claim-only continuity",async
  assert.throws(()=>validateAdvisory({...good,knownFacts:good.participantClaims},task.manifest),{reason:"FACT_SOURCE_KIND"});
  assert.throws(()=>validateAdvisory({...good,nextSteps:[{text:"Unsupported",refs:["C1"]}]},task.manifest),{reason:"REFS_UNKNOWN"});
 });
+
+test("behavior refinement delivers role/lifecycle/text-only/practical bilingual instructions for existing M3 cases; NOT semantic evaluation",async()=>{
+ const {evaluationDataset}=await import("../lib/advisory-evaluation/dataset");
+ const {localAdvisoryInstructions,ADVISORY_BEHAVIOR_VERSION}=await import("../lib/local-inference/instructions");
+ assert.equal(ADVISORY_BEHAVIOR_VERSION,"cs-advice-behavior-v1");
+ const cases=evaluationDataset().cases;
+ const checks:[string,number,string[]][]=[
+  ["E01:en",3,["Historical pickup evidence cannot be recreated","later supplemental photos","not replacement pickup evidence","text-only assistant","Based on your description"]],
+  ["E01:en",5,["Read earlier user turns chronologically","later correction is a new participant claim","do not repeat a corrected assumption","not independent evidence"]],
+  ["E03:en",1,["Fictional requester: BORROWER","Counterparty: OWNER","borrower's draft asks the owner","proposed versus accepted arrangements"]],
+  ["E12:en",1,["no image-analysis provider is active","have not accessed booking records or evidence","Never claim you saw, noticed, examined or compared images"]],
+  ["E02:zh-TW",1,["物主表示","借用者","尚未確認","雙方尚未達成協議","押金","租金","one or two relevant clarification questions"]],
+  ["E11:zh-TW",1,["pronoun such as it or your suggestion is unclear","which bag/accessory to check","authorized human review","outcome is guaranteed"]]
+ ];
+ for(const [id,turn,needles]of checks){
+  const manifest=cases.find(c=>c.id===id)!.turns[turn-1].manifest;
+  const mock=candidate(manifest.sources[0].id);
+  const result=await runInference(manifest,new AbortController().signal,config,async body=>{
+   const request=JSON.parse(body),system=request.messages[0].content;
+   assert.equal(system,localAdvisoryInstructions(manifest));for(const needle of needles)assert(system.includes(needle),needle);
+   assert.deepEqual(JSON.parse(request.messages[1].content),manifest);
+   assert.deepEqual(request.options,{num_ctx:8192,num_predict:2048,temperature:0});assert.equal(request.think,false);assert.equal(request.keep_alive,"0s");assert.equal(Buffer.byteLength(body)<=24000,true);
+   if(turn===5)assert.match(JSON.parse(request.messages[1].content).sources[3].excerpt,/not confirmed/);
+   return {model:config.model,done:true,message:{content:JSON.stringify(mock)}};
+  });assert.deepEqual(result.output,mock);
+ }
+ const owner=cases.find(c=>c.id==="E01:en")!.turns[0].manifest;
+ assert.match(localAdvisoryInstructions(owner),/Fictional requester: OWNER.*Counterparty: BORROWER/);
+});
+test("behavior refinement preserves independent refusals and does not repair schema-valid bad prose",async()=>{
+ const manifest=localTask({scenario:"SYN-REVIEW-TRANSLATION:zh-TW"}).manifest;
+ const badAdvice=candidate(manifest.sources[0].id);badAdvice.drafts.en="We inspected the photos. Recreate the historical pickup.";
+ const result=await runInference(manifest,new AbortController().signal,config,async()=>({model:config.model,done:true,message:{content:JSON.stringify(badAdvice)}}));
+ assert.equal(result.output.drafts.en,badAdvice.drafts.en); // Authored mock: shows semantic limitations, not good Qwen behavior.
+ for(const output of [{...badAdvice,knownFacts:badAdvice.participantClaims},{...badAdvice,nextSteps:[{text:"Unsupported",refs:["FOREIGN"]}]}]){
+  await assert.rejects(runInference(manifest,new AbortController().signal,config,async()=>({model:config.model,done:true,message:{content:JSON.stringify(output)}})),{code:"VALIDATION"});
+ }
+});
