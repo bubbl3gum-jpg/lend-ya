@@ -134,3 +134,8 @@ M3 stays **In Progress**. The separately authorized3B candidate adds bounded sel
 ### Milestone5A — development-only procedural grounding candidate
 
 M5 remains **In Progress** within original Stage10, not a new master stage. The separately authorized5A candidate reuses the existing local playground/route with optional BOOKING/HANDOFF/RETURN procedural grounding. Three versioned, implementation-reviewed development entries are server-selected; user turns remain claims and no real records are read. See `milestone5a/KNOWLEDGE_AUDIT.md` and `milestone5a/REVIEW.md`. Knowledge wording/production policy acceptance remains pending; genuine behavior-refinement Qwen and M3B smoke testing remain owner-deferred, not accepted. M3 infrastructure/digests, source validator, launcher and all unfinished production gates are preserved. No provider, marketplace action or next batch follows automatically.
+
+
+### Milestone5B — structured fictional case assistance candidate
+
+M5 remains **In Progress**. Separately authorized5B adds opt-in expandable Case Notes, a narrowly validated advisory classification/stage/questions variant and user-triggered local editable unsent summaries. M5A procedure IDs/fingerprints/review limitations remain unchanged; procedure CONTEXT is never shown as a verified case event. See `milestone5b/REVIEW.md`. No booking was loaded, ticket sent, Vision/provider enabled or marketplace action performed. Genuine Qwen/behavior/M5A and M3B acceptance remain deferred, not inferred from mock tests. Original14-stage roadmap and all production gates preserved. Stop for owner review before another batch.

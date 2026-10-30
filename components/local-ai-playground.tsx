@@ -1,14 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/i18n/locale";
+import { CaseNotesPanel } from "@/components/case-notes";
+import type { CaseAdvisory } from "@/lib/local-inference/case-notes";
 import type { Advisory } from "@/lib/local-inference/contracts";
 import type { KnowledgeEntry } from "@/lib/local-inference/knowledge";
 import type { Manifest } from "@/lib/ai-case-brief/contracts";
-type Reply={output:Advisory;manifest:Manifest;latencyMs:number;provenance:"LOCAL_OLLAMA_INFERENCE";knowledge?:(KnowledgeEntry&{id:string;scope:"GENERAL_PROCEDURE_ONLY"})[]};
+type Reply={output:Advisory&Partial<Pick<CaseAdvisory,"caseNotes">>;manifest:Manifest;latencyMs:number;provenance:"LOCAL_OLLAMA_INFERENCE";knowledge?:(KnowledgeEntry&{id:string;scope:"GENERAL_PROCEDURE_ONLY"})[]};
 type Turn={text:string;reply?:Reply;error?:string};
 export function LocalAiPlayground(){
  const {locale}=useLocale(),zh=locale==="zh-TW";
- const [topic,setTopic]=useState("GENERAL");
+ const [topic,setTopic]=useState("GENERAL"),[caseMode,setCaseMode]=useState(false);
  const [side,setSide]=useState<"OWNER"|"BORROWER">("OWNER"),[input,setInput]=useState(""),[turns,setTurns]=useState<Turn[]>([]),[busy,setBusy]=useState(false),[elapsed,setElapsed]=useState(0);
  const sequence=useRef(0),flight=useRef<AbortController|null>(null),pending=useRef(false),entry=useRef<HTMLTextAreaElement|null>(null);
  useEffect(()=>()=>{sequence.current++;flight.current?.abort();},[]);
@@ -19,7 +21,7 @@ export function LocalAiPlayground(){
   const next=[...turns,{text:input}],id=++sequence.current,controller=new AbortController();
   flight.current=controller;pending.current=true;setTurns(next);setInput("");setBusy(true);setElapsed(0);
   try{
-   const r=await fetch("/api/dev/support-companion/local",{method:"POST",headers:{"Content-Type":"application/json","X-Hustlen-Local-AI":"1"},cache:"no-store",signal:controller.signal,body:JSON.stringify(topic==="GENERAL"?{mode:"PLAYGROUND",side,language:locale,messages:next.map(t=>t.text)}:{mode:"GROUNDED",topic,side,language:locale,messages:next.map(t=>t.text)})});
+   const r=await fetch("/api/dev/support-companion/local",{method:"POST",headers:{"Content-Type":"application/json","X-Hustlen-Local-AI":"1"},cache:"no-store",signal:controller.signal,body:JSON.stringify(caseMode?{mode:"CASE_ASSISTANCE",topic,side,language:locale,messages:next.map(t=>t.text)}:topic==="GENERAL"?{mode:"PLAYGROUND",side,language:locale,messages:next.map(t=>t.text)}:{mode:"GROUNDED",topic,side,language:locale,messages:next.map(t=>t.text)})});
    const data=await r.json();if(id!==sequence.current||controller.signal.aborted)return;
    if(!r.ok){const allowed=["INPUT","UNAVAILABLE","LIMIT","TIMEOUT","CANCELED","VALIDATION","SESSION","DENIED"];throw Error(allowed.includes(data.code)?data.code:"UNAVAILABLE");}
    if(data.provenance!=="LOCAL_OLLAMA_INFERENCE")throw Error("VALIDATION");
@@ -33,6 +35,7 @@ export function LocalAiPlayground(){
  <p>{zh?"最多 6 則使用者訊息，每則 1,000 字元。對話僅保留在此頁記憶體；重新整理即清除。後續提問會附上先前的使用者訊息，AI 回覆不會作為證據重新送出；若要詢問先前建議，請具體描述。":"Up to 6 user turns, 1,000 characters each. Kept only in page memory; reload clears it. Follow-ups include earlier user turns, not AI replies as evidence. Describe the specific advice when asking about a previous reply."}</p>
  <nav className="companion-modes" aria-label={zh?"可選程序主題":"Optional procedure topics"}>{(["GENERAL","BOOKING","HANDOFF","RETURN"] as const).map(value=><button type="button" key={value} aria-pressed={topic===value} disabled={busy||turns.length>0} onClick={()=>setTopic(value)}>{({GENERAL:zh?"一般對話":"General conversation",BOOKING:zh?"申請與取件時間":"Booking & pickup time",HANDOFF:zh?"取件與交接":"Pickup & handoff",RETURN:zh?"歸還與狀況紀錄":"Return & documentation"})[value]}</button>)}</nav>
  <p>{zh?"主題為可選項目。程序來源僅經實作檢視、限開發試驗，非已核准商業政策，也不代表你的預約已獲驗證。開始新對話後可更換主題。":"Topics are optional. Procedure sources are implementation-reviewed development candidates, not approved commercial policy or verified facts about your booking. Start a new conversation to change topic."}</p>
+ <label className="companion-check"><input type="checkbox" checked={caseMode} disabled={busy||turns.length>0} onChange={e=>setCaseMode(e.target.checked)}/>{zh?"啟用虛構案件筆記":"Enable fictional Case Notes"}</label>
  <label>{zh?"扮演角色":"Acting as"}<select className="catalogue-input" aria-label={zh?"扮演角色":"Acting as"} value={side} disabled={turns.length>0||busy} onChange={e=>setSide(e.target.value as "OWNER"|"BORROWER")}><option value="OWNER">{zh?"物主":"Owner"}</option><option value="BORROWER">{zh?"借用者":"Borrower"}</option></select></label>
  <button type="button" onClick={reset}>{zh?"新對話":"New conversation"}</button>
  <div aria-label={zh?"虛構對話":"Fictional conversation"} aria-busy={busy}>
@@ -40,6 +43,7 @@ export function LocalAiPlayground(){
  {turn.error&&<p role="alert">{zh?"未取得有效回覆。失敗代碼：":"No valid response. Failure code: "}{turn.error}</p>}
  {turn.reply&&<><h3>{zh?"AI 建議・非判決":"AI advice · not a decision"}</h3><p>{turn.reply.provenance} · {turn.reply.latencyMs} ms</p><p style={{whiteSpace:"pre-wrap"}}>{turn.reply.output.drafts[turn.reply.manifest.language]}</p>
  {turn.reply.knowledge?.map(k=><section key={k.id}><h4>{zh?"Hustlen' 一般程序":"General Hustlen' procedure"}</h4><p>{k.id} · {zh?"版本":"Version"} {k.version} · {zh?"僅限開發，正式核准待定":"Development only; production approval pending"}</p><p>{k.description[turn.reply!.manifest.language]}</p><p>{k.limitations[turn.reply!.manifest.language]}</p></section>)}
+ {turn.reply.output.caseNotes&&<CaseNotesPanel output={turn.reply.output as CaseAdvisory} manifest={turn.reply.manifest}/>}
  <details><summary>{zh?"建議與來源歸屬":"Advice and source attribution"}</summary>
  {(["knownFacts","participantClaims","uncertainties","nextSteps","requiresAgreement","humanReview"] as const).map(key=><section key={key}><h4>{({knownFacts:zh?"程序／合成情境事實（非個案驗證）":"Procedure / synthetic facts (not case verification)",participantClaims:zh?"使用者陳述（尚未驗證）":"User-reported information (unverified)",uncertainties:zh?"未知與尚未驗證的假設":"Unknowns and unverified assumptions",nextSteps:zh?"AI 建議（並未執行）":"AI suggestions (not executed)",requiresAgreement:zh?"需要明確同意":"Requires explicit agreement",humanReview:zh?"需要人工審查":"Human review"})[key]}</h4><ul>{turn.reply!.output[key].map((v,i)=><li key={i}>{typeof v==="string"?v:<>{v.text} [{v.refs.join(", ")}]</>}</li>)}</ul></section>)}
  {turn.reply.manifest.sources.map(source=><blockquote key={source.id}><strong>{source.id} · {source.kind}</strong><p style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{source.excerpt}</p></blockquote>)}

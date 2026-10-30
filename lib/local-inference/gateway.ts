@@ -1,3 +1,4 @@
+import { caseAdvisorySchema, validateCaseAdvisory } from "./case-notes";
 import { localAdvisoryInstructions } from "./instructions";
 import { request } from "node:http";
 import { sourceAwareAdvisorySchema, InferenceError, validateAdvisory } from "./contracts";
@@ -35,7 +36,7 @@ export async function runInference(manifest: Manifest, signal: AbortSignal, conf
  const timer=setTimeout(()=>{timedOut=true;controller.abort();},60000);
  const start=performance.now();
  try {
-  const body=JSON.stringify({model:config.model,stream:false,think:false,keep_alive:"0s",format:sourceAwareAdvisorySchema(manifest),options:{num_ctx:8192,num_predict:2048,temperature:0},messages:[{role:"system",content:localAdvisoryInstructions(manifest)},{role:"user",content:JSON.stringify(manifest)}]});
+  const body=JSON.stringify({model:config.model,stream:false,think:false,keep_alive:"0s",format:manifest.caseId==="SYN-CASE-ASSISTANCE"?caseAdvisorySchema(manifest):sourceAwareAdvisorySchema(manifest),options:{num_ctx:8192,num_predict:2048,temperature:0},messages:[{role:"system",content:localAdvisoryInstructions(manifest)},{role:"user",content:JSON.stringify(manifest)}]});
   if(Buffer.byteLength(body)>24000)throw new InferenceError("INPUT");
   const raw=await transport(body,controller.signal) as Record<string,unknown>;
   if(controller.signal.aborted)throw new InferenceError(timedOut?"TIMEOUT":"CANCELED");
@@ -45,7 +46,7 @@ export async function runInference(manifest: Manifest, signal: AbortSignal, conf
   if(!raw.message || typeof raw.message!=="object" || Array.isArray(raw.message) || typeof (raw.message as {content?:unknown}).content!=="string")throw new InferenceError("VALIDATION","CONTENT_MISSING","provider");
   // Explicitly allowlist content; never return message.thinking or raw provider fields.
   let parsed:unknown;try {parsed=JSON.parse((raw.message as {content:string}).content);}catch{throw new InferenceError("VALIDATION",raw.done_reason==="length"?"CONTENT_JSON_LIMIT":"CONTENT_JSON","provider");}
-  const output=validateAdvisory(parsed,manifest);
+  const output=manifest.caseId==="SYN-CASE-ASSISTANCE"?validateCaseAdvisory(parsed,manifest):validateAdvisory(parsed,manifest);
   const count=(v:unknown)=>typeof v==="number"&&Number.isSafeInteger(v)&&v>=0&&v<=1000000?v:null;
   return {output,provenance:"LOCAL_OLLAMA_INFERENCE" as const,model:config.model,latencyMs:Math.round(performance.now()-start),promptTokens:count(raw.prompt_eval_count),outputTokens:count(raw.eval_count),humanReviewed:false as const};
  }catch(e){if(timedOut)throw new InferenceError("TIMEOUT");if(signal.aborted)throw new InferenceError("CANCELED");throw e instanceof InferenceError?e:new InferenceError("UNAVAILABLE");}
