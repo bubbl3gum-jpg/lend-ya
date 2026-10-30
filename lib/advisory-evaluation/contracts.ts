@@ -45,8 +45,8 @@ export function validateResult(raw:unknown):ResultRecord{
  if(r.outcome==="NOT_RUN"){
   if(run.execution!=="NOT_RUN"||[run.model,run.modelDigest,run.promptDigest,run.schemaDigest,r.httpStatus,r.latencyMs,r.output,r.failure].some(x=>x!==null)||r.structural!=="NOT_RUN"||r.heuristics.length)invalid();
  }else{
-  if(run.execution==="NOT_RUN"||!run.model)invalid();
-  if(run.execution==="LOCAL_OLLAMA_INFERENCE"&&run.model!=="qwen3.5:9b"&&run.model!=="qwen3.5:4b")invalid();
+  if(run.execution==="NOT_RUN"||(r.outcome==="SUCCESS"&&!run.model))invalid();
+  if(run.execution==="LOCAL_OLLAMA_INFERENCE"&&run.model!==null&&run.model!=="qwen3.5:9b"&&run.model!=="qwen3.5:4b")invalid();
   if(r.outcome==="SUCCESS"){
    if(r.httpStatus!==200||r.structural!=="VALID"||r.failure!==null||r.latencyMs===null)invalid();
    try{validateAdvisory(r.output,turn.manifest);}catch{invalid();}

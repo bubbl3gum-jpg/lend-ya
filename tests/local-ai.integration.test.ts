@@ -52,6 +52,26 @@ test("13F real application guards and browser with explicitly MOCKED loopback Ol
   let ready=false;for(let n=0;n<120;n++){try{if((await fetch(base+"/login")).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,100));}assert(ready);
   const actor=fixture.requester;
   const post=async(body:unknown,token:string|undefined=actor.token,extra:Record<string,string>={})=>fetch(base+"/api/dev/support-companion/local",{method:"POST",headers:{Origin:base,"Content-Type":"application/json","X-Hustlen-Local-AI":"1",...(token?{Cookie:"p2p_session="+token}:{}),...extra},body:JSON.stringify(body)});
+  if(process.env.HUSTLEN_EVALUATION_RUNNER_TEST==="1"){
+   const {authenticatedClient}=await import("../lib/advisory-evaluation/client");
+   const {planEvaluation,runEvaluation}=await import("../lib/advisory-evaluation/runner");
+   const {evaluationDataset}=await import("../lib/advisory-evaluation/dataset");
+   const email=(await db.query('SELECT email FROM "User" WHERE id=$1',[actor.userId])).rows[0].email;
+   const beforeSessions=(await db.query('SELECT count(*)::int n FROM "AuthSession" WHERE "userId"=$1',[actor.userId])).rows[0].n;
+   const client=await authenticatedClient(base,email,MFA_PASSWORD,new AbortController().signal);
+   try{
+    const plan=planEvaluation(evaluationDataset(),["E01:en","E10:en"]);
+    const result=await runEvaluation(plan,client,new AbortController().signal,"MOCK","RUN-real-app-mock-model",async()=>{});
+    assert.equal(result.summary.success,6);assert.equal(result.summary.attemptedRequests,6);assert.equal(result.results.at(-1)!.caseId,"E10:en");assert.equal(result.attempts.at(-1)!.responseBound,true);assert(result.reviews.every(r=>r.reviewer===null));
+    assert(!prompts.at(-1)!.includes('"mode":"PLAYGROUND"'));assert.equal(JSON.parse(JSON.parse(prompts.at(-1)!).messages[1].content).sources[0].kind,"CONTEXT");
+    const limited=await runEvaluation(planEvaluation(evaluationDataset()),client,new AbortController().signal,"MOCK","RUN-rate-refusal",async()=>{});assert.equal(limited.results[0].failure?.code,"LIMIT");assert.equal(calls,6);
+   }finally{await client.close();}
+   assert.equal((await db.query('SELECT count(*)::int n FROM "AuthSession" WHERE "userId"=$1',[actor.userId])).rows[0].n,beforeSessions);
+   await assert.rejects(client.send({scenario:"SYN-REVIEW-INJECTION:en"},new AbortController().signal));
+   assert.deepEqual(await snapshots(),original);
+   await writeFile(path.join(artifact,"evaluation-runner-evidence.json"),JSON.stringify({realQwen:false,mockedInference:true,protectedRoute:true,nativeLoginLogout:true,selectedCalls:6,e10FixedContext:true,rateRefusal:true,domainRecordsUnchanged:true},null,2));
+   return;
+  }
   if(process.env.HUSTLEN_PLAYGROUND_TEST==="1"){
    const input={mode:"PLAYGROUND",side:"OWNER",language:"en",messages:["Fictional camera was returned; I have not confirmed whether its charger is missing."]};
    assert.equal((await post(input,"")).status,401);
