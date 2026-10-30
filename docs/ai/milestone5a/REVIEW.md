@@ -67,3 +67,5 @@ Screenshots `screenshots/mock-booking-desktop.png`, `mock-handoff-tablet.png`, `
 No real Qwen, translation/Vision provider or M3B benchmark ran. General policy/source entailment, conversational usefulness and bilingual quality remain unverified. Full unrelated camera/rental suites were not rerun or claimed. Existing behavior-refinement and M3B real-model acceptance remain pending by owner choice.
 
 Recommended next *implementation* proposal, after owner review: a user-reviewed case-summary and human-handoff **preview** from fictional claims and the selected procedural source, with uncertainties and shareable draft clearly separated. Reuse current drafts and authorization boundaries; no automatic ticket creation, real private data or staffed production handoff. Do not start it in this batch.
+
+Implementation commit: `c459e0245b8468bd7b37ac2c678b2e66fedbe5d1`. Separate closeout commit contains metadata-only verification, not generated inference transcripts. No push, merge, deployment or automatic next batch; stop for owner review.
