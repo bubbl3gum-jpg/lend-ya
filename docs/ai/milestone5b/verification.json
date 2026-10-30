@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-30",
+  "baseline": "d5a4d046d55d10715c2cececd01bf0f2b336df2b",
+  "implementation": "9d36861edc39a924a2158948e8585f77d22678c8",
+  "unit": {
+    "tests": 178,
+    "pass": 178
+  },
+  "focusedCaseTests": 4,
+  "typecheck": "final pass",
+  "lint": "final pass without warnings",
+  "initialIssues": {
+    "testTypeInferenceErrors": 2,
+    "browserFailures": 1,
+    "browserCause": "Prepared textarea implicit-label lookup; explicit unique label/id and value assertion corrected",
+    "timeoutsOrSafetyAssertionsWeakened": false
+  },
+  "realModelRequests": 0,
+  "m3bBenchmarkRun": false,
+  "semanticAcceptance": "pending owner",
+  "m5aSourceContentFingerprints": "unchanged; existing golden tests pass",
+  "results": [
+    {
+      "group": "test:case-assistance",
+      "start": "2026-10-30T08:58:40.995Z",
+      "end": "2026-10-30T08:59:14.511Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/a808bcc8b6e20f2162cb4d50",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:case-assistance.log"
+    },
+    {
+      "group": "test:grounded-help",
+      "start": "2026-10-30T08:59:14.513Z",
+      "end": "2026-10-30T08:59:32.880Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/70ae37efa52acd80e7b66424",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:grounded-help.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-30T08:59:32.880Z",
+      "end": "2026-10-30T08:59:51.467Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/5f04009279f0b16c574fda7d",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T08:59:51.467Z",
+      "end": "2026-10-30T09:00:10.797Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/01e51808bc1c2700fffd4e31",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T09:00:10.798Z",
+      "end": "2026-10-30T09:00:20.365Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/37847daf2b51571768ad5c89",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "launcher": {
+    "group": "test:local-ai-demo",
+    "start": "2026-10-30T09:08:03.222Z",
+    "end": "2026-10-30T09:08:21.838Z",
+    "exit": 0,
+    "headed": true,
+    "display": "Linux test-only Xorg dummy display",
+    "mockedOllama": true,
+    "realQwen": false
+  },
+  "caseRecordsLoaded": 0,
+  "supportTicketsSubmitted": 0,
+  "summaryPersistence": "page memory only; edited summaries not sent to model",
+  "evidence": "authored mocks and deterministic/application checks, not Qwen semantic results"
+}
