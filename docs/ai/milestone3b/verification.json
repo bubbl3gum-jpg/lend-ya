@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-30",
+  "implementation": "396762edbdd847d526318b4fdb464b72e6627016",
+  "realModelRequests": 0,
+  "fullBenchmarkExecuted": false,
+  "transcriptFilesPersistedByNewRunner": 0,
+  "humanReviewsCompleted": 0,
+  "unitTests": {
+    "tests": 169,
+    "pass": 169
+  },
+  "focusedTests": {
+    "tests": 6,
+    "pass": 6
+  },
+  "typecheck": "pass",
+  "lint": "final pass without warnings; initial unused test import warning removed",
+  "unexpectedTestFailures": 0,
+  "executionEvidence": "Deterministic seams and authenticated application with mocked Ollama only",
+  "offlineSmokePlan": {
+    "cases": [
+      "E03:en",
+      "E02:zh-TW",
+      "E10:en"
+    ],
+    "calls": 3,
+    "planDigest": "02f7897ba53a4295eaac0fd560366750fa72a64086552679a5254a0443941bd7",
+    "ownerRunApproval": "pending",
+    "retentionApproval": "pending"
+  },
+  "results": [
+    {
+      "group": "test:advisory-runner-app",
+      "start": "2026-10-30T06:46:53.091Z",
+      "end": "2026-10-30T06:47:13.035Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/821e4918b240b453b46729c6",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:advisory-runner-app.log"
+    },
+    {
+      "group": "test:local-ai-diagnostics",
+      "start": "2026-10-30T06:42:53.505Z",
+      "end": "2026-10-30T06:43:10.665Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/313d3ab7763d975333f57cd9",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-diagnostics.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-30T06:43:10.666Z",
+      "end": "2026-10-30T06:43:25.849Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/1587ee80bb199a86699fa51d",
+      "tests": [
+        "ℹ tests 1"
+      ],
+      "passes": [
+        "ℹ pass 1"
+      ],
+      "fails": [
+        "ℹ fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-30T06:47:13.041Z",
+      "end": "2026-10-30T06:47:23.577Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/045ae4b17726c0f1f492694b",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "milestone3cStarted": false
+}
