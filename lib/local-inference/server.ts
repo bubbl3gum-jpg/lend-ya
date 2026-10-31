@@ -1,3 +1,5 @@
+import {translationEnabled,translationActor,captureTranslation} from "../translation-sidecar/server";
+import type {Scope} from "../translation-sidecar/store";
 import "server-only";
 import { logOperationalError } from "../operational-error";
 import { companionActor } from "../assistant/server";
@@ -24,10 +26,15 @@ export async function localInferenceApi(request:Request){
   if(attempts.size>=1000&&!attempts.has(actor.user.id))throw new InferenceError("LIMIT");
   const counter=attempts.get(actor.user.id)??{at:now,n:0};counter.n++;attempts.set(actor.user.id,counter);if(counter.n>6)throw new InferenceError("LIMIT");
   authorizedDiagnostic=process.env.HUSTLEN_LOCAL_AI_DIAGNOSTICS==="owned-test-categories-only";
+  const translationAllowed=translationEnabled()&&["SYN-PLAYGROUND","SYN-GROUNDED-HELP","SYN-CASE-ASSISTANCE"].includes(task.manifest.caseId);
+  let translationScope:Scope|undefined;
+  if(translationAllowed)try{translationScope=(await translationActor()).scope;}catch(e){logOperationalError("translation.snapshot_identity",e);}
   const result=await ollamaGateway(config).generate(task.manifest,request.signal);
   const current=await companionActor();if(current.user.id!==actor.user.id)return reply({code:"SESSION"},401);
   if(request.signal.aborted)throw new InferenceError("CANCELED");
-  return reply({...result,scenario:task.id,inputDigest:task.digest,manifest:task.manifest,...("knowledge" in task?{knowledge:task.knowledge}:{})});
+  let translationSnapshot;
+  if(translationScope)try{translationSnapshot=await captureTranslation({manifest:task.manifest,output:result.output,model:result.model},translationScope);}catch(e){logOperationalError("translation.snapshot_capture",e);}
+  return reply({...result,scenario:task.id,inputDigest:task.digest,manifest:task.manifest,...(translationAllowed?{translationSnapshot:translationSnapshot??null}:{}),...("knowledge" in task?{knowledge:task.knowledge}:{})});
  }catch(e){
   if(e instanceof InferenceError)return reply({code:e.code,...(authorizedDiagnostic && safeValidationDiagnostic(e)?{diagnostic:safeValidationDiagnostic(e)}:{})},e.code==="INPUT"?400:e.code==="LIMIT"?429:e.code==="CANCELED"?409:e.code==="TIMEOUT"?504:e.code==="VALIDATION"?502:503);
   const status=e instanceof Error && "status" in e && (e.status===401||e.status===403)?e.status:503;

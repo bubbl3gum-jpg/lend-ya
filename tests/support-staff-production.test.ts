@@ -17,6 +17,7 @@ test(
         "/dev/support-companion",
         "/api/dev/support-companion",
         "/api/dev/support-companion/local",
+        "/api/dev/support-companion/translation",
         "/api/dev/inspection",
         "/dev/inspection",
       ])

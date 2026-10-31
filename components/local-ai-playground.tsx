@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/i18n/locale";
+import { TranslationSidecar } from "@/components/translation-sidecar";
+import type {SnapshotDescriptor} from "@/lib/translation-sidecar/types";
 import { CaseNotesPanel } from "@/components/case-notes";
 import type { CaseAdvisory } from "@/lib/local-inference/case-notes";
 import type { Advisory } from "@/lib/local-inference/contracts";
 import type { KnowledgeEntry } from "@/lib/local-inference/knowledge";
 import type { Manifest } from "@/lib/ai-case-brief/contracts";
-type Reply={output:Advisory&Partial<Pick<CaseAdvisory,"caseNotes">>;manifest:Manifest;latencyMs:number;provenance:"LOCAL_OLLAMA_INFERENCE";knowledge?:(KnowledgeEntry&{id:string;scope:"GENERAL_PROCEDURE_ONLY"})[]};
+type Reply={translationSnapshot?:SnapshotDescriptor|null;output:Advisory&Partial<Pick<CaseAdvisory,"caseNotes">>;manifest:Manifest;latencyMs:number;provenance:"LOCAL_OLLAMA_INFERENCE";knowledge?:(KnowledgeEntry&{id:string;scope:"GENERAL_PROCEDURE_ONLY"})[]};
 type Turn={text:string;reply?:Reply;error?:string};
 export function LocalAiPlayground(){
  const {locale}=useLocale(),zh=locale==="zh-TW";
@@ -32,7 +34,7 @@ export function LocalAiPlayground(){
  return <section className="companion-section" aria-labelledby="playground-title">
  <p className="catalogue-kicker">{zh?"本機限定・虛構對話":"Local only · fictional conversations"}</p><h2 id="playground-title">{zh?"互動試用區":"Interactive Playground"}</h2>
  <p id="playground-notice">{zh?"僅限自有開發環境。請勿輸入真實客戶資料、姓名、聯絡方式、證件或任何敏感資訊。所有輸入都是未驗證的虛構主張。AI 不會退款、傳送訊息、結案或變更保管狀態。":"Owned development only. Do not enter real customer data, names, contact details, identity documents or sensitive information. All input is fictional, unverified claims. AI cannot refund, send messages, close cases or change custody."}</p>
- <p>{zh?"最多 6 則使用者訊息，每則 1,000 字元。對話僅保留在此頁記憶體；重新整理即清除。後續提問會附上先前的使用者訊息，AI 回覆不會作為證據重新送出；若要詢問先前建議，請具體描述。":"Up to 6 user turns, 1,000 characters each. Kept only in page memory; reload clears it. Follow-ups include earlier user turns, not AI replies as evidence. Describe the specific advice when asking about a previous reply."}</p>
+ <p>{zh?"最多 6 則使用者訊息，每則 1,000 字元。重新整理會清除此頁對話。若啟用可選模擬翻譯，已驗證回覆另暫存於有上限的伺服器記憶體，最多五分鐘。後續提問會附上先前的使用者訊息，AI 回覆不會作為證據重新送出；若要詢問先前建議，請具體描述。":"Up to 6 user turns, 1,000 characters each. Page reload clears the local conversation. If optional mock translation is enabled, validated replies also stay in bounded server memory for up to five minutes. Follow-ups include earlier user turns, not AI replies as evidence. Describe the specific advice when asking about a previous reply."}</p>
  <nav className="companion-modes" aria-label={zh?"可選程序主題":"Optional procedure topics"}>{(["GENERAL","BOOKING","HANDOFF","RETURN"] as const).map(value=><button type="button" key={value} aria-pressed={topic===value} disabled={busy||turns.length>0} onClick={()=>setTopic(value)}>{({GENERAL:zh?"一般對話":"General conversation",BOOKING:zh?"申請與取件時間":"Booking & pickup time",HANDOFF:zh?"取件與交接":"Pickup & handoff",RETURN:zh?"歸還與狀況紀錄":"Return & documentation"})[value]}</button>)}</nav>
  <p>{zh?"主題為可選項目。程序來源僅經實作檢視、限開發試驗，非已核准商業政策，也不代表你的預約已獲驗證。開始新對話後可更換主題。":"Topics are optional. Procedure sources are implementation-reviewed development candidates, not approved commercial policy or verified facts about your booking. Start a new conversation to change topic."}</p>
  <label className="companion-check"><input type="checkbox" checked={caseMode} disabled={busy||turns.length>0} onChange={e=>setCaseMode(e.target.checked)}/>{zh?"啟用虛構案件筆記":"Enable fictional Case Notes"}</label>
@@ -43,6 +45,7 @@ export function LocalAiPlayground(){
  {turn.error&&<p role="alert">{zh?"未取得有效回覆。失敗代碼：":"No valid response. Failure code: "}{turn.error}</p>}
  {turn.reply&&<><h3>{zh?"AI 建議・非判決":"AI advice · not a decision"}</h3><p>{turn.reply.provenance} · {turn.reply.latencyMs} ms</p><p style={{whiteSpace:"pre-wrap"}}>{turn.reply.output.drafts[turn.reply.manifest.language]}</p>
  {turn.reply.knowledge?.map(k=><section key={k.id}><h4>{zh?"Hustlen' 一般程序":"General Hustlen' procedure"}</h4><p>{k.id} · {zh?"版本":"Version"} {k.version} · {zh?"僅限開發，正式核准待定":"Development only; production approval pending"}</p><p>{k.description[turn.reply!.manifest.language]}</p><p>{k.limitations[turn.reply!.manifest.language]}</p></section>)}
+ {turn.reply.translationSnapshot!==undefined&&<TranslationSidecar snapshot={turn.reply.translationSnapshot}/> }
  {turn.reply.output.caseNotes&&<CaseNotesPanel output={turn.reply.output as CaseAdvisory} manifest={turn.reply.manifest}/>}
  <details><summary>{zh?"建議與來源歸屬":"Advice and source attribution"}</summary>
  {(["knownFacts","participantClaims","uncertainties","nextSteps","requiresAgreement","humanReview"] as const).map(key=><section key={key}><h4>{({knownFacts:zh?"程序／合成情境事實（非個案驗證）":"Procedure / synthetic facts (not case verification)",participantClaims:zh?"使用者陳述（尚未驗證）":"User-reported information (unverified)",uncertainties:zh?"未知與尚未驗證的假設":"Unknowns and unverified assumptions",nextSteps:zh?"AI 建議（並未執行）":"AI suggestions (not executed)",requiresAgreement:zh?"需要明確同意":"Requires explicit agreement",humanReview:zh?"需要人工審查":"Human review"})[key]}</h4><ul>{turn.reply!.output[key].map((v,i)=><li key={i}>{typeof v==="string"?v:<>{v.text} [{v.refs.join(", ")}]</>}</li>)}</ul></section>)}
