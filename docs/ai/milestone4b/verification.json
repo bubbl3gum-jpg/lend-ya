@@ -1,0 +1,222 @@
+{
+  "baseline": "07f04a5bdcc66947fd93382320a4fc4a840cb27a",
+  "implementation": "9615cc617bab4e06d41a5d98113bd6e81241da0d",
+  "kind": "MOCK_ONLY_TRANSLATION_FOUNDATION",
+  "unit": {
+    "command": "npm run test:unit",
+    "passed": 195,
+    "failed": 0,
+    "newContractGroups": 5
+  },
+  "staticChecks": [
+    "npx tsc --noEmit",
+    "npm run lint",
+    "git diff --check"
+  ],
+  "selectedApplicationChecks": [
+    {
+      "group": "test:translation-sidecar",
+      "start": "2026-10-31T02:10:57.088Z",
+      "end": "2026-10-31T02:11:15.838Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/85683a80cb7ae060a15cdbaf",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:translation-sidecar.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-31T02:03:51.953Z",
+      "end": "2026-10-31T02:04:12.601Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/0822f33423ef3310d97eb8e6",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:case-assistance",
+      "start": "2026-10-31T02:04:12.601Z",
+      "end": "2026-10-31T02:04:29.418Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/2413265367b06909ed67e59d",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:case-assistance.log"
+    },
+    {
+      "group": "test:support-handoff",
+      "start": "2026-10-31T02:04:29.419Z",
+      "end": "2026-10-31T02:04:47.542Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/c51dbb396b76249af26f8dd9",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-handoff.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-31T02:04:47.542Z",
+      "end": "2026-10-31T02:05:18.663Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3c4ce1854c42514cc964b45d",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "test:vision-prototype",
+      "start": "2026-10-31T02:05:18.663Z",
+      "end": "2026-10-31T02:05:32.706Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/e4299c95a251eff3644423e4",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:vision-prototype.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-31T02:11:15.840Z",
+      "end": "2026-10-31T02:11:28.602Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ca4e0268d487ae03af0f36a6",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "headedLauncherCheck": {
+    "group": "test:local-ai-demo",
+    "start": "2026-10-31T02:13:52.190Z",
+    "end": "2026-10-31T02:14:12.439Z",
+    "exit": 0,
+    "headed": true,
+    "display": "Linux test-only Xorg dummy display",
+    "mockedOllama": true,
+    "realQwen": false
+  },
+  "initialFailures": [],
+  "noWeakening": {
+    "timeoutsIncreased": false,
+    "sourceValidatorChanged": false,
+    "generalBrowserErrorSuppression": false,
+    "expectedNegativeUIError": "Exactly one429 resource console error asserted in intentional per-snapshot limit case"
+  },
+  "snapshot": {
+    "scope": "exact active persisted session incarnation + actor + owned run",
+    "ttlSeconds": 300,
+    "perSession": 6,
+    "perActor": 12,
+    "processCount": 128,
+    "canonicalByteLimit": 262144,
+    "serializedContentBudget": 4194304,
+    "maxSuccessfulRequestIDsPerSnapshot": 2,
+    "persistentTranscriptStore": false,
+    "multiWorkerStore": false
+  },
+  "translation": {
+    "providerSelected": false,
+    "realTranslationCalls": 0,
+    "translationModelsDownloaded": 0,
+    "authoredMockPairs": 7,
+    "provenance": "MOCK_TEST_OUTPUT",
+    "semanticQualityAccepted": false,
+    "humanReviewsCompleted": 0,
+    "unknownTextBehavior": "MOCK_UNAVAILABLE, no fabricated translation"
+  },
+  "ui": {
+    "fullArtifact": ".test-artifacts/85683a80cb7ae060a15cdbaf",
+    "committedScreenshots": [
+      "screenshots/desktop-mock.png",
+      "screenshots/tablet-mock.png",
+      "screenshots/mobile-mock.png"
+    ],
+    "viewportWidths": [
+      1440,
+      820,
+      390
+    ],
+    "focusedMobileVisuallyInspected": true,
+    "nativeLoginAndCrossSessionIsolation": true,
+    "noAutomaticTranslation": true,
+    "summaryAndSupportPreviewPreserved": true
+  },
+  "preserved": [
+    "Qwen model settings/gateway and Advisory schema",
+    "M5A knowledge and source digests",
+    "M3 datasets/rubric/validators/historical scores",
+    "M7A/M7B Vision contracts and execution refusal",
+    "application locale identifiers and authored catalogues",
+    "canonical14-stage roadmap",
+    "existing stash/private configuration"
+  ],
+  "genuineQwenAcceptance": "DEFERRED",
+  "genuineM3BRun": false,
+  "genuineVisionRun": false,
+  "databaseSafety": {
+    "freshOwnedDisposableOnly": true,
+    "selectedRunsCleanedUp": true,
+    "existingApplicationDatabaseModified": false,
+    "migrationsChanged": false
+  },
+  "pushed": false,
+  "merged": false,
+  "deployed": false
+}

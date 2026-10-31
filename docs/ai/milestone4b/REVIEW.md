@@ -123,3 +123,5 @@ Memory snapshots are development-process scoped, not a distributed production tr
 - `tests/translation-sidecar.test.ts`
 
 Screenshots: [desktop](screenshots/desktop-mock.png), [tablet](screenshots/tablet-mock.png), [mobile](screenshots/mobile-mock.png). These focused native captures show authored mock output. Next development indicator can appear; it is not a product control.
+
+Implementation SHA: `9615cc617bab4e06d41a5d98113bd6e81241da0d`. Separate closeout records final ledger. Final results:195/195 unit, TypeScript/lint, translation browser1/1, original playground1/1, Case Notes1/1, M5C handoff1/1, production refusal1/1, Vision fixture UI1/1, normal build and headed demo launcher pass. All inference responses in these tests are authored mocks; zero real translation/model-quality results. All selected disposable test databases cleaned up. No initial failing checks in M4B; final checks rerun after literal/typing/expiry-display refinements and focused screenshot additions.
