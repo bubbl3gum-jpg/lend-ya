@@ -1,0 +1,153 @@
+{
+  "checkedAtUTC": "2026-10-31T01:42:45.291337+00:00",
+  "method": "Unauthenticated public documentation and supported-language metadata GET only; no text translation, credentials, customer data or model downloads.",
+  "sources": [
+    {
+      "id": "deepl-sdk",
+      "url": "https://raw.githubusercontent.com/DeepLcom/deepl-python/main/README.md",
+      "status": 200,
+      "bytes": 75421,
+      "sha256": "af19a72be10f748a9839a310d47873ba60be684dd9bfb71b7ba5213597af82cc"
+    },
+    {
+      "id": "deepl-openapi",
+      "url": "https://raw.githubusercontent.com/DeepLcom/openapi/main/openapi.yaml",
+      "status": 200,
+      "bytes": 376234,
+      "sha256": "0b7c4964e038ca9d8d01bfdd7ad5a1bd296a08a5b9e040627dfb439d09213b0c"
+    },
+    {
+      "id": "deepl-languages",
+      "url": "https://developers.deepl.com/docs/getting-started/supported-languages",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "deepl-pricing",
+      "url": "https://www.deepl.com/en/pro-api",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "deepl-data",
+      "url": "https://www.deepl.com/en/pro-data-security",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-pricing",
+      "url": "https://cloud.google.com/translate/pricing",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-languages",
+      "url": "https://cloud.google.com/translate/docs/languages",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-data",
+      "url": "https://cloud.google.com/translate/data-usage",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-sdk",
+      "url": "https://raw.githubusercontent.com/googleapis/google-cloud-python/main/packages/google-cloud-translate/README.rst",
+      "status": 200,
+      "bytes": 7897,
+      "sha256": "50a742daa42f3031d14033353324987977498b9c8618c65132f1dceaef1ce2a4"
+    },
+    {
+      "id": "azure-languages",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/language-support",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-pricing",
+      "url": "https://azure.microsoft.com/en-us/pricing/details/cognitive-services/translator/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-data",
+      "url": "https://learn.microsoft.com/en-us/legal/cognitive-services/translator/data-privacy-security",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-sdk",
+      "url": "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/main/sdk/translation/azure-ai-translation-text/README.md",
+      "status": 200,
+      "bytes": 12329,
+      "sha256": "ff78de0e80edd3b56908ac272fd770a359867936995a87af1ababca47aad193c"
+    },
+    {
+      "id": "azure-language-source",
+      "url": "https://raw.githubusercontent.com/MicrosoftDocs/azure-ai-docs/main/articles/translator/language-support.md",
+      "status": "UNRETRIEVABLE",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": "local-nllb",
+      "url": "https://huggingface.co/facebook/nllb-200-distilled-600M/raw/main/README.md",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "local-opus",
+      "url": "https://raw.githubusercontent.com/Helsinki-NLP/Opus-MT/master/README.md",
+      "status": 200,
+      "bytes": 10029,
+      "sha256": "d5fa3a9481b9097c4a61c8b7e3dcb19cb8036f8d40cc04baa03a367ed9705bea"
+    },
+    {
+      "id": "local-marian",
+      "url": "https://raw.githubusercontent.com/marian-nmt/marian/master/LICENSE.md",
+      "status": 200,
+      "bytes": 1138,
+      "sha256": "fb3e48be2f3c9c85f3acf32d4ff115a803208e51ecab694000415c8bf1dd712b"
+    },
+    {
+      "id": "amazon-pricing",
+      "url": "https://aws.amazon.com/translate/pricing/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "amazon-sdk",
+      "url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/translate/2017-07-01/service-2.json",
+      "status": 200,
+      "bytes": 87560,
+      "sha256": "3e2d60a1b1817f1e9baf62c45ddf23793599242648209f149750dbe8dad10067"
+    },
+    {
+      "id": "azure-supported-example",
+      "url": "https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/TranslatorText/stable/v3.0/examples/GetLanguages.json",
+      "status": "UNRETRIEVABLE",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": "azure-language-spec",
+      "url": "https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/TranslatorText/stable/v3.0/TranslatorText.json",
+      "status": 200,
+      "bytes": 64496,
+      "sha256": "70ce120aedb41af2417b8c6151c71d0193113606f41d662a5b9650a7a86abbb6"
+    },
+    {
+      "id": "nllb-fairseq-card",
+      "url": "https://raw.githubusercontent.com/facebookresearch/fairseq/nllb/README.md",
+      "status": 200,
+      "bytes": 9479,
+      "sha256": "d384690f691096ab66688b3d42a352941fdb319a7650a6bec260209fddc785d4"
+    },
+    {
+      "id": "azure-public-language-metadata",
+      "url": "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0&scope=translation",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ]
+}
