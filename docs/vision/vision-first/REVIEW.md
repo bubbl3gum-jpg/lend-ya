@@ -86,3 +86,5 @@ Additional initial observation: headed Vision test checked the resource-console 
 - `tests/vision-provider.test.ts`
 
 Actual responsive mock captures: [desktop](screenshots/desktop-mock.png), [tablet](screenshots/tablet-mock.png), [mobile](screenshots/mobile-mock.png). Mobile visually inspected; authored mock identity and absence of real photographs explicit.
+
+Implementation commit: `8d2b32d62ed3497005331f13a80c540c52fa4e40`. Final verification ledger: [verification.json](verification.json). This closeout records deterministic/mocked application evidence only; genuine photographic/model acceptance remains blocked.

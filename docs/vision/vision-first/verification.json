@@ -1,0 +1,268 @@
+{
+  "date": "2026-10-31",
+  "baseline": "50e8808ee2ef8d5688e37745116251b31e9ecdc7",
+  "implementation": "8d2b32d62ed3497005331f13a80c540c52fa4e40",
+  "branch": "feature/vision-first-controlled-provider-prototype",
+  "application_checks": [
+    {
+      "group": "test:vision-first",
+      "start": "2026-10-31T09:37:30.795Z",
+      "end": "2026-10-31T09:37:45.274Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/13f6609ab8f09af7657dd1d9",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:vision-first.log"
+    },
+    {
+      "group": "test:vision-prototype",
+      "start": "2026-10-31T09:31:20.220Z",
+      "end": "2026-10-31T09:31:38.524Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/86a2f1c9a81c802d059fc663",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:vision-prototype.log"
+    },
+    {
+      "group": "test:support-staff-production",
+      "start": "2026-10-31T09:31:38.525Z",
+      "end": "2026-10-31T09:32:12.191Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/ec2efdea898b3e8f0e896d54",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-staff-production.log"
+    },
+    {
+      "group": "test:local-ai-playground",
+      "start": "2026-10-31T09:32:12.192Z",
+      "end": "2026-10-31T09:32:28.958Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/fb706bb43a39801605237e86",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:local-ai-playground.log"
+    },
+    {
+      "group": "test:translation-sidecar",
+      "start": "2026-10-31T09:32:28.958Z",
+      "end": "2026-10-31T09:32:47.304Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/6341489f7991c55aabfdfd99",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:translation-sidecar.log"
+    },
+    {
+      "group": "test:support-handoff",
+      "start": "2026-10-31T09:32:47.304Z",
+      "end": "2026-10-31T09:33:05.241Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/f832f0fd4d42816c39eb0a3e",
+      "tests": [
+        "\u2139 tests 1"
+      ],
+      "passes": [
+        "\u2139 pass 1"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:support-handoff.log"
+    },
+    {
+      "group": "test:rental-api",
+      "start": "2026-10-31T09:37:45.307Z",
+      "end": "2026-10-31T09:38:14.783Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3ac6b673541d2564b087cf57",
+      "tests": [
+        "\u2139 tests 13"
+      ],
+      "passes": [
+        "\u2139 pass 13"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:rental-api.log"
+    },
+    {
+      "group": "test:integration",
+      "start": "2026-10-31T09:38:14.821Z",
+      "end": "2026-10-31T09:38:49.924Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/3b3e8382d98e2bc9e3b3d733",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:integration.log"
+    },
+    {
+      "group": "test:meetup-session",
+      "start": "2026-10-31T09:38:49.977Z",
+      "end": "2026-10-31T09:39:30.857Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/df4ad7154195d0ff53ac0fe6",
+      "tests": [
+        "\u2139 tests 6"
+      ],
+      "passes": [
+        "\u2139 pass 6"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:meetup-session.log"
+    },
+    {
+      "group": "test:meetup",
+      "start": "2026-10-31T09:39:30.930Z",
+      "end": "2026-10-31T09:43:54.406Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/66d2c0df8d0ead409fc3d536",
+      "tests": [
+        "\u2139 tests 12"
+      ],
+      "passes": [
+        "\u2139 pass 12"
+      ],
+      "fails": [
+        "\u2139 fail 0"
+      ],
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/test:meetup.log"
+    },
+    {
+      "group": "build:verify",
+      "start": "2026-10-31T09:43:54.477Z",
+      "end": "2026-10-31T09:44:02.871Z",
+      "exit": 0,
+      "signal": null,
+      "artifact": ".test-artifacts/782e1cc9dfb4f8d693d4eb66",
+      "tests": null,
+      "passes": null,
+      "fails": null,
+      "cleanup": true,
+      "log": "/tmp/hustlen-ai-demo-regression/build:verify.log"
+    }
+  ],
+  "headed_launcher_checks": [
+    {
+      "group": "test:vision-demo",
+      "start": "2026-10-31T09:46:48.541Z",
+      "end": "2026-10-31T09:47:09.402Z",
+      "exit": 0,
+      "headed": true,
+      "display": "Linux test-only Xorg dummy display",
+      "mockedOllama": true,
+      "realQwen": false
+    },
+    {
+      "group": "test:local-ai-demo",
+      "start": "2026-10-31T09:47:09.445Z",
+      "end": "2026-10-31T09:47:30.019Z",
+      "exit": 0,
+      "headed": true,
+      "display": "Linux test-only Xorg dummy display",
+      "mockedOllama": true,
+      "realQwen": false
+    }
+  ],
+  "deterministic_checks": {
+    "unit": "200/200 passed",
+    "focused_original_and_new_vision": "11/11 passed",
+    "typescript": "passed",
+    "lint": "passed",
+    "diff_check": "passed"
+  },
+  "initial_failures": [
+    {
+      "check": "test:vision-first",
+      "cause": "Test expected 400 for cross-origin request; existing proxy correctly returned 403. Corrected expected status only.",
+      "cleanup": true
+    },
+    {
+      "check": "build:verify",
+      "cause": "Workspace ENOSPC before isolated run. Preserved ignored artifacts in /tmp with original-path symlinks, then normal build passed. Initial run did not reach owned database marker."
+    },
+    {
+      "check": "test:vision-demo",
+      "cause": "Console observation preceded completion of intentional 502. Awaited visible error and exact one-console-error assertion with unchanged default deadline; final rerun passed."
+    }
+  ],
+  "boundaries": {
+    "genuine_vision_calls": 0,
+    "downloaded_weights": 0,
+    "supplied_authorized_photographs": 0,
+    "human_visual_accuracy_reviews": 0,
+    "production_changes": false,
+    "push_merge_deploy": false,
+    "historical_migrations_changed": false,
+    "canonical_roadmap_history_changed": false,
+    "existing_stash_preserved": true
+  },
+  "unavailable": [
+    "Verified Gemini 3.8 Flash Vision model identity",
+    "Actual photographic fixture provenance and human labels",
+    "Genuine model compatibility, latency, memory, visual accuracy",
+    "Owner approval of exact images, provider/model, privacy, retention, costs, resources and inference scope"
+  ],
+  "artifact_preservation": "Ignored current-run artifacts preserved under /tmp/hustlen-preserved-test-artifacts-vision-first with original-path symlinks; no historical evidence deleted. Temporary paths are workspace evidence, not portable artifacts. Responsive screenshots are committed.",
+  "interpretation": "Mocked transport tests establish contracts and application behavior, not visual accuracy. Full meetup tests perform real virtual-camera QR decoding, not Vision inference."
+}
