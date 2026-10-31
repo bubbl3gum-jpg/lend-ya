@@ -1,3 +1,5 @@
+import {visionProvider,geminiModel} from "../lib/vision-prototype/provider";
+import {visionModel} from "../lib/vision-prototype/adapter-config";
 import "dotenv/config";
 import { spawn, type ChildProcess } from "node:child_process";
 import { randomBytes } from "node:crypto";
@@ -23,6 +25,11 @@ async function stopChild(child:ChildProcess|undefined){
 }
 async function main(){
  if(process.env.NODE_ENV==="production")throw Error("Development only");
+ const args=process.argv.slice(2),visionDemo=args.includes("--vision"),providerArg=args.find(a=>a.startsWith("--provider="));
+ if((!visionDemo&&args.length)||(visionDemo&&(args.length!==2||!["--provider=gemini","--provider=ollama"].includes(providerArg??""))))throw Error("Vision demo requires one explicit --provider=gemini or --provider=ollama");
+ const visionEnv=visionDemo?{HUSTLEN_VISION_PROTOTYPE:"fixture-only",HUSTLEN_VISION_SCHEMATIC_DEMO:"mock-only",HUSTLEN_VISION_PROVIDER:providerArg==="--provider=gemini"?"GEMINI":"OLLAMA",HUSTLEN_GEMINI_VISION_MODEL:geminiModel,HUSTLEN_VISION_OLLAMA_MODEL:visionModel,HUSTLEN_VISION_MODEL_MANIFEST_DIGEST:process.env.HUSTLEN_VISION_MODEL_MANIFEST_DIGEST}:{};
+ if(visionDemo)visionProvider({...visionEnv,NODE_ENV:"development"}); // No network or model download.
+
  const url=testDatabaseUrl(process.env.MRT_TEST_DATABASE_URL,process.env.DATABASE_URL),database=url.pathname.slice(1),runId=testRunId();
  const artifact=path.resolve(".test-artifacts",runId);
  let stopping=false,failed=false,release!:()=>void;
@@ -39,9 +46,9 @@ async function main(){
  const watch=(child:ChildProcess)=>{child.once("error",()=>{failed=true;requestStop();});child.once("exit",()=>{if(!stopping){failed=true;requestStop();}});};
  try{
   // Health/model presence only. No generation, downloads, mock fallback or service management.
-  const response=await fetch("http://127.0.0.1:11434/api/tags",{redirect:"error",signal:AbortSignal.timeout(2000)});
+  if(!visionDemo){const response=await fetch("http://127.0.0.1:11434/api/tags",{redirect:"error",signal:AbortSignal.timeout(2000)});
   if(!response.ok)throw Error("Ollama unavailable");
-  const tags=await response.json();if(!Array.isArray(tags.models)||!tags.models.some((m:{name?:unknown})=>m?.name==="qwen3.5:9b"))throw Error("Install qwen3.5:9b in the existing local Ollama first");check();
+  const tags=await response.json();if(!Array.isArray(tags.models)||!tags.models.some((m:{name?:unknown})=>m?.name==="qwen3.5:9b"))throw Error("Install qwen3.5:9b in the existing local Ollama first");check();}
   admin=await connectTestDatabaseTarget(url,true);check();
   // CREATE fails if it exists: never adopt, reset, migrate or drop an existing target.
   await admin.query(`CREATE DATABASE "${database}"`);owned=true;
@@ -69,7 +76,7 @@ async function main(){
   worker.stdin!.end(JSON.stringify({mfaUrl:fixture.profile.url("mfa"),supportUrl:fixture.supportUrl,secret,socket}));
   for(let n=0;n<100&&!ready;n++){check();await new Promise(r=>setTimeout(r,50));}if(!ready)throw Error("Private login worker unavailable");check();
   const runtime=fixture.profile.url("runtime");
-  app=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",String(port)],{env:{...common,DATABASE_URL:runtime,TEST_DATABASE_URL:runtime,MRT_TEST_DATABASE_URL:runtime,HUSTLEN_SUPPORT_ASSISTANT_CANDIDATE:"offline-only",HUSTLEN_TRANSLATION_SIDECAR:"mock-only",HUSTLEN_SUPPORT_STAFF_CHANNEL_KEY:secret,HUSTLEN_SUPPORT_STAFF_SOCKET:socket,HUSTLEN_LOCAL_AI:"synthetic-ollama-only",HUSTLEN_LOCAL_AI_DIAGNOSTICS:"owned-test-categories-only",HUSTLEN_OLLAMA_MODEL:"qwen3.5:9b"},detached:true,stdio:"ignore"});watch(app);
+  app=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",String(port)],{env:{...common,DATABASE_URL:runtime,TEST_DATABASE_URL:runtime,MRT_TEST_DATABASE_URL:runtime,HUSTLEN_SUPPORT_ASSISTANT_CANDIDATE:"offline-only",HUSTLEN_TRANSLATION_SIDECAR:visionDemo?"disabled":"mock-only",...visionEnv,...(visionDemo?{HUSTLEN_VISION_FIXTURE_ACTOR_IDS:String(fixture.requester.userId)}:{}),HUSTLEN_SUPPORT_STAFF_CHANNEL_KEY:secret,HUSTLEN_SUPPORT_STAFF_SOCKET:socket,HUSTLEN_LOCAL_AI:visionDemo?"disabled":"synthetic-ollama-only",HUSTLEN_LOCAL_AI_DIAGNOSTICS:"owned-test-categories-only",HUSTLEN_OLLAMA_MODEL:"qwen3.5:9b"},detached:true,stdio:"ignore"});watch(app);
   ready=false;for(let n=0;n<120&&!ready;n++){check();try{ready=(await fetch(origin+"/login",{signal:AbortSignal.timeout(1000)})).ok;}catch{}if(!ready)await new Promise(r=>setTimeout(r,100));}if(!ready)throw Error("Local app unavailable");check();
   browser=await chromium.launch({headless:false,executablePath:process.env.MRT_BROWSER_PATH??process.env.CHROMIUM_PATH,handleSIGINT:false,handleSIGTERM:false,handleSIGHUP:false});
   browser.on("disconnected",requestStop);check();
@@ -80,9 +87,9 @@ async function main(){
   const {MFA_PASSWORD}=await import("../tests/support/mfa-fixtures");
   await page.goto(origin+"/login");check();await page.getByLabel("Email address",{exact:true}).fill(email);await page.getByLabel("Password",{exact:true}).fill(MFA_PASSWORD);
   await page.getByRole("button",{name:"Log in",exact:true}).click();await page.waitForURL(origin+"/dashboard");check();
-  await page.goto(origin+"/dev/support-companion");check();
-  console.log(`Ready: ${origin}/dev/support-companion`);
-  console.log("Select synthetic scenarios and press Generate with Ollama yourself. No generation is automatic. Validation failures stay failures.");
+  const destination=visionDemo?"/dev/vision-prototype":"/dev/support-companion";await page.goto(origin+destination);check();
+  console.log(`Ready: ${origin}${destination}`);
+  console.log(visionDemo?"Vision schematic MOCK demo only. Select an authored display test. No live provider or model call, no automatic execution. Photos remain unsupplied.":"Select synthetic scenarios and press Generate with Ollama yourself. No generation is automatic. Validation failures stay failures.");
   console.log("Browser stays open until Ctrl+C or you close it. Existing fixture credential/config expiry and inference/rate limits remain unchanged.");
   await stopped;
  }catch(e){if(!stopping){failed=true;logOperationalError("demo.local_ai",e);}}
@@ -111,6 +118,6 @@ async function main(){
    for(const s of signals)process.off(s,requestStop);
   }
  }
- if(failed){console.error("Local AI demo failed; private details omitted. Check Ollama/model, guarded DB permissions and installed Chromium. Use a NEW target to restart.");process.exitCode=1;}
+ if(failed){console.error(visionDemo?"Vision schematic demo failed; private details omitted. Check guarded DB permissions and visible Chromium. No live call attempted. Use a NEW target.":"Local AI demo failed; private details omitted. Check Ollama/model, guarded DB permissions and installed Chromium. Use a NEW target to restart.");process.exitCode=1;}
 }
 main().catch(e=>{logOperationalError("demo.local_ai.start",e);console.error("Local AI demo refused startup; original database and external services are not reset or stopped.");process.exitCode=1;});

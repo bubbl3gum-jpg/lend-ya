@@ -10,6 +10,7 @@ test(
       for (const route of [
         "/dev/vision-prototype",
         "/api/dev/vision-fixtures",
+        "/api/dev/vision-prototype",
         "/api/dev/support-agent",
         "/api/dev/support-requester",
         "/dev/support-agent",

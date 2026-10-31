@@ -13,6 +13,7 @@ import { chromium,expect,type Browser } from "@playwright/test";
 import { testDatabaseUrl,connectTestDatabaseTarget,assertOwnedDatabase,testRunId } from "./support/test-database";
 
 test("interactive local AI launcher: headed native auth, manual success/failure, persistence and SIGINT cleanup",{timeout:180000,skip:process.platform!=="darwin"&&!process.env.DISPLAY?"Needs a visible desktop or test X display; never substitute headless":false},async()=>{
+ const visionDemo=process.env.HUSTLEN_VISION_DEMO_TEST==="1";
  const url=testDatabaseUrl(process.env.MRT_TEST_DATABASE_URL,process.env.DATABASE_URL),name=url.pathname.slice(1),admin=await connectTestDatabaseTarget(url,true);
  const dir=await mkdtemp(path.join(tmpdir(),"hustlen-ai-launch-test-"));let child:ChildProcess|undefined,childDone:Promise<unknown>|undefined,browser:Browser|undefined,output="",modelAvailable=true,generations=0;
  const mediaDir=path.resolve("storage/listings"),oldMedia=randomUUID()+".png",newMedia=randomUUID()+".png";
@@ -25,7 +26,7 @@ test("interactive local AI launcher: headed native auth, manual success/failure,
   res.end(JSON.stringify({model:"qwen3.5:9b",done:true,message:{content:manifest.language==="zh-TW"?"{}":JSON.stringify(advisory),thinking:"NEVER_EXPOSE"}}));
  });
  const launch=(extra:Record<string,string|undefined>={})=>{
-  output="";child=spawn("npm",["run","demo:local-ai"],{detached:true,env:{...process.env,...extra},stdio:["ignore","pipe","pipe"]});
+  output="";child=spawn("npm",visionDemo?["run","demo:vision","--","--provider=gemini"]:["run","demo:local-ai"],{detached:true,env:{...process.env,...extra},stdio:["ignore","pipe","pipe"]});
   childDone=new Promise(resolve=>child!.once("close",(code,signal)=>resolve({code,signal})));
   for(const stream of [child.stdout,child.stderr])stream?.on("data",b=>{output+=String(b);});return child;
  };
@@ -35,7 +36,7 @@ test("interactive local AI launcher: headed native auth, manual success/failure,
  try{
   await new Promise<void>((resolve,reject)=>{ollama.once("error",reject);ollama.listen(11434,"127.0.0.1",resolve);});
   assert.equal((await closed(launch({NODE_ENV:"production"}))).code,1);await absent();
-  modelAvailable=false;assert.equal((await closed(launch())).code,1);await absent();modelAvailable=true;
+  if(!visionDemo){modelAvailable=false;assert.equal((await closed(launch())).code,1);await absent();modelAvailable=true;}else modelAvailable=false;
   // Existing database is deliberately owned by THIS TEST, not by the launcher.
   const sentinelRun=testRunId();await admin.query(`CREATE DATABASE "${name}"`);await admin.query(`COMMENT ON DATABASE "${name}" IS 'hustlen-mrt-test:${sentinelRun}'`);
   const sentinel=await connectTestDatabaseTarget(url);try{await assertOwnedDatabase(sentinel,url,sentinelRun);await sentinel.query("CREATE TABLE untouched(v integer);INSERT INTO untouched VALUES(7)");assert.equal((await closed(launch())).code,1);assert.equal((await sentinel.query("SELECT v FROM untouched")).rows[0].v,7);await assertOwnedDatabase(sentinel,url,sentinelRun);}finally{await sentinel.end();}
@@ -51,17 +52,22 @@ test("interactive local AI launcher: headed native auth, manual success/failure,
   await mkdir(mediaDir,{recursive:true});await writeFile(path.join(mediaDir,oldMedia),"pre-existing test sentinel",{flag:"wx"});
   const running=launch({MRT_BROWSER_PATH:wrapper});const done=closed(running);
   for(let n=0;n<600&&!output.includes("Ready: ");n++){assert.equal(running.exitCode,null,"Launcher must stay alive through setup");await new Promise(r=>setTimeout(r,100));}
-  assert.match(output,/Ready: http:\/\/localhost:\d+\/dev\/support-companion/);assert.equal(generations,0,"Launcher must never auto-generate");
+  assert.match(output,visionDemo?/Ready: http:\/\/localhost:\d+\/dev\/vision-prototype/:/Ready: http:\/\/localhost:\d+\/dev\/support-companion/);assert.equal(generations,0,"Launcher must never auto-generate");
   const run=output.match(/run ([a-f0-9]{24})\./)![1],origin=output.match(/Ready: (http:\/\/localhost:\d+)/)![1];
   const own=await connectTestDatabaseTarget(url);try{await assertOwnedDatabase(own,url,run);const listing=(await own.query('SELECT id FROM "Listing" ORDER BY id LIMIT 1')).rows[0].id;await writeFile(path.join(mediaDir,newMedia),"new owned test upload",{flag:"wx"});for(const file of [oldMedia,newMedia])await own.query('INSERT INTO "ListingMedia"("listingId",url,"mimeType",kind)VALUES($1,$2,\'image/png\',\'PHOTO\')',[listing,"/api/listing-media/"+file]);}finally{await own.end();}
-  browser=await chromium.connectOverCDP(`http://127.0.0.1:${port}`);const page=browser.contexts()[0].pages().find(p=>p.url()===origin+"/dev/support-companion")!;assert(page,"Actual headed browser must complete native login");
+  browser=await chromium.connectOverCDP(`http://127.0.0.1:${port}`);const page=browser.contexts()[0].pages().find(p=>p.url()===origin+(visionDemo?"/dev/vision-prototype":"/dev/support-companion"))!;assert(page,"Actual headed browser must complete native login");
   const pageErrors:string[]=[],consoleErrors:string[]=[];page.on("pageerror",e=>pageErrors.push(e.message));page.on("console",m=>{if(m.type()==="error")consoleErrors.push(m.text());});
+  if(visionDemo){
+   for(const route of ["/api/dev/support-companion/local","/api/dev/support-companion/translation"])assert.equal((await page.request.post(origin+route,{headers:{Origin:origin,"Content-Type":"application/json"},data:{}})).status(),404);
+   await expect(page.getByRole("button",{name:"Live analysis blocked",exact:true})).toBeDisabled();let r=page.waitForResponse(r=>r.url()===origin+"/api/dev/vision-prototype");await page.getByRole("button",{name:"Run MOCK review test",exact:true}).click();assert.equal((await r).status(),200);await expect(page.getByRole("region",{name:"Interactive Vision review",exact:true}).getByRole("status")).toHaveText("State: INSUFFICIENT_EVIDENCE");await page.getByLabel("Authored display scenario",{exact:true}).selectOption("FAILURE");r=page.waitForResponse(r=>r.url()===origin+"/api/dev/vision-prototype");await page.getByRole("button",{name:"Run MOCK review test",exact:true}).click();assert.equal((await r).status(),502);await expect(page.getByRole("region",{name:"Interactive Vision review",exact:true}).getByRole("alert")).toContainText("PROVIDER_JSON");assert.equal(generations,0);assert.equal(running.exitCode,null);assert(browser.isConnected());
+  }else{
   await page.getByRole("button",{name:"Generate with Ollama",exact:true}).click();await expect(page.getByLabel("English local AI draft",{exact:true})).toHaveValue("Please clarify.");
   page.once("dialog",d=>d.accept());await page.getByLabel("Synthetic scenario and output language",{exact:true}).selectOption("SYN-REVIEW-TRANSLATION:zh-TW");
   const failure=page.waitForResponse(r=>r.url()===origin+"/api/dev/support-companion/local");await page.getByRole("button",{name:"Generate with Ollama",exact:true}).click();const r=await failure;assert.equal(r.status(),502);assert.deepEqual(await r.json(),{code:"VALIDATION",diagnostic:{version:"local-validation-v1",reason:"OBJECT_SHAPE",field:"root"}});
   await expect(page.getByText(/No usable result/)).toBeVisible();assert.equal(await page.getByLabel("English local AI draft",{exact:true}).count(),0);assert.equal(generations,2);assert.equal(running.exitCode,null);assert(browser.isConnected(),"No automatic shutdown after two scenarios");
   await page.locator(".companion-language select").selectOption("zh-TW");await expect(page.getByRole("button",{name:"使用 Ollama 產生建議",exact:true})).toBeVisible();
-  assert.deepEqual(pageErrors,[]);assert.equal(consoleErrors.length,1);assert.match(consoleErrors[0],/^Failed to load resource: the server responded with a status of 502/);
+  }
+  assert.deepEqual(pageErrors,[]);await expect.poll(()=>consoleErrors.length).toBe(1);assert.match(consoleErrors[0],/^Failed to load resource: the server responded with a status of 502/);
   await page.screenshot({path:path.join(dir,"headed-manual-failure.png"),fullPage:true});
   stop();await done;assert.match(output,/Removed this run's marked disposable database/);await absent();assert(!browser.isConnected());
   assert.equal((await admin.query("SELECT count(*)::int n FROM pg_roles WHERE shobj_description(oid,'pg_authid') IN ($1,$2)",["hustlen-test-principal:"+run,"hustlen-support-principal:"+run])).rows[0].n,0);
@@ -69,6 +75,6 @@ test("interactive local AI launcher: headed native auth, manual success/failure,
   await assert.rejects(access(path.resolve(".test-artifacts",run)),{code:"ENOENT"});await assert.rejects(access(`/tmp/hustlen-support-${run}.sock`),{code:"ENOENT"});
   await assert.rejects(fetch(origin+"/login",{signal:AbortSignal.timeout(1000)}));assert.equal((await fetch("http://127.0.0.1:11434/api/tags")).status,200);assert.equal((await admin.query("SELECT 1 v")).rows[0].v,1);
   assert(!output.includes("NEVER_EXPOSE"));
-  console.log("Headed launcher proof: native login; zero automatic calls; two manual mock calls; visible502; language switch; retained window; SIGINT cleanup; external services alive. NOT genuine Qwen quality.");
+  console.log("Headed launcher proof: native login; zero automatic calls; manual mock success/failure; retained window; SIGINT cleanup; external services alive. NOT genuine model quality.");
  }finally{await browser?.close();stop();await childDone;await new Promise<void>(r=>ollama.close(()=>r()));await admin.end();await rm(dir,{recursive:true,force:true});for(const file of [oldMedia,newMedia])await rm(path.join(mediaDir,file),{force:true});}
 });

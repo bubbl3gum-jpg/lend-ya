@@ -1,0 +1,35 @@
+{
+  "checkedAtUTC": "2026-10-31T09:21:33.441124+00:00",
+  "sources": [
+    {
+      "id": "gemini-models",
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "gemini-structured",
+      "url": "https://ai.google.dev/gemini-api/docs/structured-output",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "gemini-pricing",
+      "url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "gemini-discovery",
+      "url": "https://raw.githubusercontent.com/googleapis/google-api-python-client/main/googleapiclient/discovery_cache/documents/generativelanguage.v1beta.json",
+      "status": "UNRETRIEVABLE",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": "gemini-sdk",
+      "url": "https://raw.githubusercontent.com/googleapis/python-genai/main/README.md",
+      "status": 200,
+      "sha256": "0b149de4933b6bfa721677461bbff27de27fdb1f431460ce3843fe6b3bccb7f6"
+    }
+  ]
+}

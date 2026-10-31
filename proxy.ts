@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
-  if ((request.nextUrl.pathname === "/dev/vision-prototype" || request.nextUrl.pathname.startsWith("/api/dev/vision-fixtures")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_VISION_PROTOTYPE !== "fixture-only"))
+  if ((request.nextUrl.pathname === "/dev/vision-prototype" || request.nextUrl.pathname.startsWith("/api/dev/vision-fixtures") || request.nextUrl.pathname.startsWith("/api/dev/vision-prototype")) && (process.env.NODE_ENV !== "development" || process.env.HUSTLEN_VISION_PROTOTYPE !== "fixture-only"))
     return NextResponse.json({code:"UNAVAILABLE"},{status:404,headers:{"Cache-Control":"private, no-store","X-Content-Type-Options":"nosniff"}});
   if (request.nextUrl.pathname.startsWith("/api/dev/support-companion/translation") && (process.env.NODE_ENV!=="development" || process.env.HUSTLEN_TRANSLATION_SIDECAR!=="mock-only"))
     return NextResponse.json({version:"advisory-translation-v1",state:"UNAVAILABLE",code:"UNAVAILABLE",originalPreserved:true},{status:404,headers:{"Cache-Control":"private, no-store"}});
