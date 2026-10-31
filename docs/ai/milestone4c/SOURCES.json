@@ -1,0 +1,131 @@
+{
+  "checkedAtUTC": "2026-10-31T02:44:43.161535+00:00",
+  "method": "Public primary documentation/specification/language-metadata GETs only; no translation requests, account access, credentials or customer data.",
+  "sources": [
+    {
+      "id": "google-languages",
+      "url": "https://docs.cloud.google.com/translate/docs/languages",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-pricing",
+      "url": "https://cloud.google.com/translate/pricing",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-data",
+      "url": "https://docs.cloud.google.com/translate/data-usage",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-advanced",
+      "url": "https://docs.cloud.google.com/translate/docs/advanced/translating-text-v3",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-glossary",
+      "url": "https://docs.cloud.google.com/translate/docs/advanced/glossary",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-regions",
+      "url": "https://docs.cloud.google.com/translate/docs/advanced/locations",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-quotas",
+      "url": "https://docs.cloud.google.com/translate/quotas",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "google-proto",
+      "url": "https://raw.githubusercontent.com/googleapis/googleapis/master/google/cloud/translate/v3/translation_service.proto",
+      "status": 200,
+      "bytes": 78651,
+      "sha256": "d8c549257101bb7f8aa862e9449efa7399c1dd6384ab04d4942de25d58ff38c1"
+    },
+    {
+      "id": "google-rest",
+      "url": "https://raw.githubusercontent.com/googleapis/google-api-python-client/main/googleapiclient/discovery_cache/documents/translate.v3.json",
+      "status": 200,
+      "bytes": 124627,
+      "sha256": "85b2464ba1ca534e2cb78697b524fb2b4f7bcc4b7d9d7895a2ffdb7b7f4726cc"
+    },
+    {
+      "id": "azure-languages",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/language-support",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-pricing",
+      "url": "https://azure.microsoft.com/en-us/pricing/details/cognitive-services/translator/",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-data",
+      "url": "https://learn.microsoft.com/en-us/legal/cognitive-services/translator/data-privacy-security",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-regions",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/reference/v3-0-reference#base-urls",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "azure-spec",
+      "url": "https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/TranslatorText/stable/v3.0/TranslatorText.json",
+      "status": 200,
+      "bytes": 64496,
+      "sha256": "70ce120aedb41af2417b8c6151c71d0193113606f41d662a5b9650a7a86abbb6"
+    },
+    {
+      "id": "azure-language-metadata",
+      "url": "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0&scope=translation",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "deepl-languages",
+      "url": "https://developers.deepl.com/docs/getting-started/supported-languages",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "deepl-pricing",
+      "url": "https://www.deepl.com/en/pro-api",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "deepl-data",
+      "url": "https://www.deepl.com/en/pro-data-security",
+      "status": "UNRETRIEVABLE",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "deepl-openapi",
+      "url": "https://raw.githubusercontent.com/DeepLcom/openapi/main/openapi.yaml",
+      "status": 200,
+      "bytes": 376234,
+      "sha256": "0b7c4964e038ca9d8d01bfdd7ad5a1bd296a08a5b9e040627dfb439d09213b0c"
+    },
+    {
+      "id": "deepl-sdk",
+      "url": "https://raw.githubusercontent.com/DeepLcom/deepl-python/main/README.md",
+      "status": 200,
+      "bytes": 75421,
+      "sha256": "af19a72be10f748a9839a310d47873ba60be684dd9bfb71b7ba5213597af82cc"
+    }
+  ]
+}

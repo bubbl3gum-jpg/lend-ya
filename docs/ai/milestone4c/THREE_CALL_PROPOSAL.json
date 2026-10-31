@@ -1,0 +1,113 @@
+{
+  "version": "m4c-three-call-proposal-v1",
+  "status": "PROPOSAL_NOT_EXECUTABLE",
+  "approved": false,
+  "providerRecommendation": {
+    "product": "Google Cloud Translation Advanced v3",
+    "method": "translateText",
+    "model": "projects/{owner-approved-project}/locations/global/models/general/nmt",
+    "location": "global",
+    "glossary": null,
+    "mimeType": "text/plain",
+    "languagePairVerifiedForCurrentAccount": false,
+    "pricingVerified": false,
+    "privacyRegionalApproval": false
+  },
+  "limits": {
+    "plannedTranslateRequests": 3,
+    "maxActualTranslateRequests": 3,
+    "targetsPerRequest": 1,
+    "contentsPerRequest": 1,
+    "automaticRetries": 0,
+    "concurrency": 1,
+    "timeoutMsPerRequest": 30000,
+    "maxSourceScalarsPerRequest": 128,
+    "maxSourceBytesPerRequest": 384,
+    "maxSourceScalarsWholeRun": 256,
+    "maxSourceBytesWholeRun": 768,
+    "maxResponseBytesPerRequest": 65536,
+    "maxTranslatedScalarsPerRequest": 1024
+  },
+  "sourceEncoding": "Exact UTF8 bytes, no BOM, no appended newline, no normalization or punctuation/whitespace edits. SHA256 covers raw source text only, not JSON serialization.",
+  "plannedSourceScalars": 168,
+  "plannedSourceBytes": 206,
+  "requests": [
+    {
+      "taskId": "T03",
+      "sourceLocale": "en",
+      "targetLocale": "zh-TW",
+      "providerSourceCode": "en",
+      "providerTargetCode": "zh-TW",
+      "sourceText": "Friday18:00 and Saturday10:00 are proposals; neither was accepted.",
+      "sourceSHA256": "72fb0688dfd6d61001f4def282e1780e6475c231f2bf01f16c516bd157949ff0",
+      "unicodeScalars": 66,
+      "utf8Bytes": 66,
+      "sourceProvenance": "AUTHORED_M4A_SYNTHETIC_ANCHOR_NOT_QWEN_OUTPUT",
+      "sourceKind": "PARTICIPANT_CLAIM",
+      "expectedInvariants": [
+        "Neither pickup proposal accepted.",
+        "Preserve Friday18:00 and Saturday10:00 as distinct proposals; do not invent a calendar date or agreement."
+      ],
+      "providerOutput": null,
+      "humanReview": {
+        "reviewer": null,
+        "reviewedAt": null,
+        "scores": null
+      }
+    },
+    {
+      "taskId": "T05",
+      "sourceLocale": "zh-TW",
+      "targetLocale": "en",
+      "providerSourceCode": "zh-TW",
+      "providerTargetCode": "en",
+      "sourceText": "借用者表示已歸還，但尚未驗證實際收件。",
+      "sourceSHA256": "9cbe36e48c1ae37edf5bde5ad8d9fe19d459e07f320a3e52e4e1f6e3588175ec",
+      "unicodeScalars": 19,
+      "utf8Bytes": 57,
+      "sourceProvenance": "AUTHORED_M4A_SYNTHETIC_ANCHOR_NOT_QWEN_OUTPUT",
+      "sourceKind": "PARTICIPANT_CLAIM",
+      "expectedInvariants": [
+        "Borrower reports return; physical receipt remains unverified.",
+        "Do not assert confirmed return or continued borrower custody."
+      ],
+      "providerOutput": null,
+      "humanReview": {
+        "reviewer": null,
+        "reviewedAt": null,
+        "scores": null
+      }
+    },
+    {
+      "taskId": "T08",
+      "sourceLocale": "en",
+      "targetLocale": "zh-TW",
+      "providerSourceCode": "en",
+      "providerTargetCode": "zh-TW",
+      "sourceText": "NT$1000 is the stated deposit; NT$400 is the rental fee. Neither is confirmed paid.",
+      "sourceSHA256": "b272e420e7ce3429394dfa7d7cf03d863d227e4073f0dc2d0a6d3556b949b5f6",
+      "unicodeScalars": 83,
+      "utf8Bytes": 83,
+      "sourceProvenance": "AUTHORED_M4A_SYNTHETIC_ANCHOR_NOT_QWEN_OUTPUT",
+      "sourceKind": "PARTICIPANT_CLAIM",
+      "expectedInvariants": [
+        "NT$1000 deposit and NT$400 rental fee remain separate.",
+        "Neither confirmed paid; no deduction/refund/liability permission."
+      ],
+      "providerOutput": null,
+      "humanReview": {
+        "reviewer": null,
+        "reviewedAt": null,
+        "scores": null
+      }
+    }
+  ],
+  "readinessBlockers": [
+    "Current bidirectional language/pair support unverified",
+    "Current price/account quotas/privacy/region/Taiwan eligibility unverified",
+    "M4B genuine-provider provenance/adapter not implemented",
+    "Three authored canonical fixtures not issued by existing Qwen-only capture path",
+    "T03 existing time-token parser false rejection requires separately approved bounded correction",
+    "No execution/credentials/retention/budget approval"
+  ]
+}
