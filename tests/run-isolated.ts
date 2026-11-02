@@ -1,3 +1,4 @@
+import {randomBytes} from "node:crypto";
 import { logOperationalError } from "../lib/operational-error";
 import "dotenv/config";
 import { spawn, type ChildProcess } from "node:child_process";
@@ -36,6 +37,8 @@ async function main() {
     app: ChildProcess | undefined;
   const env: NodeJS.ProcessEnv = {
     ...process.env,
+    MEETUP_CODE_SECRET: randomBytes(32).toString("hex"),
+    MEETUP_CONFIRMATION_TTL_SECONDS: "900",
     DATABASE_URL: url.toString(),
     MRT_TEST_DATABASE_URL: url.toString(),
     MRT_TEST_RUN_ID: runId,

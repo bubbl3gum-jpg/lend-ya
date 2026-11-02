@@ -1,0 +1,5 @@
+{
+  "remainingConsolidationTestDatabases": 0,
+  "operation": "Read-only maintenance count; no DROP/UPDATE performed",
+  "existingApplicationDatabasesModified": false
+}

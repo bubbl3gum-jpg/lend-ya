@@ -125,14 +125,14 @@ export function RentalEvidenceForm({
     >
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="text-sm text-slate-600">
-        Review the saved evidence above. Record defects and uncertainty
+        Review the saved evidence on this booking. Record defects and uncertainty
         honestly; confirmation acknowledges this record, not a claim that the
         item is perfect.
       </p>
       {requirePhysicalReceipt && (
         <>
           <p>
-            Verify the pickup QR or one-time code first. Your own checklist and
+            Verify the pickup QR first. Your own checklist and
             acknowledgement are still required.
           </p>
           <label className="flex gap-2">

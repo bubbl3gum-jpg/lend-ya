@@ -1287,3 +1287,16 @@
 .heritage .heritage-help .catalogue-button:hover {
   background: #342e25;
 }
+
+/* Rental verification: a restrained ruled publication insert, with clean controls. */
+.meetup-journey {
+  border-color: #9c8665;
+  background: #f7efdd url('/heritage/paper-fibers.png');
+  color: #342e25;
+  border-top-width: 3px;
+}
+.meetup-journey h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 1.5rem; }
+.meetup-journey button, .meetup-journey input, .meetup-journey textarea {
+  background-color: #fff8e9; color: #342e25; border-color: #9c8665;
+}
+.meetup-journey button:focus-visible { outline: 3px solid #8c461d; outline-offset: 3px; }

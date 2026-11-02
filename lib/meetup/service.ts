@@ -1,4 +1,6 @@
 import "server-only";
+import {AUTOMATIC_ENROLLMENT} from "./enrollment";
+export {activateNewBooking} from "./enrollment";
 import {
   createHash,
   createHmac,
@@ -31,6 +33,15 @@ import {
   testChecksMatch,
 } from "./test-location";
 
+async function automaticBooking(tx:Tx,id:number) {
+  return !!await tx.meetupEvent.findFirst({where:{bookingId:id,kind:AUTOMATIC_ENROLLMENT},select:{id:true}});
+}
+/** Stronger creation-time candidate: location precedes evidence, for each separate stage. */
+export async function requireStageArrivals(tx:Tx,id:number,p:Purpose) {
+  if(!await automaticBooking(tx,id)) return;
+  const b=await tx.booking.findUniqueOrThrow({where:{id},include:{meetup:true,handoff:true,return:true,meetingStation:true,disputes:{where:{status:"OPEN"},take:1}}});
+  eligible(b,p); await arrivals(tx,b,p);
+}
 async function testAllowed(tx: Tx, b: Pick<Booking, "ownerId" | "renterId">) {
   if (
     !testLocationEnvironment() ||
@@ -208,7 +219,7 @@ type RecordBooking = Awaited<ReturnType<typeof locked>>;
 function eligible(b: RecordBooking, p: Purpose) {
   if (!b.meetup)
     throw new RentalError(
-      "This booking has not opted into the isolated meetup preview.",
+      "This booking has no enrolled meetup verification workflow.",
       409,
     );
   if (
@@ -777,6 +788,8 @@ export async function verify(
   return prisma.$transaction(async (tx) => {
     const b = await locked(tx, id, userId);
     eligible(b, p);
+    if (body.manualCode !== undefined && await automaticBooking(tx,id))
+      throw new RentalError("QR scanning is required for new bookings. No manual-code exception is approved; request assistance.",403);
     const c = await tx.meetupChallenge.findUnique({
       where: { id: body.challengeId as string },
     });
@@ -804,7 +817,7 @@ export async function verify(
               })
             )?.reason === "TEST_LOCATION"
               ? "TEST_LOCATION"
-              : "LOCATION_SUPPORTING_SIGNAL",
+              : c.fallbackId ? "REDUCED_LOCATION_UNVERIFIED" : "LOCATION_SUPPORTING_SIGNAL",
           challengeId: c.id,
           replayed: true,
           confirmationExpiresAt: c.confirmationExpiresAt,
@@ -880,7 +893,7 @@ export async function verify(
         (await tx.meetupCheckIn.findUnique({ where: { id: c.ownerCheckId } }))
           ?.reason === "TEST_LOCATION"
           ? "TEST_LOCATION"
-          : "LOCATION_SUPPORTING_SIGNAL",
+          : c.fallbackId ? "REDUCED_LOCATION_UNVERIFIED" : "LOCATION_SUPPORTING_SIGNAL",
       challengeId: c.id,
       itemTitle: item.title,
       bookingId: id,
@@ -902,7 +915,7 @@ export async function status(id: number, userId: number) {
           previewParticipant(b.ownerId) &&
           previewParticipant(b.renterId),
       };
-    const p: Purpose = ["CONFIRMED", "HANDOFF_PENDING"].includes(b.status)
+    const p: Purpose = ["PENDING", "CONFIRMED", "HANDOFF_PENDING"].includes(b.status)
         ? "PICKUP"
         : "RETURN",
       checks = await latestChecks(tx, b, p);
@@ -942,8 +955,19 @@ export async function status(id: number, userId: number) {
             expiresAt: r.expiresAt,
           }
         : null;
+    const automatic = await automaticBooking(tx,id);
+    let readyForEvidence=false;
+    let blockedReason="";
+    if(automatic && ["CONFIRMED","IN_USE"].includes(b.status)) {
+      try { await arrivals(tx,b,p); readyForEvidence=true; }
+      catch(error) { if(!(error instanceof RentalError)) throw error; blockedReason=error.message; }
+    }
     return {
       enabled: true,
+      automatic,
+      manualCodeAllowed: !automatic,
+      readyForEvidence,
+      blockedReason,
       temporaryLocation: (await testAllowed(tx, b))
         ? (() => {
             const centre = currentTestCentre(id);

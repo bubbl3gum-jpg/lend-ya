@@ -1,3 +1,5 @@
+import {RentalError} from "@/lib/rental-errors";
+import {activateNewBooking} from "@/lib/meetup/service";
 import {issueDocumentationReview,bindDocumentationRequest,documentationFailure} from "@/lib/rental-documentation/service";
 import {acknowledgement} from "@/lib/rental-documentation/contracts";
 import {DocumentationError} from "@/lib/rental-documentation/service";
@@ -313,11 +315,13 @@ export async function POST(request: Request): Promise<Response> {
           select: bookingSelect,
         });
 
+        await activateNewBooking(transaction, {id:booking.id,ownerId:listing.ownerId,renterId:currentUser.id,meetingStationId});
         return Response.json({ booking }, { status: 201 });
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
   } catch (error) {
+    if(error instanceof RentalError) return apiError(error.message,error.status);
     const documentationError=documentationFailure(error);if(documentationError)return documentationError;
     if (requestKey && (isSerializationConflict(error) ||
       (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"))) {

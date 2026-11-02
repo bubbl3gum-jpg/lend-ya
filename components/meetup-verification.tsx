@@ -19,6 +19,10 @@ type Check = {
 type State = {
   enabled: boolean;
   canEnroll?: boolean;
+  automatic?: boolean;
+  manualCodeAllowed?: boolean;
+  readyForEvidence?: boolean;
+  blockedReason?: string;
   temporaryLocation?: {
     allowed: boolean;
     active: {
@@ -54,12 +58,14 @@ export function MeetupVerification({
   isOwner,
   bookingStatus,
   onState,
+  required = false,
 }: {
   bookingId: number;
   userId: number;
   isOwner: boolean;
   bookingStatus: string;
-  onState: (enabled: boolean, proof: string | null) => void;
+  required?: boolean;
+  onState: (enabled: boolean, proof: string | null, readyForEvidence?: boolean) => void;
 }) {
   const router = useRouter(),
     [data, setData] = useState<State | null>(null),
@@ -159,6 +165,7 @@ export function MeetupVerification({
           Date.parse(c.confirmationExpiresAt ?? "") > Date.now()
           ? c.id
           : null,
+        value.automatic ? !!value.readyForEvidence : true,
       );
     } catch (error) {
       if (
@@ -353,7 +360,7 @@ export function MeetupVerification({
     });
     verifyRetry.current = null;
     setFeedback(
-      `${result.assurance === "TEST_LOCATION" ? "TEST_LOCATION — simulated meetup, not real station arrival." : "Verified"} booking #${bookingId}: ${result.itemTitle}. Inspect the equipment and record your own condition and physical receipt acknowledgement.`,
+      `${value.manualCode !== undefined ? "Legacy manual-code exception — reduced assurance;" : ""}${result.assurance === "TEST_LOCATION" ? "TEST_LOCATION — simulated meetup, not real station arrival." : "Verified"} booking #${bookingId}: ${result.itemTitle}. QR/token verification does not prove location or condition.${result.assurance === "REDUCED_LOCATION_UNVERIFIED" ? " REDUCED_LOCATION_UNVERIFIED — location is not verified." : ""} Inspect the equipment and record your own condition and physical receipt acknowledgement.`,
     );
     await load();
   }
@@ -361,7 +368,7 @@ export function MeetupVerification({
     await perform(async () => {
       if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia)
         throw Error(
-          "Camera scanning needs HTTPS or localhost and a supported browser. Use the one-time manual code.",
+          data?.manualCodeAllowed ? "Camera scanning needs HTTPS or localhost and a supported browser. Use the one-time manual code." : "QR scanning is required. Restart the camera in a supported secure browser or request assistance.",
         );
       cameraDiagnostic("start");
       const generation = ++cameraGeneration.current;
@@ -385,7 +392,7 @@ export function MeetupVerification({
           if (generation === cameraGeneration.current) {
             stopCamera();
             setError(
-              "Camera stopped. Restart scanning or use the one-time manual code.",
+              data?.manualCodeAllowed ? "Camera stopped. Restart scanning or use the one-time manual code." : "QR scanning is required. Restart the camera in a supported secure browser or request assistance.",
             );
             cameraDiagnostic("track-interrupted");
           }
@@ -418,7 +425,7 @@ export function MeetupVerification({
               scanner.stop();
               stopCamera();
               setError(
-                "Camera frame processing failed. Restart scanning or use the one-time manual code.",
+                data?.manualCodeAllowed ? "Camera frame processing failed. Restart scanning or use the one-time manual code." : "QR scanning is required. Restart the camera in a supported secure browser or request assistance.",
               );
               return;
             }
@@ -465,7 +472,7 @@ export function MeetupVerification({
         if (generation !== cameraGeneration.current) return;
         stopCamera();
         throw Error(
-          "Camera unavailable or permission denied. Use the one-time manual code.",
+          data?.manualCodeAllowed ? "Camera unavailable or permission denied. Use the one-time manual code." : "Camera unavailable or permission denied. QR scanning is required; request assistance.",
         );
       }
     });
@@ -479,7 +486,7 @@ export function MeetupVerification({
           Customer Service and reporting options
         </Link>
       </p>
-    ) : null;
+    ) : required ? <p role="status">Loading mandatory meetup verification. Receipt actions remain locked.</p> : null;
   if (!data.enabled && !data.canEnroll) return null;
   const proof =
     data.challenge?.verifierId === userId &&
@@ -491,12 +498,22 @@ export function MeetupVerification({
       : null;
   return (
     <section
-      className="space-y-3 rounded-2xl border border-blue-200 p-4"
+      className="meetup-journey space-y-3 border p-4 sm:p-6"
       aria-label="MRT meetup verification"
     >
       <h2 className="text-lg font-semibold">
-        MRT pickup and return verification · isolated preview
+        {data.automatic ? "Rental meetup · mandatory GPS and QR verification" : "MRT pickup and return verification · isolated preview"}
       </h2>
+      {data.enabled && <div className="space-y-2" aria-label="Rental verification stages">
+        <p><strong>Current stage:</strong> {bookingStatus.replaceAll("_"," ")}</p>
+        <ol className="list-inside list-decimal space-y-1 text-sm">
+          <li>Both participants submit independent fresh location readings at the agreed meeting area.</li>
+          <li>{p === "PICKUP" ? "Owner saves condition evidence; owner generates pickup QR." : "Borrower saves return evidence; borrower generates return QR."}</li>
+          <li>{p === "PICKUP" ? "Borrower scans with their own authenticated device and acknowledges condition and actual receipt." : "Owner scans with their own authenticated device and acknowledges physical return. Inspection is a separate decision."}</li>
+        </ol>
+        <p role="status">{bookingStatus === "PENDING" ? "Next: owner accepts the booking request. Verification is already required; it cannot be skipped." : bookingStatus === "CONFIRMED" || bookingStatus === "IN_USE" ? `Next: both participants check in, then ${p === "PICKUP" ? "owner" : "borrower"} submits evidence.` : bookingStatus === "HANDOFF_PENDING" ? "Next: owner generates pickup QR; borrower scans and separately confirms physical receipt." : bookingStatus === "RETURN_PENDING" ? "Next: borrower generates return QR; owner scans and separately confirms physical return." : "Meetup stage ended. Existing receipts are preserved; inspection and disputes remain separate."}</p>
+        {data.blockedReason && <p className="text-sm">Evidence blocked: {data.blockedReason}</p>}
+      </div>}
       {!data.enabled ? (
         <>
           <p>
@@ -744,9 +761,7 @@ export function MeetupVerification({
                         width={280}
                         height={280}
                       />
-                      <p>
-                        One-time manual code: <strong>{issued.code}</strong>
-                      </p>
+                      {data.manualCodeAllowed && <p>Legacy reduced-assurance manual-code exception: <strong>{issued.code}</strong></p>}
                       <p>
                         {data.challenge?.id === issued.challengeId &&
                         data.challenge.consumedAt
@@ -785,7 +800,7 @@ export function MeetupVerification({
                       Stop camera
                     </button>
                   )}
-                  <form
+                  {data.manualCodeAllowed && <form
                     className="space-y-2"
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -802,6 +817,7 @@ export function MeetupVerification({
                       });
                     }}
                   >
+                    <p>Legacy reduced-assurance exception only. This still requires the intended participant, fresh arrivals, a valid one-time challenge and explicit physical receipt.</p>
                     <label className="block">
                       One-time {label.toLowerCase()} code
                       <input
@@ -821,7 +837,7 @@ export function MeetupVerification({
                     >
                       Verify {label.toLowerCase()} code
                     </button>
-                  </form>
+                  </form>}
                   {data.challenge && (
                     <p>
                       {Date.parse(data.challenge.expiresAt) <= clock

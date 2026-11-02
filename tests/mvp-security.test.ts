@@ -1,3 +1,4 @@
+import {meetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
@@ -837,26 +838,18 @@ test(
             returnConfirmed: true,
             conditionNotes: "Verified profile fixture evidence",
           };
-          for (const [action, who] of [
-            ["handoff", owner],
-            ["handoff", borrower],
-            ["return", borrower],
-          ] as const)
-            assert.equal(
-              (
-                await api(
-                  `/api/bookings/${id}/${action}`,
-                  who.cookie,
-                  "POST",
-                  evidence,
-                )
-              ).status,
-              200,
-            );
+          const verification=meetupFixture(base,owner.cookie,borrower.cookie);
+          await verification.arrivals(id,"PICKUP");
+          assert.equal((await api(`/api/bookings/${id}/handoff`,owner.cookie,"POST",evidence)).status,200);
+          const pickupReceipt=await verification.scanPayload(id,"PICKUP");
+          assert.equal((await api(`/api/bookings/${id}/handoff`,borrower.cookie,"POST",{...evidence,...pickupReceipt})).status,200);
+          await verification.arrivals(id,"RETURN");
+          assert.equal((await api(`/api/bookings/${id}/return`,borrower.cookie,"POST",evidence)).status,200);
+          const returnReceipt=await verification.scanPayload(id,"RETURN");
           assert.equal(
             (
               await api(`/api/bookings/${id}`, owner.cookie, "PATCH", {
-                action: "inspect",
+                action: "inspect",...returnReceipt,
               })
             ).status,
             200,

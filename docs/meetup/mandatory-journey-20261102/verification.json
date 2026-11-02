@@ -1,0 +1,840 @@
+{
+  "baseline": "0d88f4cd1f1aadb44792da24496888174115668d",
+  "runs": [
+    {
+      "suite": "unit",
+      "start": "2026-11-02T08:09:43.548Z",
+      "end": "2026-11-02T08:09:50.525Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 202",
+        "\u2139 pass 202",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "lint",
+      "start": "2026-11-02T08:09:44.858Z",
+      "end": "2026-11-02T08:10:04.003Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:meetup",
+      "start": "2026-11-02T08:09:57.137Z",
+      "end": "2026-11-02T08:14:43.716Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/085fb771fa27ba08bc653753"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:meetup-session",
+      "start": "2026-11-02T08:15:12.148Z",
+      "end": "2026-11-02T08:15:54.111Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 6",
+        "\u2139 pass 6",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/9c22901b17a8d702e2c1726c"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:rental-api",
+      "start": "2026-11-02T08:15:54.160Z",
+      "end": "2026-11-02T08:16:26.883Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/1e9def01d720a1fb231694b0"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:rental-browser",
+      "start": "2026-11-02T08:16:26.948Z",
+      "end": "2026-11-02T08:17:22.858Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 4",
+        "\u2139 pass 4",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/134c4d161eb3f4289eb36f50"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:integration",
+      "start": "2026-11-02T08:17:22.901Z",
+      "end": "2026-11-02T08:17:58.819Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/9bdbe7d3672681e3180251f5"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:admin",
+      "start": "2026-11-02T08:17:58.864Z",
+      "end": "2026-11-02T08:18:44.592Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 7",
+        "\u2139 pass 7",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/911f3a200a34acd877fe3e22"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:support-handoff",
+      "start": "2026-11-02T08:18:44.634Z",
+      "end": "2026-11-02T08:19:04.542Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/645ea53eaccc3b038769e12a"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:translation-sidecar",
+      "start": "2026-11-02T08:19:04.590Z",
+      "end": "2026-11-02T08:19:24.747Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/eb30d2b5482f5d4ad5b9c216"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "build:verify",
+      "start": "2026-11-02T08:19:24.791Z",
+      "end": "2026-11-02T08:19:43.534Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/4591540a7d7ed287e44d3e2a"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "prisma-validation",
+      "start": "2026-11-02T08:19:43.594Z",
+      "end": "2026-11-02T08:19:44.934Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:meetup-camera",
+      "start": "2026-11-02T08:19:51.527Z",
+      "end": "2026-11-02T08:21:06.905Z",
+      "exit": 1,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 5",
+        "\u2139 pass 3",
+        "\u2139 fail 2"
+      ],
+      "artifacts": [
+        ".test-artifacts/35aaa408048600aba7b7993c"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:meetup",
+      "start": "2026-11-02T08:21:12.276Z",
+      "end": "2026-11-02T08:26:02.265Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/75b53fc13e7b798483e9ea56"
+      ],
+      "cleanupReported": true,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "typecheck",
+      "start": "2026-11-02T08:21:13.614Z",
+      "end": "2026-11-02T08:21:32.588Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "superseded-development-candidate"
+    },
+    {
+      "suite": "test:meetup",
+      "start": "2026-11-02T08:32:40.276Z",
+      "end": "2026-11-02T08:37:34.997Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/803a18a61fa9b43cfef9d61b"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "unit",
+      "start": "2026-11-02T08:33:46.345Z",
+      "end": "2026-11-02T08:33:54.548Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 202",
+        "\u2139 pass 202",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "lint",
+      "start": "2026-11-02T08:33:47.739Z",
+      "end": "2026-11-02T08:34:06.471Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:meetup-camera",
+      "start": "2026-11-02T08:37:43.375Z",
+      "end": "2026-11-02T08:38:59.376Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 5",
+        "\u2139 pass 5",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/915421d9b2c66f3f1fecfa0e"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "typecheck",
+      "start": "2026-11-02T08:37:44.703Z",
+      "end": "2026-11-02T08:37:50.525Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:meetup-session",
+      "start": "2026-11-02T08:39:16.572Z",
+      "end": "2026-11-02T08:39:59.240Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 6",
+        "\u2139 pass 6",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/4ab1b94159ec399b8097daf8"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:rental-api",
+      "start": "2026-11-02T08:39:59.284Z",
+      "end": "2026-11-02T08:40:34.774Z",
+      "exit": 1,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 11",
+        "\u2139 fail 2"
+      ],
+      "artifacts": [
+        ".test-artifacts/223d28ebff9f6ad4a0cbdad0"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:rental-browser",
+      "start": "2026-11-02T08:40:34.823Z",
+      "end": "2026-11-02T08:41:32.612Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 4",
+        "\u2139 pass 4",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/70218cb201d3680afd5203d7"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:integration",
+      "start": "2026-11-02T08:41:32.660Z",
+      "end": "2026-11-02T08:42:16.349Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/41e1828e30a5214ac730a72f"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:admin",
+      "start": "2026-11-02T08:42:16.392Z",
+      "end": "2026-11-02T08:42:58.608Z",
+      "exit": 1,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 7",
+        "\u2139 pass 6",
+        "\u2139 fail 1"
+      ],
+      "artifacts": [
+        ".test-artifacts/f26cebf545f7f3f6220ec319"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:mvp",
+      "start": "2026-11-02T08:42:58.650Z",
+      "end": "2026-11-02T08:44:10.376Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 12",
+        "\u2139 pass 12",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/f986f6ae847cec4a8f552a96"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:support-handoff",
+      "start": "2026-11-02T08:44:10.421Z",
+      "end": "2026-11-02T08:44:28.884Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/e161585d6c6c58f24ce1f786"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:translation-sidecar",
+      "start": "2026-11-02T08:44:28.939Z",
+      "end": "2026-11-02T08:44:50.260Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/da7659d8faa94a4e907740ce"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "build:verify",
+      "start": "2026-11-02T08:44:50.304Z",
+      "end": "2026-11-02T08:44:59.016Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/e68ebff976e2994ecfed140a"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "prisma-validation",
+      "start": "2026-11-02T08:44:59.051Z",
+      "end": "2026-11-02T08:45:00.127Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:rental-api",
+      "start": "2026-11-02T08:45:50.965Z",
+      "end": "2026-11-02T08:46:31.490Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/8e512935ca7f988c24a42bd9"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "typecheck",
+      "start": "2026-11-02T08:45:52.306Z",
+      "end": "2026-11-02T08:46:13.793Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:admin",
+      "start": "2026-11-02T08:47:08.247Z",
+      "end": "2026-11-02T08:47:54.649Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 7",
+        "\u2139 pass 7",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/fee488d7e789d15bc32cc457"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "lint",
+      "start": "2026-11-02T08:48:04.224Z",
+      "end": "2026-11-02T08:48:22.323Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:meetup-camera",
+      "start": "2026-11-02T08:51:25.346Z",
+      "end": "2026-11-02T08:52:42.382Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 5",
+        "\u2139 pass 5",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/52b9229269298c01d21730b5"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "typecheck",
+      "start": "2026-11-02T08:51:26.662Z",
+      "end": "2026-11-02T08:51:46.747Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "test:migration",
+      "start": "2026-11-02T08:54:09.828Z",
+      "end": "2026-11-02T08:54:18.347Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/5331dced4bc9624d350a4ab2"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "unit",
+      "start": "2026-11-02T08:54:11.160Z",
+      "end": "2026-11-02T08:54:18.441Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 202",
+        "\u2139 pass 202",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "lint",
+      "start": "2026-11-02T08:54:24.688Z",
+      "end": "2026-11-02T08:54:44.170Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    {
+      "suite": "build:verify",
+      "start": "2026-11-02T08:54:24.700Z",
+      "end": "2026-11-02T08:54:40.481Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/e78c97501601b18f3a0575cb"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    }
+  ],
+  "latestCoreResults": {
+    "test:meetup": {
+      "suite": "test:meetup",
+      "start": "2026-11-02T08:32:40.276Z",
+      "end": "2026-11-02T08:37:34.997Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/803a18a61fa9b43cfef9d61b"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "unit": {
+      "suite": "unit",
+      "start": "2026-11-02T08:54:11.160Z",
+      "end": "2026-11-02T08:54:18.441Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 202",
+        "\u2139 pass 202",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    "lint": {
+      "suite": "lint",
+      "start": "2026-11-02T08:54:24.688Z",
+      "end": "2026-11-02T08:54:44.170Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    "test:meetup-camera": {
+      "suite": "test:meetup-camera",
+      "start": "2026-11-02T08:51:25.346Z",
+      "end": "2026-11-02T08:52:42.382Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 5",
+        "\u2139 pass 5",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/52b9229269298c01d21730b5"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "typecheck": {
+      "suite": "typecheck",
+      "start": "2026-11-02T08:51:26.662Z",
+      "end": "2026-11-02T08:51:46.747Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    "test:meetup-session": {
+      "suite": "test:meetup-session",
+      "start": "2026-11-02T08:39:16.572Z",
+      "end": "2026-11-02T08:39:59.240Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 6",
+        "\u2139 pass 6",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/4ab1b94159ec399b8097daf8"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:rental-api": {
+      "suite": "test:rental-api",
+      "start": "2026-11-02T08:45:50.965Z",
+      "end": "2026-11-02T08:46:31.490Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 13",
+        "\u2139 pass 13",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/8e512935ca7f988c24a42bd9"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:rental-browser": {
+      "suite": "test:rental-browser",
+      "start": "2026-11-02T08:40:34.823Z",
+      "end": "2026-11-02T08:41:32.612Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 4",
+        "\u2139 pass 4",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/70218cb201d3680afd5203d7"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:integration": {
+      "suite": "test:integration",
+      "start": "2026-11-02T08:41:32.660Z",
+      "end": "2026-11-02T08:42:16.349Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/41e1828e30a5214ac730a72f"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:admin": {
+      "suite": "test:admin",
+      "start": "2026-11-02T08:47:08.247Z",
+      "end": "2026-11-02T08:47:54.649Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 7",
+        "\u2139 pass 7",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/fee488d7e789d15bc32cc457"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:mvp": {
+      "suite": "test:mvp",
+      "start": "2026-11-02T08:42:58.650Z",
+      "end": "2026-11-02T08:44:10.376Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 12",
+        "\u2139 pass 12",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/f986f6ae847cec4a8f552a96"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:support-handoff": {
+      "suite": "test:support-handoff",
+      "start": "2026-11-02T08:44:10.421Z",
+      "end": "2026-11-02T08:44:28.884Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/e161585d6c6c58f24ce1f786"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "test:translation-sidecar": {
+      "suite": "test:translation-sidecar",
+      "start": "2026-11-02T08:44:28.939Z",
+      "end": "2026-11-02T08:44:50.260Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/da7659d8faa94a4e907740ce"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "build:verify": {
+      "suite": "build:verify",
+      "start": "2026-11-02T08:54:24.700Z",
+      "end": "2026-11-02T08:54:40.481Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/e78c97501601b18f3a0575cb"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    },
+    "prisma-validation": {
+      "suite": "prisma-validation",
+      "start": "2026-11-02T08:44:59.051Z",
+      "end": "2026-11-02T08:45:00.127Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "phase": "core-mandatory"
+    },
+    "test:migration": {
+      "suite": "test:migration",
+      "start": "2026-11-02T08:54:09.828Z",
+      "end": "2026-11-02T08:54:18.347Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/5331dced4bc9624d350a4ab2"
+      ],
+      "cleanupReported": true,
+      "phase": "core-mandatory"
+    }
+  },
+  "genuinePhoneAcceptance": "unavailable",
+  "cameraEvidence": "Actual virtual-camera QR decoding with independent authenticated Chromium contexts; geolocation emulated",
+  "inference": "No genuine AI/model calls; companion/translation regressions mocked"
+}

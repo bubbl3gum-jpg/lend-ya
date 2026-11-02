@@ -50,6 +50,7 @@ export default async function BookingPage({
       ownerId: true,
       renterId: true,
       status: true,
+      meetup: {select:{bookingId:true,events:{where:{kind:"NEW_BOOKING_VERIFICATION"},select:{id:true},take:1}}},
       startAt: true,
       endAt: true,
       totalPrice: true,
@@ -179,6 +180,22 @@ export default async function BookingPage({
             <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
               {booking.status}
             </span>
+          </div>
+
+          <div className="mt-8">
+            {agreementEnabled()&&<div className="catalogue heritage documentation-agreement-surface" data-theme={await readAppearance()}><LocaleProvider initialLocale={await readLocale()}><AgreedRentalDocumentation key={bookingId} bookingId={bookingId}/></LocaleProvider></div>}
+      <BookingActions documentationPilot={agreementEnabled()}
+              meetupRequired={!!booking.meetup}
+              automaticMeetup={!!booking.meetup?.events.length}
+              bookingId={booking.id}
+              currentUserId={currentUser.id}
+              ownerId={booking.ownerId}
+              renterId={booking.renterId}
+              status={booking.status}
+              handoffPerformerId={booking.handoff?.performedBy}
+              hasDispute={booking.dispute?.status === "OPEN"}
+              inspectionRecorded={Boolean(booking.return?.inspectedAt)}
+            />
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
@@ -392,19 +409,7 @@ export default async function BookingPage({
           ) ? (
             <VerifiedReviewForm bookingId={booking.id} />
           ) : null}
-          <div className="mt-8">
-            {agreementEnabled()&&<div className="catalogue heritage documentation-agreement-surface" data-theme={await readAppearance()}><LocaleProvider initialLocale={await readLocale()}><AgreedRentalDocumentation key={bookingId} bookingId={bookingId}/></LocaleProvider></div>}
-      <BookingActions documentationPilot={agreementEnabled()}
-              bookingId={booking.id}
-              currentUserId={currentUser.id}
-              ownerId={booking.ownerId}
-              renterId={booking.renterId}
-              status={booking.status}
-              handoffPerformerId={booking.handoff?.performedBy}
-              hasDispute={booking.dispute?.status === "OPEN"}
-              inspectionRecorded={Boolean(booking.return?.inspectedAt)}
-            />
-          </div>
+
         </div>
       </div>
     </main>

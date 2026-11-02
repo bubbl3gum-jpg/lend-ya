@@ -1,3 +1,4 @@
+import {activateNewBooking} from "../lib/meetup/enrollment";
 import { logOperationalError } from "../lib/operational-error";
 import "dotenv/config";
 import { importMrt } from "../lib/mrt/import";
@@ -198,7 +199,8 @@ async function main(): Promise<void> {
       where: { listingId: camera.id, renterId: bob.id },
     }))
   )
-    await prisma.booking.create({
+    await prisma.$transaction(async tx => {
+      const booking=await tx.booking.create({
       data: {
         listingId: camera.id,
         ownerId: alice.id,
@@ -211,6 +213,8 @@ async function main(): Promise<void> {
         deposit: "10000.00",
         notes: "Pickup at Taipei Main Station.",
       },
+      });
+      await activateNewBooking(tx,booking);
     });
 
   if (
@@ -218,7 +222,8 @@ async function main(): Promise<void> {
       where: { listingId: cordlessDrill.id, renterId: bob.id },
     }))
   )
-    await prisma.booking.create({
+    await prisma.$transaction(async tx => {
+      const booking=await tx.booking.create({
       data: {
         listingId: cordlessDrill.id,
         ownerId: charlie.id,
@@ -231,6 +236,8 @@ async function main(): Promise<void> {
         deposit: "1000.00",
         notes: "Pickup with both batteries and charger.",
       },
+      });
+      await activateNewBooking(tx,booking);
     });
 
   console.log(

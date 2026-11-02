@@ -1,3 +1,4 @@
+import {browserMeetupFixture} from "./support/meetup-fixture";
 import sharp from "sharp";
 import { checklistItems } from "../lib/rental-checklist";
 import "dotenv/config";
@@ -475,6 +476,8 @@ async function main() {
         data: { action: "accept" },
       }),
     );
+    const verification=await browserMeetupFixture(baseURL,owner,borrower);
+    await verification.arrivals(bookingId,"PICKUP");
     const evidence = {
       conditionConfirmed: true,
       returnConfirmed: true,
@@ -487,20 +490,23 @@ async function main() {
         data: evidence,
       }),
     );
+    const pickupReceipt=await verification.scanPayload(bookingId,"PICKUP");
     await check(
       await borrower.request.post(`/api/bookings/${bookingId}/handoff`, {
-        data: evidence,
+        data: {...evidence,...pickupReceipt},
       }),
     );
+    await verification.arrivals(bookingId,"RETURN");
     await check(
       await borrower.request.post(`/api/bookings/${bookingId}/return`, {
         data: evidence,
       }),
       200,
     );
+    const returnReceipt=await verification.scanPayload(bookingId,"RETURN");
     await check(
       await owner.request.patch(`/api/bookings/${bookingId}`, {
-        data: { action: "inspect" },
+        data: { action: "inspect",...returnReceipt },
       }),
     );
     await check(
@@ -538,16 +544,19 @@ async function main() {
         data: { action: "accept" },
       }),
     );
+    await verification.arrivals(disputedBooking,"PICKUP");
     await check(
       await owner.request.post(`/api/bookings/${disputedBooking}/handoff`, {
         data: evidence,
       }),
     );
+    const disputedReceipt=await verification.scanPayload(disputedBooking,"PICKUP");
     await check(
       await borrower.request.post(`/api/bookings/${disputedBooking}/handoff`, {
-        data: evidence,
+        data: {...evidence,...disputedReceipt},
       }),
     );
+    await verification.arrivals(disputedBooking,"RETURN");
     await check(
       await borrower.request.post(`/api/bookings/${disputedBooking}/return`, {
         data: evidence,

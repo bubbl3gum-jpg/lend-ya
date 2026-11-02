@@ -1,4 +1,4 @@
-import { digest, requireMeetupReceipt, replayReceipt } from "@/lib/meetup/service";
+import { digest, requireStageArrivals, requireMeetupReceipt, replayReceipt } from "@/lib/meetup/service";
 import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -72,6 +72,7 @@ export async function submitRentalStage(
           throw new RentalError("Only the owner can submit the handoff.", 403);
         if (booking.handoff)
           throw new RentalError("A handoff has already been recorded.");
+        await requireStageArrivals(transaction,bookingId,"PICKUP");
         const photos = await savePhotos("HANDOFF_OWNER");
         await transaction.handoff.create({
           data: {
@@ -145,6 +146,7 @@ export async function submitRentalStage(
         throw new RentalError(
           "Only an in-use booking with a confirmed bilateral handoff can begin a return.",
         );
+      await requireStageArrivals(transaction,bookingId,"RETURN");
       const photos = await savePhotos("RETURN_BORROWER");
       await transaction.return.create({
         data: {

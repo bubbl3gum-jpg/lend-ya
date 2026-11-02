@@ -1,0 +1,8 @@
+{
+  "transport": "camera",
+  "actualChallengeVerificationAndExplicitPhysicalReceipt": true,
+  "physicalReturnRecordedViaQrChallenge": true,
+  "acceptedInspectionStillNotEstablished": true,
+  "normalInspectionNotCustodyAnomaly": true,
+  "cameraAcceptanceClaimed": true
+}

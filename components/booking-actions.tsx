@@ -6,6 +6,8 @@ import { RentalEvidenceForm } from "@/components/rental-evidence-form";
 
 type BookingActionsProps = {
   documentationPilot?:boolean;
+  meetupRequired?: boolean;
+  automaticMeetup?: boolean;
   bookingId: number;
   currentUserId: number;
   ownerId: number;
@@ -17,6 +19,8 @@ type BookingActionsProps = {
 };
 export function BookingActions({
   documentationPilot=false,
+  meetupRequired=false,
+  automaticMeetup=false,
   bookingId,
   currentUserId,
   ownerId,
@@ -26,11 +30,13 @@ export function BookingActions({
   inspectionRecorded = false,
 }: BookingActionsProps) {
   const router = useRouter();
-  const [meetupEnabled, setMeetupEnabled] = useState(false),
+  const [meetupEnabled, setMeetupEnabled] = useState(meetupRequired),
     [meetupProof, setMeetupProof] = useState<string | null>(null);
-  const onMeetup = useCallback((enabled: boolean, proof: string | null) => {
+  const [evidenceReady,setEvidenceReady]=useState(!automaticMeetup);
+  const onMeetup = useCallback((enabled: boolean, proof: string | null, ready = false) => {
     setMeetupEnabled(enabled);
     setMeetupProof(proof);
+    setEvidenceReady(ready);
   }, []);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -96,6 +102,7 @@ export function BookingActions({
         isOwner={isOwner}
         bookingStatus={status}
         onState={onMeetup}
+        required={meetupRequired}
       />
       {(status === "PENDING" || status === "CONFIRMED") && isParticipant ? (
         <>
@@ -139,14 +146,14 @@ export function BookingActions({
         </>
       ) : null}
       {status === "CONFIRMED" && isOwner ? (
-        <RentalEvidenceForm
+        <fieldset disabled={automaticMeetup && !evidenceReady}><legend className="sr-only">Owner handoff evidence</legend><RentalEvidenceForm
           bookingId={bookingId}
           actorId={currentUserId}
           action="handoff"
           title="Submit owner handoff"
           collectSerialNumber
           onSaved={saved}
-        />
+        /></fieldset>
       ) : null}
       {status === "CONFIRMED" && isBorrower ? (
         <p className="text-sm">
@@ -171,13 +178,13 @@ export function BookingActions({
         </p>
       ) : null}
       {status === "IN_USE" && isBorrower ? (
-        <RentalEvidenceForm
+        <fieldset disabled={automaticMeetup && !evidenceReady}><legend className="sr-only">Borrower return evidence</legend><RentalEvidenceForm
           bookingId={bookingId}
           actorId={currentUserId}
           action="return"
           title="Submit item return"
           onSaved={saved}
-        />
+        /></fieldset>
       ) : null}
       {status === "RETURN_PENDING" && isOwner && !meetupEnabled ? (
         <button
@@ -189,7 +196,7 @@ export function BookingActions({
         </button>
       ) : null}
       {status === "RETURN_PENDING" && isBorrower ? (
-        <p className="text-sm">Return saved. Waiting for owner inspection.</p>
+        <p className="text-sm">Return evidence saved. Waiting for owner physical receipt verification, then separate inspection.</p>
       ) : null}
       {status === "INSPECTION" && isOwner && !inspectionRecorded ? (
         <RentalEvidenceForm

@@ -1,3 +1,4 @@
+import {browserMeetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
@@ -176,6 +177,12 @@ test(
         notes: string,
         acceptable?: boolean,
       ) => {
+        const id=Number(new URL(page.url()).pathname.split("/").pop());
+        const verification=await browserMeetupFixture(base,owner.context(),borrower.context());
+        if(title==="Submit owner handoff") await verification.arrivals(id,"PICKUP");
+        if(title==="Confirm receipt as borrower") await verification.scanPayload(id,"PICKUP");
+        if(title==="Submit item return") await verification.arrivals(id,"RETURN");
+        await page.getByRole("button",{name:"Refresh verification status",exact:true}).click();
         const form = page.locator("form").filter({
           has: page.getByRole("heading", { name: title, exact: true }),
         });
@@ -195,7 +202,7 @@ test(
           await form
             .getByRole("combobox", { name: "Inspection decision", exact: true })
             .selectOption(acceptable ? "acceptable" : "problem");
-        await form.getByRole("checkbox").check();
+        for(const checkbox of await form.getByRole("checkbox").all()) await checkbox.check();
         await expect(button).toBeEnabled();
         await button.click();
         await expect(form).toHaveCount(0);
@@ -227,9 +234,10 @@ test(
             "Borrower: returned unchanged",
           );
           await owner.reload();
-          await owner
-            .getByRole("button", { name: "Begin return inspection" })
-            .click();
+          await (await browserMeetupFixture(base,owner.context(),borrower.context())).scanPayload(Number(new URL(owner.url()).pathname.split("/").pop()),"RETURN");
+          await owner.getByRole("button",{name:"Refresh verification status",exact:true}).click();
+          await owner.getByLabel("I have physically received the returned equipment. This does not accept its condition.").check();
+          await owner.getByRole("button",{name:"Acknowledge physical return and begin inspection",exact:true}).click();
           await evidenceForm(
             owner,
             "Save owner inspection decision",
@@ -362,9 +370,10 @@ test(
             "Borrower: accessory missing",
           );
           await owner.reload();
-          await owner
-            .getByRole("button", { name: "Begin return inspection" })
-            .click();
+          await (await browserMeetupFixture(base,owner.context(),borrower.context())).scanPayload(Number(new URL(owner.url()).pathname.split("/").pop()),"RETURN");
+          await owner.getByRole("button",{name:"Refresh verification status",exact:true}).click();
+          await owner.getByLabel("I have physically received the returned equipment. This does not accept its condition.").check();
+          await owner.getByRole("button",{name:"Acknowledge physical return and begin inspection",exact:true}).click();
           await evidenceForm(
             owner,
             "Save owner inspection decision",
@@ -402,32 +411,8 @@ test(
       if (browser) await browser.close();
       await stop();
       closeSync(log);
-      if (listingIds.length) {
-        await pool.query(
-          'DELETE FROM "Dispute" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=ANY($1::int[]))',
-          [listingIds],
-        );
-        await pool.query(
-          'DELETE FROM "ListingReport" WHERE "listingId"=ANY($1::int[])',
-          [listingIds],
-        );
-        await pool.query(
-          'DELETE FROM "VerifiedReview" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=ANY($1::int[]))',
-          [listingIds],
-        );
-        await pool.query(
-          'DELETE FROM "Booking" WHERE "listingId"=ANY($1::int[])',
-          [listingIds],
-        );
-        await pool.query('DELETE FROM "Listing" WHERE id=ANY($1::int[])', [
-          listingIds,
-        ]);
-      }
+      // Leave immutable rows for the marked owned-database teardown.
       await Promise.all(files.map((file) => unlink(file)));
-      if (userIds.length)
-        await pool.query('DELETE FROM "User" WHERE id=ANY($1::int[])', [
-          userIds,
-        ]);
       await pool.end();
     }
   },

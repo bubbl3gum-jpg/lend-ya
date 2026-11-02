@@ -40,6 +40,7 @@ export default async function DashboardPage() {
       ownerId: true,
       renterId: true,
       status: true,
+      meetup: {select:{bookingId:true,events:{where:{kind:"NEW_BOOKING_VERIFICATION"},select:{id:true},take:1}}},
       startAt: true,
       endAt: true,
       totalPrice: true,
@@ -250,6 +251,8 @@ export default async function DashboardPage() {
                     </div>
                     <BookingActions
                       bookingId={booking.id}
+                      meetupRequired={!!booking.meetup}
+                      automaticMeetup={!!booking.meetup?.events.length}
                       currentUserId={currentUser.id}
                       ownerId={booking.ownerId}
                       renterId={booking.renterId}

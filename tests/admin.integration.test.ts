@@ -275,6 +275,7 @@ test(
         ),
       );
       await script("prisma/seed.ts");
+      assert.equal((await pool.query('SELECT count(*)::int n FROM "Booking" b WHERE NOT EXISTS (SELECT 1 FROM "MeetupSession" m WHERE m."bookingId"=b.id)')).rows[0].n,0,"New seed bookings require meetup verification too");
       const seededUsers = await pool.query(
         "SELECT id,email FROM \"User\" WHERE email IN ('bob@example.test','charlie@example.test')",
       );
@@ -1035,39 +1036,8 @@ test(
         await exited;
       }
       closeSync(log);
-      if (listingIds.length) {
-        await pool.query(
-          'DELETE FROM "Dispute" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=ANY($1::int[]))',
-          [listingIds],
-        );
-        await pool.query(
-          'DELETE FROM "ListingReport" WHERE "listingId"=ANY($1::int[])',
-          [listingIds],
-        );
-        await pool.query(
-          'DELETE FROM "VerifiedReview" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=ANY($1::int[]))',
-          [listingIds],
-        );
-        await pool.query(
-          'DELETE FROM "Booking" WHERE "listingId"=ANY($1::int[])',
-          [listingIds],
-        );
-        await pool.query('DELETE FROM "Listing" WHERE id=ANY($1::int[])', [
-          listingIds,
-        ]);
-      }
+      // Preserve immutable meetup, evidence and audit rows until the marked database teardown.
       await Promise.all(listingFiles.map((file) => unlink(file)));
-      // Preserve immutable audit fixtures and their actor until the owned database
-      // is dropped by run-isolated.ts. Never bypass evidence triggers for cleanup.
-      if (userIds.length)
-        await pool.query(
-          'DELETE FROM "User" WHERE id=ANY($1::int[]) AND NOT EXISTS (SELECT 1 FROM "AdminAuditLog" WHERE "adminId"="User".id)',
-          [userIds],
-        );
-      if (stationIds.length)
-        await pool.query('DELETE FROM "MrtStation" WHERE id=ANY($1::int[])', [
-          stationIds,
-        ]);
       await pool.end();
     }
   },

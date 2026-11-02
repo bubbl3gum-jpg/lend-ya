@@ -74,6 +74,7 @@ test(
       confirmation = 900,
       checkTtl = 600,
       temporary = false,
+      configured = true,
     ) {
       server = spawn(
         process.execPath,
@@ -95,7 +96,7 @@ test(
             MEETUP_TEST_LOCATION_ENABLED: temporary ? "true" : "false",
             MEETUP_TEST_LOCATION_USER_IDS: temporary ? ids.join(",") : "",
             MEETUP_PREVIEW_USER_IDS: ids.join(","),
-            MEETUP_CODE_SECRET: serverSecret,
+            MEETUP_CODE_SECRET: configured ? serverSecret : undefined,
             MEETUP_CONFIRMATION_TTL_SECONDS: String(confirmation),
             MEETUP_CHECKIN_TTL_SECONDS: String(checkTtl),
             MEETUP_CHALLENGE_TTL_SECONDS: String(ttl),
@@ -207,7 +208,7 @@ test(
         timestamp: Date.now(),
         ...extra,
       });
-    async function rental() {
+    async function rental(legacy = true) {
       listingCounter++;
       const form = new FormData();
       for (const [k, v] of Object.entries({
@@ -225,7 +226,7 @@ test(
       );
       const l = await api("/api/listings", owner, "POST", form);
       assert.equal(l.status, 201);
-      const b = await api("/api/bookings", borrower, "POST", {
+      const b = legacy ? {status:201,json:{booking:{id:(await db.query(`INSERT INTO "Booking" ("listingId","ownerId","renterId","meetingStationId","startAt","endAt",status,"totalPrice","dailyPrice","updatedAt") VALUES ($1,$2,$3,$4,'2038-01-01T02:00Z','2038-01-02T02:00Z','PENDING',10,10,now()) RETURNING id`,[l.json.listing.id,owner.id,borrower.id,stationId])).rows[0].id}}} : await api("/api/bookings", borrower, "POST", {
         listingId: l.json.listing.id,
         meetingStationId: stationId,
         startAt: "2038-01-01T10:00",
@@ -295,6 +296,43 @@ test(
         });
         return;
       }
+      await t.test("all new bookings enroll atomically; bilateral GPS and QR cannot be bypassed; historical bookings unchanged",async()=>{
+        const oldSession=(await op(first.id,"enroll",owner)).status;
+        assert.equal(oldSession,403,"Legacy enrollment still requires preview access");
+        await stop();await start(); // No preview flag or allowlist for ordinary new bookings
+        const r=await rental(false);
+        assert.equal((await api(`/api/bookings/${r.id}/meetup/status`,owner)).json.enabled,true);
+        assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupEvent" WHERE "bookingId"=$1 AND kind='NEW_BOOKING_VERIFICATION'`,[r.id])).rows[0].n,1);
+        assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupSession" WHERE "bookingId"=$1`,[first.id])).rows[0].n,0,"No retrofit of older booking");
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,owner,"POST",evidence)).status,409);
+        await check(r.id,owner);
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,owner,"POST",evidence)).status,409);
+        await check(r.id,borrower,"PICKUP",{latitude:point.latitude+0.00005});
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,owner,"POST",evidence)).status,200);
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,borrower,"POST",evidence)).status,409);
+        await stop();await start(ids); // restart cannot remove persisted enforcement
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,borrower,"POST",evidence)).status,409);
+        assert.equal((await detail(r.id)).json.booking.status,"HANDOFF_PENDING");
+        assert.equal((await db.query(`SELECT count(*)::int n FROM "BookingEvidencePhoto" WHERE "bookingId"=$1 AND stage='HANDOFF_BORROWER'`,[r.id])).rows[0].n,0);
+        const issued=(await op(r.id,"issue",owner,{purpose:"PICKUP"})).json;
+        assert.equal((await op(r.id,"verify",borrower,{purpose:"PICKUP",challengeId:issued.challengeId,manualCode:issued.manualCode,requestKey:randomUUID()})).status,403,"New bookings cannot downgrade to an unapproved manual-code exception");
+        assert.equal((await op(r.id,"verify",owner,{purpose:"PICKUP",challengeId:issued.challengeId,qrPayload:issued.qrPayload,requestKey:randomUUID()})).status,403);
+        assert.equal((await op(r.id,"verify",borrower,{purpose:"PICKUP",challengeId:issued.challengeId,qrPayload:issued.qrPayload,requestKey:randomUUID()})).status,200);
+        assert.equal((await op(r.id,"verify",borrower,{purpose:"PICKUP",challengeId:issued.challengeId,qrPayload:issued.qrPayload,requestKey:randomUUID()})).status,409,"A new verification key cannot reuse a consumed QR");
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,borrower,"POST",{...evidence,physicalReceipt:false,meetupChallengeId:issued.challengeId})).status,409,"A successful QR verification does not substitute for actual receipt acknowledgement");
+        assert.equal((await api(`/api/bookings/${r.id}/handoff`,borrower,"POST",{...evidence,physicalReceipt:true,meetupChallengeId:issued.challengeId})).status,200);
+        assert.equal((await api(`/api/bookings/${r.id}/return`,borrower,"POST",evidence)).status,409,"Pickup arrivals cannot authorize return evidence");
+        await check(r.id,owner,"RETURN");await check(r.id,borrower,"RETURN");
+        assert.equal((await api(`/api/bookings/${r.id}/return`,borrower,"POST",evidence)).status,200);
+        assert.equal((await api(`/api/bookings/${r.id}`,owner,"PATCH",{action:"inspect"})).status,400,"Cannot use the old inspection shortcut");
+        const unused=await rental();
+        assert.equal((await api(`/api/bookings/${unused.id}`,owner,"PATCH",{action:"cancel"})).status,200);
+        const before=(await db.query(`SELECT count(*)::int n FROM "Booking"`)).rows[0].n;
+        await stop();await start(ids,180,900,600,false,false);
+        assert.equal((await api("/api/bookings",borrower,"POST",{listingId:unused.listingId,meetingStationId:stationId,startAt:"2039-01-01T10:00",endAt:"2039-01-02T10:00"})).status,503);
+        assert.equal((await db.query(`SELECT count(*)::int n FROM "Booking"`)).rows[0].n,before,"Failed activation rolls back the new booking");
+        await stop(); await start();
+      });
       let pickup: Payload;
       if(process.env.MRT_TEST_CAMERA_ONLY!=="1") {
       await t.test(
@@ -1393,7 +1431,8 @@ test(
       await t.test(
         "two real mobile browser sessions: GPS permission, actual camera QR, drafts, reduced return, restart and screenshots",
         async () => {
-          const browserRental = await rental(),
+          await stop(); await start(); // normal new-booking flow, without preview enrollment
+          const browserRental = await rental(false),
             id = browserRental.id;
           const media = path.join(artifact, "pickup.y4m");
           // Initialize a valid fixture video; replace with this booking's QR before opening the camera.
@@ -1439,7 +1478,7 @@ test(
           let borrowerContext = await browser.newContext({
             timezoneId: "Asia/Taipei",
             viewport: { width: 390, height: 844 },
-            geolocation: { ...point, accuracy: 10 },
+            geolocation: { ...point, latitude:point.latitude+0.00005, accuracy: 10 },
             permissions: ["geolocation", "camera"],
           });
           let opage = await ownerContext.newPage();
@@ -1460,12 +1499,8 @@ test(
             await page.goto(`${base}/bookings/${id}`);
             page.on("dialog", (dialog) => void dialog.accept());
           }
-          await opage
-            .getByRole("button", {
-              name: "Enable isolated meetup preview",
-              exact: true,
-            })
-            .click();
+          await expect(opage.getByRole("heading",{name:"Rental meetup · mandatory GPS and QR verification"})).toBeVisible();
+          await expect(opage.getByRole("button",{name:"Enable isolated meetup preview",exact:true})).toHaveCount(0);
           await expect(
             bpage.getByRole("button", { name: "I've Arrived", exact: true }),
           ).toBeVisible({ timeout: 15000 });
@@ -1603,12 +1638,6 @@ test(
           await expect(bpage.getByText("IN_USE", { exact: true })).toBeVisible({
             timeout: 15000,
           });
-          await (await fillEvidence(bpage, "Submit item return"))
-            .getByRole("button", { name: "Submit item return", exact: true })
-            .click();
-          await expect(
-            bpage.getByText("RETURN_PENDING", { exact: true }),
-          ).toBeVisible({ timeout: 15000 });
           await opage.reload();
           // Actual denied browser geolocation (no grant); the explicit unavailable path also covers timeout/device failure.
           await ownerContext.clearPermissions();
@@ -1642,11 +1671,17 @@ test(
               })
               .click();
           }
+          await (await fillEvidence(bpage, "Submit item return"))
+            .getByRole("button", { name: "Submit item return", exact: true })
+            .click();
+          await expect(
+            bpage.getByText("RETURN_PENDING", { exact: true }),
+          ).toBeVisible({ timeout: 15000 });
           const returnIssuance=bpage.waitForResponse(r=>r.url().endsWith(`/api/bookings/${id}/meetup/issue`)&&r.request().method()==="POST");
           await bpage
             .getByRole("button", { name: "Generate Return QR", exact: true })
             .click();
-          await expect(bpage.getByText(/One-time manual code:/)).toBeVisible();
+          await expect(bpage.getByAltText("Return one-time verification QR")).toBeVisible();
           await bpage.screenshot({
             path: path.join(screenshots, "02-return-reduced-assurance.png"),
             fullPage: true,
@@ -1664,7 +1699,7 @@ test(
             .click();
           await expect(
             opage.getByText(
-              "Camera unavailable or permission denied. Use the one-time manual code.",
+              "Camera unavailable or permission denied. QR scanning is required; request assistance.",
               { exact: true },
             ),
           ).toBeVisible();
@@ -1683,6 +1718,7 @@ test(
           try{await expect(opage.getByText(/Verified booking/)).toBeVisible({timeout:20000});}finally{await saveReturn();}
           assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupEvent" WHERE "challengeId"=$1 AND kind='CHALLENGE_VERIFIED'`,[returnIssued.challengeId])).rows[0].n,1);
           assert.equal((await detail(id)).json.booking.status,"RETURN_PENDING","Camera verification alone cannot record physical return");
+          await expect(opage.getByText(/REDUCED_LOCATION_UNVERIFIED — location is not verified/)).toBeVisible();
           // Disconnect the dev-server HMR clients before restart; retain real authenticated browser contexts.
           await opage.goto("about:blank");
           await bpage.goto("about:blank");

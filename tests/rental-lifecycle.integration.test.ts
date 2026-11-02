@@ -1,3 +1,4 @@
+import {meetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
@@ -118,7 +119,10 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
       cookie: response.headers.get("set-cookie")?.split(";")[0] ?? "",
     };
   };
-  const submit = (
+  let verification: ReturnType<typeof meetupFixture>;
+  let ownerCookie="",borrowerCookie="";
+  const pickupProof=new Map<number,{meetupChallengeId:string;physicalReceipt:boolean}>(),returnProof=new Map<number,{meetupChallengeId:string;physicalReceipt:boolean}>();
+  const submit = async (
     id: number,
     action: string,
     cookie: string,
@@ -126,9 +130,13 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
     files = [new File([image], "condition.png", { type: "image/png" })],
   ) => {
     const form = new FormData();
-    form.set("payload", JSON.stringify({ ...evidence, ...overrides }));
+    form.set("payload", JSON.stringify({ ...evidence, ...(action==="handoff"&&cookie===borrowerCookie?pickupProof.get(id):{}), ...overrides }));
     files.forEach((file) => form.append("photos", file));
-    return api(`/api/bookings/${id}/${action}`, cookie, "POST", form);
+    const result=await api(`/api/bookings/${id}/${action}`, cookie, "POST", form);
+    if(result.status===200 && action==="handoff" && cookie===ownerCookie) pickupProof.set(id,await verification.scanPayload(id,"PICKUP"));
+    if(result.status===200 && action==="handoff" && cookie===borrowerCookie) await verification.arrivals(id,"RETURN");
+    if(result.status===200 && action==="return" && cookie===borrowerCookie) returnProof.set(id,await verification.scanPayload(id,"RETURN"));
+    return result;
   };
   try {
     const account = async (role: string) => {
@@ -155,8 +163,12 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
     stationId = (
       await pool.query("SELECT id FROM \"MrtStation\" WHERE code='TPE'")
     ).rows[0].id;
-    const patch = (id: number, cookie: string, action: string, extra = {}) =>
-      api(`/api/bookings/${id}`, cookie, "PATCH", { action, ...extra });
+    ownerCookie=owner.cookie;borrowerCookie=borrower.cookie;
+    verification=meetupFixture(process.env.TEST_BASE_URL!,owner.cookie,borrower.cookie);
+    const patch = async (id: number, cookie: string, action: string, extra = {}) => {
+      const pending=action==="inspect" && cookie===owner.cookie && (await api(`/api/bookings/${id}`,cookie)).json.booking.status==="RETURN_PENDING";
+      return api(`/api/bookings/${id}`, cookie, "PATCH", { action, ...(pending?returnProof.get(id):{}), ...extra });
+    };
     const detail = async (id: number, cookie = borrower.cookie) => {
       const r = await api(`/api/bookings/${id}`, cookie);
       assert.equal(r.status, 200);
@@ -206,6 +218,7 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
         (await patch(booking.json.booking.id, owner.cookie, "accept")).status,
         200,
       );
+      await verification.arrivals(booking.json.booking.id,"PICKUP");
       return booking.json.booking.id;
     };
     const inUse = async () => {
@@ -293,7 +306,8 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
             conditionNotes: "Borrower: different observation",
           }),
         ]);
-        assert.deepEqual(results.map((r) => r.status).sort(), [200, 409]);
+        assert.deepEqual(results.map((r) => r.status).sort(), [200, 200],"Identical bound receipt retries are idempotent");
+        assert.equal((await pool.query(`SELECT count(*)::int n FROM "MeetupEvent" WHERE "bookingId"=$1 AND purpose='PICKUP' AND kind='PHYSICAL_RECEIPT_ACK'`,[id])).rows[0].n,1);
         saved = await detail(id);
         assert.equal(saved.status, "IN_USE");
         assert.equal(saved.handoff.confirmedBy, borrower.id);
@@ -795,30 +809,8 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
       },
     );
   } finally {
-    if (listingIds.length) {
-      await pool.query(
-        'DELETE FROM "Dispute" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=ANY($1::int[]))',
-        [listingIds],
-      );
-      await pool.query(
-        'DELETE FROM "ListingReport" WHERE "listingId"=ANY($1::int[])',
-        [listingIds],
-      );
-      await pool.query(
-        'DELETE FROM "VerifiedReview" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=ANY($1::int[]))',
-        [listingIds],
-      );
-      await pool.query(
-        'DELETE FROM "Booking" WHERE "listingId"=ANY($1::int[])',
-        [listingIds],
-      );
-      await pool.query('DELETE FROM "Listing" WHERE id=ANY($1::int[])', [
-        listingIds,
-      ]);
-    }
+    // Immutable meetup/evidence history is retained until the owning harness drops its marked DB.
     await Promise.all(listingFiles.map((file) => unlink(file)));
-    if (userIds.length)
-      await pool.query('DELETE FROM "User" WHERE id=ANY($1::int[])', [userIds]);
     await pool.end();
   }
 });

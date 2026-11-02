@@ -9,7 +9,7 @@ export function secret() {
   const value = process.env.MEETUP_CODE_SECRET;
   if (!value || value.length < 32)
     throw Error(
-      "Meetup preview requires a server-side secret of at least 32 characters",
+      "Meetup verification requires a server-side secret of at least 32 characters",
     );
   return value;
 }
@@ -26,12 +26,12 @@ export function checkInTtlSeconds() {
   return n;
 }
 
-/** Explicit preview choice; 900 seconds is proposed, not a public policy default. */
+/** Explicit bounded server configuration; no silent confirmation-window default. */
 export function confirmationTtlSeconds() {
   const n = Number(process.env.MEETUP_CONFIRMATION_TTL_SECONDS);
   if (!Number.isInteger(n) || n < 60 || n > 1800)
     throw Error(
-      "Set an explicitly approved preview confirmation period (60–1800 seconds)",
+      "Set an explicit confirmation period (60–1800 seconds)",
     );
   return n;
 }

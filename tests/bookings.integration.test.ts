@@ -1,3 +1,4 @@
+import {meetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
@@ -176,10 +177,11 @@ test("real booking API: two-user persistence, validation, privacy, history and c
     assert.equal(a.result.booking.totalPrice, "24.68");
     assert.equal(a.result.booking.deposit, "25.67");
     assert.equal(a.result.booking.startAt, "2035-01-01T02:00:00.000Z");
-    const patch = (bookingId: number, cookie: string, action: string) =>
+    const patch = (bookingId: number, cookie: string, action: string, extra = {}) =>
       api(`/api/bookings/${bookingId}`, cookie, "PATCH", {
         action,
-        reason: "test reason",
+        ...(action==="inspect"?{}:{reason:"test reason"}),
+        ...extra,
       });
     await t.test(
       "private detail, owner-only approval and concurrent reservation",
@@ -312,8 +314,16 @@ test("real booking API: two-user persistence, validation, privacy, history and c
             functionTested: "unknown",
           },
         };
-        const stage = (id: number, action: string, cookie: string) =>
-          api(`/api/bookings/${id}/${action}`, cookie, "POST", evidence);
+        const verification=meetupFixture(process.env.TEST_BASE_URL!,owner.cookie,borrower.cookie);
+        const pickupProof=new Map<number,{meetupChallengeId:string;physicalReceipt:boolean}>(),returnProof=new Map<number,{meetupChallengeId:string;physicalReceipt:boolean}>();
+        const stage = async (id: number, action: string, cookie: string) => {
+          if(action==="handoff"&&cookie===owner.cookie) await verification.arrivals(id,"PICKUP");
+          if(action==="return") await verification.arrivals(id,"RETURN");
+          const result=await api(`/api/bookings/${id}/${action}`, cookie, "POST", {...evidence,...(action==="handoff"&&cookie===borrower.cookie?pickupProof.get(id):{})});
+          if(result.status===200&&action==="handoff"&&cookie===owner.cookie) pickupProof.set(id,await verification.scanPayload(id,"PICKUP"));
+          if(result.status===200&&action==="return") returnProof.set(id,await verification.scanPayload(id,"RETURN"));
+          return result;
+        };
         for (const [action, cookie] of [
           ["handoff", owner.cookie],
           ["handoff", borrower.cookie],
@@ -330,7 +340,7 @@ test("real booking API: two-user persistence, validation, privacy, history and c
           );
         }
         assert.equal(
-          (await patch(first.result.booking.id, owner.cookie, "inspect"))
+          (await patch(first.result.booking.id, owner.cookie, "inspect",returnProof.get(first.result.booking.id)))
             .status,
           200,
         );
@@ -388,21 +398,7 @@ test("real booking API: two-user persistence, validation, privacy, history and c
       },
     );
   } finally {
-    if (listingId) {
-      await pool.query(
-        'DELETE FROM "Dispute" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=$1)',
-        [listingId],
-      );
-      await pool.query('DELETE FROM "ListingReport" WHERE "listingId"=$1', [
-        listingId,
-      ]);
-      await pool.query('DELETE FROM "Booking" WHERE "listingId"=$1', [
-        listingId,
-      ]);
-      await pool.query('DELETE FROM "Listing" WHERE id=$1', [listingId]);
-    }
-    if (users.length)
-      await pool.query('DELETE FROM "User" WHERE id = ANY($1::int[])', [users]);
+    // Immutable booking/meetup records are removed only by the owning harness database teardown.
     await pool.end();
   }
 });

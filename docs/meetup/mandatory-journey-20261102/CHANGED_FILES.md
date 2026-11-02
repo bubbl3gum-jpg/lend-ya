@@ -1,0 +1,43 @@
+# Changed-file inventory
+
+Application baseline `0d88f4cd1f1aadb44792da24496888174115668d`. Generated/temporary test logs remain private and ignored. No schema or historical migration SQL changes.
+
+- `app/api/bookings/[id]/route.ts`
+- `app/api/bookings/route.ts`
+- `app/bookings/[id]/page.tsx`
+- `app/dashboard/page.tsx`
+- `app/heritage.css`
+- `components/booking-actions.tsx`
+- `components/meetup-verification.tsx`
+- `components/rental-evidence-form.tsx`
+- `docs/meetup/mandatory-journey-20261102/CHANGED_FILES.md`
+- `docs/meetup/mandatory-journey-20261102/REVIEW.md`
+- `docs/meetup/mandatory-journey-20261102/VERIFICATION.md`
+- `docs/meetup/mandatory-journey-20261102/camera-negative-evidence.json`
+- `docs/meetup/mandatory-journey-20261102/camera-pickup.json`
+- `docs/meetup/mandatory-journey-20261102/camera-return.json`
+- `docs/meetup/mandatory-journey-20261102/cleanup.json`
+- `docs/meetup/mandatory-journey-20261102/investigation-qr-receipt.json`
+- `docs/meetup/mandatory-journey-20261102/preservation.json`
+- `docs/meetup/mandatory-journey-20261102/screenshots/01-pickup-verified.png`
+- `docs/meetup/mandatory-journey-20261102/screenshots/03-return-received-inspection.png`
+- `docs/meetup/mandatory-journey-20261102/screenshots/04-rental-completed.png`
+- `docs/meetup/mandatory-journey-20261102/screenshots/README.md`
+- `docs/meetup/mandatory-journey-20261102/verification.json`
+- `docs/product/DEMO_RUNBOOK.md`
+- `lib/meetup/config.ts`
+- `lib/meetup/enrollment.ts`
+- `lib/meetup/service.ts`
+- `lib/rental-lifecycle.ts`
+- `package.json`
+- `prisma/seed.ts`
+- `tests/admin.integration.test.ts`
+- `tests/bookings.integration.test.ts`
+- `tests/meetup-activation.test.ts`
+- `tests/meetup.integration.test.ts`
+- `tests/mrt-integration.ts`
+- `tests/mvp-security.test.ts`
+- `tests/rental-browser.test.ts`
+- `tests/rental-lifecycle.integration.test.ts`
+- `tests/run-isolated.ts`
+- `tests/support/meetup-fixture.ts`

@@ -232,6 +232,7 @@ export async function PATCH(
         return apiError("Only the listing owner can inspect a return.", 403);
       }
       if(await prisma.meetupSession.findUnique({where:{bookingId}})){
+        if(booking.status!=="RETURN_PENDING" && typeof body.meetupChallengeId!=="string") return apiError("Physical return receipt requires a pending return and a verified stage challenge.",409);
         try{return Response.json(await receiveReturn(bookingId,currentUser.id,body));}catch(error){return rentalFailure(error,"PATCH meetup return receipt");}
       }
       if (booking.status !== "RETURN_PENDING" || !booking.return) {
