@@ -1276,3 +1276,14 @@
 .heritage .heritage-help .heritage-section {
   --muted-ink: #675844;
 }
+.heritage .heritage-help .catalogue-button {
+  display: inline-flex;
+  align-items: center;
+  background: #4c5437;
+  color: #fff6df;
+  border-color: #4c5437;
+  outline-color: #fff6df;
+}
+.heritage .heritage-help .catalogue-button:hover {
+  background: #342e25;
+}
