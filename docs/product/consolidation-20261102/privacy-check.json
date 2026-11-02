@@ -1,0 +1,7 @@
+{
+  "scope": "All introduced textual lines relative to a4bf232, not inherited README examples",
+  "introduced_private_connection_values": false,
+  "introduced_private_key_markers": false,
+  "note": "Initial whole-file scan matched an unchanged preexisting README example also used by local configuration. Confirmed it exists at baseline; no newly introduced connection value. No sensitive value is recorded here.",
+  "preexisting_match_confirmed_at_baseline": true
+}

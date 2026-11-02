@@ -39,3 +39,4 @@ Relative to starting local baseline `a4bf23287660475bb324520ddd1c5a42a9d13faa`. 
 - `tests/localization.test.ts`
 - `tests/moderation-migration.test.ts`
 - `tests/mrt-integration.ts`
+- `docs/product/consolidation-20261102/privacy-check.json`
