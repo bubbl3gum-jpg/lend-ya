@@ -1,6 +1,8 @@
 export const en = {
   "nav.home": "Home",
   "nav.browse": "Browse",
+  "nav.listItem": "List an item",
+  "nav.myRentals": "My rentals",
   "nav.categories": "Categories",
   "nav.mrt": "MRT pickup stations",
   "nav.support": "Customer service",
@@ -367,6 +369,8 @@ export type MessageId = keyof typeof en;
 export const zhTW: Record<MessageId, string> = {
   "nav.home": "首頁",
   "nav.browse": "瀏覽物品",
+  "nav.listItem": "刊登物品",
+  "nav.myRentals": "我的租借",
   "nav.categories": "物品分類",
   "nav.mrt": "捷運取件站點",
   "nav.support": "客服中心",

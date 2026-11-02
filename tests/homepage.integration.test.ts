@@ -48,6 +48,35 @@ test(
         ).status(),
         401,
       );
+      // Consolidated public entry points preserve server-side authentication and pilot isolation.
+      await page.goto(base + "/customer-service");
+      await expect(page.getByRole("heading", { name: "Help & customer service" })).toBeVisible();
+      await expect(page.getByRole("link", { name: "Create ticket", exact: true })).toHaveCount(0);
+      await expect(page.locator('a[href^="/dev/"]')).toHaveCount(0);
+      for (const [label, width, height] of [["desktop", 1440, 1100], ["tablet", 820, 1180], ["mobile", 390, 844]] as const) {
+        await page.setViewportSize({ width, height });
+        for (const theme of ["light", "dark"]) {
+          await page.getByLabel("Appearance", { exact: true }).selectOption(theme);
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+          await page.screenshot({ path: path.join(artifact, `help-${theme}-${label}.png`), fullPage: true });
+        }
+      }
+      await page.getByRole("button", { name: "Explore", exact: true }).click();
+      const publicMenu = page.getByRole("dialog");
+      await expect(publicMenu.getByRole("link", { name: "List an item", exact: true })).toHaveAttribute("href", "/listings/new");
+      await expect(publicMenu.getByRole("link", { name: "My rentals", exact: true })).toHaveAttribute("href", "/dashboard");
+      await page.keyboard.press("Escape");
+      await expect(publicMenu).not.toBeVisible();
+      await expect(page.getByRole("button", { name: "Explore", exact: true })).toBeFocused();
+      await page.getByRole("button", { name: "Explore", exact: true }).click();
+      await publicMenu.getByRole("link", { name: "My rentals", exact: true }).click();
+      await expect(page).toHaveURL(base + "/login");
+      await page.setViewportSize({ width: 1440, height: 1100 });
+      await page.goto(base + "/customer-service");
+      await page.locator(".heritage-primary-navigation").getByRole("link", { name: "List an item", exact: true }).click();
+      await expect(page).toHaveURL(base + "/login");
+      await page.goto(base + "/");
+      await page.getByLabel("Appearance", { exact: true }).selectOption("light");
       async function actor(name: string) {
         const response = await fetch(base + "/api/auth/register", {
           method: "POST",

@@ -2,7 +2,7 @@ name: Verify combined Hustlen
 on:
   pull_request:
   push:
-    branches: [main, integration/hustlen-mrt-complete]
+    branches: [main, integration/hustlen-mrt-complete, integration/hustlen-product-consolidation-20261102]
   workflow_dispatch:
 permissions:
   contents: read

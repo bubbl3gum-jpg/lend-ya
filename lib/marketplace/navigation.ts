@@ -3,6 +3,8 @@ import type { MessageId } from "@/lib/i18n/catalogues";
 export const marketplaceLinks = [
   { href: "/", label: "nav.home" },
   { href: "/listings", label: "nav.browse" },
+  { href: "/listings/new", label: "nav.listItem" },
+  { href: "/dashboard", label: "nav.myRentals" },
   { href: "/#discovery", label: "nav.categories" },
   { href: "/listings#marketplace-filters", label: "nav.mrt" },
   { href: "/customer-service", label: "nav.support" },
