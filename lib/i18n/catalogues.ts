@@ -1,4 +1,6 @@
 export const en = {
+  "browse.filters": "Item filters",
+  "browse.preparing": "Preparing item filters…",
   "nav.home": "Home",
   "nav.browse": "Browse",
   "nav.listItem": "List an item",
@@ -367,6 +369,8 @@ export const en = {
 } as const;
 export type MessageId = keyof typeof en;
 export const zhTW: Record<MessageId, string> = {
+  "browse.filters": "物品篩選",
+  "browse.preparing": "正在準備物品篩選功能…",
   "nav.home": "首頁",
   "nav.browse": "瀏覽物品",
   "nav.listItem": "刊登物品",

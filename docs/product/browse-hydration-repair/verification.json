@@ -1,0 +1,180 @@
+{
+  "baseline": "003961deff8f541ceda119308f90005e33d653ed",
+  "date": "2026-11-02 Asia/Taipei",
+  "runs": [
+    {
+      "suite": "test:mvp",
+      "start": "2026-11-02T04:54:51.905Z",
+      "end": "2026-11-02T04:55:53.562Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 11",
+        "\u2139 pass 11",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/cf8f50343b219fb61f31611b"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_mvp-1793595291905.log"
+    },
+    {
+      "suite": "test:mvp",
+      "start": "2026-11-02T04:58:29.822Z",
+      "end": "2026-11-02T04:59:35.660Z",
+      "exit": 1,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 12",
+        "\u2139 pass 10",
+        "\u2139 fail 2"
+      ],
+      "artifacts": [
+        ".test-artifacts/eaef43d3cbafda7211c06e66"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_mvp-1793595509822.log"
+    },
+    {
+      "suite": "test:mvp",
+      "start": "2026-11-02T05:01:53.530Z",
+      "end": "2026-11-02T05:03:04.715Z",
+      "exit": 1,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 12",
+        "\u2139 pass 10",
+        "\u2139 fail 2"
+      ],
+      "artifacts": [
+        ".test-artifacts/9a635d1531ab9c556b185647"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_mvp-1793595713530.log"
+    },
+    {
+      "suite": "test:mvp",
+      "start": "2026-11-02T05:04:56.671Z",
+      "end": "2026-11-02T05:05:57.250Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 12",
+        "\u2139 pass 12",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/6d968a57282a7da41e11a5b2"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_mvp-1793595896671.log"
+    },
+    {
+      "suite": "test:integration",
+      "start": "2026-11-02T05:05:57.293Z",
+      "end": "2026-11-02T05:06:32.442Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/0c782b656b1b052fd91373d8"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_integration-1793595957293.log"
+    },
+    {
+      "suite": "test:homepage",
+      "start": "2026-11-02T05:06:32.483Z",
+      "end": "2026-11-02T05:07:04.624Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/108d74688d8e1973513d291a"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_homepage-1793595992482.log"
+    },
+    {
+      "suite": "unit",
+      "start": "2026-11-02T05:07:04.663Z",
+      "end": "2026-11-02T05:07:09.788Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 201",
+        "\u2139 pass 201",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [],
+      "cleanupReported": false,
+      "log": "/tmp/hustlen-consolidation-evidence/unit-1793596024663.log"
+    },
+    {
+      "suite": "typecheck",
+      "start": "2026-11-02T05:07:09.824Z",
+      "end": "2026-11-02T05:07:26.425Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "log": "/tmp/hustlen-consolidation-evidence/typecheck-1793596029824.log"
+    },
+    {
+      "suite": "lint",
+      "start": "2026-11-02T05:07:26.461Z",
+      "end": "2026-11-02T05:07:41.132Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "log": "/tmp/hustlen-consolidation-evidence/lint-1793596046461.log"
+    },
+    {
+      "suite": "build:verify",
+      "start": "2026-11-02T05:07:41.175Z",
+      "end": "2026-11-02T05:07:49.371Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/b547d6a90d23466a9576ca1a"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/build_verify-1793596061175.log"
+    }
+  ],
+  "latestLocalChecksAllPassed": true,
+  "controlledFailure": "Production with client script delivery held: target search, Cameras, Ximen remain visible but count/cards remain4 after hydration; unchanged5000ms one-listing assertion fails. Normal ungated baseline passed11/11.",
+  "testInstrumentationCorrection": "Fieldset toBeDisabled is unsupported by matcher; assert actual disabled attribute and preserve assertions on all four actual controls.",
+  "managedBrowserInstall": {
+    "command": "PLAYWRIGHT_BROWSERS_PATH=/tmp/hustlen-playwright-ci npx playwright install chromium",
+    "status": "BLOCKED",
+    "reason": "HTTP403 Domain forbidden from cdn.playwright.dev",
+    "requested": "Chrome156.0.8078.4 / Playwright chromium1248",
+    "usedLocally": "System Chromium154.0.8037.57 on Debian13",
+    "exactRemoteConfiguration": "Await published GitHub Ubuntu24/managed-browser run; no claim of identical local host"
+  },
+  "boundaries": {
+    "historicalMigrationsUnchanged": 33,
+    "expectedCountAndDeadlinesUnchanged": true,
+    "filterPredicatesUnchanged": true,
+    "noServerAuthorityChanges": true,
+    "freshOwnedDatabasesOnly": true,
+    "allChangingRunsReportedCleanup": true
+  },
+  "sourceDigests": {
+    "components/listings-browser.tsx": "713ceb60c5fee58f9eb51495c160f442598ca37eb4dd6696d4eb31f05f35622e",
+    "lib/i18n/catalogues.ts": "87a62d4441eb4518c7edfd3dd2ed78da4e9df1a931e2bb11219521ff2bcfd2d6",
+    "tests/localization.test.ts": "86e0e213bd4a8f56e56d7ca75acb15cf5e7643c3f53e9c8d26ce1d561b244661",
+    "tests/mvp-security.test.ts": "1fee1c4033ac5561bf68d415ddd602899c42e905609291a4845be4a3acb9b7f8"
+  },
+  "ciAtPublication": "Pending exact new commit run; actual terminal outcome will be checked and reported separately. No inference from local passes."
+}

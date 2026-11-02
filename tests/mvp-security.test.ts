@@ -1195,6 +1195,81 @@ test(
           );
         },
       );
+      await t.test("production browse hydration readiness, all filters, result identity and navigation", async () => {
+        const prefix = `Hydration fixture ${tag}`;
+        const ids: number[] = [];
+        for (const [suffix, category, station] of [
+          ["A", "Cameras", stations[1]], ["B", "Cameras", stations[0]],
+          ["C", "Tools", stations[1]], ["D", "Cameras", stations[1]],
+        ] as const) {
+          const f = form(); f.set("title", `${prefix} ${suffix}`); f.set("category", category);
+          f.set("stationIds", JSON.stringify([station]));
+          const result = await createListing(f);
+          assert.equal(result.status, 201, result.text); ids.push(result.json.listing.id);
+        }
+        assert.equal((await api(`/api/listings/${ids[3]}/report`, borrower.cookie, "POST",
+          { reason: "Synthetic fixture concern", description: "Owned test report, not an established finding" })).status, 201);
+        const stationName = (await pool.query('SELECT name FROM "MrtStation" WHERE id=$1', [stations[1]])).rows[0].name;
+        const otherStation = (await pool.query('SELECT name FROM "MrtStation" WHERE id=$1', [stations[0]])).rows[0].name;
+        browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? "/usr/bin/chromium", headless: true });
+        const context = await browser.newContext();
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        await context.route(url => url.origin === base && url.pathname.startsWith("/_next/") && url.pathname.endsWith(".js"), async route => {
+          await gate; await route.continue();
+        });
+        const page = await context.newPage(), errors: string[] = [];
+        page.on("pageerror", error => errors.push(error.message));
+        page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+        const search = page.getByLabel("Search items"), category = page.getByRole("combobox", { name: "Category", exact: true }),
+          status = page.getByRole("combobox", { name: "Status", exact: true }), station = page.getByRole("combobox", { name: "Pickup station", exact: true });
+        const results = async (expected: number[]) => {
+          await expect(page.locator("article")).toHaveCount(expected.length);
+          await expect(page.getByText(`${expected.length} ${expected.length === 1 ? "listing" : "listings"}`, { exact: true })).toBeVisible();
+          const links = await page.locator("article > a").all();
+          assert.deepEqual((await Promise.all(links.map(link => link.getAttribute("href")))).sort(), expected.map(id => `/listings/${id}`).sort());
+        };
+        try {
+          // Hold JavaScript, not time: the real SSR must never accept non-functional edits.
+          await page.goto(base + "/listings", { waitUntil: "commit" });
+          await expect(page.getByRole("group", { name: "Item filters", exact: true })).toHaveAttribute("disabled", "");
+          for (const control of [search, category, status, station]) await expect(control).toBeDisabled();
+          await expect(page.getByText("Preparing item filters…", { exact: true })).toBeVisible();
+          release();
+          for (const control of [search, category, status, station]) await expect(control).toBeEnabled();
+          await expect(page.getByText("Preparing item filters…", { exact: true })).toHaveCount(0);
+          await search.fill(prefix); await results(ids);
+          await status.selectOption("FLAGGED"); await results([ids[3]]);
+          await status.selectOption("RENTED"); await results([]);
+          await status.selectOption("AVAILABLE"); await results(ids.slice(0, 3));
+          await category.selectOption("Cameras"); await results(ids.slice(0, 2));
+          await station.selectOption(stationName); await results([ids[0]]);
+          await search.fill(`${prefix} A`.toUpperCase()); await results([ids[0]]);
+          await search.fill(prefix); await status.selectOption("ALL"); await results([ids[0], ids[3]]);
+          await category.selectOption("Tools"); await results([ids[2]]);
+          await station.selectOption(otherStation); await results([]);
+          await station.selectOption("ALL"); await results([ids[2]]);
+          await category.selectOption("ALL"); await results(ids);
+          await search.fill(`No matching fixture ${tag}`); await results([]);
+          await search.fill(prefix); await results(ids);
+          await page.locator(`article > a[href="/listings/${ids[0]}"]`).click();
+          await page.waitForURL(base + `/listings/${ids[0]}`);
+          await page.locator('.heritage-primary-navigation a[href="/listings"]').click();
+          await page.waitForURL(base + "/listings");
+          await search.fill(prefix); await results(ids);
+          await status.selectOption("FLAGGED"); await results([ids[3]]);
+          await page.goto(base + "/listings?category=Cameras");
+          await expect(category).toBeEnabled(); await expect(category).toHaveValue("Cameras");
+          await search.fill(prefix); await results([ids[0], ids[1], ids[3]]);
+          await status.selectOption("AVAILABLE"); await station.selectOption(stationName); await results([ids[0]]);
+          assert.deepEqual(errors, []);
+          await writeFile(path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "browse-hydration-after.json"), JSON.stringify({
+            mode: "production", deterministicScriptGate: true, disabledUntilHydrated: true, allFourFilters: true,
+            counterMatchesRenderedIdentities: true, zeroResults: true, actualReportFlag: true,
+            clientNavigation: true, initialCategoryPreserved: true, noArtificialSleepsOrTimeoutChanges: true,
+          }, null, 2));
+        } finally { release(); await context.close(); }
+      });
     } finally {
       await browser?.close();
       await stop();

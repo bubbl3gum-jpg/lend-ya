@@ -1,0 +1,12 @@
+{
+  "mode": "production",
+  "deterministicScriptGate": true,
+  "disabledUntilHydrated": true,
+  "allFourFilters": true,
+  "counterMatchesRenderedIdentities": true,
+  "zeroResults": true,
+  "actualReportFlag": true,
+  "clientNavigation": true,
+  "initialCategoryPreserved": true,
+  "noArtificialSleepsOrTimeoutChanges": true
+}

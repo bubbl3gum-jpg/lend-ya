@@ -3,8 +3,13 @@
 import { useLocale } from "@/components/i18n/locale";
 import { formatNumber } from "@/lib/i18n/core";
 import { categoryLabel } from "@/lib/i18n/listings";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ListingCard, type ListingCardData } from "@/components/listing-card";
+
+// Match the existing preference controls: SSR is a non-interactive preview.
+const subscribeReadiness = () => () => {};
+const readyClient = () => true;
+const readyServer = () => false;
 
 type Props = {
   listings: ListingCardData[];
@@ -20,6 +25,7 @@ export function ListingsBrowser({
   initialCategory = "ALL",
 }: Props) {
   const { locale, t } = useLocale();
+  const ready = useSyncExternalStore(subscribeReadiness, readyClient, readyServer);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(initialCategory);
   const [status, setStatus] = useState("ALL");
@@ -43,6 +49,8 @@ export function ListingsBrowser({
 
   return (
     <>
+      <fieldset disabled={!ready} aria-busy={!ready} className="min-w-0">
+        <legend className="sr-only">{t("browse.filters")}</legend>
       <div
         id="marketplace-filters"
         className="mb-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-2 xl:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(10rem,0.7fr))]"
@@ -102,6 +110,8 @@ export function ListingsBrowser({
         </label>
       </div>
 
+      </fieldset>
+      {!ready ? <p className="mb-4 text-sm text-slate-600" role="status">{t("browse.preparing")}</p> : null}
       <p className="mb-4 text-sm text-slate-600" aria-live="polite">
         {t(filtered.length === 1 ? "browse.countOne" : "browse.countMany", {
           count: formatNumber(locale, filtered.length),
