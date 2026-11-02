@@ -42,3 +42,23 @@ test("fast-uri rejects encoded schemes and ambiguous hosts and preserves relativ
   const result=spawnSync(process.execPath,["--max-old-space-size=64","--input-type=module","-e",script],{timeout:3000,encoding:"utf8"});
   assert.equal(result.error,undefined);assert.equal(result.signal,null);assert.equal(result.status,0,result.stderr);
 });
+
+test("Zod rejects an oversized constrained array before expanding per-element errors", () => {
+  // GHSA-mrhx-c7xc-m3w5: bound memory/time in a child; sparse input itself is small.
+  const script = `
+    import { z } from "zod";
+    import assert from "node:assert/strict";
+    const result = z.array(z.string()).max(2).safeParse(new Array(100000));
+    assert.equal(result.success, false);
+    assert.equal(result.error.issues.length, 1);
+    assert.equal(result.error.issues[0].code, "too_big");
+    assert.equal(result.error.issues[0].maximum, 2);
+    assert.deepEqual(z.array(z.string()).max(2).parse(["item"]), ["item"]);
+  `;
+  const result = spawnSync(process.execPath,
+    ["--max-old-space-size=64", "--input-type=module", "-e", script],
+    { timeout: 3000, encoding: "utf8" });
+  assert.equal(result.error, undefined);
+  assert.equal(result.signal, null);
+  assert.equal(result.status, 0, result.stderr);
+});

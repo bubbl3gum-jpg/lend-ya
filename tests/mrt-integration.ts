@@ -431,7 +431,24 @@ async function main() {
         .isEnabled(),
       true,
     );
-    await md.getByRole("button", { name: "Zoom in", exact: true }).tap();
+    try {
+      await md.getByRole("button", { name: "Zoom in", exact: true }).tap();
+    } catch (error) {
+      // Bounded layout-only diagnostics; retain the original failure and deadline.
+      await mp.screenshot({ path: path.join(artifactDir, "screenshots", "mobile-map-failure.png") });
+      await writeFile(path.join(artifactDir, "mobile-map-failure.json"), JSON.stringify(await md.evaluate((dialog) => {
+        const zoom = dialog.querySelector('[aria-label="Zoom in"]');
+        const rect = zoom?.getBoundingClientRect();
+        const point = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
+        return {
+          viewport: { width: innerWidth, height: innerHeight },
+          dialog: { top: dialog.getBoundingClientRect().top, height: dialog.getBoundingClientRect().height, scrollTop: dialog.scrollTop, scrollHeight: dialog.scrollHeight },
+          zoom: rect ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null,
+          hit: point ? { tag: point.tagName, label: point.getAttribute("aria-label") } : null,
+        };
+      }), null, 2));
+      throw error;
+    }
     await md.getByRole("button", { name: "Reset map view" }).tap();
     assert.ok(
       await mp.evaluate(
