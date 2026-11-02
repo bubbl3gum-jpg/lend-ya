@@ -97,7 +97,7 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
     );
     const additions: Record<string, string[]> = {
       User: ["accountStatus"],
-      Booking: ["requestKey", "requestHash"],
+      Booking: ["requestKey", "requestHash", "documentationContextId", "documentationAcknowledgedAt", "documentationAcceptedAt"],
       Listing: ["adminRestricted"],
       Dispute: [
         "resolvedBy",
@@ -115,6 +115,9 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
         if (table === "Booking") {
           assert.equal(row.requestKey, null, "Existing bookings receive no invented request identity");
           assert.equal(row.requestHash, null, "Existing bookings receive no invented request hash");
+          for (const field of ["documentationContextId", "documentationAcknowledgedAt", "documentationAcceptedAt"]) {
+            assert.equal(row[field], null, `Historical bookings must not acquire invented ${field}`);
+          }
         }
         for (const field of additions[table] ?? []) delete row[field];
       }
