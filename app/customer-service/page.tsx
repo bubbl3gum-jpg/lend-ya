@@ -14,10 +14,10 @@ export default async function CustomerServicePage() {
     <HeritageSurface initialTheme={await readAppearance()} initialLocale={await readLocale()}>
       <a className="catalogue-skip" href="#help-content">Skip to help</a>
       <SiteHeader catalogue />
-      <main id="help-content" tabIndex={-1} className="mx-auto max-w-5xl px-6 py-10" lang="en">
+      <main id="help-content" tabIndex={-1} className="heritage-help mx-auto max-w-5xl px-6 py-10" lang="en">
         <header className="mb-8 border-b border-[var(--rule)] pb-6">
           <p className="catalogue-eyebrow">Hustlen’ / Sharing with care</p>
-          <h1 className="catalogue-title">Help &amp; customer service</h1>
+          <h1 className="heritage-help-title">Help &amp; customer service</h1>
           <p className="catalogue-muted mt-4">Find your next step in the rental journey. Operational guidance on this page is in English.</p>
         </header>
         <div className="grid gap-8 md:grid-cols-2">

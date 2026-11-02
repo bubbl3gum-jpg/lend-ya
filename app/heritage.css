@@ -1265,3 +1265,14 @@
 .documentation-ledger label{display:block}
 
 .catalogue.documentation-agreement-surface{min-height:0}
+
+/* Help reuses the fixed parchment insert in both themes; keep its secondary ink legible. */
+.heritage-help-title {
+  margin-top: 0.75rem;
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  line-height: 1.15;
+}
+.heritage .heritage-help .heritage-section {
+  --muted-ink: #675844;
+}
