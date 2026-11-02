@@ -59,17 +59,19 @@ test(
           await page.getByLabel("Appearance", { exact: true }).selectOption(theme);
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
           const helpAction = page.getByRole("link", { name: "Browse items", exact: true });
-          const readability = await helpAction.evaluate((element) => {
-            const style = getComputedStyle(element);
-            const luminance = (rgb: string) => {
-              const channels = rgb.match(/[\d.]+/g)!.slice(0, 3).map(Number).map(v => {
-                const c = v / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-              });
-              return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
-            };
-            const foreground = luminance(style.color), background = luminance(style.backgroundColor);
-            return { ratio: (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05), height: element.getBoundingClientRect().height };
-          });
+          const colors = await helpAction.evaluate((element) => ({
+            foreground: getComputedStyle(element).color,
+            background: getComputedStyle(element).backgroundColor,
+            height: element.getBoundingClientRect().height,
+          }));
+          const luminance = (rgb: string) => {
+            const channels = rgb.match(/[\d.]+/g)!.slice(0, 3).map(Number).map(v => {
+              const c = v / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+            });
+            return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+          };
+          const foreground = luminance(colors.foreground), background = luminance(colors.background);
+          const readability = { ratio: (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05), height: colors.height };
           assert.ok(readability.ratio >= 4.5, "Help action text must remain readable in each theme");
           assert.ok(readability.height >= 44, "Help actions retain a usable touch target");
           await page.screenshot({ path: path.join(artifact, `help-${theme}-${label}.png`), fullPage: true });
