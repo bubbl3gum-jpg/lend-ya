@@ -1,0 +1,11 @@
+{
+  "method": "Original SQL replay with the same two omitted prerequisites, stopping at first PostgreSQL error",
+  "realApplicationDatabaseChanged": false,
+  "migration": "20261029110000_owned_condition_claims",
+  "firstError": {
+    "sqlstate": "42704",
+    "message": "type \"MeetupEvent\" does not exist"
+  },
+  "failedTransactionRolledBack": true,
+  "ownedDatabaseRemoved": true
+}

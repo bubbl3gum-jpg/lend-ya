@@ -1,8 +1,9 @@
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cp, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { cp, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { connectTestDatabase } from "./support/test-database";
@@ -19,11 +20,13 @@ test("additive meetup migration preserves every populated pre-existing table and
     );
     const migrations = path.join(dir, "migrations");
     await cp("prisma/migrations", migrations, { recursive: true });
-    await rm(path.join(migrations, migration), { recursive: true });
-    await rm(
-      path.join(migrations, "20261020090000_meetup_confirmation_window"),
-      { recursive: true },
-    );
+    const names = (await readdir(migrations)).filter(name => /^\d/.test(name)).sort();
+    const confirmation = "20261020090000_meetup_confirmation_window";
+    assert.ok(names.includes(migration) && names.includes(confirmation));
+    // A historical schema is a chronological prefix, not today's schema with holes.
+    // Later condition-claim functions require the MeetupEvent row type.
+    for (const name of names.filter(name => name >= migration))
+      await rm(path.join(migrations, name), { recursive: true });
     const config = path.join(dir, "prisma.config.ts");
     await writeFile(
       config,
@@ -76,6 +79,7 @@ test("additive meetup migration preserves every populated pre-existing table and
         'SELECT migration_name,checksum FROM "_prisma_migrations" ORDER BY migration_name',
       )
     ).rows;
+    assert.deepEqual(old.map(row => row.migration_name), names.filter(name => name < migration));
     await cp(
       path.join("prisma/migrations", migration),
       path.join(migrations, migration),
@@ -105,8 +109,8 @@ test("additive meetup migration preserves every populated pre-existing table and
     assert.deepEqual(
       (
         await db.query(
-          'SELECT migration_name,checksum FROM "_prisma_migrations" WHERE migration_name<>$1 AND migration_name<>$2 ORDER BY migration_name',
-          [migration, "20261020090000_meetup_confirmation_window"],
+          'SELECT migration_name,checksum FROM "_prisma_migrations" WHERE migration_name<$1 ORDER BY migration_name',
+          [migration],
         )
       ).rows,
       old,
@@ -155,15 +159,10 @@ test("additive meetup migration preserves every populated pre-existing table and
         'SELECT migration_name,checksum FROM "_prisma_migrations" ORDER BY migration_name',
       )
     ).rows;
+    await cp(path.join("prisma/migrations", confirmation), path.join(migrations, confirmation), { recursive: true });
     await run(
       process.execPath,
-      [
-        "node_modules/prisma/build/index.js",
-        "migrate",
-        "deploy",
-        "--config",
-        "prisma7.config.ts",
-      ],
+      ["node_modules/prisma/build/index.js", "migrate", "deploy", "--config", config],
       { env: process.env },
     );
     for (const table of allTables) {
@@ -201,6 +200,35 @@ test("additive meetup migration preserves every populated pre-existing table and
       ),
       /immutable/,
     );
+    // Finally replay the untouched remaining migrations over populated meetup history.
+    const beforeTail = new Map<string, unknown[]>();
+    for (const table of allTables)
+      beforeTail.set(table, (await db.query(`SELECT to_jsonb(t) AS row FROM "${table}" t ORDER BY to_jsonb(t)::text`)).rows);
+    const prefixChecksums = (await db.query('SELECT migration_name,checksum FROM "_prisma_migrations" ORDER BY migration_name')).rows;
+    assert.deepEqual(prefixChecksums.map(row => row.migration_name), names.filter(name => name <= confirmation));
+    await run(process.execPath,
+      ["node_modules/prisma/build/index.js", "migrate", "deploy", "--config", "prisma7.config.ts"],
+      { env: process.env });
+    for (const table of allTables) {
+      const projection = table === "Booking"
+        ? "to_jsonb(t)-ARRAY['documentationContextId','documentationAcknowledgedAt','documentationAcceptedAt']"
+        : "to_jsonb(t)";
+      assert.deepEqual((await db.query(`SELECT ${projection} AS row FROM "${table}" t ORDER BY ${projection}::text`)).rows,
+        beforeTail.get(table), `${table} historical values preserved across remaining migrations`);
+    }
+    const historicalBookings = (await db.query('SELECT "documentationContextId","documentationAcknowledgedAt","documentationAcceptedAt" FROM "Booking"')).rows;
+    assert.equal(historicalBookings.length, 2);
+    for (const row of historicalBookings)
+      assert.deepEqual(row, { documentationContextId: null, documentationAcknowledgedAt: null, documentationAcceptedAt: null },
+        "Later documentation migration must not invent historical agreement authority");
+    assert.deepEqual((await db.query('SELECT migration_name,checksum FROM "_prisma_migrations" WHERE migration_name<=$1 ORDER BY migration_name', [confirmation])).rows, prefixChecksums);
+    const history = (await db.query('SELECT migration_name,checksum,finished_at,rolled_back_at FROM "_prisma_migrations" ORDER BY migration_name')).rows;
+    assert.deepEqual(history.map(row => row.migration_name), names, "Full original migration history, without omissions");
+    for (const row of history) {
+      assert.ok(row.finished_at && !row.rolled_back_at);
+      assert.equal(row.checksum, createHash("sha256").update(await readFile(path.join("prisma/migrations", row.migration_name, "migration.sql"))).digest("hex"));
+    }
+    await assert.rejects(db.query(`UPDATE "MeetupChallenge" SET "confirmationExpiresAt"="consumedAt"+interval '15 minutes'`), /immutable/);
     const repeat = await run(
       process.execPath,
       [

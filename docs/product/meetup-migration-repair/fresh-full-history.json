@@ -1,0 +1,9 @@
+{
+  "method": "Guarded independent fresh database, original full Prisma migration deploy and repeat",
+  "realApplicationDatabaseChanged": false,
+  "migrationCount": 33,
+  "allChecksumsMatch": true,
+  "allFinished": true,
+  "repeatNoPending": true,
+  "ownedDatabaseRemoved": true
+}

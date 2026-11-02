@@ -1,0 +1,206 @@
+{
+  "baseline": "168045843bc2abefb035bf713bd237bd5e4d0ad9",
+  "testSourceSha256": "fc6b3b5db3feec9568ad515adc7dd272a224373c7c17cc9573acf484affa0a06",
+  "runs": [
+    {
+      "suite": "test:meetup-migration",
+      "start": "2026-11-02T04:19:43.258Z",
+      "end": "2026-11-02T04:19:46.064Z",
+      "exit": 1,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 0",
+        "\u2139 fail 1"
+      ],
+      "artifacts": [
+        ".test-artifacts/2b43ce848b8a15065f593ad8"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_meetup-migration-1793593183258.log"
+    },
+    {
+      "suite": "test:meetup-migration",
+      "start": "2026-11-02T04:22:00.296Z",
+      "end": "2026-11-02T04:22:06.259Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/f3901a179a25dc90ce566314"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_meetup-migration-1793593320295.log"
+    },
+    {
+      "suite": "test:migration",
+      "start": "2026-11-02T04:22:42.148Z",
+      "end": "2026-11-02T04:22:48.333Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [
+        ".test-artifacts/00bd3e0560af132bdebfcf78"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_migration-1793593362148.log"
+    },
+    {
+      "suite": "test:meetup",
+      "start": "2026-11-02T04:22:48.371Z",
+      "end": "2026-11-02T04:27:16.459Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 12",
+        "\u2139 pass 12",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/cd57ffd88640d6d7594d9ab0"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_meetup-1793593368371.log"
+    },
+    {
+      "suite": "test:condition-claims-migration",
+      "start": "2026-11-02T04:25:57.658Z",
+      "end": "2026-11-02T04:26:01.579Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/4d3da5b726f04285f95d5fe2"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_condition-claims-migration-1793593557657.log"
+    },
+    {
+      "suite": "test:rental-documentation-migration",
+      "start": "2026-11-02T04:26:01.628Z",
+      "end": "2026-11-02T04:26:05.416Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/f34f07165dde82c1c0360088"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_rental-documentation-migration-1793593561628.log"
+    },
+    {
+      "suite": "test:recovery-room-migration",
+      "start": "2026-11-02T04:26:05.452Z",
+      "end": "2026-11-02T04:26:09.184Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/134683dbff8669c69ea03562"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_recovery-room-migration-1793593565452.log"
+    },
+    {
+      "suite": "test:admin-migration",
+      "start": "2026-11-02T04:27:16.496Z",
+      "end": "2026-11-02T04:27:20.338Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 1",
+        "\u2139 pass 1",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [
+        ".test-artifacts/52a7ae1633d62465efe77c95"
+      ],
+      "cleanupReported": true,
+      "log": "/tmp/hustlen-consolidation-evidence/test_admin-migration-1793593636496.log"
+    },
+    {
+      "suite": "unit",
+      "start": "2026-11-02T04:27:20.375Z",
+      "end": "2026-11-02T04:27:25.512Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [
+        "\u2139 tests 201",
+        "\u2139 pass 201",
+        "\u2139 fail 0"
+      ],
+      "artifacts": [],
+      "cleanupReported": false,
+      "log": "/tmp/hustlen-consolidation-evidence/unit-1793593640375.log"
+    },
+    {
+      "suite": "typecheck",
+      "start": "2026-11-02T04:27:25.553Z",
+      "end": "2026-11-02T04:27:42.420Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "log": "/tmp/hustlen-consolidation-evidence/typecheck-1793593645553.log"
+    },
+    {
+      "suite": "lint",
+      "start": "2026-11-02T04:27:42.461Z",
+      "end": "2026-11-02T04:27:57.346Z",
+      "exit": 0,
+      "signal": null,
+      "tests": [],
+      "artifacts": [],
+      "cleanupReported": false,
+      "log": "/tmp/hustlen-consolidation-evidence/lint-1793593662461.log"
+    }
+  ],
+  "allLatestLocalChecksPassed": true,
+  "historicalMigrations": {
+    "count": 33,
+    "allOriginalBytesUnchanged": true
+  },
+  "cleanup": {
+    "remainingTaskDatabases": 0,
+    "readOnlyMaintenanceCheck": true
+  },
+  "firstError": {
+    "method": "Original SQL replay with the same two omitted prerequisites, stopping at first PostgreSQL error",
+    "realApplicationDatabaseChanged": false,
+    "migration": "20261029110000_owned_condition_claims",
+    "firstError": {
+      "sqlstate": "42704",
+      "message": "type \"MeetupEvent\" does not exist"
+    },
+    "failedTransactionRolledBack": true,
+    "ownedDatabaseRemoved": true
+  },
+  "separateFreshReplay": {
+    "method": "Guarded independent fresh database, original full Prisma migration deploy and repeat",
+    "realApplicationDatabaseChanged": false,
+    "migrationCount": 33,
+    "allChecksumsMatch": true,
+    "allFinished": true,
+    "repeatNoPending": true,
+    "ownedDatabaseRemoved": true
+  },
+  "ciAtPublication": "Pending new push run; check exact published commit via GitHub public Actions page. API access returned Forbidden. Final owner-facing report will state actual observed run outcome.",
+  "boundaries": "No app/schema/historical SQL/main/database-authority changes; no db push, migrate resolve, force push, real customer data or genuine AI calls."
+}
