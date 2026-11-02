@@ -85,6 +85,7 @@ export async function POST(request: Request): Promise<Response> {
   if (requestKey !== null && !/^[A-Za-z0-9_-]{8,128}$/.test(requestKey))
     return apiError("Idempotency-Key must contain 8–128 letters, digits, underscores or hyphens.", 400);
   let requestHash: string | undefined;
+  let expectedQuote: unknown;
   const replay = async () => {
     if (!requestKey || !requestHash) return null;
     const existing = await prisma.booking.findUnique({
@@ -93,6 +94,11 @@ export async function POST(request: Request): Promise<Response> {
     });
     if (!existing) return null;
     if (existing.requestHash !== requestHash)
+      return apiError("This idempotency key was already used for a different request.", 409);
+    // Validate a supplied quote against the committed snapshot, not today's listing price.
+    // Historical request hashes omit expectedQuote, so this also preserves old retries.
+    if (expectedQuote !== undefined && expectedQuote !==
+      `${existing.dailyPrice}:${existing.totalPrice}:${existing.deposit ?? "0"}`)
       return apiError("This idempotency key was already used for a different request.", 409);
     const { requestHash: _hash, ...booking } = existing;
     void _hash;
@@ -103,6 +109,7 @@ export async function POST(request: Request): Promise<Response> {
     if (!body) {
       return apiError("Request body must be a valid JSON object.", 400);
     }
+    expectedQuote = body.expectedQuote;
 
     const listingId =
       typeof body.listingId === "number"

@@ -81,6 +81,7 @@ test(
       .png()
       .toBuffer();
     let completedId = 0;
+    let submittedRequest: { key: string; body: Record<string, unknown> } | undefined;
     try {
       await start();
       browser = await chromium.launch({
@@ -159,9 +160,19 @@ test(
           .getByRole("button", { name: "Review quotation" })
           .click();
         await expect(borrower.getByText(/Rental fee: \$24.68/)).toBeVisible();
+        const submitted = borrower.waitForRequest((request) =>
+          request.url() === `${base}/api/bookings` && request.method() === "POST" &&
+          request.postDataJSON()?.quote === false,
+        );
         await borrower
           .getByRole("button", { name: "Confirm and submit request" })
           .click();
+        const request = await submitted;
+        if (!completedId) {
+          const key = request.headers()["idempotency-key"];
+          assert.ok(key);
+          submittedRequest = { key, body: request.postDataJSON() };
+        }
         await borrower.waitForURL("**/bookings/*");
         const id = Number(new URL(borrower.url()).pathname.split("/").pop());
         await owner.goto(`${base}/bookings/${id}`);
@@ -169,6 +180,7 @@ test(
         await expect(
           owner.getByRole("heading", { name: "Submit owner handoff" }),
         ).toBeVisible();
+        await expect(owner.getByLabel("Condition notes", { exact: true })).toBeEnabled();
         return id;
       };
       const evidenceForm = async (
@@ -179,8 +191,7 @@ test(
       ) => {
         const id=Number(new URL(page.url()).pathname.split("/").pop());
         const verification=await browserMeetupFixture(base,owner.context(),borrower.context());
-        if(title==="Submit owner handoff") await verification.arrivals(id,"PICKUP");
-        if(title==="Confirm receipt as borrower") await verification.scanPayload(id,"PICKUP");
+        if(title==="Confirm receipt as borrower") { await verification.arrivals(id,"PICKUP"); await verification.scanPayload(id,"PICKUP"); }
         if(title==="Submit item return") await verification.arrivals(id,"RETURN");
         await page.getByRole("button",{name:"Refresh verification status",exact:true}).click();
         const form = page.locator("form").filter({
@@ -193,6 +204,7 @@ test(
             .getByRole("combobox", { name: label, exact: true })
             .selectOption(key === "functionTested" ? "unknown" : "yes");
         await form.getByLabel("Condition notes", { exact: true }).fill(notes);
+        if (title === "Submit owner handoff") await form.getByLabel("Serial number (optional)").fill("BROWSER-SERIAL-123");
         await form.getByLabel(/Condition photos \(optional\)/).setInputFiles({
           name: "condition.png",
           mimeType: "image/png",
@@ -216,6 +228,15 @@ test(
             "Submit owner handoff",
             "Owner: scratch documented",
           );
+          assert.equal((await pool.query('SELECT count(*)::int n FROM "MeetupCheckIn" WHERE "bookingId"=$1', [completedId])).rows[0].n, 0);
+          await owner.reload();
+          await expect(owner.getByText("Owner: scratch documented", { exact: true })).toBeVisible();
+          await expect(owner.getByText("Serial number: BROWSER-SERIAL-123", { exact: true })).toBeVisible();
+          await expect(owner.locator('img[alt*="condition photo"]')).toHaveCount(1);
+          const early = (await pool.query('SELECT b.status,h."confirmedAt",h.checklist FROM "Booking" b JOIN "Handoff" h ON h."bookingId"=b.id WHERE b.id=$1', [completedId])).rows[0];
+          assert.equal(early.status, "HANDOFF_PENDING");
+          assert.equal(early.confirmedAt, null);
+          assert.equal(early.checklist.functionTested, "unknown");
           await borrower.reload();
           await expect(
             borrower.getByText("Owner: scratch documented", { exact: true }),
@@ -284,14 +305,36 @@ test(
           assert.ok(completedId);
           await stop();
           await start();
-          const original = (await pool.query('SELECT "requestKey","listingId","meetingStationId","startAt","endAt",notes FROM "Booking" WHERE id=$1', [completedId])).rows[0];
+          const original = (await pool.query('SELECT "requestKey","listingId","totalPrice","dailyPrice","deposit" FROM "Booking" WHERE id=$1', [completedId])).rows[0];
           assert.ok(original.requestKey, "Browser creates a durable retry key");
+          assert.ok(submittedRequest, "Capture the actual booking submission");
+          assert.equal(submittedRequest.key, original.requestKey);
+          assert.equal(submittedRequest.body.listingId, original.listingId);
+          // Listing changes cannot change the committed price snapshot or invalidate a retry.
+          await pool.query('UPDATE "Listing" SET price=99.99 WHERE id=$1', [original.listingId]);
           const replay = await borrower.request.post(`${base}/api/bookings`, {
             headers: { "Idempotency-Key": original.requestKey },
-            data: { listingId: original.listingId, meetingStationId: original.meetingStationId, canonicalStationId: "taipei-main", startAt: original.startAt.toISOString(), endAt: original.endAt.toISOString(), notes: original.notes ?? "" },
+            data: submittedRequest.body,
           });
           assert.equal(replay.status(), 201);
-          assert.equal((await replay.json()).booking.id, completedId);
+          const replayed = (await replay.json()).booking;
+          assert.equal(replayed.id, completedId);
+          assert.equal(replayed.totalPrice, original.totalPrice);
+          assert.equal(replayed.dailyPrice, original.dailyPrice);
+          assert.equal(replayed.deposit, original.deposit);
+          for (const change of [
+            { notes: "different request" },
+            { startAt: "2035-01-01T11:00" },
+            { meetingStationId: Number(submittedRequest.body.meetingStationId) + 1 },
+            { canonicalStationId: "different-station" },
+            { expectedQuote: "stale" },
+          ]) {
+            const conflictStatus: number = (await borrower.request.post(`${base}/api/bookings`, {
+              headers: { "Idempotency-Key": original.requestKey },
+              data: { ...submittedRequest.body, ...change },
+            })).status();
+            assert.equal(conflictStatus, 409);
+          }
           assert.equal((await pool.query('SELECT count(*)::int n FROM "Booking" WHERE "listingId"=$1', [original.listingId])).rows[0].n, 1);
           for (const page of [owner, borrower]) {
             await page.goto(`${base}/bookings/${completedId}`);

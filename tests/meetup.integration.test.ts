@@ -53,6 +53,7 @@ test(
       password = "MeetupFixture123!",
       serverSecret = randomBytes(32).toString("hex"),
       artifact = process.env.MRT_TEST_ARTIFACT_DIR!;
+    const productionCamera = process.env.MRT_TEST_CAMERA_PRODUCTION === "1";
     const logPath = path.join(artifact, "meetup-server.log"),
       log = openSync(logPath, "a");
     let server: ChildProcess | undefined,
@@ -75,12 +76,13 @@ test(
       checkTtl = 600,
       temporary = false,
       configured = true,
+      testRunId = process.env.MRT_TEST_RUN_ID,
     ) {
       server = spawn(
         process.execPath,
         [
           "node_modules/next/dist/bin/next",
-          "dev",
+          productionCamera ? "start" : "dev",
           "--hostname",
           "localhost",
           "--port",
@@ -89,13 +91,14 @@ test(
         {
           env: {
             ...process.env,
-            NODE_ENV: "development",
+            NODE_ENV: productionCamera ? "production" : "development",
             HUSTLEN_INSPECTION_CANDIDATE:"owned-preview-only",
             HUSTLEN_INSPECTION_ORIGIN:base,
             NEXT_PUBLIC_HUSTLEN_CAMERA_DIAGNOSTICS: "owned-test",
-            MEETUP_TEST_LOCATION_ENABLED: temporary ? "true" : "false",
+            MEETUP_TEST_LOCATION_ENABLED: !productionCamera && temporary ? "true" : "false",
             MEETUP_TEST_LOCATION_USER_IDS: temporary ? ids.join(",") : "",
-            MEETUP_PREVIEW_USER_IDS: ids.join(","),
+            MRT_TEST_RUN_ID: testRunId,
+            MEETUP_PREVIEW_USER_IDS: productionCamera ? "" : ids.join(","),
             MEETUP_CODE_SECRET: configured ? serverSecret : undefined,
             MEETUP_CONFIRMATION_TTL_SECONDS: String(confirmation),
             MEETUP_CHECKIN_TTL_SECONDS: String(checkTtl),
@@ -272,6 +275,46 @@ test(
       point = { latitude: coords.latitude!, longitude: coords.longitude! };
       const first = await rental(),
         ids = [owner.id, borrower.id];
+      if (!productionCamera) {
+      await t.test("owner evidence can be saved before pickup check-ins", async () => {
+        const sample = await rental(false);
+        const form = (file: File) => {
+          const data = new FormData();
+          data.set("payload", JSON.stringify({ ...evidence, conditionNotes: "Early evidence", serialNumber: "TEST-123" }));
+          data.append("photos", file);
+          return data;
+        };
+        const photoFile = () => new File([new Uint8Array(photo)], "fixture.png", { type: "image/png" });
+        assert.equal((await api(`/api/bookings/${sample.id}/handoff`, outsider, "POST", form(photoFile()))).status, 403);
+        assert.equal((await api(`/api/bookings/${sample.id}/handoff`, borrower, "POST", form(photoFile()))).status, 403);
+        assert.equal((await api(`/api/bookings/${sample.id}/handoff`, owner, "POST", form(new File(["invalid"], "bad.png", { type: "image/png" })))).status, 400);
+        const saved = await api(`/api/bookings/${sample.id}/handoff`, owner, "POST", form(photoFile()));
+        assert.equal(saved.status, 200);
+        const row = (await db.query('SELECT b.status,h."conditionNotes",h."serialNumber",h.checklist,h."confirmedBy",h."confirmedAt" FROM "Booking" b JOIN "Handoff" h ON h."bookingId"=b.id WHERE b.id=$1', [sample.id])).rows[0];
+        assert.equal(row.status, "HANDOFF_PENDING");
+        assert.equal(row.conditionNotes, "Early evidence");
+        assert.equal(row.serialNumber, "TEST-123");
+        assert.deepEqual(row.checklist, checklist);
+        assert.equal(row.confirmedBy, null);
+        assert.equal(row.confirmedAt, null);
+        assert.equal((await db.query('SELECT count(*)::int n FROM "BookingEvidencePhoto" WHERE "bookingId"=$1 AND stage=\'HANDOFF_OWNER\'', [sample.id])).rows[0].n, 1);
+        assert.equal((await db.query('SELECT count(*)::int n FROM "MeetupChallenge" WHERE "bookingId"=$1', [sample.id])).rows[0].n, 0);
+        assert.equal((await op(sample.id, "issue", owner, { purpose: "PICKUP" })).status, 409);
+        assert.equal((await api(`/api/bookings/${sample.id}/handoff`, borrower, "POST", evidence)).status, 409);
+        assert.equal((await api(`/api/bookings/${sample.id}/return`, borrower, "POST", evidence)).status, 409);
+      });
+      await t.test("temporary location rejects a database with the wrong ownership marker", async () => {
+        const wrongId = randomBytes(12).toString("hex");
+        await mkdir(path.join(".test-artifacts", wrongId), { recursive: true });
+        await writeFile(path.join(".test-artifacts", wrongId, "tsconfig.json"), readFileSync(path.join(artifact, "tsconfig.json")));
+        try {
+          await stop(); await start(ids, 180, 900, 600, true, true, wrongId);
+          const sample = await rental(false);
+          assert.equal((await op(sample.id, "test-location", owner, { action: "create", acknowledged: true, latitude: 22.1, longitude: 121.1, accuracy: 10, timestamp: Date.now() })).status, 403);
+          assert.equal((await api(`/api/bookings/${sample.id}/meetup/status`, owner)).json.temporaryLocation, null);
+        } finally { await stop(); await start(); }
+      });
+      }
       async function assertInvestigationReceipt(id:number, transport:"camera"|"manual-code") {
         const result=await fetch(base+`/admin/bookings/${id}?wbCategory=CUSTODY_REVIEW`,{headers:{Cookie:investigationAdmin.cookie}});
         assert.equal(result.status,200);
@@ -296,6 +339,7 @@ test(
         });
         return;
       }
+      if (!productionCamera) {
       await t.test("all new bookings enroll atomically; bilateral GPS and QR cannot be bypassed; historical bookings unchanged",async()=>{
         const oldSession=(await op(first.id,"enroll",owner)).status;
         assert.equal(oldSession,403,"Legacy enrollment still requires preview access");
@@ -304,11 +348,11 @@ test(
         assert.equal((await api(`/api/bookings/${r.id}/meetup/status`,owner)).json.enabled,true);
         assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupEvent" WHERE "bookingId"=$1 AND kind='NEW_BOOKING_VERIFICATION'`,[r.id])).rows[0].n,1);
         assert.equal((await db.query(`SELECT count(*)::int n FROM "MeetupSession" WHERE "bookingId"=$1`,[first.id])).rows[0].n,0,"No retrofit of older booking");
-        assert.equal((await api(`/api/bookings/${r.id}/handoff`,owner,"POST",evidence)).status,409);
-        await check(r.id,owner);
-        assert.equal((await api(`/api/bookings/${r.id}/handoff`,owner,"POST",evidence)).status,409);
-        await check(r.id,borrower,"PICKUP",{latitude:point.latitude+0.00005});
         assert.equal((await api(`/api/bookings/${r.id}/handoff`,owner,"POST",evidence)).status,200);
+        assert.equal((await op(r.id,"issue",owner,{purpose:"PICKUP"})).status,409);
+        await check(r.id,owner);
+        assert.equal((await op(r.id,"issue",owner,{purpose:"PICKUP"})).status,409);
+        await check(r.id,borrower,"PICKUP",{latitude:point.latitude+0.00005});
         assert.equal((await api(`/api/bookings/${r.id}/handoff`,borrower,"POST",evidence)).status,409);
         await stop();await start(ids); // restart cannot remove persisted enforcement
         assert.equal((await api(`/api/bookings/${r.id}/handoff`,borrower,"POST",evidence)).status,409);
@@ -333,7 +377,61 @@ test(
         assert.equal((await db.query(`SELECT count(*)::int n FROM "Booking"`)).rows[0].n,before,"Failed activation rolls back the new booking");
         await stop(); await start();
       });
-      let pickup: Payload;
+      await t.test("automatic booking uses consented browser TEST_LOCATION for pickup and return", async () => {
+        let instance: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+        try {
+          await stop(); await start(ids, 180, 900, 600, true);
+          const r = await rental(false);
+          assert.equal((await api(`/api/bookings/${r.id}/handoff`, owner, "POST", evidence)).status, 200);
+          const centre = { latitude: 22.1, longitude: 121.1, accuracy: 10 };
+          instance = await chromium.launch({ executablePath: process.env.MRT_BROWSER_PATH ?? "/usr/bin/chromium", headless: true, args: ["--no-sandbox"] });
+          const ownerContext = await instance.newContext({ geolocation: centre, permissions: ["geolocation"] });
+          const borrowerContext = await instance.newContext({ geolocation: centre, permissions: ["geolocation"] });
+          for (const [context, actor] of [[ownerContext, owner], [borrowerContext, borrower]] as const)
+            await context.addCookies([{ name: "p2p_session", value: actor.cookie.slice("p2p_session=".length), url: base }]);
+          const ownerPage = await ownerContext.newPage(), borrowerPage = await borrowerContext.newPage();
+          const simulate = async (purpose: "PICKUP" | "RETURN") => {
+            await ownerPage.goto(`${base}/bookings/${r.id}`);
+            await borrowerPage.goto(`${base}/bookings/${r.id}`);
+            const create = ownerPage.getByRole("button", { name: "Use my current location as a temporary test meetup" });
+            await expect(create).toBeDisabled();
+            await ownerPage.getByLabel("I acknowledge this is a simulated meetup, not arrival at the real MRT station.").check();
+            await create.click();
+            await expect(ownerPage.getByText("Waiting for both participants to acknowledge.")).toBeVisible();
+            assert.equal((await check(r.id, owner, purpose, centre)).status, 409);
+            await borrowerPage.reload();
+            await borrowerPage.getByRole("button", { name: "I acknowledge this simulated meetup, not arrival at the real MRT station" }).click();
+            for (const [page, actor] of [[ownerPage, owner], [borrowerPage, borrower]] as const) {
+              const response = page.waitForResponse((res) => res.url().endsWith(`/api/bookings/${r.id}/meetup/checkin`) && res.request().method() === "POST");
+              await page.getByRole("button", { name: "I've Arrived" }).click();
+              const checked = await response;
+              assert.equal(checked.status(), 200);
+              assert.equal((await checked.json()).checkIn.outcome, "TEST_LOCATION");
+              assert.equal((await api(`/api/bookings/${r.id}/meetup/status`, actor)).status, 200);
+            }
+          };
+          await simulate("PICKUP");
+          const pickup = await op(r.id, "issue", owner, { purpose: "PICKUP" });
+          assert.equal(pickup.status, 200); assert.equal(pickup.json.assurance, "TEST_LOCATION");
+          assert.equal((await op(r.id, "verify", borrower, { purpose: "PICKUP", challengeId: pickup.json.challengeId, manualCode: pickup.json.manualCode, requestKey: randomUUID() })).status, 403);
+          assert.equal((await op(r.id, "verify", borrower, { purpose: "PICKUP", challengeId: pickup.json.challengeId, qrPayload: pickup.json.qrPayload, requestKey: randomUUID() })).status, 200);
+          assert.equal((await api(`/api/bookings/${r.id}/handoff`, borrower, "POST", { ...evidence, meetupChallengeId: pickup.json.challengeId, physicalReceipt: false })).status, 409);
+          assert.equal((await api(`/api/bookings/${r.id}/handoff`, borrower, "POST", { ...evidence, meetupChallengeId: pickup.json.challengeId, physicalReceipt: true })).status, 200);
+          assert.equal((await api(`/api/bookings/${r.id}/return`, borrower, "POST", evidence)).status, 409);
+          await simulate("RETURN");
+          assert.equal((await api(`/api/bookings/${r.id}/return`, borrower, "POST", evidence)).status, 200);
+          const returned = await op(r.id, "issue", borrower, { purpose: "RETURN" });
+          assert.equal(returned.status, 200); assert.equal(returned.json.assurance, "TEST_LOCATION");
+          assert.equal((await op(r.id, "verify", owner, { purpose: "RETURN", challengeId: returned.json.challengeId, qrPayload: returned.json.qrPayload, requestKey: randomUUID() })).status, 200);
+          assert.equal((await op(r.id, "receipt", owner, { action: "inspect", meetupChallengeId: returned.json.challengeId, physicalReceipt: false })).status, 400);
+          assert.equal((await op(r.id, "receipt", owner, { action: "inspect", meetupChallengeId: returned.json.challengeId, physicalReceipt: true })).status, 200);
+          assert.equal((await detail(r.id)).json.booking.status, "INSPECTION");
+        } finally {
+          try { await instance?.close(); } finally { await stop(); await start(); }
+        }
+      });
+      }
+      let pickup!: Payload;
       if(process.env.MRT_TEST_CAMERA_ONLY!=="1") {
       await t.test(
         "preview defaults off, explicit enrollment and participant/CSRF guards",
@@ -1431,9 +1529,9 @@ test(
       await t.test(
         "two real mobile browser sessions: GPS permission, actual camera QR, drafts, reduced return, restart and screenshots",
         async () => {
+          try {
           await stop(); await start(); // normal new-booking flow, without preview enrollment
-          const browserRental = await rental(false),
-            id = browserRental.id;
+          let id: number;
           const media = path.join(artifact, "pickup.y4m");
           // Initialize a valid fixture video; replace with this booking's QR before opening the camera.
           await writeFile(
@@ -1496,23 +1594,39 @@ test(
               .getByRole("button", { name: "Log in", exact: true })
               .click();
             await expect(page).not.toHaveURL(/\/login$/, { timeout: 15000 });
-            await page.goto(`${base}/bookings/${id}`);
             page.on("dialog", (dialog) => void dialog.accept());
           }
+          // Create the listing, request and acceptance through the participant UIs.
+          await opage.goto(`${base}/listings/new`);
+          await opage.getByLabel("Listing title").fill(`Camera lifecycle ${tag}`);
+          await opage.getByRole("combobox", { name: "Category", exact: true }).selectOption("Electronics");
+          await opage.getByLabel("Price", { exact: true }).fill("10");
+          await opage.getByLabel("Deposit", { exact: true }).fill("0");
+          await opage.getByLabel("Condition", { exact: true }).fill("Good");
+          await opage.getByRole("textbox", { name: /^Description/ }).fill("Synthetic camera lifecycle fixture");
+          await opage.getByLabel(/Item photos/).setInputFiles({ name: "item.png", mimeType: "image/png", buffer: photo });
+          await opage.getByRole("button", { name: "Choose pickup stations", exact: true }).click();
+          await opage.getByRole("dialog").locator('[data-station-id="taipei-main"] .station-hit').click();
+          await opage.getByRole("button", { name: "Confirm availability", exact: true }).click();
+          await opage.getByRole("button", { name: "Publish listing", exact: true }).click();
+          await opage.waitForURL(/\/listings\/\d+$/);
+          await bpage.goto(opage.url());
+          await bpage.getByRole("button", { name: "Choose meeting station", exact: true }).click();
+          await bpage.getByRole("dialog").locator('[data-station-id="taipei-main"] .station-hit').click();
+          await bpage.getByRole("button", { name: "Confirm meeting station", exact: true }).click();
+          await bpage.getByLabel("Start date").fill("2038-01-01T10:00");
+          await bpage.getByLabel("End date").fill("2038-01-02T10:00");
+          await bpage.getByRole("button", { name: "Review quotation" }).click();
+          await bpage.getByRole("button", { name: "Confirm and submit request" }).click();
+          await bpage.waitForURL(/\/bookings\/\d+$/);
+          id = Number(new URL(bpage.url()).pathname.split("/").pop());
+          await opage.goto(`${base}/bookings/${id}`);
+          await opage.getByRole("button", { name: "Accept request", exact: true }).click();
+          await expect(opage.getByRole("heading", { name: "Submit owner handoff", exact: true })).toBeVisible();
           await expect(opage.getByRole("heading",{name:"Rental meetup · mandatory GPS and QR verification"})).toBeVisible();
           await expect(opage.getByRole("button",{name:"Enable isolated meetup preview",exact:true})).toHaveCount(0);
           await expect(
             bpage.getByRole("button", { name: "I've Arrived", exact: true }),
-          ).toBeVisible({ timeout: 15000 });
-          for (const page of [opage, bpage])
-            await page
-              .getByRole("button", { name: "I've Arrived", exact: true })
-              .click();
-          await expect(opage.getByText(/Owner: Location verified/)).toBeVisible(
-            { timeout: 15000 },
-          );
-          await expect(
-            opage.getByText(/Borrower: Location verified/),
           ).toBeVisible({ timeout: 15000 });
           async function fillEvidence(page: Page, title: string) {
             const form = page.locator("form").filter({
@@ -1537,6 +1651,10 @@ test(
           await expect(
             opage.getByText("HANDOFF_PENDING", { exact: true }),
           ).toBeVisible({ timeout: 15000 });
+          for (const page of [opage, bpage])
+            await page.getByRole("button", { name: "I've Arrived", exact: true }).click();
+          await expect(opage.getByText(/Owner: Location verified/)).toBeVisible({ timeout: 15000 });
+          await expect(opage.getByText(/Borrower: Location verified/)).toBeVisible({ timeout: 15000 });
           const issuance = opage.waitForResponse(
             (r) =>
               r.url().endsWith(`/api/bookings/${id}/meetup/issue`) &&
@@ -1724,6 +1842,8 @@ test(
           await bpage.goto("about:blank");
           await stop();
           await start(ids);
+          assert.equal((await opage.request.get(`${base}/api/auth/me`)).status(), 200);
+          assert.equal((await bpage.request.get(`${base}/api/auth/me`)).status(), 200);
           await opage.goto(`${base}/bookings/${id}`);
           await expect(
             opage.getByLabel(
@@ -1783,14 +1903,38 @@ test(
           );
           assert.equal(overflow, false);
           assert.equal((await detail(id)).json.booking.status, "COMPLETED");
+          await bpage.goto(`${base}/bookings/${id}`);
+          for (const [page, label] of [[opage, "Owner camera review"], [bpage, "Borrower camera review"]] as const) {
+            await page.getByLabel("Comment", { exact: true }).fill(label);
+            await page.getByRole("button", { name: "Submit verified review", exact: true }).click();
+            await expect(page.getByText(label, { exact: true })).toBeVisible();
+          }
+          assert.equal((await db.query('SELECT count(*)::int n FROM "VerifiedReview" WHERE "bookingId"=$1', [id])).rows[0].n, 2);
           await returnBrowser.close();returnBrowser=undefined;
           await cameraBrowser.close();
           cameraBrowser = undefined;
           await browser.close();
           browser = undefined;
+          } finally {
+            // An encoder, browser, assertion, or restart failure must not leave
+            // the following legacy-preview cases on the unprivileged server.
+            try {
+              for (const save of cameraSavers) await save().catch(() => {});
+              cameraSavers.length = 0;
+              const closed = await Promise.allSettled([cameraBrowser, returnBrowser, browser].map((instance) => instance?.close()));
+              cameraBrowser = returnBrowser = browser = undefined;
+              const errors = closed.filter((result) => result.status === "rejected");
+              if (errors.length) throw new AggregateError(errors.map((result) => result.reason), "Failed to close camera test browsers");
+            } finally {
+              await stop();
+              await start(ids);
+            }
+          }
         },
       );
+      if (!productionCamera) {
       await t.test("manual-code browser response-loss recovery (separate from camera acceptance)",async()=>{
+        try {
         const r=await rental(),id=r.id;await prepare(id);
         const pickup=(await op(id,"issue",owner,{purpose:"PICKUP"})).json;
         assert.equal((await op(id,"verify",borrower,{purpose:"PICKUP",challengeId:pickup.challengeId,manualCode:pickup.manualCode,requestKey:randomUUID()})).status,200);
@@ -1840,8 +1984,11 @@ test(
 
         assert.equal((await detail(id)).json.booking.status,"RETURN_PENDING");
         await browser.close();browser=undefined;
+        } finally { await browser?.close(); browser=undefined; }
       });
       await t.test("camera negatives: invalid content, initialization failure, interruption, cancellation and navigation cleanup",async()=>{
+        const instances: Awaited<ReturnType<typeof chromium.launch>>[] = [];
+        try {
         const r=await rental(),id=r.id;await prepare(id);
         const invalid=path.join(artifact,"invalid-camera.y4m"),blank=path.join(artifact,"blank-camera.y4m"),png=path.join(artifact,"negative-camera.png");
         await writeFile(png,await QRCode.toBuffer("https://fixture.invalid/not-a-meetup",{width:480,margin:4}));
@@ -1849,6 +1996,7 @@ test(
         execFileSync("ffmpeg",["-y","-loglevel","error","-f","lavfi","-i","color=white:size=640x480:rate=10","-t","2","-pix_fmt","yuv420p",blank]);
         const make=async(file:string,label:string)=>{
           const instance=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true,args:["--use-fake-device-for-media-stream",`--use-file-for-fake-video-capture=${file}`,"--use-fake-ui-for-media-stream"]});
+          instances.push(instance);
           const context=await instance.newContext({permissions:["camera"]});await context.addCookies([{name:"p2p_session",value:borrower.cookie.slice("p2p_session=".length),url:base}]);
           const page=await context.newPage();const save=await observeCamera(page,label);await page.goto(`${base}/bookings/${id}`);return {instance,page,save};
         };
@@ -1877,10 +2025,17 @@ test(
         }finally{await live.save();await live.instance.close();}
         assert.equal((await detail(id)).json.booking.status,"HANDOFF_PENDING");
         await writeFile(path.join(artifact,"camera-negative-evidence.json"),JSON.stringify({invalidQrDeniedBeforeRequest:true,initializationFailureStopsStream:true,interruptedTrackReported:true,restartAndStopCleanup:true,navigationReleasesTrack:true,noVerificationOrCustodyMutation:true},null,2));
+        } finally { for (const instance of instances) await instance.close(); }
       });
+      }
       const logs = readFileSync(logPath, "utf8");
-      assert.ok(!logs.includes(pickup!.qrPayload));
-      assert.ok(!logs.includes(pickup!.qrPayload.split(":").at(-1)!));
+      if (process.env.MRT_TEST_CAMERA_ONLY !== "1") {
+        assert.ok(pickup);
+      }
+      if (pickup) {
+        assert.ok(!logs.includes(pickup.qrPayload));
+        assert.ok(!logs.includes(pickup.qrPayload.split(":").at(-1)!));
+      }
       assert.ok(!logs.includes(serverSecret));
     } finally {
       for(const save of cameraSavers)await save().catch(()=>{});

@@ -28,7 +28,7 @@
     "moderation:evaluate": "tsx scripts/evaluate-moderation.ts",
     "analysis:synthetic": "tsx scripts/analyze-synthetic.ts",
     "analysis:worker": "tsx scripts/chat-analysis-worker.ts",
-    "demo:meetup:local": "tsx scripts/local-meetup-demo.ts",
+    "demo:meetup:local": "node --import tsx scripts/local-meetup-demo.ts",
     "test:meetup": "tsx tests/run-isolated.ts --meetup",
     "test:meetup-migration": "tsx tests/run-isolated.ts --meetup-migration",
     "test:authorization": "tsx tests/run-isolated.ts --authorization",

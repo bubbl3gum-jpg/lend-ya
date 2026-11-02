@@ -72,7 +72,6 @@ export async function submitRentalStage(
           throw new RentalError("Only the owner can submit the handoff.", 403);
         if (booking.handoff)
           throw new RentalError("A handoff has already been recorded.");
-        await requireStageArrivals(transaction,bookingId,"PICKUP");
         const photos = await savePhotos("HANDOFF_OWNER");
         await transaction.handoff.create({
           data: {

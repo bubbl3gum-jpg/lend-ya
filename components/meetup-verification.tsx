@@ -507,12 +507,12 @@ export function MeetupVerification({
       {data.enabled && <div className="space-y-2" aria-label="Rental verification stages">
         <p><strong>Current stage:</strong> {bookingStatus.replaceAll("_"," ")}</p>
         <ol className="list-inside list-decimal space-y-1 text-sm">
-          <li>Both participants submit independent fresh location readings at the agreed meeting area.</li>
-          <li>{p === "PICKUP" ? "Owner saves condition evidence; owner generates pickup QR." : "Borrower saves return evidence; borrower generates return QR."}</li>
+          <li>{p === "PICKUP" ? "Owner may save condition evidence before check-in. Both participants then submit independent fresh location readings at the agreed meeting area." : "Both participants submit independent fresh location readings at the agreed meeting area."}</li>
+          <li>{p === "PICKUP" ? "After evidence and both check-ins, the owner generates the pickup QR." : "Borrower saves return evidence; borrower generates return QR."}</li>
           <li>{p === "PICKUP" ? "Borrower scans with their own authenticated device and acknowledges condition and actual receipt." : "Owner scans with their own authenticated device and acknowledges physical return. Inspection is a separate decision."}</li>
         </ol>
-        <p role="status">{bookingStatus === "PENDING" ? "Next: owner accepts the booking request. Verification is already required; it cannot be skipped." : bookingStatus === "CONFIRMED" || bookingStatus === "IN_USE" ? `Next: both participants check in, then ${p === "PICKUP" ? "owner" : "borrower"} submits evidence.` : bookingStatus === "HANDOFF_PENDING" ? "Next: owner generates pickup QR; borrower scans and separately confirms physical receipt." : bookingStatus === "RETURN_PENDING" ? "Next: borrower generates return QR; owner scans and separately confirms physical return." : "Meetup stage ended. Existing receipts are preserved; inspection and disputes remain separate."}</p>
-        {data.blockedReason && <p className="text-sm">Evidence blocked: {data.blockedReason}</p>}
+        <p role="status">{bookingStatus === "PENDING" ? "Next: owner accepts the booking request. Verification is already required; it cannot be skipped." : bookingStatus === "CONFIRMED" ? "Next: owner may save condition evidence; both participants must check in before pickup QR issuance." : bookingStatus === "IN_USE" ? "Next: both participants check in, then borrower submits return evidence." : bookingStatus === "HANDOFF_PENDING" ? "Next: both participants check in before the owner generates the pickup QR; the borrower scans and separately confirms physical receipt." : bookingStatus === "RETURN_PENDING" ? "Next: borrower generates return QR; owner scans and separately confirms physical return." : "Meetup stage ended. Existing receipts are preserved; inspection and disputes remain separate."}</p>
+        {data.blockedReason && <p className="text-sm">Location verification pending: {data.blockedReason}</p>}
       </div>}
       {!data.enabled ? (
         <>
@@ -553,6 +553,8 @@ export function MeetupVerification({
                 This is a simulated meetup, not arrival at the real MRT station.
                 The agreed station stays unchanged. Both participants must
                 acknowledge and then check in using fresh device locations.
+                Proximity to this shared centre does not measure the distance
+                between devices.
                 Existing checklists and physical receipt confirmations remain
                 mandatory.
               </p>

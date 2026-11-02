@@ -112,7 +112,9 @@ export function RentalEvidenceForm({
           onSaved(
             result.inspectionAccepted === false
               ? "Inspection concern saved. The booking remains under inspection; open a dispute for administrative review."
-              : "Condition evidence and confirmation saved.",
+              : collectSerialNumber
+                ? "Owner condition evidence saved. Physical handoff and receipt are not confirmed."
+                : "Condition evidence and confirmation saved.",
           );
         } catch (error) {
           setError(
@@ -244,7 +246,9 @@ export function RentalEvidenceForm({
               ? "I am returning the item and acknowledge the recorded return condition."
               : action === "inspection"
                 ? "I have inspected the returned item and acknowledge this decision and condition record."
-                : "I have reviewed the item and acknowledge the recorded condition and handoff."}
+                : collectSerialNumber
+                  ? "I have reviewed the item and acknowledge the recorded condition. This does not confirm physical handoff or receipt."
+                  : "I have reviewed the item and acknowledge the recorded condition and handoff."}
           </span>
         </label>
       </fieldset>

@@ -146,14 +146,14 @@ export function BookingActions({
         </>
       ) : null}
       {status === "CONFIRMED" && isOwner ? (
-        <fieldset disabled={automaticMeetup && !evidenceReady}><legend className="sr-only">Owner handoff evidence</legend><RentalEvidenceForm
+        <RentalEvidenceForm
           bookingId={bookingId}
           actorId={currentUserId}
           action="handoff"
           title="Submit owner handoff"
           collectSerialNumber
           onSaved={saved}
-        /></fieldset>
+        />
       ) : null}
       {status === "CONFIRMED" && isBorrower ? (
         <p className="text-sm">

@@ -397,6 +397,35 @@ test("real booking API: two-user persistence, validation, privacy, history and c
         );
       },
     );
+    await t.test("concurrent identical booking requests are durable and changed terms conflict", async () => {
+      const key = randomUUID();
+      const isolatedListing = (await pool.query(
+        'INSERT INTO "Listing" ("ownerId",title,description,category,price,deposit,condition,"updatedAt") VALUES ($1,$2,$2,\'Electronics\',12.34,25.67,\'Good\',NOW()) RETURNING id',
+        [owner.id, `concurrency-${tag}`],
+      )).rows[0].id;
+      await pool.query('INSERT INTO "ListingStation" ("listingId","stationId") VALUES ($1,$2)', [isolatedListing, stationId]);
+      await pool.query('INSERT INTO "ListingMedia" ("listingId",url,"mimeType",kind) VALUES ($1,$2,\'image/png\',\'PHOTO\')', [isolatedListing, "/uploads/listings/booking-test-fixture.png"]);
+      const payload = { ...input, listingId: isolatedListing, startAt: "2041-01-01T10:00", endAt: "2041-01-02T10:00", canonicalStationId: "taipei-main" };
+      const send = async (body: object, cookie = borrower.cookie) => {
+        const response = await fetch(`${process.env.TEST_BASE_URL}/api/bookings`, {
+          method: "POST",
+          headers: { Cookie: cookie, "Content-Type": "application/json", "Idempotency-Key": key },
+          body: JSON.stringify(body),
+        });
+        return { status: response.status, body: await response.json() };
+      };
+      const results = await Promise.all([send(payload), send(payload)]);
+      assert.deepEqual(results.map((result) => result.status), [201, 201]);
+      assert.equal(results[0].body.booking.id, results[1].body.booking.id);
+      const retry = await send({ ...payload, startAt: "2041-01-01T02:00:00.000Z", endAt: "2041-01-02T02:00:00.000Z", notes: " test " });
+      assert.equal(retry.status, 201);
+      assert.equal(retry.body.booking.id, results[0].body.booking.id);
+      assert.equal((await send({ ...payload, notes: "changed" })).status, 409);
+      assert.equal((await send({ ...payload, endAt: "2041-01-03T10:00" })).status, 409);
+      assert.equal((await send({ ...payload, expectedQuote: "stale" })).status, 409);
+      assert.equal((await send(payload, "")).status, 401);
+      assert.equal((await pool.query('SELECT count(*)::int AS n FROM "Booking" WHERE "renterId"=$1 AND "requestKey"=$2', [borrower.id, key])).rows[0].n, 1);
+    });
   } finally {
     // Immutable booking/meetup records are removed only by the owning harness database teardown.
     await pool.end();

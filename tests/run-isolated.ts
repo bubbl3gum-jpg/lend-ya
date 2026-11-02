@@ -198,6 +198,11 @@ async function main() {
         ]);
       if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
         if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
+        if (process.argv.includes("--camera-production")) {
+          if (legacyGroup !== "meetup-camera") throw new Error("Production camera comparison requires --meetup-camera.");
+          await run(["node_modules/next/dist/bin/next", "build"]);
+          env.MRT_TEST_CAMERA_PRODUCTION = "1";
+        }
         if (["local-ai-real","local-ai","support-staff","scoped-reads","staff-session","approval","execution-rehearsal","mfa","database-principals"].includes(legacyGroup??""))
           await run(["--import", "./tests/support/server-boundary-loader.mjs", "--import", "tsx", "--test", standalone]);
         else await run(["node_modules/tsx/dist/cli.mjs", "--test", standalone]);
