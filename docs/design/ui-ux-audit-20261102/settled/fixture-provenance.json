@@ -1,0 +1,32 @@
+{
+  "runId": "90c83fd655aa325e44a1d38f",
+  "fixtures": {
+    "users": {
+      "owner": 1,
+      "borrower": 2,
+      "admin": 3
+    },
+    "listings": [
+      1,
+      2,
+      3
+    ],
+    "bookings": {
+      "PENDING": 1,
+      "CONFIRMED": 2,
+      "HANDOFF_PENDING": 3,
+      "IN_USE": 4,
+      "RETURN_PENDING": 5,
+      "INSPECTION": 6,
+      "COMPLETED": 7,
+      "DISPUTED": 8,
+      "CANCELLED": 9,
+      "ADMIN_CLOSED": 10
+    },
+    "dispute": 1,
+    "report": 1,
+    "audit": 1
+  },
+  "source": "Native synthetic registration/listing/report APIs; explicitly authored temporary booking-state fixtures. No actual rental, QR, identity verification or payment claimed.",
+  "gates": "Production defaults preserved. No chat preview/reviewer/staff/Support/identity/AI/Vision/translation flags or grants activated."
+}

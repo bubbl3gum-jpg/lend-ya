@@ -1,0 +1,24 @@
+{
+  "main": "f856dc360b332007dd79725ddee0d28102411521",
+  "integration": "c136dc9a355138ea306faa41dd95514524d0fc87",
+  "existingApplicationDatabasesModified": false,
+  "passed": true,
+  "mainMigrationCount": 8,
+  "finalMigrationCount": 33,
+  "historicalSqlUnchanged": true,
+  "historicalTableProjectionsPreserved": [
+    "User",
+    "AuthSession",
+    "Listing",
+    "ListingStation",
+    "Booking",
+    "Handoff",
+    "Return",
+    "MrtStation"
+  ],
+  "legacySessionPreserved": true,
+  "automaticStaffMemberships": 0,
+  "allMigrationChecksumsMatch": true,
+  "repeatNoPending": true,
+  "ownedDatabaseRemoved": true
+}

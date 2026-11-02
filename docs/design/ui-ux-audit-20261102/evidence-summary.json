@@ -1,0 +1,9 @@
+{
+  "applicationCommit": "c136dc9a355138ea306faa41dd95514524d0fc87",
+  "observations": 804,
+  "screenshots": 798,
+  "initialFixtureCaptureFailures": 6,
+  "documentOverflowObserved": 0,
+  "pageErrorsRecorded": 0,
+  "interpretation": "Visual audit, not full functional or WCAG certification; failed initial picker selection corrected in supplement; unavailable feature gates preserved."
+}

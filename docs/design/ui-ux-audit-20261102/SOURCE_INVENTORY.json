@@ -1,0 +1,1053 @@
+{
+  "sourceCommit": "c136dc9a355138ea306faa41dd95514524d0fc87",
+  "pages": [
+    {
+      "route": "/account/activity",
+      "file": "app/account/activity/page.tsx",
+      "sha256": "0f6953c18ed521d05cd1915e6a7a85505996c0756e89ac549771e70e1e7af458",
+      "layouts": [
+        "app/account/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/condition-claims/service",
+        "@/lib/i18n/server",
+        "next/link",
+        "@/lib/auth",
+        "@/lib/prisma"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/account/identity",
+      "file": "app/account/identity/page.tsx",
+      "sha256": "3a8a0000c4518666e0d765e48c9b3354d40c5effde090548e20d4f1c720a3634",
+      "layouts": [
+        "app/account/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/identity/service",
+        "@/components/identity-workspace"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/account",
+      "file": "app/account/page.tsx",
+      "sha256": "9a7ba9d304630b38052315b93b42119a759d00bcf59d4eed7cd5fba0a3e81a26",
+      "layouts": [
+        "app/account/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/password-change/service",
+        "@/lib/auth",
+        "@/components/account-details"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/account/verification",
+      "file": "app/account/verification/page.tsx",
+      "sha256": "95257b803956a448b3fc831f68923fed14f25a060cb835c5ab207d6219722f99",
+      "layouts": [
+        "app/account/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/identity/service",
+        "next/link",
+        "@/lib/auth",
+        "@/lib/trust-profile",
+        "@/components/trust-profile"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/account-security",
+      "file": "app/admin/account-security/page.tsx",
+      "sha256": "6f4ac3092a1ae7d5b95b2796040f72ce4b69cfab60570182af4f7513d522a2ae",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/admin/auth",
+        "@/lib/admin/own-session",
+        "@/components/admin/ui"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/ai-case-brief",
+      "file": "app/admin/ai-case-brief/page.tsx",
+      "sha256": "908dea9fa67245c2de942c7bc2a6eaa403c87a0e7507b061ddb1a484db2700f1",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/ai-case-brief/manifest",
+        "next/navigation",
+        "@/lib/admin/auth",
+        "@/lib/ai-case-brief/config",
+        "@/lib/i18n/server",
+        "@/lib/heritage/appearance",
+        "@/components/admin/ai-case-brief"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/announcements",
+      "file": "app/admin/announcements/page.tsx",
+      "sha256": "9ea2a0636c1eeaac4836ccb06d56cdd7d61c73b3d6149a6302ecb431ef45b09c",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/admin/auth",
+        "@/lib/announcements/service",
+        "@/components/admin/announcements"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/audit-logs",
+      "file": "app/admin/audit-logs/page.tsx",
+      "sha256": "6f13cd808ff7f4039e4c2b3c720b3ec1315b7421874bdf4e850e9f51bb657e21",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/cases",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/bookings/[id]",
+      "file": "app/admin/bookings/[id]/page.tsx",
+      "sha256": "a279e6735d2a6e392a084a5e545d02f34111b318aab07c2b0e0ddd618ba1377b",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/investigation-context",
+        "@/lib/admin/query",
+        "@/components/admin/details"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/bookings",
+      "file": "app/admin/bookings/page.tsx",
+      "sha256": "6d75493bc670192a3e13e82a2bbe6664b8ddc4bb9e54fed164c5647ea93787a4",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/directory",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/case-audit/[id]",
+      "file": "app/admin/case-audit/[id]/page.tsx",
+      "sha256": "6b12045b9f709e10b4a5d019e13154a9ab0e28a416f9a1818f5973ada0356de5",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/case-history",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/chat/[id]",
+      "file": "app/admin/chat/[id]/page.tsx",
+      "sha256": "b7c1176f9cf12b6f662216a41ea23612ab35dc2b6eb750c63ce64554fcf6020d",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/admin/auth",
+        "@/lib/chat/http",
+        "@/components/chat/reviewer"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/chat",
+      "file": "app/admin/chat/page.tsx",
+      "sha256": "ad4a79d8cdc769466e0c370396a9bc2ee8ef0c1feb7e1b6dc028c9ec96b0982f",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/admin/auth",
+        "@/components/chat/reviewer"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/disputes/[id]/history",
+      "file": "app/admin/disputes/[id]/history/page.tsx",
+      "sha256": "42d4c917e90e336bec45ca9a8f5cbc370dee0db92954e44f7e42f924628661dc",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/case-history",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/disputes/[id]",
+      "file": "app/admin/disputes/[id]/page.tsx",
+      "sha256": "19e194ca8c830b09f479b461a814fd592d78e500e38a5eb9f097b5a55b7c9b7f",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/cases",
+        "@/components/admin/investigation-context",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/disputes",
+      "file": "app/admin/disputes/page.tsx",
+      "sha256": "cf9a39f8af958f9e44209cc9abe0526dc195653b226e405c1283b8e4f96848f0",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/cases",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/listings/[id]",
+      "file": "app/admin/listings/[id]/page.tsx",
+      "sha256": "4ca513afe29fbab8eaa22cff62af230581211e40b51e3091ba95d24dcc55c4ee",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/investigation-context",
+        "@/lib/admin/query",
+        "@/components/admin/details"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/listings",
+      "file": "app/admin/listings/page.tsx",
+      "sha256": "e357dcfc910baf1c5455f548be85d0d19085ae2c9a0e0f40c61fb16c41d7a2bd",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/directory",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/locations/lab",
+      "file": "app/admin/locations/lab/page.tsx",
+      "sha256": "246138252e90a217c7ee6bdee97ab7fced50375644fa84bcda745f2e5fc19fff",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/components/admin/geofencing-lab",
+        "@/lib/admin/locations",
+        "@/lib/geofencing-lab/service",
+        "@/lib/admin/auth",
+        "@/lib/operational-error"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/locations",
+      "file": "app/admin/locations/page.tsx",
+      "sha256": "10ad57b39761ba72140e39efeff706dd4289c71358ca5948ce35ee885066900b",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/locations",
+        "@/lib/admin/locations",
+        "@/lib/geofencing-lab/service",
+        "@/lib/admin/auth",
+        "@/lib/operational-error",
+        "@/lib/admin/auth"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin",
+      "file": "app/admin/page.tsx",
+      "sha256": "5b7d3e35d6c583ca2b1783bc55b741dcabbc7feaaf09be4a87d88d1c074563df",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/link",
+        "@/lib/admin/auth",
+        "@/lib/admin/data",
+        "@/components/admin/ui"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/reports/[id]/history",
+      "file": "app/admin/reports/[id]/history/page.tsx",
+      "sha256": "ecefcc889eb97988ade58b399b60bae26a3f9521f07f0f5a5c2a5bcf51868ded",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/case-history",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/reports/[id]",
+      "file": "app/admin/reports/[id]/page.tsx",
+      "sha256": "bdf5b0c760759172d9390b3068c6a38bde0b89f92f009338b9dd7fda4efa7914",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/cases",
+        "@/components/admin/investigation-context",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/reports",
+      "file": "app/admin/reports/page.tsx",
+      "sha256": "481cbe1dd665fe65887519b74343850cdf733de8f08bc9b419bce90aafaf2e4e",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/cases",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/security",
+      "file": "app/admin/security/page.tsx",
+      "sha256": "067077a88836f4e0581051f5911995f141017b7bb7af3066998be513621857ab",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/admin/auth",
+        "@/lib/passkey-pilot",
+        "@/components/admin/ui",
+        "@/components/admin/passkeys"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/settings",
+      "file": "app/admin/settings/page.tsx",
+      "sha256": "9bdb685ad1b0094f57200559b17e326d76f91bb0ba16ebee09b2b4757e5c9d09",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/admin/auth",
+        "@/lib/admin/settings",
+        "@/lib/platform-settings/service",
+        "@/components/admin/platform-settings",
+        "@/lib/operational-error",
+        "@/lib/platform-settings/registry"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/support",
+      "file": "app/admin/support/page.tsx",
+      "sha256": "f2ec8351ff53f0e1a23b10ffe88a4d7daee1a1f589a37c881d70dc5d7f498a50",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/link",
+        "@/lib/admin/auth",
+        "@/lib/admin/support",
+        "@/lib/admin/support-query",
+        "@/lib/admin/case-history-navigation",
+        "@/lib/admin/workbench-navigation",
+        "@/lib/admin/query",
+        "@/lib/operational-error",
+        "@/components/admin/ui"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/users/[id]",
+      "file": "app/admin/users/[id]/page.tsx",
+      "sha256": "bd689a9ebcfc100ac1cf85a74b3eb0e9bd642820e7c271ee1b9553947409d39b",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/details"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/users",
+      "file": "app/admin/users/page.tsx",
+      "sha256": "8ab1abb409467f7b7932673be6c1b908e8c48af621a6c6c9f0476ed7dce9ff22",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/admin/directory",
+        "@/lib/admin/query"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/admin/workbench",
+      "file": "app/admin/workbench/page.tsx",
+      "sha256": "286a03cd9533eda9e5476d0d9a69bbee8c1910c8478f701621def2c1b44f713b",
+      "layouts": [
+        "app/admin/layout.tsx",
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/link",
+        "@/lib/admin/auth",
+        "@/lib/admin/workbench",
+        "@/lib/admin/query",
+        "@/components/admin/ui",
+        "@/lib/operational-error"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/bookings/[id]",
+      "file": "app/bookings/[id]/page.tsx",
+      "sha256": "62536de928726a176b2f1d9c057d7c70a5b0a2be9bddf6add0052b70a57424d3",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/i18n/locale",
+        "@/lib/i18n/server",
+        "@/lib/heritage/appearance",
+        "@/lib/rental-documentation/service",
+        "@/components/documentation-agreement",
+        "@/lib/mrt/network",
+        "@/components/rental-evidence",
+        "@/lib/booking-time",
+        "@/components/verified-review-form",
+        "next/link",
+        "next/navigation",
+        "@/components/booking-actions",
+        "@/components/site-header",
+        "@/lib/api-validation",
+        "@/lib/auth",
+        "@/lib/prisma",
+        "@/lib/inspection/service"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/catalogue",
+      "file": "app/catalogue/page.tsx",
+      "sha256": "3a66262d492810f029cd6b46c5701246267aef0cef358234f79effcc9655b9b6",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/marketplace/home"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/customer-service",
+      "file": "app/customer-service/page.tsx",
+      "sha256": "d12ea07a681b94484bfff6704902671c0ac743a582b90a3beec1c2c5d38be716",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/support/tickets",
+        "@/lib/operational-error",
+        "next/link",
+        "@/components/site-header",
+        "@/components/heritage/experience",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/customer-service/tickets/[id]/channel",
+      "file": "app/customer-service/tickets/[id]/channel/page.tsx",
+      "sha256": "1fff7c9df1b02005b0488f4123992e34a629fd47ce9c157966f5802f99491340",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/support/channels",
+        "@/components/support-ticket-pages",
+        "@/components/support-requester-channel"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/customer-service/tickets/[id]",
+      "file": "app/customer-service/tickets/[id]/page.tsx",
+      "sha256": "d370f98716c1af4c32198c78bb944b251c7da6ad62a47ccc5780fe6bd8a0bd86",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/support/channel-config",
+        "next/link",
+        "next/navigation",
+        "@/components/support-ticket-pages",
+        "@/lib/support/tickets",
+        "@/components/admin/ui"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/customer-service/tickets/new",
+      "file": "app/customer-service/tickets/new/page.tsx",
+      "sha256": "84085319c31f01be0714b5a11ca722538a923a3568ee3016d782404c3e00f9ce",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/support-ticket-pages",
+        "@/components/support-ticket-form"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/customer-service/tickets",
+      "file": "app/customer-service/tickets/page.tsx",
+      "sha256": "c371e6413d6548a24862248c844eb6d3af6a7dd08f148600c05853860beebda2",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/link",
+        "@/components/support-ticket-pages",
+        "@/lib/support/tickets",
+        "@/lib/admin/query",
+        "@/components/admin/ui"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/dashboard",
+      "file": "app/dashboard/page.tsx",
+      "sha256": "2ed0da16eb421f85cc899d5be9c733cb96fcd3f252bb2dc2ef00bd0bd7523913",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/booking-time",
+        "@/components/listing-management",
+        "next/link",
+        "next/navigation",
+        "@/lib/auth",
+        "@/lib/prisma",
+        "@/components/booking-actions",
+        "@/components/site-header"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/announcements",
+      "file": "app/dev/announcements/page.tsx",
+      "sha256": "c47bb147b61fba3c8dfd097d86f18a6d9c01dfac208f5f197dc7d4bb0f100418",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/admin/auth",
+        "@/lib/announcements/service",
+        "@/lib/platform-settings/service",
+        "@/lib/booking-time"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/dev/condition-cases",
+      "file": "app/dev/condition-cases/page.tsx",
+      "sha256": "866564f9f9d0f99cde72606f62eb5b7497e51b217d1c6264b9df9d95fa93a10e",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/recovery-room/service",
+        "next/navigation",
+        "@/lib/condition-claims/service",
+        "@/lib/auth",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/components/condition-case-workspace",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/inspection",
+      "file": "app/dev/inspection/page.tsx",
+      "sha256": "3c64182d9e4b618a3cce38400a3972d8b53bc27e33ffbf0fe33b3c8126268725",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/condition-claims/service",
+        "@/lib/rental-documentation/service",
+        "@/lib/item-studio/service",
+        "next/navigation",
+        "@/lib/inspection/service",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/components/inspection-workspace",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/item-documentation",
+      "file": "app/dev/item-documentation/page.tsx",
+      "sha256": "f711277c0b065372c7c3112637f1be330abddbcb95053a93f6f558736a91ece6",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/rental-documentation/service",
+        "@/lib/item-studio/service",
+        "next/navigation",
+        "@/lib/item-documentation/service",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/lib/i18n/server",
+        "@/lib/heritage/appearance",
+        "@/components/documentation-workspace"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/item-studio",
+      "file": "app/dev/item-studio/page.tsx",
+      "sha256": "dc984effd93f94e20af5dbba0e626f526321fc4462b8cfbc36023d3fe7017ce6",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/rental-documentation/service",
+        "next/navigation",
+        "@/lib/item-studio/service",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/lib/i18n/server",
+        "@/lib/heritage/appearance",
+        "@/components/item-studio"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/recovery-room",
+      "file": "app/dev/recovery-room/page.tsx",
+      "sha256": "5244568e6b0e3dbc09021310c82d31b6848ee227539362c476cc5acdb3eb756c",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/recovery-room/service",
+        "@/lib/auth",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/components/recovery-room-workspace",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/staff-listing-inspection",
+      "file": "app/dev/staff-listing-inspection/page.tsx",
+      "sha256": "f4c313db4a758bd30ea1b96a36f5f01f3517292ca9a99f04d07bd8630511e31d",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/staff-read-pilot/bridge",
+        "@/lib/auth",
+        "@/components/staff-listing-inspection"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/dev/support-agent",
+      "file": "app/dev/support-agent/page.tsx",
+      "sha256": "641b6f481c51a39b4fbfbe10fa2a8c3530b7d20d466ecc93342d4eeba39786c1",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/site-header",
+        "@/lib/support-staff-candidate/page",
+        "@/components/support-candidate-workbench",
+        "@/lib/assistant/server"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/support-companion",
+      "file": "app/dev/support-companion/page.tsx",
+      "sha256": "95fb1e9cc57606f770a9f6a7912be6fa21981dce2b822e1678f58a35ccb832de",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/assistant/server",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/components/support-companion",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server",
+        "@/lib/local-inference/server",
+        "@/lib/local-inference/catalogue"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/support-requester",
+      "file": "app/dev/support-requester/page.tsx",
+      "sha256": "d997ebdc95fe0e7cf189b833a71a914e9ff2806def8338bb08c6fc1df99b0f03",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/site-header",
+        "@/lib/support-staff-candidate/page",
+        "@/components/support-candidate-workbench",
+        "@/lib/assistant/server"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/dev/vision-prototype",
+      "file": "app/dev/vision-prototype/page.tsx",
+      "sha256": "b15c3c9227a911851ff8725c7f9a9c931798bd1151e8140f724726e29b8d6dc3",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/vision-review",
+        "@/lib/vision-prototype/provider",
+        "next/navigation",
+        "next/image",
+        "@/lib/vision-prototype/server",
+        "@/lib/vision-prototype/contracts",
+        "@/components/heritage/experience",
+        "@/components/site-header",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/listings/[id]/edit",
+      "file": "app/listings/[id]/edit/page.tsx",
+      "sha256": "e0e938bfa4c73d5ef68d2989398e3cd4318d86866c0733efbc062a87eb78d027",
+      "layouts": [
+        "app/layout.tsx",
+        "app/listings/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/mrt/network",
+        "next/navigation",
+        "@/lib/auth",
+        "@/lib/prisma",
+        "@/lib/api-validation",
+        "@/components/site-header",
+        "@/components/edit-listing-form"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/listings/[id]",
+      "file": "app/listings/[id]/page.tsx",
+      "sha256": "f66460ae89e3d2ffc814b69d8478fd8dc033df813c9503141e2fa68fc5dbe193",
+      "layouts": [
+        "app/layout.tsx",
+        "app/listings/layout.tsx"
+      ],
+      "imports": [
+        "@/lib/rental-documentation/service",
+        "@/components/i18n/locale",
+        "@/components/i18n/discovery",
+        "@/components/heritage/experience",
+        "@/lib/heritage/appearance",
+        "@/lib/i18n/server",
+        "@/components/chat/participant",
+        "@/lib/chat/config",
+        "@/lib/mrt/network",
+        "next/image",
+        "next/link",
+        "next/navigation",
+        "@/components/booking-form",
+        "@/components/listing-status-badge",
+        "@/components/site-header",
+        "@/lib/auth",
+        "@/lib/api-validation",
+        "@/lib/listing-status",
+        "@/lib/prisma"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/listings/new",
+      "file": "app/listings/new/page.tsx",
+      "sha256": "83f3ffdfd85552d4dffc45b753db9716153a7d73f60645ce2118305e5113b019",
+      "layouts": [
+        "app/layout.tsx",
+        "app/listings/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/prisma",
+        "@/lib/auth",
+        "@/components/create-listing-form"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/listings",
+      "file": "app/listings/page.tsx",
+      "sha256": "7cc6c346a1b3f72ff874488069fd616da4feb02d6e94a81b7571a44ce01eb9b6",
+      "layouts": [
+        "app/layout.tsx",
+        "app/listings/layout.tsx"
+      ],
+      "imports": [
+        "@/components/i18n/locale",
+        "@/components/i18n/discovery",
+        "next/link",
+        "@/lib/i18n/server",
+        "@/components/heritage/experience",
+        "@/lib/heritage/appearance",
+        "@/lib/prisma",
+        "@/components/site-header",
+        "@/components/listings-browser",
+        "@/lib/listing-status"
+      ],
+      "heritageMention": true,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/login",
+      "file": "app/login/page.tsx",
+      "sha256": "faea66e517299f659fa63985ee25208f60556ec06fb138fe741bdb45422456b9",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/auth-form"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/messages/[id]",
+      "file": "app/messages/[id]/page.tsx",
+      "sha256": "f38c13b297a440b883601f669ca79ae23ab3ca9b4e329b67b94b42db3f5cf0b6",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/auth",
+        "@/lib/chat/config",
+        "@/lib/chat/http",
+        "@/components/site-header",
+        "@/components/chat/participant"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/messages",
+      "file": "app/messages/page.tsx",
+      "sha256": "5dc299d96693535e50c979b455338f27fae94d63834d2a718a73dbacbe16ec4b",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/auth",
+        "@/lib/chat/config",
+        "@/components/site-header",
+        "@/components/chat/participant"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/",
+      "file": "app/page.tsx",
+      "sha256": "9a2763f6505ffd8623b50aff44645ae82dfdcb79e388d668a4c0d7a3f98edb4e",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/marketplace/home"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    },
+    {
+      "route": "/profile/[userId]",
+      "file": "app/profile/[userId]/page.tsx",
+      "sha256": "cf1d6d6d193af640e441cda7809f15cdbe972ecb8743148babeab92fb6e21683",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "next/navigation",
+        "@/lib/api-validation",
+        "@/lib/trust-profile",
+        "@/components/trust-profile",
+        "@/components/site-header"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": true
+    },
+    {
+      "route": "/register",
+      "file": "app/register/page.tsx",
+      "sha256": "76f34558ef351365bffc3a7ffc44593b218aa29785aa1d482e84860ca95f3703",
+      "layouts": [
+        "app/layout.tsx"
+      ],
+      "imports": [
+        "@/components/auth-form"
+      ],
+      "heritageMention": false,
+      "siteHeaderMention": false
+    }
+  ],
+  "layouts": [
+    "app/account/layout.tsx",
+    "app/admin/layout.tsx",
+    "app/layout.tsx",
+    "app/listings/layout.tsx"
+  ],
+  "stylesheets": [
+    "app/globals.css",
+    "app/heritage.css"
+  ]
+}

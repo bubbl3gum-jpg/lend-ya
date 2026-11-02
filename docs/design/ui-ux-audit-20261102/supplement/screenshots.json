@@ -1,0 +1,3114 @@
+{
+  "baseline": "c136dc9a355138ea306faa41dd95514524d0fc87",
+  "runId": "86b3c41427b90e3bf2ce130b",
+  "records": [
+    {
+      "scenario": "listing-borrower",
+      "template": "/listings/2",
+      "route": "/listings/2",
+      "actor": "borrower",
+      "state": "default",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/listings/2",
+      "file": "screenshots/listing-borrower--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — tool",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 4,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\nBooking is paused while this item has an open report or dispute.\nLanguage\nEnglish\n繁體中文（台灣）\nAppearance\nSystem\nLight\nDark\nImmersive effects\nDiscovery sound\n\nSound is optional and used only for intentional discovery. Reduced motion is always respected.\n\nEnglish and Traditional Chinese cover Home, Browse, public listing details, shared navigation and Account Settings. Rental, messaging and other page content remain English."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "borrower-station-dialog",
+      "template": "/listings/4",
+      "route": "/listings/4",
+      "actor": "borrower",
+      "state": "native-station-modal",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/listings/4",
+      "file": "screenshots/borrower-station-dialog--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — available-camera",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Close station map",
+            "width": 41,
+            "height": 24
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom in",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom out",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Reset map view",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Muzha · 木柵 · BR02 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Muzha",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xinhai · 辛亥 · BR05 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Xinhai",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Dazhi · 大直 · BR14 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Dazhi",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xihu · 西湖 · BR16 — unavailable",
+            "width": 235,
+            "height": 42
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          },
+          {
+            "level": "H3",
+            "text": "Request this rental"
+          },
+          {
+            "level": "H2",
+            "text": "Choose meeting station"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\n\nThe rental quotation, station picker and private messaging workflow below currently use English. Your listing and language preference are unchanged.\n\nRequest this rental\n\nAll rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial days round up.\n\nStart date\nEnd date\nChoose meeting station\n\nChoose one owner-approved location. No station is selected yet.\n\nChoose meeting station\nClose\n\nGreen locations are approved by this owner. Grey locations cannot be selected. Stations are meeting areas. Agree on an exact exit or meeting point with the other participant.\n\n動物園\n大安\n南港展覽館\n廣慈/奉天宮\n北投\n新北投\n淡水\n新店\n七張\n小碧潭\n大坪林\n台電大樓\n松山\n南勢角\n迴龍\n蘆洲\n頂埔\n亞東醫院\n新北產業園區\nFull network overview · Search or zoom in for station"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "listing-borrower",
+      "template": "/listings/2",
+      "route": "/listings/2",
+      "actor": "borrower",
+      "state": "default",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/listings/2",
+      "file": "screenshots/listing-borrower--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — tool",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 4,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\nBooking is paused while this item has an open report or dispute.\nLanguage\nEnglish\n繁體中文（台灣）\nAppearance\nSystem\nLight\nDark\nImmersive effects\nDiscovery sound\n\nSound is optional and used only for intentional discovery. Reduced motion is always respected.\n\nEnglish and Traditional Chinese cover Home, Browse, public listing details, shared navigation and Account Settings. Rental, messaging and other page content remain English."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "borrower-station-dialog",
+      "template": "/listings/4",
+      "route": "/listings/4",
+      "actor": "borrower",
+      "state": "native-station-modal",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/listings/4",
+      "file": "screenshots/borrower-station-dialog--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — available-camera",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Close station map",
+            "width": 41,
+            "height": 24
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom in",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom out",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Reset map view",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Muzha · 木柵 · BR02 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Muzha",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xinhai · 辛亥 · BR05 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Xinhai",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Dazhi · 大直 · BR14 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Dazhi",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xihu · 西湖 · BR16 — unavailable",
+            "width": 235,
+            "height": 42
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          },
+          {
+            "level": "H3",
+            "text": "Request this rental"
+          },
+          {
+            "level": "H2",
+            "text": "Choose meeting station"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\n\nThe rental quotation, station picker and private messaging workflow below currently use English. Your listing and language preference are unchanged.\n\nRequest this rental\n\nAll rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial days round up.\n\nStart date\nEnd date\nChoose meeting station\n\nChoose one owner-approved location. No station is selected yet.\n\nChoose meeting station\nClose\n\nGreen locations are approved by this owner. Grey locations cannot be selected. Stations are meeting areas. Agree on an exact exit or meeting point with the other participant.\n\n動物園\n大安\n南港展覽館\n廣慈/奉天宮\n北投\n新北投\n淡水\n新店\n七張\n小碧潭\n大坪林\n台電大樓\n松山\n南勢角\n迴龍\n蘆洲\n頂埔\n亞東醫院\n新北產業園區\nFull network overview · Search or zoom in for station labels\n+\n100%\n−\n↺\nOriginal schematic · Layout under review Drag to pan · Ct"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "listing-borrower",
+      "template": "/listings/2",
+      "route": "/listings/2",
+      "actor": "borrower",
+      "state": "default",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/listings/2",
+      "file": "screenshots/listing-borrower--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — tool",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 4,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\nBooking is paused while this item has an open report or dispute.\nLanguage\nEnglish\n繁體中文（台灣）\nAppearance\nSystem\nLight\nDark\nImmersive effects\nDiscovery sound\n\nSound is optional and used only for intentional discovery. Reduced motion is always respected.\n\nEnglish and Traditional Chinese cover Home, Browse, public listing details, shared navigation and Account Settings. Rental, messaging and other page content remain English."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "borrower-station-dialog",
+      "template": "/listings/4",
+      "route": "/listings/4",
+      "actor": "borrower",
+      "state": "native-station-modal",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/listings/4",
+      "file": "screenshots/borrower-station-dialog--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — available-camera",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Close station map",
+            "width": 41,
+            "height": 24
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom in",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom out",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Reset map view",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Taipei Zoo · 動物園 · BR01 — unavailable",
+            "width": 301,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Taipei Zoo",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Muzha · 木柵 · BR02 — unavailable",
+            "width": 301,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Muzha",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xinhai · 辛亥 · BR05 — unavailable",
+            "width": 301,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Xinhai",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Linguang · 麟光 · BR06 — unavailable",
+            "width": 301,
+            "height": 42
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          },
+          {
+            "level": "H3",
+            "text": "Request this rental"
+          },
+          {
+            "level": "H2",
+            "text": "Choose meeting station"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\n\nThe rental quotation, station picker and private messaging workflow below currently use English. Your listing and language preference are unchanged.\n\nRequest this rental\n\nAll rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial days round up.\n\nStart date\nEnd date\nChoose meeting station\n\nChoose one owner-approved location. No station is selected yet.\n\nChoose meeting station\nClose\n\nGreen locations are approved by this owner. Grey locations cannot be selected. Stations are meeting areas. Agree on an exact exit or meeting point with the other participant.\n\n動物園\n大安\n南港展覽館\n廣慈/奉天宮\n北投\n新北投\n淡水\n新店\n七張\n小碧潭\n台電大樓\n松山\n南勢角\n迴龍\n蘆洲\n頂埔\n亞東醫院\n新北產業園區\nFull network overview · Search or zoom in for station labels\n+\n100%\n−\n↺\nOriginal schematic · Layout under review\nBR · Wenhu\nR · Tamsu"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "listing-borrower",
+      "template": "/listings/2",
+      "route": "/listings/2",
+      "actor": "borrower",
+      "state": "default",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/listings/2",
+      "file": "screenshots/listing-borrower--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — tool",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 4,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\nBooking is paused while this item has an open report or dispute.\nLanguage\nEnglish\n繁體中文（台灣）\nAppearance\nSystem\nLight\nDark\nImmersive effects\nDiscovery sound\n\nSound is optional and used only for intentional discovery. Reduced motion is always respected.\n\nEnglish and Traditional Chinese cover Home, Browse, public listing details, shared navigation and Account Settings. Rental, messaging and other page content remain English."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "borrower-station-dialog",
+      "template": "/listings/4",
+      "route": "/listings/4",
+      "actor": "borrower",
+      "state": "native-station-modal",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/listings/4",
+      "file": "screenshots/borrower-station-dialog--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — available-camera",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Close station map",
+            "width": 41,
+            "height": 24
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom in",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom out",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Reset map view",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Muzha · 木柵 · BR02 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Muzha",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xinhai · 辛亥 · BR05 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Xinhai",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Dazhi · 大直 · BR14 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Dazhi",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xihu · 西湖 · BR16 — unavailable",
+            "width": 235,
+            "height": 42
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          },
+          {
+            "level": "H3",
+            "text": "Request this rental"
+          },
+          {
+            "level": "H2",
+            "text": "Choose meeting station"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\n\nThe rental quotation, station picker and private messaging workflow below currently use English. Your listing and language preference are unchanged.\n\nRequest this rental\n\nAll rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial days round up.\n\nStart date\nEnd date\nChoose meeting station\n\nChoose one owner-approved location. No station is selected yet.\n\nChoose meeting station\nClose\n\nGreen locations are approved by this owner. Grey locations cannot be selected. Stations are meeting areas. Agree on an exact exit or meeting point with the other participant.\n\n動物園\n大安\n南港展覽館\n廣慈/奉天宮\n北投\n新北投\n淡水\n新店\n七張\n小碧潭\n大坪林\n台電大樓\n松山\n南勢角\n迴龍\n蘆洲\n頂埔\n亞東醫院\n新北產業園區\nFull network overview · Search or zoom in for station"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "listing-borrower",
+      "template": "/listings/2",
+      "route": "/listings/2",
+      "actor": "borrower",
+      "state": "default",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/listings/2",
+      "file": "screenshots/listing-borrower--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — tool",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 4,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\nBooking is paused while this item has an open report or dispute.\nLanguage\nEnglish\n繁體中文（台灣）\nAppearance\nSystem\nLight\nDark\nImmersive effects\nDiscovery sound\n\nSound is optional and used only for intentional discovery. Reduced motion is always respected.\n\nEnglish and Traditional Chinese cover Home, Browse, public listing details, shared navigation and Account Settings. Rental, messaging and other page content remain English."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "borrower-station-dialog",
+      "template": "/listings/4",
+      "route": "/listings/4",
+      "actor": "borrower",
+      "state": "native-station-modal",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/listings/4",
+      "file": "screenshots/borrower-station-dialog--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — available-camera",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Close station map",
+            "width": 41,
+            "height": 24
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom in",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom out",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Reset map view",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Muzha · 木柵 · BR02 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Muzha",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xinhai · 辛亥 · BR05 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Xinhai",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Dazhi · 大直 · BR14 — unavailable",
+            "width": 235,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Dazhi",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xihu · 西湖 · BR16 — unavailable",
+            "width": 235,
+            "height": 42
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          },
+          {
+            "level": "H3",
+            "text": "Request this rental"
+          },
+          {
+            "level": "H2",
+            "text": "Choose meeting station"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\n\nThe rental quotation, station picker and private messaging workflow below currently use English. Your listing and language preference are unchanged.\n\nRequest this rental\n\nAll rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial days round up.\n\nStart date\nEnd date\nChoose meeting station\n\nChoose one owner-approved location. No station is selected yet.\n\nChoose meeting station\nClose\n\nGreen locations are approved by this owner. Grey locations cannot be selected. Stations are meeting areas. Agree on an exact exit or meeting point with the other participant.\n\n動物園\n大安\n南港展覽館\n廣慈/奉天宮\n北投\n新北投\n淡水\n新店\n七張\n小碧潭\n大坪林\n台電大樓\n松山\n南勢角\n迴龍\n蘆洲\n頂埔\n亞東醫院\n新北產業園區\nFull network overview · Search or zoom in for station labels\n+\n100%\n−\n↺\nOriginal schematic · Layout under review Drag to pan · Ct"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "listing-borrower",
+      "template": "/listings/2",
+      "route": "/listings/2",
+      "actor": "borrower",
+      "state": "default",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/listings/2",
+      "file": "screenshots/listing-borrower--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — tool",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 4,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\nBooking is paused while this item has an open report or dispute.\nLanguage\nEnglish\n繁體中文（台灣）\nAppearance\nSystem\nLight\nDark\nImmersive effects\nDiscovery sound\n\nSound is optional and used only for intentional discovery. Reduced motion is always respected.\n\nEnglish and Traditional Chinese cover Home, Browse, public listing details, shared navigation and Account Settings. Rental, messaging and other page content remain English."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "borrower-station-dialog",
+      "template": "/listings/4",
+      "route": "/listings/4",
+      "actor": "borrower",
+      "state": "native-station-modal",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/listings/4",
+      "file": "screenshots/borrower-station-dialog--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Synthetic audit fixture — available-camera",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "30px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "A",
+            "label": "← Back to listings",
+            "width": 111,
+            "height": 16
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Close station map",
+            "width": 41,
+            "height": 24
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom in",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Zoom out",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Reset map view",
+            "width": 40,
+            "height": 40
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Taipei Zoo · 動物園 · BR01 — unavailable",
+            "width": 301,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Taipei Zoo",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Muzha · 木柵 · BR02 — unavailable",
+            "width": 301,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Muzha",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Xinhai · 辛亥 · BR05 — unavailable",
+            "width": 301,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Locate Xinhai",
+            "width": 61,
+            "height": 42
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Linguang · 麟光 · BR06 — unavailable",
+            "width": 301,
+            "height": 42
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Pickup stations"
+          },
+          {
+            "level": "H3",
+            "text": "Request this rental"
+          },
+          {
+            "level": "H2",
+            "text": "Choose meeting station"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit borrower\nSign out\n← Back to listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\n$12.00 per day\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\nCondition\nSynthetic declared condition; known wear documented.\nOwner\nSynthetic audit owner\nDeposit\n$30.00\nPickup stations\nTaipei Main Station\n\nThe rental quotation, station picker and private messaging workflow below currently use English. Your listing and language preference are unchanged.\n\nRequest this rental\n\nAll rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial days round up.\n\nStart date\nEnd date\nChoose meeting station\n\nChoose one owner-approved location. No station is selected yet.\n\nChoose meeting station\nClose\n\nGreen locations are approved by this owner. Grey locations cannot be selected. Stations are meeting areas. Agree on an exact exit or meeting point with the other participant.\n\n動物園\n大安\n南港展覽館\n廣慈/奉天宮\n北投\n新北投\n淡水\n新店\n七張\n小碧潭\n台電大樓\n松山\n南勢角\n迴龍\n蘆洲\n頂埔\n亞東醫院\n新北產業園區\nFull network overview · Search or zoom in for station labels\n+\n100%\n−\n↺\nOriginal schematic · Layout under review\nBR · Wenhu\nR · Tamsu"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-keyboard-skip",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "keyboard-focus",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-keyboard-skip--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "70.4px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit owner\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose somethin"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-save-success",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "native-own-profile-save-success",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-save-success--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "70.4px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit owner light 1440\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSettings saved.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and co"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-keyboard-skip",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "keyboard-focus",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-keyboard-skip--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "44.8px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner light 1440\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange.\n\nHustlen’\n\nGoo"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-save-success",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "native-own-profile-save-success",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-save-success--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "44.8px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner light 820\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSettings saved.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-keyboard-skip",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "keyboard-focus",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-keyboard-skip--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "48px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner light 820\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange.\n\nHustlen’\n\nGood things, shared with care.\n\nAccount "
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-save-success",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "native-own-profile-save-success",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-save-success--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "48px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner light 390\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSettings saved.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange.\n\nHustlen’\n\nGood things, shared wit"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-keyboard-skip",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "keyboard-focus",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-keyboard-skip--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "70.4px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit owner light 390\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choos"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-save-success",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "native-own-profile-save-success",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-save-success--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "70.4px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit owner dark 1440\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSettings saved.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and con"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-keyboard-skip",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "keyboard-focus",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-keyboard-skip--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "44.8px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 1440\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange.\n\nHustlen’\n\nGood"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-save-success",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "native-own-profile-save-success",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-save-success--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "44.8px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 820\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nSmall things.\nThoughtfully shared.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSettings saved.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange."
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-keyboard-skip",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "keyboard-focus",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-keyboard-skip--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "48px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 820\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange.\n\nHustlen’\n\nGood things, shared with care.\n\nAccount e"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "account-save-success",
+      "template": "/account",
+      "route": "/account",
+      "actor": "owner",
+      "state": "native-own-profile-save-success",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/account",
+      "file": "screenshots/account-save-success--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Your account",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "48px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 5,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Your account"
+          },
+          {
+            "level": "H2",
+            "text": "The name you share."
+          },
+          {
+            "level": "H2",
+            "text": "Security and access"
+          },
+          {
+            "level": "H2",
+            "text": "Good exchanges begin with a familiar name."
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Skip to account content\nHustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 390\nSign out\nHUSTLEN’ / THE ACCOUNT BOOK\nPERSONAL EDITION · Nº 01\n\nA PLACE FOR THE PARTICULARS\n\nYour account\n\nKeep your details in order. Make room for what comes next.\n\nIN THIS ACCOUNT\n\n01\nPersonal details\n02\nActivity logs\n03\nTrust & verification\n↗\nBack to dashboard\n\n01 / PERSONAL DETAILS\n\nThe name you share.\n\nA small introduction, wherever you meet in the marketplace.\n\nEmail address\naudit-owner-86b3c41427b90e3bf2ce130b@example.test\nYour sign-in address (read-only). This form changes your display name only.\nAccount access\nActive\nDisplay name\n\nShown to other people on Hustlen’. Up to 100 characters.\n\nSave settings →\nYour details are up to date.\n\nSettings saved.\n\nSecurity and access\n\nPassword changes are not available in this version. Account recovery delivery is not configured.\n\nDetailed session information is not available in this account view.\n\nCULTIVATING A LITTLE TRUST\n\nGood exchanges begin with a familiar name.\n\nYour display name accompanies your listings and conversations. Choose something others can recognise when arranging an exchange.\n\nHustlen’\n\nGood things, shared with"
+      },
+      "pageErrors": []
+    },
+    {
+      "scenario": "browse-hydration-loading",
+      "template": "/listings",
+      "route": "/listings",
+      "actor": "owner",
+      "state": "actual-scripts-held-loading",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/listings",
+      "file": "screenshots/browse-hydration-loading--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Browse listings",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "36px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Browse listings"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tent"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — camera"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit owner dark 390\nSign out\n\nMARKETPLACE\n\nBrowse listings\nCreate listing\nItem filters\nSearch items\nCategory\nAll categories\nCameras\nCamping & Outdoors\nTools\nStatus\nAll statuses\nAvailable\nRented\nFlagged\nPickup station\nAll stations\nTaipei Main Station\n\nPreparing item filters…\n\n4 listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMPING & OUTDOORS\n\nSynthetic audit fixture — tent\nRented\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMERAS\n"
+      }
+    },
+    {
+      "scenario": "browse-hydration-loading",
+      "template": "/listings",
+      "route": "/listings",
+      "actor": "owner",
+      "state": "actual-scripts-held-loading",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/listings",
+      "file": "screenshots/browse-hydration-loading--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Browse listings",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "36px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Browse listings"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tent"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — camera"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 390\nSign out\n\nMARKETPLACE\n\nBrowse listings\nCreate listing\nItem filters\nSearch items\nCategory\nAll categories\nCameras\nCamping & Outdoors\nTools\nStatus\nAll statuses\nAvailable\nRented\nFlagged\nPickup station\nAll stations\nTaipei Main Station\n\nPreparing item filters…\n\n4 listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMPING & OUTDOORS\n\nSynthetic audit fixture — tent\nRented\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMERAS\n\nSynthetic audit fixture — camera\nFlagged\n\nFictional UI-audit record. Artwor"
+      }
+    },
+    {
+      "scenario": "browse-hydration-loading",
+      "template": "/listings",
+      "route": "/listings",
+      "actor": "owner",
+      "state": "actual-scripts-held-loading",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/listings",
+      "file": "screenshots/browse-hydration-loading--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(232, 223, 203)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "light"
+        ],
+        "h1": {
+          "text": "Browse listings",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "36px",
+          "color": "rgb(52, 46, 37)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Browse listings"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tent"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — camera"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 390\nSign out\n\nMARKETPLACE\n\nBrowse listings\nCreate listing\nItem filters\nSearch items\nCategory\nAll categories\nCameras\nCamping & Outdoors\nTools\nStatus\nAll statuses\nAvailable\nRented\nFlagged\nPickup station\nAll stations\nTaipei Main Station\n\nPreparing item filters…\n\n4 listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMPING & OUTDOORS\n\nSynthetic audit fixture — tent\nRented\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMERAS\n\nSynthetic audit fixture — camera\nFlagged\n\nFictional UI-audit record. Artwor"
+      }
+    },
+    {
+      "scenario": "browse-hydration-loading",
+      "template": "/listings",
+      "route": "/listings",
+      "actor": "owner",
+      "state": "actual-scripts-held-loading",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/listings",
+      "file": "screenshots/browse-hydration-loading--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Browse listings",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "36px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Browse listings"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tent"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — camera"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nHome\nBrowse\nList an item\nMy rentals\nCategories\nMRT pickup stations\nCustomer service\nAccount center · Synthetic audit owner dark 390\nSign out\n\nMARKETPLACE\n\nBrowse listings\nCreate listing\nItem filters\nSearch items\nCategory\nAll categories\nCameras\nCamping & Outdoors\nTools\nStatus\nAll statuses\nAvailable\nRented\nFlagged\nPickup station\nAll stations\nTaipei Main Station\n\nPreparing item filters…\n\n4 listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMPING & OUTDOORS\n\nSynthetic audit fixture — tent\nRented\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMERAS\n"
+      }
+    },
+    {
+      "scenario": "browse-hydration-loading",
+      "template": "/listings",
+      "route": "/listings",
+      "actor": "owner",
+      "state": "actual-scripts-held-loading",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/listings",
+      "file": "screenshots/browse-hydration-loading--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Browse listings",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "36px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Browse listings"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tent"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — camera"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 390\nSign out\n\nMARKETPLACE\n\nBrowse listings\nCreate listing\nItem filters\nSearch items\nCategory\nAll categories\nCameras\nCamping & Outdoors\nTools\nStatus\nAll statuses\nAvailable\nRented\nFlagged\nPickup station\nAll stations\nTaipei Main Station\n\nPreparing item filters…\n\n4 listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMPING & OUTDOORS\n\nSynthetic audit fixture — tent\nRented\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMERAS\n\nSynthetic audit fixture — camera\nFlagged\n\nFictional UI-audit record. Artwor"
+      }
+    },
+    {
+      "scenario": "browse-hydration-loading",
+      "template": "/listings",
+      "route": "/listings",
+      "actor": "owner",
+      "state": "actual-scripts-held-loading",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/listings",
+      "file": "screenshots/browse-hydration-loading--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": "rgb(25, 24, 18)",
+        "mainCount": 1,
+        "fullHeritageRoots": 1,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [
+          "dark"
+        ],
+        "h1": {
+          "text": "Browse listings",
+          "font": "Georgia, \"Times New Roman\", serif",
+          "size": "36px",
+          "color": "rgb(238, 225, 198)"
+        },
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "BUTTON",
+            "label": "Report",
+            "width": 42,
+            "height": 20
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          },
+          {
+            "tag": "INPUT",
+            "label": "",
+            "width": 18,
+            "height": 18
+          }
+        ],
+        "inputs": 8,
+        "headings": [
+          {
+            "level": "H2",
+            "text": "The marketplace"
+          },
+          {
+            "level": "H2",
+            "text": "Your account book"
+          },
+          {
+            "level": "H1",
+            "text": "Browse listings"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — available-camera"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tent"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — tool"
+          },
+          {
+            "level": "H2",
+            "text": "Synthetic audit fixture — camera"
+          }
+        ],
+        "brokenImages": 0,
+        "bodyExcerpt": "Hustlen’\nLEND. BORROW. GROW.\nExplore\nAccount center · Synthetic audit owner dark 390\nSign out\n\nMARKETPLACE\n\nBrowse listings\nCreate listing\nItem filters\nSearch items\nCategory\nAll categories\nCameras\nCamping & Outdoors\nTools\nStatus\nAll statuses\nAvailable\nRented\nFlagged\nPickup station\nAll stations\nTaipei Main Station\n\nPreparing item filters…\n\n4 listings\n\nCAMERAS\n\nSynthetic audit fixture — available-camera\nAvailable\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMPING & OUTDOORS\n\nSynthetic audit fixture — tent\nRented\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nTOOLS\n\nSynthetic audit fixture — tool\nFlagged\n\nFictional UI-audit record. Artwork is a schematic fixture, not a real product photograph.\n\n$12.00\nper day\n\nSynthetic declared condition; known wear documented.\n\nPickup: Taipei Main Station\n\nReport\n\nCAMERAS\n\nSynthetic audit fixture — camera\nFlagged\n\nFictional UI-audit record. Artwor"
+      }
+    },
+    {
+      "scenario": "booking-server-loading",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-lock-loading",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-loading--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Loading bookings…"
+      }
+    },
+    {
+      "scenario": "booking-server-error",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-cancellation-error-boundary",
+      "theme": "light",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-error--light--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Try again",
+            "width": 100,
+            "height": 42
+          }
+        ],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Unable to load your bookings. Please try again.\n\nTry again"
+      }
+    },
+    {
+      "scenario": "booking-server-loading",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-lock-loading",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-loading--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Loading bookings…"
+      }
+    },
+    {
+      "scenario": "booking-server-error",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-cancellation-error-boundary",
+      "theme": "light",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-error--light--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Try again",
+            "width": 100,
+            "height": 42
+          }
+        ],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Unable to load your bookings. Please try again.\n\nTry again"
+      }
+    },
+    {
+      "scenario": "booking-server-loading",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-lock-loading",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-loading--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Loading bookings…"
+      }
+    },
+    {
+      "scenario": "booking-server-error",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-cancellation-error-boundary",
+      "theme": "light",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-error--light--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Try again",
+            "width": 100,
+            "height": 42
+          }
+        ],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Unable to load your bookings. Please try again.\n\nTry again"
+      }
+    },
+    {
+      "scenario": "booking-server-loading",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-lock-loading",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-loading--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Loading bookings…"
+      }
+    },
+    {
+      "scenario": "booking-server-error",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-cancellation-error-boundary",
+      "theme": "dark",
+      "width": 1440,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-error--dark--1440.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 1440,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Try again",
+            "width": 100,
+            "height": 42
+          }
+        ],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Unable to load your bookings. Please try again.\n\nTry again"
+      }
+    },
+    {
+      "scenario": "booking-server-loading",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-lock-loading",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-loading--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Loading bookings…"
+      }
+    },
+    {
+      "scenario": "booking-server-error",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-cancellation-error-boundary",
+      "theme": "dark",
+      "width": 820,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-error--dark--820.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 820,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Try again",
+            "width": 100,
+            "height": 42
+          }
+        ],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Unable to load your bookings. Please try again.\n\nTry again"
+      }
+    },
+    {
+      "scenario": "booking-server-loading",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-lock-loading",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-loading--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Loading bookings…"
+      }
+    },
+    {
+      "scenario": "booking-server-error",
+      "template": "/bookings/1",
+      "route": "/bookings/1",
+      "actor": "owner",
+      "state": "owned-read-cancellation-error-boundary",
+      "theme": "dark",
+      "width": 390,
+      "http": 200,
+      "finalPath": "/bookings/1",
+      "file": "screenshots/booking-server-error--dark--390.jpg",
+      "metrics": {
+        "bodyBackground": "rgb(248, 250, 252)",
+        "mainBackground": null,
+        "mainCount": 0,
+        "fullHeritageRoots": 0,
+        "chromeOnlyRoots": 0,
+        "rootThemes": [],
+        "h1": null,
+        "overflow": false,
+        "documentWidth": 390,
+        "smallTargets": [
+          {
+            "tag": "BUTTON",
+            "label": "Try again",
+            "width": 100,
+            "height": 42
+          }
+        ],
+        "inputs": 0,
+        "headings": [],
+        "brokenImages": 0,
+        "bodyExcerpt": "Unable to load your bookings. Please try again.\n\nTry again"
+      }
+    }
+  ]
+}
