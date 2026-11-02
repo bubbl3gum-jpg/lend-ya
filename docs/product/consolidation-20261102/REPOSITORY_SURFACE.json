@@ -1,0 +1,131 @@
+{
+  "captured": "2026-11-02 Asia/Taipei",
+  "scope": "Tracked asset/style/CI/config metadata only; no environment values, credentials or file bodies. Complements full source inventory.",
+  "files": [
+    {
+      "file": ".github/workflows/verify.yml",
+      "bytes": 2483,
+      "sha256": "131cf8f909aab2a7e21e6960e4c13605744bfa6dcbac564dc5d2c50893d7d3c5"
+    },
+    {
+      "file": "AGENTS.md",
+      "bytes": 12831,
+      "sha256": "1fbc317fe4a244c734a1830908c2f374922a439971528854360d2dde3be3985c"
+    },
+    {
+      "file": "app/globals.css",
+      "bytes": 10515,
+      "sha256": "5ae1d18c888504a6a3299e2f4468da5126722dbadab87a1fa5e3c44b2fc64cc5"
+    },
+    {
+      "file": "app/heritage.css",
+      "bytes": 37382,
+      "sha256": "beb22ad60cc2aa456297ba41b1681903347881dbf3415d045ab566cefea1a4bb"
+    },
+    {
+      "file": "components/mrt/map.css",
+      "bytes": 2369,
+      "sha256": "7889aff2e0c59c04fae15745901885b85044af15ccbbf8da342d6932e6f4dac2"
+    },
+    {
+      "file": "docker-compose.yml",
+      "bytes": 348,
+      "sha256": "fa6de0616d546457c204ce9b68b3dc75fbad3011db30944d7801475f3cc9fdd0"
+    },
+    {
+      "file": "eslint.config.mjs",
+      "bytes": 491,
+      "sha256": "0b0c048e51a854b6caa07c6351de24b07e442f1a34bc2246d003e53743ea6a7e"
+    },
+    {
+      "file": "next.config.ts",
+      "bytes": 903,
+      "sha256": "e97f32e9fe14e23ce094a695ccd3890c4b939382bd3e96290cdbc7704072104e"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 337784,
+      "sha256": "a9c8717e4e9bf614240e27b78b66455c411a8d6c9198715e69444567fa857c74"
+    },
+    {
+      "file": "package.json",
+      "bytes": 11595,
+      "sha256": "1a346c549e60943531104a91a7df3753e45485df812d801a0282b84a6258a6c0"
+    },
+    {
+      "file": "postcss.config.mjs",
+      "bytes": 94,
+      "sha256": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde"
+    },
+    {
+      "file": "prisma7.config.ts",
+      "bytes": 406,
+      "sha256": "8f1c76d029cbe28460b90b2a026856a5ab5ccdf6f4f5e1fae672bc23574c765c"
+    },
+    {
+      "file": "public/file.svg",
+      "bytes": 391,
+      "sha256": "2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4"
+    },
+    {
+      "file": "public/globe.svg",
+      "bytes": 1035,
+      "sha256": "b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf"
+    },
+    {
+      "file": "public/heritage/harvest-landscape.webp",
+      "bytes": 240306,
+      "sha256": "526771ea1e8190a1460797686172f909ac64579805fbc023b0a8c471fda2c5cf"
+    },
+    {
+      "file": "public/heritage/organic-grain.webp",
+      "bytes": 39104,
+      "sha256": "9284a3785d0a5da31e0b0c3d090e1b4f0764bc3ab437fcb7c108394b895d27be"
+    },
+    {
+      "file": "public/heritage/paper-fibers.png",
+      "bytes": 4422,
+      "sha256": "9d71b4b2ade67a52e6cf244dce8342047d52dfb0586a8f2721fdc0455d2abe97"
+    },
+    {
+      "file": "public/heritage/plate-camera.webp",
+      "bytes": 45202,
+      "sha256": "499c1f5f991316281c45baa5a9e14a180222521164f47cb7529ba480b2fe41b8"
+    },
+    {
+      "file": "public/heritage/plate-laptop.webp",
+      "bytes": 33222,
+      "sha256": "84c39f7066ed61e4cc75f12890a6a2dc3a85b5416d7df129b2a2a9d9a215e015"
+    },
+    {
+      "file": "public/heritage/plate-tent.webp",
+      "bytes": 41584,
+      "sha256": "10e906e99f8f750584c2ad0a37147d65c9ff5f039d018e921c6131b62f000785"
+    },
+    {
+      "file": "public/heritage/plate-tool.webp",
+      "bytes": 31360,
+      "sha256": "0e624945d858c3d83beec374320ebae80c2bb3f3670f236a51d7d85a111178a1"
+    },
+    {
+      "file": "public/next.svg",
+      "bytes": 1375,
+      "sha256": "55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc"
+    },
+    {
+      "file": "public/vercel.svg",
+      "bytes": 128,
+      "sha256": "f081337b2fee635b455b63275406a3e7f39d6a014e25ad90dab5a67e62a12ac4"
+    },
+    {
+      "file": "public/window.svg",
+      "bytes": 385,
+      "sha256": "644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1"
+    },
+    {
+      "file": "tsconfig.json",
+      "bytes": 685,
+      "sha256": "dec14e7e97607b107b2758503d3c9d243e0645365846b9da36c9c88cba0ee250"
+    }
+  ]
+}

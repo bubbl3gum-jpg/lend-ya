@@ -1,0 +1,41 @@
+# Complete changed-file inventory
+
+Relative to starting local baseline `a4bf23287660475bb324520ddd1c5a42a9d13faa`. The two November2 reference documents are imported unchanged from the reviewed remote integration history. No private configuration, raw inference transcripts or ignored test artifacts are included.
+
+- `.github/workflows/verify.yml`
+- `README.md`
+- `app/customer-service/page.tsx`
+- `app/heritage.css`
+- `docs/product/COMPLETE_TEST_REPORT.md`
+- `docs/product/DEMO_RUNBOOK.md`
+- `docs/product/FULL_FUNCTIONALITY_AUDIT.md`
+- `docs/product/INTEGRATION_AUDIT_2026-11-02.md`
+- `docs/product/INTEGRATION_CHANGELOG.md`
+- `docs/product/PRODUCT_CAPABILITIES.md`
+- `docs/product/RELEASE_READINESS_REPORT.md`
+- `docs/product/REMAINING_ISSUES.md`
+- `docs/product/TEAM_MEETING_BRIEF_2026-11-02.md`
+- `docs/product/TEAM_PRESENTATION_SUMMARY.md`
+- `docs/product/UX_CONSOLIDATION_REPORT.md`
+- `docs/product/consolidation-20261102/CHANGED_FILES.md`
+- `docs/product/consolidation-20261102/ENTRY_POINTS.md`
+- `docs/product/consolidation-20261102/REPOSITORY_SURFACE.json`
+- `docs/product/consolidation-20261102/SOURCE_INVENTORY.json`
+- `docs/product/consolidation-20261102/screenshots/help-dark-desktop.png`
+- `docs/product/consolidation-20261102/screenshots/help-dark-mobile-initial.png`
+- `docs/product/consolidation-20261102/screenshots/help-dark-mobile.png`
+- `docs/product/consolidation-20261102/screenshots/help-dark-tablet.png`
+- `docs/product/consolidation-20261102/screenshots/help-light-desktop.png`
+- `docs/product/consolidation-20261102/screenshots/help-light-mobile.png`
+- `docs/product/consolidation-20261102/screenshots/help-light-tablet.png`
+- `docs/product/consolidation-20261102/screenshots/homepage-dark-desktop.png`
+- `docs/product/consolidation-20261102/screenshots/marketplace-menu-mobile.png`
+- `docs/product/consolidation-20261102/verification.json`
+- `lib/i18n/catalogues.ts`
+- `lib/marketplace/navigation.ts`
+- `package-lock.json`
+- `tests/dependency-security.test.ts`
+- `tests/homepage.integration.test.ts`
+- `tests/localization.test.ts`
+- `tests/moderation-migration.test.ts`
+- `tests/mrt-integration.ts`

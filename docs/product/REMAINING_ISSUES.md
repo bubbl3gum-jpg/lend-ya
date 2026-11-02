@@ -1,0 +1,22 @@
+# Remaining issues — integration candidate
+
+2 November 2026, Asia/Taipei. Source inventory and exact fresh outcomes accompany this register; none of the deferred policies is silently approved.
+
+| ID | Priority / state | Finding and next action |
+|---|---|---|
+| DEMO-01 | P0 acceptance BLOCKED | Genuine local Qwen connectivity, English/zh-TW output, three-turn quality and observed latency cannot be tested here: no Ollama executable/attached Mac runtime. Owner's earlier exploratory observations are historical. Rehearse on approved Mac with existing model, synthetic-only launcher and explicit genuine provenance. Use honest unavailable fallback until then. |
+| MRT-01 | P1 intermittent / acceptance risk | Initial original integration failed a30s mobile Zoom in tap after station selection. Two later unchanged-deadline original runs passed, with no map code correction. Initial run overlapped source edits/HMR and other tooling; causation is unproven. Failure-only layout diagnostics retain/rethrow any repeat. Confirm stable owner-device rehearsal; no claim that reruns fixed a defect. |
+| ENV-01 | Corrected verification-tool defect | Temporary evidence wrapper incorrectly selected another concurrent test's active output directory. Restored all bytes; corrected wrapper to archive only IDs emitted by its own completed run. Initial meetup-session failure contains resulting module-resolution500s and remains recorded. Fresh rerun passed6/6; no app authorization/collector change. |
+| SEC-01 | Focused patch verified; broader risk open | npm audit initially1 high+16 moderate. Zod4.6.5→4.6.7 dev-only patch removes high advisory and passes bounded oversized-array plus valid-input regression.16 moderate tool-chain findings remain; review compatible minimatch/ESLint fixes rather than accept proposed major downgrades or globally override incompatible APIs. No production exploit established. |
+| DEMO-02 | P1 owner rehearsal | Fresh virtual-camera QR is not physical iPhone/Safari camera/GPS acceptance. Verify permission denial/recovery and actual device flow before presentation claiming physical MRT verification. Temporary home centre must remain TEST_LOCATION with bilateral consent. |
+| OPS-01 | P1 production blocker | Local-disk listing media lacks a reviewed production object-store/backup/restore plan. No real service operation or DB alteration is authorized by a development demo. |
+| UX-01 | P1 partial polish | Primary entries and Help refined; dashboard, booking, Admin and transactional pages still have mixed legacy styling/English. No whole-site redesign or WCAG/aesthetic acceptance claim. Test keyboard/touch/contrast on owner devices. |
+| MONEY-01 | P1 disclosure | Existing USD denomination and numeric deposits are not TWD or processed payments. Explain them; changing historical currencies/amounts requires separate product/data migration review. |
+| AUTH-01 | P1 operational policy | Password reset delivery/recovery and mandatory production MFA unavailable. Existing bounded password/passkey pilots do not grant staff powers. Historical overlapping-workload login timing concern remains in tracker pending controlled reproduction/owner Mac acceptance. |
+| SUPPORT-01 | P1 / gated | Production Support intake, private staff replies, authoritative delivery semantics, recovery and human operations policies unresolved. Existing owned candidates are not live service. No response-time promises; silence not liability. |
+| STAGE-06 | Deferred existing gate | Authorized station suspension/restoration and sensitive geofence approval remain unfinished; no production station mutation. |
+| STAGE-08 | Deferred existing gate | Announcement audiences/publishing and editable operational settings require exact approval/cutover. Current candidates stay isolated. |
+| STAGE-09 | Pending owner acceptance | Heritage product visual direction/account acceptance remains incomplete; selected bilingual coverage not full-site delivery. |
+| FUTURE-01 | Deferred | Vision, translation providers, KYC/biometrics, money/financial decisions, staff activation, autonomous AI and broad private-record inference not authorized by consolidation. Preserve existing code, not operationalize it. |
+
+No unresolved P0 may be hidden to recommend final merge. Main/deploy/release require separate review/authorization. Reassess exact branch diff, fresh test ledger and owner/team rehearsal rather than count features.
