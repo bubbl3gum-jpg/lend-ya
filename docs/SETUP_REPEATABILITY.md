@@ -139,6 +139,14 @@ remote query failed with `could not read Username for 'https://github.com': No
 such device or address`. This is an authentication-access failure, not evidence
 of divergence. Retain the local checkpoint if normal Git access remains blocked;
 do not claim remote preservation without a successful post-push SHA query.
+The subsequent authorized normal push (`git -c push.followTags=false push origin
+HEAD:refs/heads/recovery/candidate-validation-20261103`) and independent
+`git ls-remote --exit-code --heads origin
+refs/heads/recovery/candidate-validation-20261103` both exited 128 with that same
+authentication error. No new remote backup is verified. Restore the supported
+GitHub repository authentication in the environment, recheck remote ancestry,
+then retry the normal push and exact-SHA query; do not extract/copy credentials,
+force-push or assume the old remote checkpoint is still current.
 
 ## Handover: dependency disposition
 
