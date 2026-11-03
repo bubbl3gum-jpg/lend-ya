@@ -1531,7 +1531,6 @@ test(
         async () => {
           try {
           await stop(); await start(); // normal new-booking flow, without preview enrollment
-          let id: number;
           const media = path.join(artifact, "pickup.y4m");
           // Initialize a valid fixture video; replace with this booking's QR before opening the camera.
           await writeFile(
@@ -1619,7 +1618,7 @@ test(
           await bpage.getByRole("button", { name: "Review quotation" }).click();
           await bpage.getByRole("button", { name: "Confirm and submit request" }).click();
           await bpage.waitForURL(/\/bookings\/\d+$/);
-          id = Number(new URL(bpage.url()).pathname.split("/").pop());
+          const id = Number(new URL(bpage.url()).pathname.split("/").pop());
           await opage.goto(`${base}/bookings/${id}`);
           await opage.getByRole("button", { name: "Accept request", exact: true }).click();
           await expect(opage.getByRole("heading", { name: "Submit owner handoff", exact: true })).toBeVisible();
