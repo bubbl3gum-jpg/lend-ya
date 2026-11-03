@@ -5,21 +5,23 @@ import { importMrt } from "../lib/mrt/import";
 import { scryptSync } from "node:crypto";
 import { prisma } from "../lib/prisma";
 
-const databaseUrl = process.env.DATABASE_URL;
+function assertDevelopmentTarget() {
+  const databaseUrl = process.env.DATABASE_URL;
 
-if (!databaseUrl) {
-  throw new Error(
-    "DATABASE_URL must be set before running the development seed.",
-  );
-}
+  if (!databaseUrl) {
+    throw new Error(
+      "DATABASE_URL must be set before running the development seed.",
+    );
+  }
 
-const databaseHost = new URL(databaseUrl).hostname;
-if (!["localhost", "127.0.0.1", "[::1]"].includes(databaseHost)) {
-  throw new Error("Refusing to seed a non-local database.");
-}
+  const databaseHost = new URL(databaseUrl).hostname;
+  if (!["localhost", "127.0.0.1", "[::1]"].includes(databaseHost)) {
+    throw new Error("Refusing to seed a non-local database.");
+  }
 
-if (process.env.NODE_ENV === "production") {
-  throw new Error("Refusing to run development seed with NODE_ENV=production.");
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Refusing to run development seed with NODE_ENV=production.");
+  }
 }
 
 function developmentPasswordHash(email: string): string {
@@ -35,6 +37,7 @@ function addDays(date: Date, days: number): Date {
 }
 
 async function main(): Promise<void> {
+  assertDevelopmentTarget();
   await importMrt();
   const alice = await prisma.user.upsert({
     where: { email: "alice@example.test" },
@@ -243,10 +246,12 @@ async function main(): Promise<void> {
   console.log(
     "Prepared missing local demo records without replacing existing users or rentals.",
   );
-  await prisma.$disconnect();
 }
 
 main().catch((error) => {
   logOperationalError("database.seed", error);
-  process.exit(1);
+  process.exitCode = 1;
+}).finally(() => prisma.$disconnect()).catch((error) => {
+  logOperationalError("database.seed.disconnect", error);
+  process.exitCode = 1;
 });

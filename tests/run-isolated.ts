@@ -185,7 +185,10 @@ async function main() {
       "TEST_BROWSER_PORT",
     ])
       env[variable] = String(testPort);
-    if (process.argv.includes("--migration"))
+    if (process.argv.includes("--baseline") || process.argv.includes("--baseline-setup-failure"))
+      await run(["node_modules/tsx/dist/cli.mjs", "tests/baseline.ts",
+        ...(process.argv.includes("--baseline-setup-failure") ? ["--setup-failure"] : [])]);
+    else if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
       if (!["recovery-room-migration","condition-claims-migration","rental-documentation-migration","password-change-migration","platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))

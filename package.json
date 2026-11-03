@@ -125,7 +125,13 @@
     "test:translation-sidecar": "HUSTLEN_TRANSLATION_TEST=1 tsx tests/run-isolated.ts --local-ai",
     "demo:vision": "tsx scripts/local-ai-demo.ts --vision",
     "test:vision-first": "HUSTLEN_VISION_FIRST_TEST=1 tsx tests/run-isolated.ts --local-ai",
-    "test:vision-demo": "HUSTLEN_VISION_DEMO_TEST=1 tsx --test tests/local-ai-demo.test.ts"
+    "test:vision-demo": "HUSTLEN_VISION_DEMO_TEST=1 tsx --test tests/local-ai-demo.test.ts",
+    "db:generate": "prisma generate --config prisma7.config.ts",
+    "db:migrate": "prisma migrate deploy --config prisma7.config.ts",
+    "db:setup": "npm run db:generate && npm run db:migrate && npm run mrt:import",
+    "db:seed": "prisma db seed --config prisma7.config.ts",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test:baseline": "tsx tests/run-isolated.ts --baseline"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",
@@ -159,5 +165,9 @@
     "prisma": {
       "mysql2": "3.24.6"
     }
+  },
+  "engines": {
+    "node": "24.x",
+    "npm": "11.x"
   }
 }

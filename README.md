@@ -4,23 +4,39 @@ Lend-Ya is a booking-based peer-to-peer marketplace MVP built with Next.js, Pris
 
 ## Local development
 
-1. Install dependencies with `npm ci`.
+1. Use Node **24.19.0** (see `.node-version`) and npm **11.x**, then install
+   locked dependencies with `npm ci`. CI reads the same Node version file.
 2. Start PostgreSQL with `docker compose up -d`.
-3. Set `DATABASE_URL` in `.env`:
+3. Copy `.env.example` to a private `.env` and supply your own `DATABASE_URL`,
+   random `MEETUP_CODE_SECRET` (at least 32 characters), and explicit
+   `MEETUP_CONFIRMATION_TTL_SECONDS` (60–1800). The template enables no
+   provisional features. For the checked-in local Compose service only:
 
 	```text
 	DATABASE_URL="postgresql://p2p_user:p2p_password@localhost:55433/p2p_marketplace?schema=public"
 	```
 
-4. Apply migrations, generate Prisma Client, and seed demo data:
+4. Generate Prisma Client, deploy all migrations and import MRT stations:
 
 	```bash
-	npx prisma migrate deploy --config prisma7.config.ts
-	npx prisma generate --config prisma7.config.ts
-	npx prisma db seed --config prisma7.config.ts
+	npm run db:setup
 	```
 
-5. Start Next.js with `npm run dev` and open <http://localhost:3000>.
+   Setup stops on the first failure. It never resets/truncates the database,
+   runs `db push`, or seeds demo accounts. Reruns preserve existing application
+   records and station identities; official MRT metadata is reconciled with the
+   checked-in network. Existing databases with unknown drift need review and
+   `npm run db:preflight`, not a reset or edited migration.
+
+5. **Optional local demo data only:** run `npm run db:seed` explicitly. Never
+   run the demo seed on production or on an unreviewed existing database.
+6. Start Next.js with `npm run dev` and open <http://localhost:3000>.
+
+Individual commands are `npm run db:generate`, `npm run db:migrate`, and
+`npm run mrt:import`. Prisma commands explicitly use `prisma7.config.ts`.
+`npm run typecheck` runs Next route type generation followed by full project
+TypeScript checking; generate Prisma Client first after every clean install.
+See [setup validation and repeatability](docs/SETUP_REPEATABILITY.md).
 
 The seed creates local demo accounts `alice@example.test`, `bob@example.test`, and `charlie@example.test`. Their development password is `LocalDev123!`. Do not use these credentials outside local development.
 
@@ -71,8 +87,8 @@ Run unit/project checks:
 ```bash
 npm run test:unit
 npx prisma validate --config prisma7.config.ts
-npx prisma generate --config prisma7.config.ts
-npx tsc --noEmit
+npm run db:generate
+npm run typecheck
 npm run lint
 npm run build
 ```
