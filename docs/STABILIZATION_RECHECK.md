@@ -1,7 +1,7 @@
 # Original Prompt 1 acceptance recheck
 
 Date: **2026-11-04**. The opening review rechecks Prompt 1 only; its later
-Prompt 2 and Recovery R3/R4/R5/R6 follow-ups are appended below. Reports were inspected against
+Prompt 2 and Recovery R3–R7 follow-ups are appended below. Reports were inspected against
 current source and fresh checks, not accepted as proof of correctness.
 
 ## Identity and provenance
@@ -491,3 +491,83 @@ or justified. The separate **empty-schema build limitation remains open**.
 Next: **R7 remaining owner/renter navigation coverage**, preserving R1–R5,
 current role/history permissions, lifecycle/evidence and feature gates. Do not
 turn historical uncertainty into a timestamp rewrite during navigation work.
+
+## Recovery R7 — owner/renter lifecycle navigation
+
+2026-11-04. Source/local/independently queried remote at start:
+`f8c602c7ad3771b2c757cb5b4c2e276712fc23da`, clean existing recovery branch and
+verified `https://github.com/bubbl3gum-jpg/lend-ya.git` origin. All ancestry/later
+R1–R6 work preserved; no reset, replacement checkout or main change. Tested
+source is that revision plus the reviewed R7 changes committed with this report.
+Applicable instructions, recovery/design contracts, schema and actual components/
+tests inspected before editing. Source-only reconstruction, not recovery of the
+missing original implementation patches.
+
+The candidate's original pending-only/no-direct-link defects were already
+absent. New `ParticipantBookings` extracts the existing role lists into explicit
+active/history groups with counts, accessible headings, all cards linked,
+group-specific empty states and exhaustive typed state classification. Current
+status, not past dates, determines grouping. Ordinary pending owner controls
+remain inline; documentation-bound approval and custody/evidence actions use
+the existing detail page with full review/lifecycle context. Role-scoped server
+queries and all backend authorization/transition/reservation rules are unchanged.
+
+| Requirement | Current implementation / executed evidence | Disposition |
+| --- | --- | --- |
+| Every enum state discoverable | Active: PENDING, CONFIRMED, HANDOFF_PENDING, IN_USE, RETURN_PENDING, INSPECTION, DISPUTED. History: COMPLETED, CANCELLED, ADMIN_CLOSED. Rejection uses CANCELLED; no invented state. Exhaustive generated-enum unit test. | Pass |
+| Both participant dashboard paths | Extended existing browser journey reopens real API-created booking from both dashboards at every normal state, validates unique href/status/Taipei label, and exercises real rejection, cancellation, dispute and existing administrative closure. Final full browser suite: 7 passed, zero failures/skips. | Pass |
+| Permissions/inactive history | Existing participant queries/detail/API checks retained. Browser verifies both participants retain inactive-listing history, unrelated dashboard cannot discover links, API 403 and semantic not-found/no private HTML. Streamed not-found may return HTTP 200; this is documented, not an access grant. | Pass |
+| Role/state actions and refresh | Existing inline owner mutation refresh; no duplicate full evidence forms in dashboard. Documented pending request leads to actual ledger before explicit detail approval; agreement browser suite 1 passed. Final cards reflect changed status/group. | Pass |
+| Loading/empty/error/mobile/locale | Both group empty messages; observed DB wait shows loading boundary; controlled read failure and restored service test real dashboard/detail retry buttons. A demonstrated stale-server-error reset is fixed via new GET reload. Both role paths tested at 390px; operational English body/shared zh-TW masthead and Taipei formatting retained. | Pass |
+| Preserved contracts | No changes to API, schema/migrations, pricing/time/policy, idempotency, evidence writers, moderation rules, security guards or feature-gate values. Existing R3/R4 replay and immutable synthetic history assertions retained. | Source diff verified |
+
+Full state map, code inventory, commands, failed attempts/corrections and final
+cleanup/acceptance are in [BOOKING_NAVIGATION.md](BOOKING_NAVIGATION.md).
+Only fresh runner-owned test databases were used for synthetic fault injection;
+temporary relation rename is restored in `finally`, with no row/constraint
+changes. No production/dev DB adopted/reset. Initial selector failures, a failed
+refresh/reset attempt and one invalidated mid-edit browser run are explicitly
+recorded; none are treated as successful acceptance evidence. The expanded
+browser deadline accounts for added journeys, with original assertions and
+individual assertion deadlines preserved.
+
+**R7 / original Prompt 4 acceptance: Pass.** Newly executed final checks:
+`TZ=UTC npm run test:unit` **215 passed**; `npm run typecheck` and
+`npm run lint` passed; `TZ=UTC npm run test:rental-browser` **7 passed**;
+`TZ=UTC npm run test:rental-api` **20 passed**;
+`TZ=UTC npm run test:rental-documentation` **1 passed**. All final suites have
+zero failures/skips. `TZ=UTC npm run build:verify` **passed**, exit 0, all 33
+migrations and complete production compilation/typing/static generation/route
+report on its own initialized database. Earlier failed attempts and their
+corrections remain in the detailed report, not presented as green runs.
+
+Independent final maintenance query found **zero test databases**, upload
+inspection **zero files**; all eight manifests record `preserved: false` (four
+documented failed browser attempts, four successful final DB-backed checks).
+Temporary PostgreSQL removal independently verified. Owned targets were distinct
+and sequential; no safeguards were changed. Diagnostics/screenshots remain
+ignored for review. All pending lifecycle state transitions were real API flows;
+the retained 1979 display fixture is explicitly synthetic and row-immutable.
+
+### Consolidated R1–R7 status and retained differences
+
+This table supersedes outdated *gap* descriptions in the initial dated recovery
+plan; it does not rewrite that report's historical execution record.
+
+| Recovery stage / original mapping | Current scoped status | Evidence / retained difference |
+| --- | --- | --- |
+| R1 — Prompt 1/B, A prerequisite | Accepted with intentional build difference | `b532e0` Prompt 1 recheck: clean install, generation, full typing/lint, unit/baseline/full initialized-DB build passed. No mandatory font fetch. **Initialized application tables required; empty-schema build fails**, still open. |
+| R2 — Prompt 2/C | Accepted with residual advisory disposition | `8d3adbb` dated fresh audit/recheck, `DEPENDENCY_SECURITY.md`: one minimatch GHSA, 16 propagated moderate development-tool entries, zero production-installed audit findings at that review. No supported compatible fix established; upstream follow-up remains. Not a fresh R7 audit or proof of complete security. |
+| R3 — Prompt 3/D timestamp/policy | Accepted, retained product rule | `de79da9`: strict explicit new instants, calendar/offset validation, authenticated stored legacy replay, post-lock expiry, exact server Decimal quotation. Configurable **90-day** default and 2000 raw UTF-16 units retained, **not** earlier 30-day proposal. |
+| R4 — Prompt 3/D display | Accepted | `3def2e5`: shared safe per-instant Taipei formatting, historical offsets/localized evidence/activity, money boundaries, UTC/non-Taipei units/browser and full prepared-DB build. Historical rows unchanged. |
+| R5 — follow-up E | Accepted | `0e8bd63`: genuine observed MVCC/retry, exact adjacency/1ms/equivalent-offset and conflicting/nonconflicting acceptance, late atomic rollback, owned success/failure cleanup. **Overlapping PENDING requests permitted; acceptance reserves**, unchanged. |
+| R6 — follow-up F | Accepted as risk assessment | `f8c602c`: source/provenance inventory and synthetic timezone/DST/non-unique origin/overlap tests. **Potential exposure; insufficient evidence for correction**. No real affected record identified or correction justified. |
+| R7 — Prompt 4 | Accepted for scoped navigation | Active/history grouping, both dashboards at all ten real schema states, documented-request ledger/approval, real cancellation/rejection/admin closure, inactive privacy, mobile/locale/loading/error recovery; final units/typing/lint/browser/API/full prepared-DB build and independent cleanup passed. Four earlier failed browser attempts transparently recorded. |
+
+Original Prompt 5 is **not implemented in R7**. Next assess the candidate's
+existing explicit handoff, physical receipt, return, inspection and immutable
+evidence/confirmation workflows against that prompt before proposing any new
+work. Preserve provisional gates and moderation/claim boundaries; test helper
+success is not evidence of physical-device/GPS performance, operational delivery
+or product-owner visual approval. No push to main, merge, deployment or
+environment publication is authorized by these acceptance results.

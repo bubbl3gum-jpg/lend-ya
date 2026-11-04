@@ -18,7 +18,8 @@ import { formatRentalTime } from "../lib/booking-time";
 // Owns its dev server, enabling a real process-restart persistence check.
 test(
   "two-user browser rental workflow and application restart",
-  { timeout: 120000 },
+  // Includes both-dashboard reopening at every state plus error/loading recovery.
+  { timeout: 240000 },
   async (t) => {
     assert.ok(
       process.env.TEST_DATABASE_URL &&
@@ -118,6 +119,30 @@ test(
       };
       await login(owner, "owner");
       await login(borrower, "borrower");
+      const outsiderContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const outsider = await outsiderContext.newPage();
+      await login(outsider, "outsider");
+      for (const page of [owner, borrower]) {
+        await expect(page.getByText("No active rentals.", { exact: true })).toHaveCount(2);
+        await expect(page.getByText("No rental history yet.", { exact: true })).toHaveCount(2);
+        await page.setViewportSize({ width: 390, height: 844 });
+      }
+      const reopen = async (id: number, status: string) => {
+        const group = ["COMPLETED", "CANCELLED", "ADMIN_CLOSED"].includes(status) ? "history" : "active";
+        for (const [page, role] of [[owner, "owner"], [borrower, "borrower"]] as const) {
+          await page.getByRole("link", { name: "← Back to dashboard", exact: true }).click();
+          const card = page.locator(`#${role}-${group}`).getByRole("article", { name: `Booking #${id}: ${status}`, exact: true });
+          await expect(card).toBeVisible();
+          await expect(card).toContainText("Asia/Taipei, UTC+08:00");
+          await expect(page.locator(`a[href="/bookings/${id}"]`)).toHaveCount(1);
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${status} dashboard fits viewport`);
+          if (status === "PENDING") await page.screenshot({ path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, `r7-${role}-mobile-pending.png`), fullPage: true });
+          await card.locator(`a[href="/bookings/${id}"]`).click();
+          await expect(page).toHaveURL(`${base}/bookings/${id}`);
+          await expect(page.getByText(status, { exact: true })).toBeVisible();
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${status} detail fits viewport`);
+        }
+      };
       stationId = (
         await pool.query("SELECT id FROM \"MrtStation\" WHERE code='TPE'")
       ).rows[0].id;
@@ -205,7 +230,15 @@ test(
         const id = Number(new URL(borrower.url()).pathname.split("/").pop());
         assert.equal((await pool.query('SELECT count(*)::int n FROM "Booking" WHERE "listingId"=$1', [data.id])).rows[0].n, 1);
         await owner.goto(`${base}/bookings/${id}`);
-        await owner.getByRole("button", { name: "Accept request" }).click();
+        await reopen(id, "PENDING");
+        await owner.getByRole("link", { name: "← Back to dashboard", exact: true }).click();
+        const pendingCard = owner.getByRole("article", { name: `Booking #${id}: PENDING`, exact: true });
+        await pendingCard.getByRole("button", { name: "Accept request" }).click();
+        const acceptedCard = owner.getByRole("article", { name: `Booking #${id}: CONFIRMED`, exact: true });
+        await expect(acceptedCard).toBeVisible();
+        await expect(acceptedCard.getByRole("button", { name: "Accept request" })).toHaveCount(0);
+        await acceptedCard.getByRole("link").click();
+        await reopen(id, "CONFIRMED");
         await expect(
           owner.getByRole("heading", { name: "Submit owner handoff" }),
         ).toBeVisible();
@@ -266,6 +299,7 @@ test(
           assert.equal(early.status, "HANDOFF_PENDING");
           assert.equal(early.confirmedAt, null);
           assert.equal(early.checklist.functionTested, "unknown");
+          await reopen(completedId, "HANDOFF_PENDING");
           await borrower.reload();
           await expect(
             borrower.getByText("Owner: scratch documented", { exact: true }),
@@ -275,6 +309,7 @@ test(
             "Confirm receipt as borrower",
             "Borrower: scratch acknowledged",
           );
+          await reopen(completedId, "IN_USE");
           await expect(
             borrower.getByRole("heading", { name: "Submit item return" }),
           ).toBeVisible();
@@ -283,11 +318,14 @@ test(
             "Submit item return",
             "Borrower: returned unchanged",
           );
+          await reopen(completedId, "RETURN_PENDING");
           await owner.reload();
           await (await browserMeetupFixture(base,owner.context(),borrower.context())).scanPayload(Number(new URL(owner.url()).pathname.split("/").pop()),"RETURN");
           await owner.getByRole("button",{name:"Refresh verification status",exact:true}).click();
           await owner.getByLabel("I have physically received the returned equipment. This does not accept its condition.").check();
           await owner.getByRole("button",{name:"Acknowledge physical return and begin inspection",exact:true}).click();
+          await expect(owner.getByText("INSPECTION", { exact: true })).toBeVisible();
+          await reopen(completedId, "INSPECTION");
           await evidenceForm(
             owner,
             "Save owner inspection decision",
@@ -301,6 +339,7 @@ test(
           await expect(
             borrower.getByText("COMPLETED", { exact: true }),
           ).toBeVisible();
+          await reopen(completedId, "COMPLETED");
           for (const page of [owner, borrower]) {
             await page
               .getByLabel("Comment", { exact: true })
@@ -503,8 +542,109 @@ test(
               .rows[0].status,
             "DISPUTED",
           );
+          await reopen(id, "DISPUTED");
+          // Distinct newly registered test actor, promoted only in this owned DB.
+          // Participants do not gain moderation authority.
+          const adminId = userIds[2];
+          await pool.query(`UPDATE "User" SET role='ADMIN' WHERE id=$1`, [adminId]);
+          const dispute = (await pool.query('SELECT id FROM "Dispute" WHERE "bookingId"=$1', [id])).rows[0].id;
+          const closed = await outsider.request.post(`${base}/api/admin/disputes/${dispute}/resolve`, {
+            headers: { Origin: base },
+            data: { finding: "ISSUE_CONFIRMED", outcome: "CLOSE_RETURNED", reason: "Synthetic navigation fixture: returned equipment inspected; preserve evidence." },
+          });
+          assert.equal(closed.status(), 200, await closed.text());
+          await owner.reload(); await borrower.reload();
+          await reopen(id, "ADMIN_CLOSED");
+          assert.equal((await pool.query('SELECT status FROM "Booking" WHERE id=$1', [id])).rows[0].status, "ADMIN_CLOSED");
         },
       );
+      await t.test("dashboard rejection/cancellation refresh history, inactive privacy and locale survive navigation", async () => {
+        const listing = listingIds[0];
+        const terms = { listingId: listing, meetingStationId: stationId, startAt: "2044-01-01T10:00+08:00", endAt: "2044-01-02T10:00+08:00" };
+        const created = await borrower.request.post(`${base}/api/bookings`, { data: terms });
+        assert.equal(created.status(), 201);
+        const rejected = (await created.json()).booking.id;
+        await owner.goto(`${base}/dashboard`);
+        const card = owner.getByRole("article", { name: `Booking #${rejected}: PENDING`, exact: true });
+        // Controlled transport failure must preserve the card and provide a usable retry.
+        await owner.route(`${base}/api/bookings/${rejected}`, r => r.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "Synthetic temporary booking failure. Retry." }) }));
+        await card.getByRole("button", { name: "Reject request" }).click();
+        await expect(card.getByRole("alert")).toHaveText("Synthetic temporary booking failure. Retry.");
+        await owner.unroute(`${base}/api/bookings/${rejected}`);
+        await card.getByRole("button", { name: "Reject request" }).click();
+        const history = owner.locator("#owner-history").getByRole("article", { name: `Booking #${rejected}: CANCELLED`, exact: true });
+        await expect(history).toBeVisible();
+        await expect(history.getByRole("button")).toHaveCount(0);
+        await history.getByRole("link").click();
+        await borrower.goto(`${base}/bookings/${rejected}`);
+        await reopen(rejected, "CANCELLED");
+        const second = await borrower.request.post(`${base}/api/bookings`, { data: terms });
+        assert.equal(second.status(), 201);
+        const cancelled = (await second.json()).booking.id;
+        await borrower.goto(`${base}/bookings/${cancelled}`);
+        await borrower.getByRole("button", { name: "Cancel booking", exact: true }).click();
+        await expect(borrower.getByText("CANCELLED", { exact: true })).toBeVisible();
+        await owner.goto(`${base}/bookings/${cancelled}`);
+        await reopen(cancelled, "CANCELLED");
+        assert.equal((await owner.request.patch(`${base}/api/listings/${listing}`, { data: { status: "INACTIVE" } })).status(), 200);
+        await reopen(cancelled, "CANCELLED");
+        await borrowerContext.addCookies([{ name: "hustlen_locale", value: "zh-TW", url: base }]);
+        await reopen(cancelled, "CANCELLED");
+        await expect(borrower.locator("header.catalogue-masthead")).toContainText("瀏覽物品");
+        assert.equal((await borrowerContext.cookies()).find(c => c.name === "hustlen_locale")?.value, "zh-TW");
+        await outsider.goto(`${base}/dashboard`);
+        for (const id of [completedId, rejected, cancelled]) {
+          await expect(outsider.locator(`a[href="/bookings/${id}"]`)).toHaveCount(0);
+          assert.equal((await outsider.request.get(`${base}/api/bookings/${id}`)).status(), 403);
+        }
+        const denied = await outsider.goto(`${base}/bookings/${cancelled}`);
+        // Next returns 200 for streamed notFound, 404 for an unstreamed response.
+        assert.ok([200, 404].includes(denied?.status() ?? 0));
+        await expect(outsider.getByRole("heading", { name: "404", exact: true })).toBeVisible();
+        await expect(outsider.getByText("Browser test rental", { exact: true })).toHaveCount(0);
+        assert.equal((await outsider.request.get(`${base}/api/listings/${listing}`)).status(), 404);
+        await borrowerContext.clearCookies({ name: "hustlen_locale" });
+      });
+      await t.test("dashboard loading and load-error recovery remain usable", async () => {
+        await outsider.goto(`${base}/account`);
+        const blocker = await connectTestDatabase();
+        let navigation: ReturnType<Page["goto"]> | undefined;
+        try {
+          await blocker.query("BEGIN");
+          await blocker.query('LOCK TABLE "Booking" IN ACCESS EXCLUSIVE MODE');
+          const pid = (await blocker.query("SELECT pg_backend_pid() pid")).rows[0].pid;
+          navigation = outsider.goto(`${base}/dashboard`, { waitUntil: "commit" });
+          await navigation;
+          await expect(outsider.getByRole("status").filter({ hasText: "Loading bookings…" })).toBeVisible();
+          await expect.poll(async () => (await pool.query("SELECT count(*)::int n FROM pg_stat_activity WHERE datname=current_database() AND $1=ANY(pg_blocking_pids(pid)) AND query LIKE '%Booking%'", [pid])).rows[0].n).toBeGreaterThan(0);
+          await blocker.query("COMMIT");
+          await expect(outsider.getByRole("heading", { name: "My borrowings", exact: true })).toBeVisible();
+        } finally {
+          await blocker.query("ROLLBACK"); await blocker.end(); if (navigation) await navigation;
+        }
+        // Temporary relation unavailability in this owned fixture only. No row or constraint changes.
+        await pool.query('ALTER TABLE "Booking" RENAME TO "R7_Booking_unavailable"');
+        try {
+          await outsider.reload();
+          await expect(outsider.getByText("Unable to load your bookings. Please try again.", { exact: true })).toBeVisible();
+        } finally {
+          await pool.query('ALTER TABLE "R7_Booking_unavailable" RENAME TO "Booking"');
+        }
+        await outsider.keyboard.press("Escape");
+        await outsider.getByRole("button", { name: "Try again", exact: true }).click();
+        await expect(outsider.getByRole("heading", { name: "My borrowings", exact: true })).toBeVisible();
+        await expect(outsider.getByText("No active rentals.", { exact: true })).toHaveCount(2);
+        await pool.query('ALTER TABLE "Booking" RENAME TO "R7_Booking_unavailable"');
+        try {
+          await borrower.goto(`${base}/bookings/${completedId}`);
+          await expect(borrower.getByText("Unable to load your bookings. Please try again.", { exact: true })).toBeVisible();
+        } finally {
+          await pool.query('ALTER TABLE "R7_Booking_unavailable" RENAME TO "Booking"');
+        }
+        await borrower.keyboard.press("Escape");
+        await borrower.getByRole("button", { name: "Try again", exact: true }).click();
+        await expect(borrower.getByText("COMPLETED", { exact: true })).toBeVisible();
+      });
       await t.test("historical Taipei DST, money boundaries and history displays preserve stored rows", async () => {
         assert.ok(completedId);
         const participants = (await pool.query('SELECT "ownerId","renterId" FROM "Booking" WHERE id=$1', [completedId])).rows[0];

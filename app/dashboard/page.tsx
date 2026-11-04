@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { BookingActions } from "@/components/booking-actions";
+import { ParticipantBookings } from "@/components/participant-bookings";
 import { SiteHeader } from "@/components/site-header";
 
 function formatPrice(value: string | number | { toString(): string }) {
@@ -40,6 +40,7 @@ export default async function DashboardPage() {
       ownerId: true,
       renterId: true,
       status: true,
+      documentationContextId: true,
       meetup: {select:{bookingId:true,events:{where:{kind:"NEW_BOOKING_VERIFICATION"},select:{id:true},take:1}}},
       startAt: true,
       endAt: true,
@@ -161,107 +162,10 @@ export default async function DashboardPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2
-              id="borrowings"
-              className="text-xl font-semibold text-slate-900"
-            >
-              My borrowings
-            </h2>
-            <div className="mt-4 space-y-3">
-              {bookings.filter((booking) => booking.renterId === currentUser.id)
-                .length === 0 ? (
-                <p className="text-sm text-slate-600">No bookings yet.</p>
-              ) : (
-                bookings
-                  .filter((booking) => booking.renterId === currentUser.id)
-                  .map((booking) => (
-                    <Link
-                      key={booking.id}
-                      href={`/bookings/${booking.id}`}
-                      className="block rounded-2xl border border-slate-200 p-3"
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <div>
-                          <p className="font-medium text-slate-900">
-                            {booking.listing.title} · Borrower
-                          </p>
-                          <p className="text-sm text-slate-600">
-                            {formatRentalTime(booking.startAt)} →{" "}
-                            {formatRentalTime(booking.endAt)}
-                          </p>
-                          <p className="text-sm text-slate-600">
-                            {[
-                              "COMPLETED",
-                              "CANCELLED",
-                              "ADMIN_CLOSED",
-                            ].includes(booking.status)
-                              ? "Historical"
-                              : booking.status === "PENDING"
-                                ? "Pending request"
-                                : booking.status === "CONFIRMED"
-                                  ? "Upcoming"
-                                  : "Active rental"}{" "}
-                            · {booking.status}
-                          </p>
-                        </div>
-                        <span className="text-sm font-medium text-slate-700">
-                          {formatPrice(booking.totalPrice)}
-                        </span>
-                      </div>
-                    </Link>
-                  ))
-              )}
-            </div>
-          </section>
+          <ParticipantBookings bookings={bookings} currentUserId={currentUser.id} role="borrower" />
         </div>
-
-        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">
-            Bookings as owner
-          </h2>
-          <div className="mt-4 space-y-4">
-            {bookings.filter((booking) => booking.ownerId === currentUser.id)
-              .length === 0 ? (
-              <p className="text-sm text-slate-600">
-                No bookings as owner yet.
-              </p>
-            ) : (
-              bookings
-                .filter((booking) => booking.ownerId === currentUser.id)
-                .map((booking) => (
-                  <div
-                    key={booking.id}
-                    className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 p-4"
-                  >
-                    <div>
-                      <Link
-                        href={`/bookings/${booking.id}`}
-                        className="font-medium underline"
-                      >
-                        {booking.listing.title} · {booking.status}
-                      </Link>
-                      <p className="text-sm text-slate-600">
-                        Owner · Borrower: {booking.renter.name}
-                      </p>
-                      <p className="text-sm text-slate-600">
-                        {formatRentalTime(booking.startAt)} →{" "}
-                        {formatRentalTime(booking.endAt)}
-                      </p>
-                    </div>
-                    <BookingActions
-                      bookingId={booking.id}
-                      meetupRequired={!!booking.meetup}
-                      automaticMeetup={!!booking.meetup?.events.length}
-                      currentUserId={currentUser.id}
-                      ownerId={booking.ownerId}
-                      renterId={booking.renterId}
-                      status={booking.status}
-                    />
-                  </div>
-                ))
-            )}
-          </div>
+        <div className="mt-10">
+          <ParticipantBookings bookings={bookings} currentUserId={currentUser.id} role="owner" />
         </div>
       </div>
     </main>

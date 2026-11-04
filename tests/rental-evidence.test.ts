@@ -1,12 +1,22 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import sharp from "sharp";
+import { BookingStatus } from "@prisma/client";
+import { bookingGroups } from "../lib/booking-navigation";
+
 import { parseChecklist, checklistItems } from "../lib/rental-checklist";
 import {
   parseEvidence,
   readRentalSubmission,
   validatePrivatePhotos,
 } from "../lib/booking-evidence";
+test("dashboard classification covers the schema and keeps unresolved custody/disputes active", () => {
+  assert.deepEqual(Object.keys(bookingGroups).sort(), Object.values(BookingStatus).sort());
+  for (const state of ["PENDING", "CONFIRMED", "HANDOFF_PENDING", "IN_USE", "RETURN_PENDING", "INSPECTION", "DISPUTED"] as const)
+    assert.equal(bookingGroups[state], "active", `${state} must remain discoverable as active regardless of date`);
+  for (const state of ["COMPLETED", "CANCELLED", "ADMIN_CLOSED"] as const)
+    assert.equal(bookingGroups[state], "history");
+});
 const checklist = Object.fromEntries(
   Object.keys(checklistItems).map((key) => [key, "unknown"]),
 );

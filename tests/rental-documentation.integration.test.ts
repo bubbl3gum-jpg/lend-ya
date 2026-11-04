@@ -88,6 +88,24 @@ test("R2 actual request and owner acceptance bind exact acknowledged documentati
  await page.getByRole("button",{name:"Review quotation",exact:true}).click();await expect(page.getByRole("heading",{name:"Item-condition ledger",exact:true})).toBeVisible();await expect(page.getByRole("button",{name:"Confirm and submit request",exact:true})).toBeDisabled();await page.getByRole("checkbox",{name:"I've reviewed this item's documented condition, known defects, and included accessories.",exact:true}).check();await expect(page.getByRole("button",{name:"Confirm and submit request",exact:true})).toBeEnabled();await expect(page.locator("#experience-preferences")).toHaveAttribute("aria-busy","false");await page.screenshot({path:path.join(art,"agreement-desktop-en.png"),fullPage:true});
  await page.getByRole("combobox",{name:"Language",exact:true}).selectOption("zh-TW");for(const [name,width,height] of [["tablet",820,1100],["mobile",390,844]]as const){await page.setViewportSize({width,height});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:path.join(art,`agreement-${name}-zh.png`),fullPage:true});}
  await page.getByRole("button",{name:"Confirm and submit request",exact:true}).click();await expect(page).toHaveURL(/\/bookings\/\d+$/);await expect(page.getByRole("heading",{name:"借用者已確認閱讀的申請紀錄",exact:true})).toBeVisible();await page.screenshot({path:path.join(art,"agreement-request-zh.png"),fullPage:true});await page.keyboard.press("Tab");assert(await page.evaluate(()=>document.activeElement!==document.body));assert.deepEqual(errors,[]);assert.deepEqual(external,[]);await context.close();
+ // Documented pending cards lead to the exact ledger, not a context-free inline approval.
+ const navigationId=Number(new URL(page.url()).pathname.split('/').pop());
+ const lender=await browser.newContext({viewport:{width:390,height:844}});
+ await lender.addCookies([{name:'p2p_session',value:owner.token,url:base}]);
+ const lenderPage=await lender.newPage();lenderPage.on('dialog',d=>d.accept());await lenderPage.goto(base+'/dashboard');
+ const requestCard=lenderPage.getByRole('article',{name:`Booking #${navigationId}: PENDING`,exact:true});
+ await expect(requestCard).toBeVisible();await expect(requestCard.getByRole('button',{name:'Accept request',exact:true})).toHaveCount(0);
+ await expect(requestCard).toContainText('Review the acknowledged item documentation');
+ await requestCard.locator(`a[href="/bookings/${navigationId}"]`).click();
+ await expect(lenderPage.locator('.documentation-agreement-surface')).toContainText('Item-condition ledger');
+ const acceptedResponse=lenderPage.waitForResponse(r=>r.url()===base+`/api/bookings/${navigationId}`&&r.request().method()==='PATCH');
+ await lenderPage.getByRole('button',{name:'Accept request',exact:true}).click();
+ // The existing confirmation dialog is part of the explicit owner action.
+ assert.equal((await acceptedResponse).status(),200);
+ await expect(lenderPage.getByText('CONFIRMED',{exact:true})).toBeVisible();
+ await lenderPage.getByRole('link',{name:'← Back to dashboard',exact:true}).click();
+ await expect(lenderPage.locator('#owner-active').getByRole('article',{name:`Booking #${navigationId}: CONFIRMED`,exact:true})).toBeVisible();
+ await lender.close();
  // Suspended participants retain existing obligation reads but cannot create a new acknowledgement.
  const future={...terms,startAt:"2035-05-01T10:00+08:00",endAt:"2035-05-02T10:00+08:00"};const futureQuote=await quote(future);const futureAck={contextId:futureQuote.documentationReview.contextId,versionId:version,acknowledged:true};
  await db.query(`UPDATE "User" SET "accountStatus"='SUSPENDED' WHERE id=$1`,[borrower.id]);assert.equal((await post("/api/bookings",{...future,documentation:futureAck})).status,403);await db.query(`UPDATE "User" SET "accountStatus"='ACTIVE' WHERE id=$1`,[borrower.id]);
