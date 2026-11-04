@@ -1,7 +1,7 @@
 # Original Prompt 1 acceptance recheck
 
 Date: **2026-11-04**. The opening review rechecks Prompt 1 only; its later
-Prompt 2 and Recovery R3/R4 follow-ups are appended below. Reports were inspected against
+Prompt 2 and Recovery R3/R4/R5 follow-ups are appended below. Reports were inspected against
 current source and fresh checks, not accepted as proof of correctness.
 
 ## Identity and provenance
@@ -220,7 +220,7 @@ connection via `MRT_TEST_DATABASE_URL` to reproduce these commands.
 | `TZ=UTC npm run test:rental-api` | **Pass**, 15 passed, 0 failed/skipped; default 90/2000 | `hustlen_test_r3_api_default_20261104` |
 | `TZ=UTC BOOKING_MAX_DURATION_DAYS=30 npm run test:rental-api` | **Pass**, 15 passed, 0 failed/skipped | `hustlen_test_r3_api_30_20261104` |
 | `TZ=UTC BOOKING_MAX_DURATION_DAYS=30 npm run test:rental-browser` with verified Chromium paths | **Pass**, 4 passed, 0 failed/skipped; actual form uses configured 30, explicit storage, restarted lower/malformed policy and lifecycle | `hustlen_test_r3_browser_20261104` |
-| `TZ=UTC npm run test:stability` | **Pass**, 8 passed, 0 failed/skipped, including controlled real deadlock/idempotency/permissions | `hustlen_test_r3_stability_20261104` |
+| `TZ=UTC npm run test:stability` | **Pass**, 8 passed, 0 failed/skipped, including injected SQLSTATE 40P01 handling/idempotency/permissions (R5 inspection corrected the earlier “real deadlock” description) | `hustlen_test_r3_stability_20261104` |
 | `TZ=UTC npm run test:rental-documentation` with Chromium paths | **Pass**, 1 passed, 0 failed/skipped; existing scoped agreement/acknowledgement and acceptance gates | `hustlen_test_r3_documentation_20261104` |
 | `TZ=UTC npm run build:verify` | **Pass**, complete initialized production build, exit 0; final form-retry source also rebuilt successfully below | `hustlen_test_r3_build_20261104` |
 
@@ -398,3 +398,50 @@ The separate empty-schema build failure stays open; no request-time rendering
 or database-independent build fix was attempted. Historical correction remains
 a separate evidence/migration decision; display fixes do not justify shifting
 any stored times or rewriting booking history.
+
+## Recovery R5 — database and concurrency regressions
+
+2026-11-04. Starting source/local/independently queried remote:
+`3def2e5fca40d732f0c9661155a836798d2defc3`; clean tree on the existing recovery
+branch, verified origin `https://github.com/bubbl3gum-jpg/lend-ya.git`.
+No reset/replacement checkout; later R1–R4 work is retained. The source tested is
+that revision plus the reviewed **test/documentation-only** changes committed
+with this entry. Missing original patches are not claimed recovered.
+
+Full coverage inventory, synchronization, expected/actual persisted outcomes,
+commands, test database names and limitations are in
+[DATABASE_REGRESSIONS.md](DATABASE_REGRESSIONS.md).
+
+| Requirement | Added or reused implementation/evidence | Disposition |
+| --- | --- | --- |
+| Adjacent reservations, 1ms overlap, equivalent offsets | New API subtests confirm exact boundary equality, both adjacent CONFIRMED, equivalent overlapping pairs PENDING after 409, complete rejected-operation snapshots unchanged. Overlapping pending requests remain permitted. | Pass |
+| Conflicting/nonconflicting acceptance under real contention | Both actual API Listing-lock waiters observed before release; 200/409 leaves one CONFIRMED/one PENDING, adjacent 200/200 leaves both CONFIRMED. Exact persisted booking sets, complete unchanged terms and one session/enrollment each. | Pass |
+| Real MVCC failure and existing retry behavior | Actual Listing row-version update after observed SERIALIZABLE request wait; PostgreSQL logs 40001 concurrent-update error. API 409 is controlled; no lifecycle rows/binding persist. Explicit same-key retry quotes new authoritative 13.37 and succeeds. Equivalent replay/altered terms/other participant cannot duplicate/change committed history. | Pass |
+| Late atomicity including documentation/enrollment | New owned-fixture event-trigger failure occurs after Booking/session writes; strengthened existing documented-request failure occurs after binding/enrollment. Seven-table full-row snapshots equal before; same-key retry succeeds with exact single session/event. Synthetic failure distinguished from real MVCC. | Pass |
+| Inactive listing/history privacy | Both participants retain detail/history; outsider detail 403, public/nonowner listing GET 404, owner GET 200. New creation/acceptance 409; existing lifecycle rows unchanged. | Pass |
+| Existing strict input, expiry, billing, lifecycle/evidence, restart | Original assertions retained. Rental API 20 passed, stability 8 passed, rental browser 5 passed, documentation 1 passed; final complete-terms and sequential-snapshot reruns passed. | Pass |
+| Full typing/lint/units | Final `npm run typecheck` and `npm run lint` passed; UTC unit suite 209 passed, zero failures/skips. | Pass |
+| MRT station races and success/failure cleanup | MRT integration passed all 10 check groups with zero browser errors. Baseline passed, preserving all 76 tables across 33 migrations; intentional child exit 1 and database/upload cleanup preserve parent sentinels. Independent final query: zero test DBs/uploads; eight successful manifests and one expected failing child all record cleanup. Temporary PostgreSQL container removal verified. | Pass |
+
+Inspection corrected the earlier R3 report's “real deadlock” wording: stability
+injects SQLSTATE 40P01 to test translation/rollback, not a real cycle. The new R5
+case supplies genuine PostgreSQL MVCC evidence. No application defect was
+demonstrated and no new automatic retry policy or security bypass was added.
+The first passing documentation run emitted a pg single-Client parallel-query
+deprecation warning; sequential snapshot reads removed it in the passing rerun.
+No unexpected test failure is being hidden or reclassified as a success.
+
+R4's initialized-isolated-database full build is reused evidence, not a new R5
+build: application/dependency/schema/configuration/runner code is unchanged.
+Clean installation, separate migration and unrelated gated suites were not
+repeated. Baseline is deliberately rerun for its failure-cleanup/sentinel checks
+and executes actual generation/migrations/setup. The separate **empty-schema
+build failure remains open**, with no rendering or build-contract change.
+
+**R5 acceptance: Pass.** No unexpected failing suite or remaining R5 blocker.
+All new/regression DB suites ran sequentially on distinct fresh owned targets;
+ownership/cleanup guards and existing application behavior remain unchanged.
+Detailed manifest/cleanup evidence is in `DATABASE_REGRESSIONS.md`. Handover:
+**R6 historical timestamp risk assessment**, authorized provenance and synthetic
+fixtures only; current regression success is not evidence that real old rows
+need correction. No production access, historical update, merge or deployment.

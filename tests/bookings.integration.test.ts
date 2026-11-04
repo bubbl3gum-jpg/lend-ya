@@ -7,6 +7,7 @@ import { randomUUID } from "node:crypto";
 import { createHash } from "node:crypto";
 import { resolveBookingPolicy } from "../lib/booking-policy";
 import { Pool } from "pg";
+import { reservationRegressions } from "./support/reservation-regressions";
 
 // Run against a migrated, disposable test database and its matching Next server.
 // Never points at DATABASE_URL implicitly: explicit test configuration is required.
@@ -520,6 +521,7 @@ test("real booking API: two-user persistence, validation, privacy, history and c
       assert.equal((await send(payload, "")).status, 401);
       assert.equal((await pool.query('SELECT count(*)::int AS n FROM "Booking" WHERE "renterId"=$1 AND "requestKey"=$2', [borrower.id, key])).rows[0].n, 1);
     });
+    await reservationRegressions(t, { owner, borrower, outsider, stationId: stationId! });
   } finally {
     // Immutable booking/meetup records are removed only by the owning harness database teardown.
     await pool.end();
