@@ -13,6 +13,7 @@ import { chromium, expect, type Page } from "@playwright/test";
 import sharp from "sharp";
 import { Pool } from "pg";
 import { checklistItems } from "../lib/rental-checklist";
+import { formatRentalTime } from "../lib/booking-time";
 
 // Owns its dev server, enabling a real process-restart persistence check.
 test(
@@ -325,6 +326,9 @@ test(
           assert.equal(row.status, "COMPLETED");
           assert.equal(row.totalPrice, "24.68");
           assert.equal(row.deposit, "25.67");
+          await expect(owner.getByText(`${formatRentalTime("2035-01-01T02:00Z")} → ${formatRentalTime("2035-01-02T02:01Z")}`, { exact: true })).toBeVisible();
+          await expect(owner.getByText(/\$12\.34 per day/)).toBeVisible();
+          await expect(owner.getByText("$25.67", { exact: true })).toBeVisible();
         },
       );
       await t.test(
@@ -501,6 +505,64 @@ test(
           );
         },
       );
+      await t.test("historical Taipei DST, money boundaries and history displays preserve stored rows", async () => {
+        assert.ok(completedId);
+        const participants = (await pool.query('SELECT "ownerId","renterId" FROM "Booking" WHERE id=$1', [completedId])).rows[0];
+        // New synthetic history only: do not amend any existing booking/evidence.
+        const listing = (await pool.query(
+          `INSERT INTO "Listing" ("ownerId",title,description,category,price,deposit,condition,status,"updatedAt")
+           VALUES ($1,'Synthetic historical display','Display fixture only','Cameras',9999999999.99,0,'Good','INACTIVE',NOW()) RETURNING id`,
+          [participants.ownerId],
+        )).rows[0].id;
+        await pool.query('INSERT INTO "ListingStation" ("listingId","stationId") VALUES ($1,$2)', [listing, stationId]);
+        const historical = (await pool.query(
+          `INSERT INTO "Booking" ("listingId","ownerId","renterId","meetingStationId","startAt","endAt",status,"dailyPrice","totalPrice",deposit,notes,"createdAt","updatedAt")
+           VALUES ($1,$2,$3,$4,'1979-07-15 01:00','1979-07-16 01:00','COMPLETED',9999999999.99,9999999999.99,0,'Synthetic historic terms','1979-07-14 01:00','1979-07-16 01:03') RETURNING id`,
+          [listing, participants.ownerId, participants.renterId, stationId],
+        )).rows[0].id;
+        await pool.query(
+          `INSERT INTO "Handoff" ("bookingId","performedBy","confirmedBy","conditionConfirmed","ownerConditionConfirmed","conditionNotes","timestamp","confirmedAt","updatedAt")
+           VALUES ($1,$2,$3,true,true,'Synthetic old handoff','1979-07-15 01:00','1979-07-15 01:02','1979-07-15 01:02')`,
+          [historical, participants.ownerId, participants.renterId],
+        );
+        await pool.query(
+          `INSERT INTO "Return" ("bookingId","initiatedBy","confirmedBy","conditionConfirmed","returnConfirmed","inspectedBy","inspectionAccepted","inspectionNotes","timestamp","confirmedAt","inspectedAt","updatedAt")
+           VALUES ($1,$2,$3,true,true,$3,true,'Synthetic old inspection','1979-07-16 01:00','1979-07-16 01:02','1979-07-16 01:03','1979-07-16 01:03')`,
+          [historical, participants.renterId, participants.ownerId],
+        );
+        const snapshot = async () => ({
+          booking: (await pool.query('SELECT row_to_json(b)::text row FROM "Booking" b WHERE id=$1', [historical])).rows,
+          handoff: (await pool.query('SELECT row_to_json(h)::text row FROM "Handoff" h WHERE "bookingId"=$1', [historical])).rows,
+          returned: (await pool.query('SELECT row_to_json(r)::text row FROM "Return" r WHERE "bookingId"=$1', [historical])).rows,
+          listing: (await pool.query('SELECT row_to_json(l)::text row FROM "Listing" l WHERE id=$1', [listing])).rows,
+          stationLinks: (await pool.query('SELECT row_to_json(s)::text row FROM "ListingStation" s WHERE "listingId"=$1', [listing])).rows,
+        });
+        const before = await snapshot();
+        const start = formatRentalTime("1979-07-15T01:00Z"), end = formatRentalTime("1979-07-16T01:00Z");
+        assert.match(start, /10:00 AM.*UTC\+09:00/, "Fixture must exercise real Taipei DST, not a modern +08 shortcut.");
+        for (const page of [owner, borrower]) {
+          await page.goto(`${base}/bookings/${historical}`);
+          await expect(page.getByText(`${start} → ${end}`, { exact: true })).toBeVisible();
+          await expect(page.getByText("$9,999,999,999.99", { exact: true })).toBeVisible();
+          await expect(page.getByText("$0.00", { exact: true })).toBeVisible();
+          for (const [title, instant] of [["Owner handoff", "1979-07-15T01:00Z"],
+            ["Borrower receipt", "1979-07-15T01:02Z"], ["Borrower return", "1979-07-16T01:00Z"],
+            ["Owner return inspection", "1979-07-16T01:03Z"]]) {
+            const evidence = page.getByRole("heading", { name: title, exact: true }).locator("..");
+            await expect(evidence).toContainText(formatRentalTime(instant));
+          }
+          await page.goto(`${base}/dashboard`);
+          await expect(page.locator(`a[href="/bookings/${historical}"]`)).toBeVisible();
+          await expect(page.getByText(`${start} → ${end}`, { exact: true })).toBeVisible();
+          await page.goto(`${base}/account/activity`);
+          const entries = page.locator("li").filter({ has: page.locator(`a[href="/bookings/${historical}"]`) });
+          await expect(entries.filter({ hasText: "Booking requested" })).toContainText(formatRentalTime("1979-07-14T01:00Z"));
+          await expect(entries.filter({ hasText: "Handoff submitted" })).toContainText(start);
+          await expect(entries.filter({ hasText: "Return submitted" })).toContainText(end);
+          await expect(entries.filter({ hasText: "Return inspected and confirmed" })).toContainText(formatRentalTime("1979-07-16T01:02Z"));
+        }
+        assert.deepEqual(await snapshot(), before, "Rendering must not rewrite historical instants, amounts or relationships.");
+      });
     } finally {
       if (browser) await browser.close();
       await stop();

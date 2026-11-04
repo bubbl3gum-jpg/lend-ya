@@ -8,6 +8,13 @@ import {
   formatNumber,
   formatTime,
 } from "../lib/i18n/core";
+test("USD display retains zero, fractional and DECIMAL(12,2) maximum values in existing locales", () => {
+  for (const [value, en, zh] of [["0", "$0.00", "US$0.00"], ["0.01", "$0.01", "US$0.01"],
+    ["12.34", "$12.34", "US$12.34"], ["9999999999.99", "$9,999,999,999.99", "US$9,999,999,999.99"]]) {
+    assert.equal(formatMoney("en", value), en);
+    assert.equal(formatMoney("zh-TW", value), zh);
+  }
+});
 test("exact locales, complete typed catalogues and matching interpolation contracts", () => {
   assert.equal(Object.keys(en).length, 335);
   assert.deepEqual(Object.keys(en).sort(), Object.keys(zhTW).sort());

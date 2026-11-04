@@ -53,7 +53,7 @@ export async function settingsInventory(): Promise<SettingRow[]> {
   add(
     "rental.clock",
     "Rental display and local form clock (API requires explicit instants)",
-    "Asia/Taipei (UTC+08:00)",
+    "Asia/Taipei (display offset follows the actual instant)",
     "lib/booking-time.ts:taipeiInputInstant / parseBookingInstant / formatRentalTime",
     "IANA timezone",
     "UTC storage; explicit offsets honored",

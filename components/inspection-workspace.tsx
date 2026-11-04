@@ -1,4 +1,5 @@
 "use client";
+import {formatRentalTime} from "@/lib/booking-time";
 import {useLocale} from "@/components/i18n/locale";
 import {conditionText} from "@/lib/i18n/condition-claims";
 import {ConditionCaseWorkspace} from "@/components/condition-case-workspace";
@@ -26,7 +27,7 @@ export function InspectionWorkspace({studioAvailable=false,agreementAvailable=fa
   }catch(e){if(seq.current===n)setError(c.signal.aborted?"Request canceled. No new result.":e instanceof Error&&["Session expired. Sign in again.","This preview is not permitted for this role, return, dispute or inspection window.","Inspection unavailable or access denied."].includes(e.message)?e.message:"Inspection unavailable or access denied.");}
   finally{clearTimeout(timeout);if(seq.current===n)setBusy(false);}
  }
- const date=(v:string|null)=>v?new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Taipei",dateStyle:"medium",timeStyle:"long"}).format(new Date(v))+" · Asia/Taipei":"Unavailable — no authoritative record";
+ const date=(v:string|null)=>v?formatRentalTime(v,"en-GB","second"):"Unavailable — no authoritative record";
  return <main className="companion-page"><Link href="/dashboard">Back to rentals</Link><header className="companion-masthead"><p>Hustlen’ / Rental inspection register</p><h1>Return & condition review</h1><p>{claimsAvailable?ct.pilot:"Owned-development preview only. No claim or response is submitted, no notification is delivered and no AI or biometric model is used."}</p></header>
  <form onSubmit={e=>{e.preventDefault();void request();}}><label htmlFor="inspection-booking">Your booking ID</label><input id="inspection-booking" type="number" min="1" required value={id} onChange={e=>{seq.current++;flight.current?.abort();setBusy(false);setId(e.target.value);setState(null);setPreview(null);setRefs([]);setComponent("");setDescription("");setError("");}}/><button disabled={busy}>Load permitted rental</button>{busy&&<button type="button" onClick={()=>{seq.current++;flight.current?.abort();setBusy(false);setState(null);setPreview(null);setError("Request canceled. No new result.");}}>Cancel</button>}</form>
  <p>Changing the booking ID clears unsaved draft text. This preview is not persisted.</p><p role="status">{error}</p>

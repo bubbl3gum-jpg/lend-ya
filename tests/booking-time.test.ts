@@ -97,3 +97,39 @@ test("ordering, now, duration, notes and elapsed-day rounding have exact boundar
   for (const [elapsed, expected] of [[1, 1], [86400000 - 1, 1], [86400000, 1], [86400001, 2]])
     assert.equal(rentalDays(start, new Date(start.getTime() + elapsed)), expected);
 });
+
+test("display rejects malformed/ambiguous history without crashing or normalizing it", () => {
+  for (const value of [null, undefined, 0, {}, new Date(NaN), "", "0", "1979-07-15", "1979-07-15T10:00",
+    "1979-02-30T10:00Z", "1900-02-29T10:00Z", "1979-07-15T24:00Z", "1979-07-15T10:60Z",
+    "1979-07-15T10:00:60Z", "1979-07-15T10:00:00.0001Z", "1979-07-15T10:00+0800",
+    "1979-07-15T10:00+24:00", "1979-07-15T10:00+08:60", "1979-07-15T10:00-00:00",
+    "1979-07-00T10:00Z", "1979-13-01T10:00Z", "-000000-01-01T10:00Z", " 1979-07-15T10:00Z"])
+    assert.equal(formatRentalTime(value), "Time unavailable", String(value));
+  assert.equal(formatRentalTime("1979-07-15T10:00", "zh-TW"), "時間無法顯示");
+  assert.notEqual(formatRentalTime("2000-02-29T10:00Z"), "Time unavailable");
+});
+
+test("display uses actual historical Taipei rules, independent of new-request parsing and host zone", () => {
+  const previous = process.env.TZ;
+  const historical = new Date("1979-07-15T01:00:00.000Z");
+  const epoch = historical.getTime();
+  try {
+    for (const zone of ["UTC", "America/Los_Angeles", "Pacific/Honolulu"]) {
+      process.env.TZ = zone;
+      const summer = formatRentalTime(historical);
+      assert.match(summer, /Jul 15, 1979.*10:00 AM.*Asia\/Taipei, UTC\+09:00/);
+      assert.equal(formatRentalTime("1979-07-15T10:00+09:00"), summer);
+      assert.equal(formatRentalTime("1979-07-14T20:00-05:00"), summer);
+      assert.match(formatRentalTime("1979-12-01T02:00Z"), /10:00 AM.*UTC\+08:00/);
+      assert.match(formatRentalTime("2035-01-01T02:00Z"), /10:00 AM.*UTC\+08:00/);
+      assert.match(formatRentalTime("1890-01-01T00:00Z"), /UTC\+08:06/);
+      assert.match(formatRentalTime("0099-01-01T00:00Z"), /Jan 1, 99,/);
+      assert.doesNotMatch(formatRentalTime("0099-01-01T00:00Z"), /1999/);
+      assert.match(formatRentalTime("0000-01-01T00:00Z"), /BC/);
+      assert.match(formatRentalTime(historical, "en-GB", "second"), /10:00:00/);
+      assert.match(formatRentalTime(historical, "zh-TW"), /1979.*Asia\/Taipei, UTC\+09:00/);
+      assert.equal(parseBookingInstant("1979-07-15T01:00Z"), null, "R3 year policy is unchanged.");
+    }
+  } finally { if (previous === undefined) delete process.env.TZ; else process.env.TZ = previous; }
+  assert.equal(historical.getTime(), epoch, "Display must not mutate the supplied Date.");
+});

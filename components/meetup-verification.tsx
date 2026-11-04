@@ -1,4 +1,5 @@
 "use client";
+import { formatRentalTime } from "@/lib/booking-time";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -562,9 +563,7 @@ export function MeetupVerification({
                 <>
                   <p>
                     Expires{" "}
-                    {new Date(
-                      data.temporaryLocation.active.expiresAt,
-                    ).toLocaleTimeString()}
+                    {formatRentalTime(data.temporaryLocation.active.expiresAt, "en-US", "second")}
                     .{" "}
                     {data.temporaryLocation.active.bothAcknowledged
                       ? "Both participants acknowledged."
@@ -629,7 +628,7 @@ export function MeetupVerification({
               <p key={n}>
                 {n === 0 ? "Owner" : "Borrower"}:{" "}
                 {c
-                  ? `${c.outcome === "TEST_LOCATION" ? "TEST_LOCATION — simulated meetup, not real station arrival" : c.outcome === "VERIFIED" ? "Location verified" : c.outcome === "INACCURATE" ? "Location inaccurate" : c.outcome === "OUTSIDE" ? "Location outside accepted area" : "Location unavailable"} · ${Date.parse(c.expiresAt) <= clock ? "check-in validity elapsed; an existing valid scan keeps its separate confirmation window" : `valid until ${new Date(c.expiresAt).toLocaleTimeString()}`}`
+                  ? `${c.outcome === "TEST_LOCATION" ? "TEST_LOCATION — simulated meetup, not real station arrival" : c.outcome === "VERIFIED" ? "Location verified" : c.outcome === "INACCURATE" ? "Location inaccurate" : c.outcome === "OUTSIDE" ? "Location outside accepted area" : "Location unavailable"} · ${Date.parse(c.expiresAt) <= clock ? "check-in validity elapsed; an existing valid scan keeps its separate confirmation window" : `valid until ${formatRentalTime(c.expiresAt, "en-US", "second")}`}`
                   : "Not checked in"}
               </p>
             ))}
@@ -770,7 +769,7 @@ export function MeetupVerification({
                           ? "QR redeemed. The recipient has a separate confirmation window; renewing revokes that proof."
                           : Date.parse(issued.expiresAt) <= clock
                             ? "Expired — renew the challenge. Your draft is preserved."
-                            : `QR scanning deadline ${new Date(issued.expiresAt).toLocaleTimeString()}`}
+                            : `QR scanning deadline ${formatRentalTime(issued.expiresAt, "en-US", "second")}`}
                       </p>
                       <p>
                         Show only to the intended participant. A screenshot can
@@ -844,7 +843,7 @@ export function MeetupVerification({
                     <p>
                       {Date.parse(data.challenge.expiresAt) <= clock
                         ? "QR scanning deadline expired. Unscanned codes need replacement; a valid scan has a separate confirmation window."
-                        : `QR scanning deadline: ${new Date(data.challenge.expiresAt).toLocaleTimeString()}`}
+                        : `QR scanning deadline: ${formatRentalTime(data.challenge.expiresAt, "en-US", "second")}`}
                     </p>
                   )}
                   {data.challenge?.consumedAt &&
@@ -854,7 +853,7 @@ export function MeetupVerification({
                         Date.parse(data.challenge.confirmationExpiresAt) <=
                           clock
                           ? "Confirmation window expired or verification changed. Request a new challenge; your condition draft is retained."
-                          : `${p === "PICKUP" ? "Complete physical receipt and required checklist" : "Acknowledge physical return receipt"} within ${Math.ceil((Date.parse(data.challenge.confirmationExpiresAt) - clock) / 1000)} seconds (until ${new Date(data.challenge.confirmationExpiresAt).toLocaleTimeString()}). ${p === "RETURN" ? "Condition inspection remains a separate required step. " : ""}Scanning alone does not confirm custody.`}
+                          : `${p === "PICKUP" ? "Complete physical receipt and required checklist" : "Acknowledge physical return receipt"} within ${Math.ceil((Date.parse(data.challenge.confirmationExpiresAt) - clock) / 1000)} seconds (until ${formatRentalTime(data.challenge.confirmationExpiresAt, "en-US", "second")}). ${p === "RETURN" ? "Condition inspection remains a separate required step. " : ""}Scanning alone does not confirm custody.`}
                       </p>
                     )}
                   {proof && p === "RETURN" && (

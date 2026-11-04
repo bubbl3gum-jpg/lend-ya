@@ -3,10 +3,9 @@
 import {DocumentLedger,type DocumentationReview} from "@/components/documentation-agreement";
 import {useLocale} from "@/components/i18n/locale";
 import {agreementText} from "@/lib/i18n/agreement";
-import {formatTime} from "@/lib/i18n/core";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { taipeiInputInstant } from "@/lib/booking-time";
+import { taipeiInputInstant, formatRentalTime } from "@/lib/booking-time";
 import { bookingPolicyError, type BookingPolicy } from "@/lib/booking-policy";
 
 import { MRTStationSelector } from "./mrt/MRTStationSelector";
@@ -208,7 +207,7 @@ export function BookingForm({ listing, policy, documentationPilot=false }: Booki
           </p>
         </div>
       ) : null}
-      {documentation&&reviewed===selection&&<div lang={locale}><p>{docText.expiry}: {formatTime(locale,documentation.expiresAt)}</p><DocumentLedger document={documentation.document} digest={documentation.contentDigest} mediaQuery={`contextId=${documentation.contextId}`}/><label><input type="checkbox" checked={ack===selection+documentation.contextId} onChange={e=>setAck(e.target.checked?selection+documentation.contextId:"")}/>{docText.ack}</label></div>}
+      {documentation&&reviewed===selection&&<div lang={locale}><p>{docText.expiry}: {formatRentalTime(documentation.expiresAt, locale)}</p><DocumentLedger document={documentation.document} digest={documentation.contentDigest} mediaQuery={`contextId=${documentation.contextId}`}/><label><input type="checkbox" checked={ack===selection+documentation.contextId} onChange={e=>setAck(e.target.checked?selection+documentation.contextId:"")}/>{docText.ack}</label></div>}
       {error ? <p role="alert" className="mt-4 text-sm text-rose-600">{error}</p> : null}
 
       <button

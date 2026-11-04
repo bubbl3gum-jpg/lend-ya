@@ -1,7 +1,7 @@
 # Original Prompt 1 acceptance recheck
 
 Date: **2026-11-04**. The opening review rechecks Prompt 1 only; its later
-Prompt 2 and Recovery R3 follow-ups are appended below. Reports were inspected against
+Prompt 2 and Recovery R3/R4 follow-ups are appended below. Reports were inspected against
 current source and fresh checks, not accepted as proof of correctness.
 
 ## Identity and provenance
@@ -285,3 +285,116 @@ retry/concurrency coverage beyond the focused lock-expiry and preserved existing
 races. The separate empty-schema build failure remains open; no request-time
 rendering change was introduced. No production activation, provider call, main
 merge, force push or deployment is part of this task.
+
+## Recovery R4 — consistent Taipei display
+
+2026-11-04, Asia/Taipei. Starting clean local/remote checkpoint:
+`de79da976007660167d2f4ac60edb7f69ed26212`, on the existing recovery branch and
+verified GitHub origin. Ancestry checked; no reset or older checkout recreation.
+Root instructions, booking/recheck reports, existing date/currency/localization
+helpers, relevant UI/gated workflow contracts and tests were inspected. Executed
+checks apply to that base plus the reviewed R4 changes in this checkpoint.
+
+### Display inventory and contract
+
+| Path / requirement | Actual finding and change | Evidence / status |
+| --- | --- | --- |
+| Booking detail, owner/renter dashboards | Already use `formatRentalTime` with date and minute, not date-only. Inherit safe explicit parsing and actual-offset label. | Historical +09 range and modern +08 dates checked on real pages in both participant roles; **Pass**. |
+| Account activity | Had explicit `toISOString` UTC-only output. Replaced with the shared Taipei helper. | Requested/handoff/return/inspection events from the synthetic 1979 fixture checked; **Pass**. |
+| Handoff/return/inspection evidence and verified history | Evidence/reviews/trust already use shared helper. No lifecycle or authorization changes. | All four historical evidence sections checked; existing completion/review/restart/dispute flow retained; **Pass**. |
+| Meetup temporary-location/check-in/QR/receipt deadlines | Found **five** `toLocaleTimeString` calls that depended on browser timezone and omitted the date. Replaced only these display calls with shared Taipei formatting, retaining seconds. | Unit helper precision/zone checks plus existing meetup regressions below. Countdown, verification, physical receipt and expiry arithmetic unchanged. |
+| Localized rental documentation, inspection, claims and coordination history | Used generic localized formatter or a separate direct Intl formatter. Routed rental-only calls through shared helper, passing existing en-GB/zh-TW locale and preserving inspection seconds/absence labels. | Full typing and targeted scoped integration/browser checks below; no global `lib/i18n/core.formatTime` change or gate activation. |
+| Invalid/ambiguous inputs | Old helper called `new Date(value)` and could normalize naive dates or throw on invalid data. New private display parser validates calendar/explicit offset before formatting, independent of R3 policy. | Unit cases return clear unavailable text for malformed values instead of plausible dates/crashes; **Pass**. |
+| Historical timezone offsets / immutability | Offset derived for the actual instant via Asia/Taipei Intl longOffset; no fixed historical +08 assumption. Date objects are cloned; strings must be zoned. | 1979 July +09, 1979 winter/modern +08, historical +08:06 and early-year units; complete synthetic row snapshots unchanged; **Pass**. |
+| Currency / localization | Existing USD price helpers and `formatMoney` left unchanged because no tested boundary defect was demonstrated. | Zero/fractional/MAX values in en-US/zh-TW units; real detail zero Decimal deposit/MAX total and fractional existing rental display; **Pass**. |
+| Preserved contracts | R3 API/parser/policy/hash/transactions unchanged; unrelated date-only and other-feature formatters retained. Read-only Admin clock text now describes per-instant offsets. | Source diff inspection and existing R3 browser replay/lifecycle checks; **Pass**. |
+
+The exact accepted display grammar, safe placeholders, localization, precision
+and historical rule examples are documented in `BOOKING_TIME.md`. A valid stored
+Date is displayed as its actual instant, not “corrected” to a guessed intended
+wall clock. No existing historical row, amount or relationship was modified.
+New synthetic history was inserted only into the marked owned regression DB.
+
+### Actual validation
+
+New disposable `postgres:17` container `lend-ya-r4-validation-20261104`, no copied
+or existing data, loopback port 32772. Credentials omitted; database commands use
+private `MRT_TEST_DATABASE_URL` bindings naming nonexisting local `hustlen_test_*`
+targets. Existing ownership/local-driver/create/drop/upload safeguards remain.
+Browser paths were checked executable (`/usr/bin/chromium`, version
+154.0.8037.57); FFmpeg/ffprobe are installed for existing virtual-camera tests.
+Database suites run sequentially with distinct fresh owned databases.
+
+| Check | Actual result |
+| --- | --- |
+| `TZ=UTC npm run test:unit` | **Pass**, 209 passed, 0 failed/skipped. |
+| `TZ=America/Los_Angeles npm run test:unit` | **Pass**, 209 passed, 0 failed/skipped. |
+| `npm run typecheck` | **Pass**, full route generation/project tsc, including final helper/screens/fixture types. |
+| `npm run lint` | **Pass**, no diagnostics. |
+| `TZ=UTC npm run test:rental-browser` | Initial new-selector attempt failed; corrected final run **Pass**, 5 passed, 0 failed/skipped on `hustlen_test_r4_browser_final_20261104`. |
+| `TZ=UTC npm run test:meetup` | **Pass**, 16 passed, 0 failed/skipped; `hustlen_test_r4_meetup_20261104`, including virtual-camera/mobile, separate scan/receipt clocks, retries and permission guards. |
+| `TZ=UTC npm run test:rental-documentation` | **Pass**, 1 passed, 0 failed/skipped; `hustlen_test_r4_agreement_20261104`. |
+| `TZ=UTC npm run test:condition-claims` | Initial fixture failed; corrected final run **Pass**, 1 passed, 0 failed/skipped; `hustlen_test_r4_claims_final_20261104`. |
+| `TZ=UTC npm run test:recovery-room` | **Pass**, 1 passed, 0 failed/skipped; `hustlen_test_r4_recovery_20261104`, including two-party history/privacy/revocation. |
+| `TZ=UTC npm run build:verify` | **Pass**, exit 0; all 33 migrations and full production compilation, typing, static-generation and route report on `hustlen_test_r4_build_20261104`. Not compilation-only success. |
+
+Initial browser failure: new assertions incorrectly expected separate start/end
+elements, while the actual existing Dates component renders one complete range.
+Selectors were corrected to require both dates/offsets in that range and the
+existing evidence headings. No display assertion was removed. The failed
+`hustlen_test_r4_browser_20261104` run cleaned its owned database/uploads; the
+fresh final run passed every original and new subtest, including unchanged
+complete historical rows and maximum-value rendering.
+
+The additional condition-case run initially failed with PostgreSQL 23505 on
+`MeetupSession_pkey` before its localized UI assertions: its unchanged fixture
+unconditionally inserted a session even for an API-created booking, which R3's
+existing automatic enrollment had already populated. Source inspection confirms
+both that insertion and automatic API enrollment predate R4; no baseline checkout
+was reset/run to manufacture this conclusion. The same setup pattern exists in
+the recovery-room fixture. These two **test-only** repairs now assert the
+existing session's exact owner and single `NEW_BOOKING_VERIFICATION` event for
+API-created fixtures, preserving those original rows; direct-SQL legacy fixtures
+still create their synthetic session as before. No ON CONFLICT suppression,
+deletion, authorization bypass or ownership-guard relaxation was introduced.
+All existing assertions remain, with stronger enrollment preconditions. The
+first failed condition-case DB (`hustlen_test_r4_claims_20261104`) was cleaned;
+its fresh corrected run passed. This was needed to execute changed-screen tests,
+not a product lifecycle rewrite or new R5 concurrency architecture.
+
+A read-only nested Git diagnostic hit sandbox EPERM; direct supported Git read
+plus a file comparison succeeded without changing security configuration. It
+verified the R3 local/API parsing and elapsed-day billing prefix in
+`lib/booking-time.ts` is byte-identical. API, policy, schema, migration, dependency
+and isolated-runner files are unchanged.
+
+Logs are session-local `/tmp/lend-r4-*.log`, with ignored runner manifests and
+screenshots in `.test-artifacts/`. Unit and browser checks above are new R4
+executions, not reused counts. Clean installation, generation, baseline and API
+suites were not repeated: dependency/schema/setup/runner/API metadata and R3
+policy/replay logic are unchanged; prior evidence remains explicitly dated in
+the earlier sections. No production data, real physical device or hosted CI
+was used. Existing tests use synthetic local media/locations and scoped gates,
+not production activation or proof of real-world GPS/camera performance.
+
+### Cleanup and acceptance
+
+**R4 acceptance: Pass.** Final unit reruns under UTC and America/Los_Angeles
+both passed all 209 tests after the last early-year assertion changes.
+Independent inspection of the isolated PostgreSQL instance found zero remaining
+`hustlen_test_*` databases. All eight runner manifests recorded
+`preserved: false` (six successful runs and the two documented failed attempts);
+no uploaded files remained in the test storage. The newly created temporary
+PostgreSQL container was stopped and its removal independently verified.
+No existing developer or production database was used or cleaned.
+
+### R5 handover / scope limits
+
+Next is R5: remaining deterministic database/concurrency regressions, including
+exact adjacency/nonconflicting requests and MVCC/retry outcomes beyond existing
+coverage. R4 does not change reservation semantics or claim that work complete.
+R3 retains the 90-day/2000-unit defaults and strict new-write/replay contract.
+The separate empty-schema build failure stays open; no request-time rendering
+or database-independent build fix was attempted. Historical correction remains
+a separate evidence/migration decision; display fixes do not justify shifting
+any stored times or rewriting booking history.

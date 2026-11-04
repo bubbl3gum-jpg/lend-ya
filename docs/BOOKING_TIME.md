@@ -1,4 +1,4 @@
-# Booking timestamps and policy — Recovery R3
+# Booking timestamps, policy and Taipei display
 
 2026-11-04, Asia/Taipei. R3 restores original Prompt 3/D's strict timestamp and
 policy behavior without replacing candidate pricing, idempotency or reservation
@@ -126,3 +126,69 @@ Browser cases use UTC server, Los Angeles borrower and Honolulu owner contexts,
 assert captured ISO payload and raw stored instant, then restart with lower and
 malformed policy to test durable replay/new-work refusal. Actual execution
 results and any limitations are recorded in `STABILIZATION_RECHECK.md`.
+
+## Historical-safe display contract — Recovery R4
+
+2026-11-04, Asia/Taipei. `formatRentalTime` is the shared display authority;
+display parsing is separate from `parseBookingInstant`/new-booking policy.
+
+- Accept finite valid `Date` objects, or explicitly zoned ISO strings with real
+  calendar dates: four-digit or signed six-digit ISO years, `T`, hour/minute,
+  optional seconds and 1–3 fractional digits, then uppercase `Z` or numeric
+  `±HH:mm` (bounded to 23:59). Unknown `-00:00`, impossible dates, date-only/
+  unzoned strings, whitespace, excess precision and other malformed inputs are
+  rejected. Numeric epoch values and arbitrary objects are not coerced to dates.
+- There is **no 2000 lower bound for display**. Historical instants, early years
+  and explicit extended-year strings are supported independently of R3's new
+  booking year limits. A Date is already an instant: its epoch is cloned, not
+  reinterpreted or mutated. This cannot establish whether a historical source
+  originally captured the user's intended time; no correction/backfill occurs.
+- Invalid/unsupported data returns **`Time unavailable`** or **`時間無法顯示`**
+  for the existing Traditional Chinese locale, never a plausible fallback date
+  or a thrown formatter error. Existing absent-record labels such as “Not
+  submitted yet”, “—” and “no authoritative record” remain distinct and intact.
+- Format the actual instant with `Asia/Taipei` ICU/tzdata rules and append one
+  `Asia/Taipei, UTC±HH:mm` label per displayed timestamp. The offset comes from
+  `Intl.DateTimeFormat(..., timeZoneName: "longOffset")`, not a fixed +08 label.
+  For example, `1979-07-15T01:00Z` displays **10:00 AM, UTC+09:00**; December
+  1979 and modern dates use UTC+08:00. Earlier local mean time can show +08:06.
+- Existing operational English uses en-US. Localized rental workflows retain
+  their previous en-GB (locale `en`) / zh-TW date ordering and labels. Default
+  minute precision is retained; inspection and meetup deadline displays request
+  seconds explicitly. Zone labels remain attached to each instant so a period
+  spanning different historical offsets is not represented by one false offset.
+
+Direct discrepancies fixed: account activity no longer prints UTC-only dates;
+all five browser-local meetup deadline/confirmation displays now use the shared
+Taipei formatter with full date and seconds. Shared-helper improvements also
+cover booking details, both dashboard roles, handoff/return/inspection evidence,
+verified reviews and trust history. Localized agreement timestamps, review
+expiry, saved rental documentation, inspection, condition-case and recovery-room
+history now use the same helper with their existing locale/absence semantics.
+The read-only Admin clock description no longer implies every historical
+instant is +08:00. Countdown arithmetic, custody/claim timers and authorization
+are unchanged. No aesthetic redesign or production feature activation follows.
+
+Intentionally retained: local `datetime-local` input/preview remains R3's Taipei
+wall-time contract, and its future-only input guidance is not a historical
+timezone label. Other features' generic `formatTime` and local parsers, unrelated
+date-only fields, locale catalogues and currencies were not globally changed.
+
+### Money display and verification
+
+The existing currency is **USD**, not newly changed to TWD. Decimal/string
+amounts and all pricing arithmetic remain authoritative and unchanged. Existing
+en-US/zh-TW USD formatting passed zero, 0.01, 12.34 and **9999999999.99** rendering
+tests. Actual booking views also render a zero Decimal deposit, fractional
+amounts and the maximum amount correctly. No demonstrated money-display defect
+required changing `formatMoney` or the existing detail/dashboard price helpers.
+
+New unit regressions reject malformed/ambiguous values, exercise equivalent
+offsets, 1979 DST, historical mean-time/early-year handling, host-zone independence,
+localized placeholders and Date immutability. The real browser regression views
+a **new synthetic** 1979 completed rental from UTC-server/Los Angeles-borrower/
+Honolulu-owner contexts across detail, dashboards, activity and all four evidence
+sections. Complete booking/handoff/return/listing/link row snapshots must remain
+identical after viewing. Existing lifecycle, restart and R3 replay tests remain
+in that suite. Executed results and any failed test attempts are recorded in the
+R4 section of `STABILIZATION_RECHECK.md`.

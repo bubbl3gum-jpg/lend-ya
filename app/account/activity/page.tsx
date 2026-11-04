@@ -3,6 +3,7 @@ import {readLocale} from "@/lib/i18n/server";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { formatRentalTime } from "@/lib/booking-time";
 export default async function ActivityPage() {
   const user = await getCurrentUser();
   if (!user) return null;
@@ -99,7 +100,7 @@ export default async function ActivityPage() {
             </Link>
             <p>
               {event.label} ·{" "}
-              {event.at.toISOString().replace("T", " ").slice(0, 16)} UTC
+              {formatRentalTime(event.at)}
             </p>
           </li>
         ))}
