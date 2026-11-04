@@ -3,6 +3,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { cp, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { tmpdir } from "node:os";
+import { pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -11,7 +13,7 @@ const run = promisify(execFile),
   migration = "20261019210000_mrt_meetup_verification";
 test("additive meetup migration preserves every populated pre-existing table and checksum; historical bookings stay unenrolled", async () => {
   const db = await connectTestDatabase(),
-    dir = await mkdtemp("/tmp/hustlen-meetup-migration-");
+    dir = await mkdtemp(path.join(tmpdir(), "hustlen-meetup-migration-"));
   try {
     assert.equal(
       (await db.query("SELECT to_regclass('public.\"Booking\"') AS t")).rows[0]
@@ -30,7 +32,7 @@ test("additive meetup migration preserves every populated pre-existing table and
     const config = path.join(dir, "prisma.config.ts");
     await writeFile(
       config,
-      `import {defineConfig} from ${JSON.stringify(path.join(process.cwd(), "node_modules/prisma/config.js"))};export default defineConfig({schema:${JSON.stringify(path.join(process.cwd(), "prisma/schema.prisma"))},migrations:{path:${JSON.stringify(migrations)}},datasource:{url:process.env.DATABASE_URL}});`,
+      `import {defineConfig} from ${JSON.stringify(pathToFileURL(path.join(process.cwd(), "node_modules/prisma/config.js")).href)};export default defineConfig({schema:${JSON.stringify(path.join(process.cwd(), "prisma/schema.prisma"))},migrations:{path:${JSON.stringify(migrations)}},datasource:{url:process.env.DATABASE_URL}});`,
     );
     await run(
       process.execPath,

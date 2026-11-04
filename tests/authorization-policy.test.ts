@@ -336,7 +336,7 @@ test("production source never imports shadow policy and all Admin API routes rem
     return readdirSync(dir, { withFileTypes: true }).flatMap((item) =>
       item.isDirectory()
         ? files(path.join(dir, item.name))
-        : [path.join(dir, item.name)],
+        : [path.join(dir, item.name).split(path.sep).join("/")],
     );
   }
   for (const root of ["app", "components", "scripts", "lib/admin", "lib/chat"])

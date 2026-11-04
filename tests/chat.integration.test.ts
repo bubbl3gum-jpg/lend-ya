@@ -1,3 +1,4 @@
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -10,6 +11,7 @@ import sharp from "sharp";
 import { chromium, expect, type Page } from "@playwright/test";
 import { loginDiagnostics, readyAuthenticationRoutes } from "./support/login-diagnostics";
 import { connectTestDatabase } from "./support/test-database";
+import { meetupFixture } from "./support/meetup-fixture";
 import { prisma } from "../lib/prisma";
 import { claimAnalysis, finishAnalysis, processAnalysis } from "../lib/chat/analysis/jobs";
 import { MockProvider, type AnalysisProvider } from "../lib/chat/analysis/provider";
@@ -20,11 +22,14 @@ type Case = {id:number;messageId:number|null;version:number;status:string;kind:s
 type Payload = {analysis:{id:number;messageId:number;status:string;recommendation:{suggestedOutcome:string;requiresHumanReview:boolean;providerVersion:string}|null}[];user:{id:number};listing:{id:number};conversationId:number;message:Message;messages:Message[];cursor:number;hasMore:boolean;nextBefore:number|null;conversation:{unreadCount:number;lastReadSequence:number};cases:Case[];case:Case;caseId:number;booking:{id:number;status:string};notices:{corrected:boolean}[];quote:{dailyPrice:string;totalPrice:string;deposit:string};code:string;outcome:string;replayed:boolean;conversations:{id:number;lastActivityAt:string}[]};
 test("Milestone 2: isolated chat, multilingual safety, scoped review, browser delivery and restart persistence",{timeout:300000},async(t)=>{
   const db=await connectTestDatabase();
+  // These SQL queue/lease fixtures use NOW() in UTC-convention timestamp
+  // columns. Pin only this already ownership-verified fixture connection.
+  await db.query("SET TIME ZONE 'UTC'");
   const base=`http://localhost:${process.env.TEST_CHAT_PORT}`,tag=randomUUID(),password="IsolatedChat123!";
   const logfile=path.join(process.env.MRT_TEST_ARTIFACT_DIR!,"chat-server.log"),log=openSync(logfile,"a");
   let server:ChildProcess|undefined,browser:Awaited<ReturnType<typeof chromium.launch>>|undefined;
   async function stop(){if(server&&server.exitCode===null&&server.signalCode===null){const done=once(server,"exit");server.kill("SIGTERM");const timer=setTimeout(()=>server?.kill("SIGKILL"),5000);await done;clearTimeout(timer);}}
-  async function start(enabled:boolean,analysisMode="mock-shadow"){server=spawn(process.execPath,["node_modules/next/dist/bin/next","dev","--hostname","localhost","--port",String(process.env.TEST_CHAT_PORT)],{env:{...process.env,NODE_ENV:"development",CHAT_ENABLED:String(enabled),CHAT_PREVIEW_USER_IDS:"",CHAT_ANALYSIS_MODE:analysisMode},stdio:["ignore",log,log]});for(let i=0;i<100;i++){if(server.exitCode!==null)throw Error("Chat server stopped; inspect owned artifact log.");try{if((await fetch(base+"/api/listings",{signal:AbortSignal.timeout(2000)})).ok)return;}catch{}await new Promise(r=>setTimeout(r,200));}throw Error("Chat server did not become ready.");}
+  async function start(enabled:boolean,analysisMode="mock-shadow"){server=spawn(process.execPath,["node_modules/next/dist/bin/next","dev",...nextDevBundlerArgs(),"--hostname","localhost","--port",String(process.env.TEST_CHAT_PORT)],{env:{...process.env,NODE_ENV:"development",CHAT_ENABLED:String(enabled),CHAT_PREVIEW_USER_IDS:"",CHAT_ANALYSIS_MODE:analysisMode},stdio:["ignore",log,log]});for(let i=0;i<100;i++){if(server.exitCode!==null)throw Error("Chat server stopped; inspect owned artifact log.");try{if((await fetch(base+"/api/listings",{signal:AbortSignal.timeout(2000)})).ok)return;}catch{}await new Promise(r=>setTimeout(r,200));}throw Error("Chat server did not become ready.");}
   const api=async(url:string,cookie="",method="GET",body?:object|FormData,headers:Record<string,string>={})=>{const r=await fetch(base+url,{method,headers:{Cookie:cookie,...(body instanceof FormData?{}:{"Content-Type":"application/json"}),...headers},...(body?{body:body instanceof FormData?body:JSON.stringify(body)}:{}),redirect:"manual"});const bytes=Buffer.from(await r.arrayBuffer());let json={} as Payload;try{json=JSON.parse(bytes.toString());}catch{}return {status:r.status,json,bytes,cookie:r.headers.get("set-cookie")?.split(";")[0]??""};};
   const register=async(name:string):Promise<Actor>=>{const email=`${name}-${tag}@example.test`;const r=await api("/api/auth/register","","POST",{name,email,password});assert.equal(r.status,201);return {id:r.json.user.id,email,cookie:r.cookie};};
   try{
@@ -135,9 +140,9 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       const job=(await db.query('SELECT * FROM "ChatAnalysisJob" WHERE "messageId"=$1',[id])).rows[0];assert.equal(job.status,"WAITING");assert.equal(job.attempts,1);assert.equal((await processAnalysis(prisma)).processed,false);
       await stop();await start(true);assert.equal((await db.query('SELECT status FROM "ChatAnalysisJob" WHERE id=$1',[job.id])).rows[0].status,"WAITING");
       assert.ok(!(await api(`/api/conversations/${cid}/messages`,borrower.cookie)).json.messages.some(m=>m.id===id));
-      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE id=$1',[job.id]);
+      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=$2 WHERE id=$1',[job.id,new Date(Date.now()-1000).toISOString()]);
       assert.equal((await processAnalysis(prisma,{...provider,analyze:async()=>{throw Error("PRIVATE_PROVIDER_FAILURE_BODY");}})).errorCode,"PROVIDER_UNAVAILABLE");
-      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE id=$1',[job.id]);assert.equal((await processAnalysis(prisma)).status,"SUCCEEDED");
+      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=$2 WHERE id=$1',[job.id,new Date(Date.now()-1000).toISOString()]);assert.equal((await processAnalysis(prisma)).status,"SUCCEEDED");
       assert.deepEqual((await db.query('SELECT * FROM "ChatMessage" WHERE id=$1',[id])).rows[0],before);
       assert.deepEqual((await db.query('SELECT version FROM "Conversation" WHERE id=$1',[cid])).rows[0],conversationBefore);
       assert.equal((await read(plainAdmin,caseId)).status,403);assert.equal((await read(admin,caseId)).status,403);await claim(admin,caseId);assert.equal((await read(admin2,caseId)).status,403);
@@ -154,12 +159,12 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
     await t.test("malformed responses exhaust at three attempts without releasing holds; leases fence stale workers",async()=>{
       const held=await send(owner,`I will stab you invalid ${tag}`),id=held.json.message.id;
       const malformed={...new MockProvider(),providerVersion:"malformed",modelVersion:"test",analyze:async()=>({banUser:true})};
-      for(let n=0;n<3;n++){await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE "messageId"=$1',[id]);const result=await processAnalysis(prisma,malformed);assert.equal(result.errorCode,"INVALID_RESPONSE");assert.equal(result.status,n===2?"FAILED":"WAITING");}
+      for(let n=0;n<3;n++){await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=$2 WHERE "messageId"=$1',[id,new Date(Date.now()-1000).toISOString()]);const result=await processAnalysis(prisma,malformed);assert.equal(result.errorCode,"INVALID_RESPONSE");assert.equal(result.status,n===2?"FAILED":"WAITING");}
       const job=(await db.query('SELECT * FROM "ChatAnalysisJob" WHERE "messageId"=$1',[id])).rows[0];assert.equal(job.attempts,3);assert.equal((await processAnalysis(prisma)).processed,false);assert.equal((await db.query('SELECT status FROM "ChatMessage" WHERE id=$1',[id])).rows[0].status,"HELD");
       await send(owner,`Lease fixture ${tag}`);const claims=await Promise.all([claimAnalysis(prisma),claimAnalysis(prisma)]);assert.equal(claims.filter(Boolean).length,1);const first=claims.find(Boolean)!;
       await db.query('UPDATE "ChatAnalysisJob" SET "leaseUntil"=NOW()-INTERVAL \'1 second\' WHERE id=$1',[first.id]);const second=await claimAnalysis(prisma);assert.equal(second?.id,first.id);assert.notEqual(second?.leaseToken,first.leaseToken);
       assert.equal((await finishAnalysis(prisma,first,{errorCode:"TIMEOUT"})).count,0);assert.equal((await finishAnalysis(prisma,second!,{errorCode:"TIMEOUT"})).count,1);
-      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=NOW() WHERE id=$1',[first.id]);const last=await claimAnalysis(prisma);assert.equal(last?.attempts,3);await db.query('UPDATE "ChatAnalysisJob" SET "leaseUntil"=NOW()-INTERVAL \'1 second\' WHERE id=$1',[first.id]);assert.equal(await claimAnalysis(prisma),null);assert.equal((await db.query('SELECT status FROM "ChatAnalysisJob" WHERE id=$1',[first.id])).rows[0].status,"FAILED");
+      await db.query('UPDATE "ChatAnalysisJob" SET "availableAt"=$2 WHERE id=$1',[first.id,new Date(Date.now()-1000).toISOString()]);const last=await claimAnalysis(prisma);assert.equal(last?.attempts,3);await db.query('UPDATE "ChatAnalysisJob" SET "leaseUntil"=NOW()-INTERVAL \'1 second\' WHERE id=$1',[first.id]);assert.equal(await claimAnalysis(prisma),null);assert.equal((await db.query('SELECT status FROM "ChatAnalysisJob" WHERE id=$1',[first.id])).rows[0].status,"FAILED");
     });
     await t.test("booking references, blocks, suspension and safe coordination preserve the complete rental lifecycle",async()=>{
       const input={listingId,meetingStationId:station,startAt:"2035-01-01T10:00+08:00",endAt:"2035-01-02T10:00+08:00"};const quote=await api("/api/bookings",borrower.cookie,"POST",{...input,quote:true});assert.equal(quote.status,200);
@@ -171,9 +176,17 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       const support=await api(`/api/conversations/${cid}/coordination`,borrower.cookie,"POST",{bookingId:bid});assert.equal(support.status,200);assert.equal((await api(`/api/conversations/${cid}/coordination`,borrower.cookie,"POST",{bookingId:bid})).json.caseId,support.json.caseId);
       assert.equal((await api(`/api/conversations/${cid}/coordination`,borrower.cookie,"POST",{bookingId:foreign.json.booking.id})).status,400);
       const evidence={checklist:Object.fromEntries(Object.keys(checklistItems).map(k=>[k,"yes"])),conditionConfirmed:true,returnConfirmed:true};
-      assert.equal((await api(`/api/bookings/${bid}/handoff`,owner.cookie,"POST",evidence)).status,200);assert.equal((await api(`/api/bookings/${bid}/handoff`,borrower.cookie,"POST",evidence)).status,200);
+      const verification=meetupFixture(base,owner.cookie,borrower.cookie);
+      await verification.arrivals(bid,"PICKUP");
+      assert.equal((await api(`/api/bookings/${bid}/handoff`,owner.cookie,"POST",evidence)).status,200);
+      const pickupProof=await verification.scanPayload(bid,"PICKUP");
+      assert.equal((await api(`/api/bookings/${bid}/handoff`,borrower.cookie,"POST",{...evidence,...pickupProof})).status,200);
       await api(`/api/conversations/${cid}/block`,borrower.cookie,"POST",{blocked:false});await db.query('UPDATE "User" SET "accountStatus"=\'SUSPENDED\' WHERE id=$1',[borrower.id]);assert.equal((await send(borrower,"Suspended free text")).status,403);
-      assert.equal((await api(`/api/bookings/${bid}/return`,borrower.cookie,"POST",evidence)).status,200);assert.equal((await api(`/api/bookings/${bid}`,owner.cookie,"PATCH",{action:"inspect"})).status,200);assert.equal((await api(`/api/bookings/${bid}/inspection`,owner.cookie,"POST",{...evidence,acceptable:true})).status,200);
+      await verification.arrivals(bid,"RETURN");
+      assert.equal((await api(`/api/bookings/${bid}/return`,borrower.cookie,"POST",evidence)).status,200);
+      const returnProof=await verification.scanPayload(bid,"RETURN");
+      assert.equal((await api(`/api/bookings/${bid}`,owner.cookie,"PATCH",{action:"inspect",...returnProof})).status,200);
+      assert.equal((await api(`/api/bookings/${bid}/inspection`,owner.cookie,"POST",{...evidence,acceptable:true})).status,200);
       await db.query('UPDATE "User" SET "accountStatus"=\'ACTIVE\' WHERE id=$1',[borrower.id]);for(const actor of [owner,borrower])assert.equal((await api(`/api/bookings/${bid}/reviews`,actor.cookie,"POST",{rating:5,comment:"Verified rental with chat"})).status,201);
       const before=await api(`/api/bookings/${bid}`,owner.cookie);assert.equal(before.json.booking.status,"COMPLETED");assert.equal((await send(owner,`After completion ${tag}`,{bookingId:bid})).status,200);assert.equal((await api("/api/conversations",borrower.cookie,"POST",{listingId})).json.conversationId,cid);assert.equal((await api(`/api/bookings/${bid}`,owner.cookie)).json.booking.status,"COMPLETED");
       const second=await api("/api/bookings",borrower.cookie,"POST",{...input,startAt:"2036-01-01T10:00+08:00",endAt:"2036-01-02T10:00+08:00"});assert.equal(second.status,201);assert.equal((await send(borrower,`Second booking same thread ${tag}`,{bookingId:second.json.booking.id})).status,200);assert.equal((await api("/api/conversations",borrower.cookie,"POST",{listingId})).json.conversationId,cid);
@@ -208,14 +221,33 @@ test("Milestone 2: isolated chat, multilingual safety, scoped review, browser de
       let loginNumber=0;
       const login=async(page:Page,actor:Actor)=>{const save=await loginDiagnostics(page,db,"chat-"+loginNumber++);try{await page.goto(base+"/login");await page.getByLabel("Email address",{exact:true}).fill(actor.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click({noWaitAfter:true});await expect(page).not.toHaveURL(/\/login$/);await save("passed");}catch(error){await save("failed");throw error;}};
       await login(pages[0],owner);await login(pages[1],borrower);await login(pages[2],admin);
-      await pages[1].goto(`${base}/listings/${listingId}`);await pages[1].getByRole("button",{name:"Chat with Owner",exact:true}).click();await expect(pages[1]).toHaveURL(`${base}/messages/${cid}`);await pages[0].goto(`${base}/messages/${cid}`);
+      let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});let held=0;
+      await pages[1].route(/\/_next\/static\/.*\.js(?:\?|$)/,async route=>{held++;await gate;await route.continue();});
+      try {
+        await pages[1].goto(`${base}/listings/${listingId}`,{waitUntil:"commit"});
+        await expect(pages[1].getByRole("button",{name:"Chat with Owner",exact:true})).toBeDisabled();
+        assert.ok(held>0);release();
+        await expect(pages[1].getByRole("button",{name:"Chat with Owner",exact:true})).toBeEnabled({timeout:30000});
+      } finally {release();await pages[1].unrouteAll({behavior:"wait"});}
+      const conversationResponse=pages[1].waitForResponse(r=>new URL(r.url()).pathname==="/api/conversations"&&r.request().method()==="POST");
+      await pages[1].getByRole("button",{name:"Chat with Owner",exact:true}).click();
+      assert.equal((await conversationResponse).status(),200);
+      await expect(pages[1]).toHaveURL(`${base}/messages/${cid}`,{timeout:30000});await pages[0].goto(`${base}/messages/${cid}`);
       const hello=`Browser message ${tag}`;await pages[0].getByLabel("Message",{exact:true}).fill(hello);await pages[0].getByRole("button",{name:"Send message",exact:true}).click();await expect(pages[1].getByText(hello,{exact:true})).toBeVisible({timeout:15000});await pages[1].getByRole("button",{name:"Mark loaded messages read"}).click();
       const item=pages[0].getByRole("listitem").filter({has:pages[0].getByText(hello,{exact:true})});await expect(item.getByText("Read",{exact:true})).toBeVisible({timeout:15000});
       await pages[1].getByRole("listitem").filter({has:pages[1].getByText(hello,{exact:true})}).getByRole("button",{name:/Report message/}).click();await pages[1].getByLabel("Report reason").fill("Browser reporting flow");await pages[1].getByRole("button",{name:"Submit message report"}).click();await expect(pages[1].getByText(/Report saved as case/)).toBeVisible();
       await pages[1].getByRole("button",{name:"Block contact",exact:true}).click();await expect(pages[1].getByRole("button",{name:"Unblock contact",exact:true})).toBeVisible();await pages[1].getByRole("button",{name:"Unblock contact",exact:true}).click();
       const review=await send(owner,`Review this link https://bit.ly/${tag}`);const caseId=await caseFor(review.json.message.id);
       for(let n=0;n<100;n++){if(!(await processAnalysis(prisma)).processed)break;}
-      await pages[2].goto(base+"/admin/chat");await pages[2].getByRole("button",{name:`Claim case #${caseId}`,exact:true}).click();await expect(pages[2].getByText(review.json.message.body,{exact:true})).toBeVisible();await expect(pages[2].getByText(`Unverified shadow analysis · message #${review.json.message.id}`,{exact:true})).toBeVisible();await pages[2].getByLabel("Decision",{exact:true}).selectOption("DISMISS");await pages[2].getByLabel("Decision explanation").fill("Harmless external link reviewed in context");await pages[2].getByRole("button",{name:"Save moderation decision"}).click();await expect(pages[2].getByText(/Decision: DISMISS/)).toBeVisible();
+      // Compile the authenticated dev page before testing its client transition.
+      // This does not claim the case or read its protected evidence.
+      assert.equal((await pages[2].request.get(`${base}/admin/chat/${caseId}`)).status(),200);
+      await pages[2].goto(base+"/admin/chat");
+      const claimed=pages[2].waitForResponse(r=>new URL(r.url()).pathname===`/api/admin/chat/cases/${caseId}/claim`&&r.request().method()==="POST");
+      await pages[2].getByRole("button",{name:`Claim case #${caseId}`,exact:true}).click();
+      assert.equal((await claimed).status(),200);
+      await expect(pages[2]).toHaveURL(`${base}/admin/chat/${caseId}`,{timeout:30000});
+      await expect(pages[2].getByText(review.json.message.body,{exact:true})).toBeVisible({timeout:30000});await expect(pages[2].getByText(`Unverified shadow analysis · message #${review.json.message.id}`,{exact:true})).toBeVisible();await pages[2].getByLabel("Decision",{exact:true}).selectOption("DISMISS");await pages[2].getByLabel("Decision explanation").fill("Harmless external link reviewed in context");await pages[2].getByRole("button",{name:"Save moderation decision"}).click();await expect(pages[2].getByText(/Decision: DISMISS/)).toBeVisible();
       await pages[1].goto(base+"/messages");await expect(pages[1].getByRole("heading",{name:"Messages",exact:true})).toBeVisible();const reconnectContext=await browser.newContext();const reconnectPage=await reconnectContext.newPage();await login(reconnectPage,outsider);await reconnectPage.goto(`${base}/messages/${paginationConversationId}`);await expect(reconnectPage.getByText(paginationReleasedBody,{exact:true})).toBeVisible({timeout:20000});await reconnectContext.close();await browser.close();browser=undefined;
     });
     await t.test("logout/login and full server restart preserve messages, read state, cases, grants and outbox",async()=>{

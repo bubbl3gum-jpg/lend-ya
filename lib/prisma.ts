@@ -2,6 +2,7 @@ import { logOperationalError } from "./operational-error";
 import { disposableDatabaseUrl } from "./disposable-database-url";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { utcPostgresUrl } from "./postgres-utc";
 
 let databaseUrl = process.env.DATABASE_URL;
 
@@ -27,7 +28,7 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrisma() {
   const client = new PrismaClient({
-    adapter: new PrismaPg({ connectionString: databaseUrl! }),
+    adapter: new PrismaPg({ connectionString: utcPostgresUrl(databaseUrl!) }),
     log: [{ emit: "event", level: "error" }],
   });
   client.$on("error", () => {

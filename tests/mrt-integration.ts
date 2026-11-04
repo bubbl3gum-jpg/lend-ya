@@ -3,7 +3,9 @@ import sharp from "sharp";
 import { checklistItems } from "../lib/rental-checklist";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { type APIResponse } from "playwright";
 import path from "node:path";
 import { connectTestDatabase } from "./support/test-database";
@@ -126,28 +128,15 @@ async function main() {
       mimeType: "image/png",
       buffer: png,
     });
-    const videoBytes = await page.evaluate(async () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = 64;
-      canvas.height = 64;
-      const stream = canvas.captureStream(10);
-      const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-      const chunks: Blob[] = [];
-      const result = new Promise<number[]>((resolve) => {
-        recorder.ondataavailable = (event) => chunks.push(event.data);
-        recorder.onstop = async () =>
-          resolve(
-            Array.from(new Uint8Array(await new Blob(chunks).arrayBuffer())),
-          );
-      });
-      recorder.start();
-      canvas.getContext("2d")!.fillRect(0, 0, 64, 64);
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      recorder.stop();
-      const bytes = await result;
-      stream.getTracks().forEach((track) => track.stop());
-      return bytes;
-    });
+    // MediaRecorder on a detached canvas can emit a header-only 110-byte WebM
+    // before an encoded frame arrives. Use a real, deterministic encoded fixture;
+    // the real upload API still validates it with ffprobe and must return 201.
+    const videoPath = path.join(artifactDir, "upload-fixture.webm");
+    await promisify(execFile)("ffmpeg", [
+      "-v", "error", "-f", "lavfi", "-i", "color=c=blue:s=64x64:r=10:d=1",
+      "-c:v", "libvpx", "-f", "webm", "-y", videoPath,
+    ], { timeout: 10000, maxBuffer: 65536 });
+    const videoBytes = await readFile(videoPath);
     await page
       .locator("input[type=file]")
       .nth(1)
@@ -156,9 +145,11 @@ async function main() {
         mimeType: "video/webm",
         buffer: Buffer.from(videoBytes),
       });
-    await page
-      .getByRole("button", { name: "Publish listing", exact: true })
-      .click();
+    const [publication] = await Promise.all([
+      page.waitForResponse(response => new URL(response.url()).pathname === "/api/listings" && response.request().method() === "POST"),
+      page.getByRole("button", { name: "Publish listing", exact: true }).click(),
+    ]);
+    assert.equal(publication.status(), 201, await publication.text());
     await page.waitForURL(/\/listings\/\d+$/);
     const listingId = Number(page.url().split("/").at(-1));
     const taipei = await prisma.mrtStation.findUniqueOrThrow({

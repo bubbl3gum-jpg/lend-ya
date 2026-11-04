@@ -4,6 +4,7 @@ import "dotenv/config";
 import { spawn, type ChildProcess } from "node:child_process";
 import { mkdir, appendFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import net from "node:net";
 import {
   testDatabaseUrl,
@@ -199,7 +200,7 @@ async function main() {
           "--config",
           "prisma7.config.ts",
         ]);
-      if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
+      if(process.argv.includes("--postgres-utc")) {await run(["node_modules/tsx/dist/cli.mjs","--test","tests/postgres-utc.integration.test.ts"]);} else if(process.argv.includes("--build")) {await run(["node_modules/next/dist/bin/next","build"]);} else if (standalone) {
         if (legacyGroup === "mvp") await run(["node_modules/next/dist/bin/next", "build"]);
         if (process.argv.includes("--camera-production")) {
           if (legacyGroup !== "meetup-camera") throw new Error("Production camera comparison requires --meetup-camera.");
@@ -254,6 +255,7 @@ async function main() {
           [
             "node_modules/next/dist/bin/next",
             productionPilot ? "start" : "dev",
+            ...nextDevBundlerArgs(productionPilot),
             "--hostname",
             "localhost",
             "--port",

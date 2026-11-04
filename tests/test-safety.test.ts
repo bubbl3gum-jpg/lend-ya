@@ -7,6 +7,15 @@ import {
   assertEffectiveTestTarget,
 } from "./support/test-database";
 import { browserLaunchOptions } from "./support/browser";
+import { nextDevBundlerArgs } from "./support/next-bundler";
+
+test("Windows acceptance uses supported Webpack dev mode without changing production", () => {
+  assert.deepEqual(nextDevBundlerArgs(false, "win32", {}), ["--webpack"]);
+  assert.deepEqual(nextDevBundlerArgs(false, "linux", {}), []);
+  assert.deepEqual(nextDevBundlerArgs(true, "win32", { MRT_TEST_BUNDLER: "webpack" }), []);
+  assert.deepEqual(nextDevBundlerArgs(false, "win32", { MRT_TEST_BUNDLER: "turbopack" }), []);
+  assert.throws(() => nextDevBundlerArgs(false, "win32", { MRT_TEST_BUNDLER: "unknown" }));
+});
 
 test("test targets require explicit local test database designation", () => {
   for (const value of [

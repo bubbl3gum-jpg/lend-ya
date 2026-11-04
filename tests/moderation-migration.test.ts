@@ -4,6 +4,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtemp, cp, writeFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
+import { tmpdir } from "node:os";
+import { pathToFileURL } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { Pool } from "pg";
@@ -17,7 +19,7 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
     "Use an empty dedicated _migration_test database.",
   );
   const pool = new Pool({ connectionString: url }),
-    dir = await mkdtemp("/tmp/lend-ya-migration-");
+    dir = await mkdtemp(path.join(tmpdir(), "lend-ya-migration-"));
   assert.equal(
     (await pool.query("SELECT to_regclass('public.\"User\"') AS users")).rows[0]
       .users,
@@ -34,7 +36,7 @@ test("Milestone 4B forward migrations preserve populated 4A account, rental, cas
     const config = path.join(dir, "prisma.config.ts");
     await writeFile(
       config,
-      `import {defineConfig} from ${JSON.stringify(path.join(process.cwd(), "node_modules/prisma/config.js"))}; export default defineConfig({schema:${JSON.stringify(path.join(process.cwd(), "prisma/schema.prisma"))},migrations:{path:${JSON.stringify(migrations)}},datasource:{url:process.env.DATABASE_URL}});`,
+      `import {defineConfig} from ${JSON.stringify(pathToFileURL(path.join(process.cwd(), "node_modules/prisma/config.js")).href)}; export default defineConfig({schema:${JSON.stringify(path.join(process.cwd(), "prisma/schema.prisma"))},migrations:{path:${JSON.stringify(migrations)}},datasource:{url:process.env.DATABASE_URL}});`,
     );
     await run(
       process.execPath,

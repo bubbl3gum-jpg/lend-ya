@@ -137,7 +137,7 @@ async function main() {
     await writeFile(path.join(artifacts, "failure-runner.log"), child.stdout + child.stderr);
     assert.equal(child.status, 1, "Intentional setup failure must fail the runner, not be reported as success.");
     assert.match(child.stdout, /BASELINE_EXPECTED_SETUP_FAILURE/);
-    const childArtifacts = /artifacts: (\.test-artifacts\/[a-f0-9]{24})/.exec(child.stdout)?.[1];
+    const childArtifacts = /artifacts: (\.test-artifacts[\\/][a-f0-9]{24})/.exec(child.stdout)?.[1];
     assert.ok(childArtifacts, "Expected a child runner artifact directory.");
     const manifest = JSON.parse(await readFile(path.join(childArtifacts, "run.json"), "utf8"));
     assert.equal(manifest.database, childUrl.pathname.slice(1));

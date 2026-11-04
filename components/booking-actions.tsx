@@ -1,8 +1,12 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { MeetupVerification } from "@/components/meetup-verification";
 import { RentalEvidenceForm } from "@/components/rental-evidence-form";
+
+const subscribeHydration = () => () => {};
+const clientReady = () => true;
+const serverNotReady = () => false;
 
 type BookingActionsProps = {
   documentationPilot?:boolean;
@@ -29,6 +33,7 @@ export function BookingActions({
   hasDispute = false,
   inspectionRecorded = false,
 }: BookingActionsProps) {
+  const ready = useSyncExternalStore(subscribeHydration, clientReady, serverNotReady);
   const router = useRouter();
   const [meetupEnabled, setMeetupEnabled] = useState(meetupRequired),
     [meetupProof, setMeetupProof] = useState<string | null>(null);
@@ -95,7 +100,8 @@ export function BookingActions({
   const buttonClass =
     "rounded-xl border border-slate-200 px-4 py-2 text-sm disabled:opacity-50";
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-booking-ready={String(ready)} aria-busy={!ready}>
+      <fieldset className="contents" disabled={!ready} aria-label="Rental actions">
       <MeetupVerification
         bookingId={bookingId}
         userId={currentUserId}
@@ -296,6 +302,7 @@ export function BookingActions({
           {error}
         </p>
       ) : null}
+      </fieldset>
     </div>
   );
 }

@@ -10,6 +10,35 @@ import {
   testChecksMatch,
 } from "../lib/meetup/test-location";
 import { evaluateLocation, stationCoordinates } from "../lib/meetup/location";
+import { createRequire } from "node:module";
+import path from "node:path";
+
+test("separate route-module copies share a centre only within the same process and test binding", () => {
+  const load = createRequire(path.join(process.cwd(), "package.json"));
+  const filename = load.resolve("./lib/meetup/test-location.ts");
+  const original = load.cache[filename];
+  const oldRun = process.env.MRT_TEST_RUN_ID;
+  const centre = createTestCentre(982, 1, 22.1, 121.1);
+  try {
+    delete load.cache[filename];
+    const separate = load(filename) as typeof import("../lib/meetup/test-location");
+    assert.equal(separate.currentTestCentre(982)?.generation, centre.generation);
+    separate.revokeTestCentre(982);
+    assert.equal(currentTestCentre(982), undefined);
+    createTestCentre(982, 1, 22.1, 121.1);
+    process.env.MRT_TEST_RUN_ID = oldRun === "f".repeat(24) ? "e".repeat(24) : "f".repeat(24);
+    assert.equal(separate.currentTestCentre(982), undefined);
+    if (oldRun === undefined) delete process.env.MRT_TEST_RUN_ID;
+    else process.env.MRT_TEST_RUN_ID = oldRun;
+    assert.equal(currentTestCentre(982), undefined, "Changing back must not resurrect an old scope");
+  } finally {
+    if (oldRun === undefined) delete process.env.MRT_TEST_RUN_ID;
+    else process.env.MRT_TEST_RUN_ID = oldRun;
+    revokeTestCentre(982);
+    if (original) load.cache[filename] = original;
+    else delete load.cache[filename];
+  }
+});
 
 test("temporary mode fails closed outside an explicitly designated local disposable dev database", () => {
   const url = "postgresql://demo:demo@localhost:55433/hustlen_test_local";

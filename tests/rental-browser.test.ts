@@ -1,3 +1,4 @@
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import {browserMeetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
@@ -28,7 +29,7 @@ test(
     );
     const port = Number(process.env.TEST_BROWSER_PORT ?? 3002);
     const base = `http://localhost:${port}`;
-    const log = openSync("/tmp/lend-ya-browser-server.log", "w");
+    const log = openSync(path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-browser-server.log"), "w");
     let server: ChildProcess | undefined;
     const stop = async () => {
       if (server && server.exitCode === null && server.signalCode === null) {
@@ -43,6 +44,7 @@ test(
         [
           "node_modules/next/dist/bin/next",
           "dev",
+          ...nextDevBundlerArgs(),
           "--hostname",
           "localhost",
           "--port",
@@ -56,7 +58,7 @@ test(
       for (let i = 0; i < 40; i++) {
         if (server.exitCode !== null)
           throw new Error(
-            "Test Next server exited; inspect /tmp/lend-ya-browser-server.log",
+            "Test Next server exited; inspect the run artifact browser-server log",
           );
         try {
           const response = await fetch(`${base}/api/listings`);
@@ -458,7 +460,7 @@ test(
           }
           await owner.setViewportSize({ width: 390, height: 844 });
           await owner.screenshot({
-            path: "/tmp/lend-ya-completed-mobile.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-completed-mobile.png"),
             fullPage: true,
           });
           assert.ok(

@@ -1,0 +1,5 @@
+# Protected source inventories record exact LF bytes. Keep byte-for-byte guard
+# checks meaningful on Windows too; do not normalize or replace expected hashes.
+/app/api/admin/** text eol=lf
+/lib/geofencing-lab/** text eol=lf
+/lib/admin/locations.ts text eol=lf

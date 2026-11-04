@@ -354,7 +354,7 @@ test(
               item.isDirectory()
                 ? routes(path.join(dir, item.name))
                 : item.name === "route.ts"
-                  ? [path.join(dir, item.name)]
+                  ? [path.join(dir, item.name).split(path.sep).join("/")]
                   : [],
             );
           }
@@ -499,8 +499,8 @@ test(
         "expired real sessions fail at both shadow boundaries without changing staff authority",
         async () => {
           await db.query(
-            `UPDATE "AuthSession" SET "expiresAt"=NOW()-INTERVAL '1 second' WHERE "userId"=$1`,
-            [actors[0].id],
+            `UPDATE "AuthSession" SET "expiresAt"=$2 WHERE "userId"=$1`,
+            [actors[0].id, new Date(Date.now() - 1000).toISOString()],
           );
           assert.equal(
             (await shadow(actors[0], "overview.read")).reason,

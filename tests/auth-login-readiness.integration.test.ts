@@ -75,7 +75,10 @@ test(
       await page.getByLabel("Email address", { exact: true }).fill(email);
       await page.getByLabel("Password", { exact: true }).fill(password);
       await submit.click({ noWaitAfter: true });
-      await expect(page).not.toHaveURL(/\/login$/);
+      // A cold Next dev server compiles both the login API and destination.
+      // Keep a bounded navigation budget and require the actual authorized page,
+      // rather than accepting any URL other than /login after five seconds.
+      await expect(page).toHaveURL(base + "/dashboard", { timeout: 30000 });
       const evidence = await finish("fixed-delayed-hydration-login");
       assert.equal(evidence.cookiePresent, true);
       assert.ok(
@@ -95,7 +98,7 @@ test(
         await p
           .getByRole("button", { name: "Log in", exact: true })
           .click({ noWaitAfter: true });
-        await expect(p).not.toHaveURL(/\/login$/);
+        await expect(p).toHaveURL(base + "/dashboard", { timeout: 30000 });
         const saved = await save("passed");
         assert.equal(saved.cookiePresent, true);
         await c.close();

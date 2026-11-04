@@ -48,6 +48,9 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test:unit
+      - run: npm run test:postgres-utc
+      - run: npm run test:authorization
+      - run: npm run test:login-readiness
       - run: npm run test:baseline
         env:
           MRT_TEST_DATABASE_URL: postgresql://postgres@localhost:55433/hustlen_test_ci_baseline

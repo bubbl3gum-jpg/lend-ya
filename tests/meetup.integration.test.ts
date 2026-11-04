@@ -12,6 +12,7 @@ import sharp from "sharp";
 import QRCode from "qrcode";
 import { chromium, expect, type Page } from "@playwright/test";
 import { connectTestDatabase } from "./support/test-database";
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import { stationCoordinates } from "../lib/meetup/location";
 import { checklistItems } from "../lib/rental-checklist";
 type Actor = { id: number; cookie: string; email: string };
@@ -83,6 +84,7 @@ test(
         [
           "node_modules/next/dist/bin/next",
           productionCamera ? "start" : "dev",
+          ...nextDevBundlerArgs(productionCamera),
           "--hostname",
           "localhost",
           "--port",
@@ -1077,8 +1079,9 @@ test(
         const evidenceUrl=`/api/bookings/${sample.id}/evidence/${state.evidence[0].id}`;
         assert.equal((await api(evidenceUrl,outsider)).status,403);assert.equal((await api(evidenceUrl,borrower)).status,200);
         const b=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH,headless:true,args:["--no-sandbox","--disable-dev-shm-usage"]});
+        try {
         async function inspectBrowser(a:Actor,label:string){const ctx=await b.newContext();const page=await ctx.newPage();const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text());});page.on("response",r=>{if(r.status()>=400)errors.push(String(r.status())+" "+new URL(r.url()).pathname);});
-          await page.goto(base+"/login");await page.getByLabel("Email address").fill(a.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click();await expect(page).not.toHaveURL(/\/login$/);
+          await page.goto(base+"/login");await page.getByLabel("Email address").fill(a.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click();await expect(page).toHaveURL(base+"/dashboard",{timeout:30000});
           await page.goto(base+"/dev/inspection");await page.getByLabel("Your booking ID",{exact:true}).fill(String(sample.id));await page.getByRole("button",{name:"Load permitted rental",exact:true}).click();await expect(page.getByText(/Physical return acknowledged/)).toBeVisible();
           await page.getByLabel("Factual description",{exact:true}).fill(label==="owner"?"A possible surface difference, not an established finding.":"I disagree; the accessory return needs clarification.");if(label==="owner")await page.getByLabel("Affected item or component",{exact:true}).fill("Camera body");
           for(const [name,width,height]of [["desktop",1440,1000],["tablet",820,1180],["mobile",390,844]] as const){await page.setViewportSize({width,height});await page.getByLabel("Factual description",{exact:true}).focus();await expect(page.getByLabel("Factual description",{exact:true})).toBeFocused();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:path.join(artifact,`inspection-${label}-${name}.png`),fullPage:true});}
@@ -1089,13 +1092,14 @@ test(
         const disputed=(await read(borrower)).value;assert.equal(disputed.physicalCustody,"RETURN_ACKNOWLEDGED");assert.equal(disputed.returnedAt,state.returnedAt);assert.equal(disputed.legacyStatus,"DISPUTED");assert.equal(disputed.responseDeadline,null);assert.equal((await preview(draft,owner)).status,409);
         const response={bookingId:sample.id,mode:"RESPONSE",description:"I disagree and ask for evidence clarification.",evidenceIds:draft.evidenceIds,accessoryState:"UNKNOWN",disagree:true,requestHuman:true};assert.equal((await preview(response,borrower)).status,200);assert.equal((await preview(response,owner)).status,409);
         await db.query(`UPDATE "User" SET "accountStatus"='SUSPENDED' WHERE id=$1`,[borrower.id]);assert.equal((await read(borrower)).status,200);assert.equal((await preview(response,borrower)).status,200);await db.query(`UPDATE "User" SET "accountStatus"='ACTIVE' WHERE id=$1`,[borrower.id]);
-        await inspectBrowser(borrower,"borrower");await b.close();
+        await inspectBrowser(borrower,"borrower");
         const after=(await db.query(`SELECT id,stage,"uploaderId","createdAt",md5(data) digest FROM "BookingEvidencePhoto" WHERE "bookingId"=$1 ORDER BY id`,[sample.id])).rows;assert.deepEqual(after,before);
         const freshLogin=await api("/api/auth/login",undefined,"POST",{email:owner.email,password});assert.equal(freshLogin.status,200);
         const revoked={...owner,cookie:freshLogin.cookie};assert.equal((await read(revoked)).status,200);assert.equal((await api("/api/auth/logout",revoked,"POST",{})).status,200);assert.equal((await read(revoked)).status,401);
         const expired={...owner,cookie:"p2p_session=invalid-synthetic-session"};assert.equal((await read(expired)).status,401);
         const latest=(await read(owner)).value;assert.equal(latest.financialState,"NOT_IMPLEMENTED");assert.equal(latest.disputes.length,1);
         await writeFile(path.join(artifact,"inspection-browser-evidence.json"),JSON.stringify({actualLogin:true,realGeofenceQrAndPhysicalReceipt:true,manualCodeNotCameraClaim:true,window24Hours:true,reloadStable:true,scanAloneInsufficient:true,crossAccountDenied:true,evidenceAuthorization:true,originalEvidenceDigestPreserved:true,realLogoutSessionRevocation:true,suspendedParticipantObligationsPreserved:true,explicitLegacyDisputeOnly:true,disputeDoesNotReverseReturn:true,borrowerUnsentDisagreement:true,noNotificationDeadlineActivated:true,noFinancialAction:true,noExternalAI:true,responsiveViewports:3},null,2));
+        } finally { await b.close(); }
       });
 
       await t.test(
@@ -1619,9 +1623,31 @@ test(
           await bpage.getByRole("button", { name: "Confirm and submit request" }).click();
           await bpage.waitForURL(/\/bookings\/\d+$/);
           const id = Number(new URL(bpage.url()).pathname.split("/").pop());
+          const delayed = await ownerContext.newPage();
+          const hydrationErrors: string[] = [];
+          delayed.on("pageerror", error => hydrationErrors.push(error.message));
+          delayed.on("console", message => { if (message.type() === "error") hydrationErrors.push(message.text()); });
+          delayed.on("requestfailed", request => hydrationErrors.push(`${request.method()} ${new URL(request.url()).pathname}: ${request.failure()?.errorText}`));
+          let release!: () => void;
+          const gate = new Promise<void>(resolve => { release = resolve; });
+          let held = 0;
+          await delayed.route(/\/_next\/static\/.*\.js(?:\?|$)/, async route => { held++; await gate; await route.continue(); });
+          try {
+            await delayed.goto(`${base}/bookings/${id}`, { waitUntil: "commit" });
+            await expect(delayed.getByRole("button", { name: "Accept request", exact: true })).toBeDisabled();
+            assert.ok(held > 0);
+            release();
+            await expect(delayed.getByRole("button", { name: "Accept request", exact: true })).toBeEnabled({ timeout: 30000 });
+          } finally {
+            release();
+            await writeFile(path.join(artifact, "booking-hydration.json"), JSON.stringify({errors:hydrationErrors,heldScripts:held,ready:await delayed.locator("[data-booking-ready]").getAttribute("data-booking-ready").catch(()=>null)},null,2));
+            await delayed.close();
+          }
           await opage.goto(`${base}/bookings/${id}`);
+          const acceptResponse = opage.waitForResponse(response => new URL(response.url()).pathname === `/api/bookings/${id}` && response.request().method() === "PATCH");
           await opage.getByRole("button", { name: "Accept request", exact: true }).click();
-          await expect(opage.getByRole("heading", { name: "Submit owner handoff", exact: true })).toBeVisible();
+          assert.equal((await acceptResponse).status(), 200);
+          await expect(opage.getByRole("heading", { name: "Submit owner handoff", exact: true })).toBeVisible({timeout:30000});
           await expect(opage.getByRole("heading",{name:"Rental meetup · mandatory GPS and QR verification"})).toBeVisible();
           await expect(opage.getByRole("button",{name:"Enable isolated meetup preview",exact:true})).toHaveCount(0);
           await expect(

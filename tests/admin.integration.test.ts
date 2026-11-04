@@ -1,3 +1,4 @@
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
 import { test } from "node:test";
@@ -34,7 +35,7 @@ test(
     );
     const port = Number(process.env.TEST_ADMIN_PORT ?? 3003),
       base = `http://localhost:${port}`;
-    const log = openSync("/tmp/lend-ya-admin-server.log", "w");
+    const log = openSync(path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-admin-server.log"), "w");
     let server: ChildProcess | undefined;
     let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
     const userIds: number[] = [],
@@ -165,6 +166,7 @@ test(
         [
           "node_modules/next/dist/bin/next",
           "dev",
+          ...nextDevBundlerArgs(),
           "--hostname",
           "localhost",
           "--port",
@@ -175,7 +177,7 @@ test(
       for (let i = 0; i < 40; i++) {
         if (server.exitCode !== null)
           throw new Error(
-            "Admin test server failed; inspect /tmp/lend-ya-admin-server.log",
+            "Admin test server failed; inspect the run artifact admin-server log",
           );
         try {
           if ((await fetch(`${base}/api/listings`)).ok) break;
@@ -406,8 +408,8 @@ test(
             .update(expired.cookie.slice(expired.cookie.indexOf("=") + 1))
             .digest("hex");
           await pool.query(
-            'UPDATE "AuthSession" SET "expiresAt"=NOW()-INTERVAL \'1 minute\' WHERE "tokenHash"=$1',
-            [tokenHash],
+            'UPDATE "AuthSession" SET "expiresAt"=$2 WHERE "tokenHash"=$1',
+            [tokenHash, new Date(Date.now() - 60000).toISOString()],
           );
           for (const endpoint of endpoints) {
             assert.equal((await api(endpoint)).status, 401);
@@ -866,7 +868,7 @@ test(
           }
           await page.setViewportSize({ width: 1440, height: 1000 });
           await page.screenshot({
-            path: "/tmp/lend-ya-admin-overview.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-admin-overview.png"),
             fullPage: true,
             style: "nextjs-portal { display: none !important; }",
           });
@@ -899,7 +901,7 @@ test(
             .click();
           await page.waitForURL(/page=2/);
           await page.screenshot({
-            path: "/tmp/lend-ya-admin-users.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-admin-users.png"),
             fullPage: true,
             style: "nextjs-portal { display: none !important; }",
           });
@@ -985,7 +987,7 @@ test(
             .getByRole("link", { name: "Overview", exact: true })
             .click();
           await page.screenshot({
-            path: "/tmp/lend-ya-admin-mobile.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-admin-mobile.png"),
             fullPage: true,
             style: "nextjs-portal { display: none !important; }",
           });

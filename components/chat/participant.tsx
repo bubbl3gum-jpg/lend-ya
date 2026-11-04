@@ -1,7 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+const subscribeHydration = () => () => {};
+const clientReady = () => true;
+const serverNotReady = () => false;
 export async function chatRequest<T>(url: string, body?: object, signal?: AbortSignal): Promise<T> {
   const response = await fetch(url, { ...(body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {}), cache: "no-store", signal });
   const result = await response.json();
@@ -14,8 +17,9 @@ type Conversation = { id: number; lastActivityAt: string; listing: { id: number;
 type History = { conversation: Conversation; messages: Message[]; cursor: number; nextBefore: number | null; hasMore: boolean };
 type OwnCase = { id: number; conversationId: number; kind: string; status: string; decision: string | null; decisionReason: string | null; parentId: number | null };
 export function StartConversation({ listingId }: { listingId: number }) {
+  const ready = useSyncExternalStore(subscribeHydration, clientReady, serverNotReady);
   const router = useRouter(), [error,setError] = useState(""), [busy,setBusy] = useState(false);
-  return <div className="my-3"><button className={button} disabled={busy} onClick={async () => { setBusy(true); setError(""); try { const r = await chatRequest<{ conversationId: number }>("/api/conversations",{ listingId }); router.push(`/messages/${r.conversationId}`); } catch(e) { setError(e instanceof Error ? e.message : "Unable to start chat."); } finally { setBusy(false); } }}>Chat with Owner</button>{error && <p role="alert">{error}</p>}</div>;
+  return <div className="my-3" data-chat-ready={String(ready)}><button className={button} disabled={!ready || busy} onClick={async () => { setBusy(true); setError(""); try { const r = await chatRequest<{ conversationId: number }>("/api/conversations",{ listingId }); router.push(`/messages/${r.conversationId}`); } catch(e) { setError(e instanceof Error ? e.message : "Unable to start chat."); } finally { setBusy(false); } }}>Chat with Owner</button>{error && <p role="alert">{error}</p>}</div>;
 }
 export function Inbox() {
   const [rows,setRows] = useState<(Conversation & { latestMessage: Message | null })[]>([]), [next,setNext] = useState<string|null>(null), [error,setError] = useState("");

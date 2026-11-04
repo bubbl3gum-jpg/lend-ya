@@ -1,3 +1,4 @@
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import {meetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
 import "dotenv/config";
@@ -60,7 +61,7 @@ test(
       password = `Test-${randomUUID()}`,
       files: string[] = [];
     const log = openSync(
-      process.env.TEST_MVP_LOG ?? "/tmp/lend-ya-m5-server.log",
+      process.env.TEST_MVP_LOG ?? path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-m5-server.log"),
       "w",
     );
     let server: ChildProcess | undefined,
@@ -78,6 +79,7 @@ test(
         [
           "node_modules/next/dist/bin/next",
           production ? "start" : "dev",
+          ...nextDevBundlerArgs(production),
           "--hostname",
           "localhost",
           "--port",
@@ -254,7 +256,7 @@ test(
                   ...env,
                   TEST_DATABASE_URL: db,
                   NODE_TEST_CONTEXT: undefined,
-                  TEST_MVP_LOG: "/tmp/lend-ya-m5-refusal.log",
+                  TEST_MVP_LOG: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-m5-refusal.log"),
                 },
               },
             ),
@@ -382,8 +384,8 @@ test(
             .update(expiry.cookie.split("=")[1])
             .digest("hex");
           await pool.query(
-            'UPDATE "AuthSession" SET "expiresAt"=NOW()-INTERVAL \'1 second\' WHERE "tokenHash"=$1',
-            [expiryHash],
+            'UPDATE "AuthSession" SET "expiresAt"=$2 WHERE "tokenHash"=$1',
+            [expiryHash, new Date(Date.now() - 1000).toISOString()],
           );
           assert.equal((await api("/api/auth/me", expiry.cookie)).status, 401);
         },
@@ -545,7 +547,7 @@ test(
             /exceeds/,
           );
           assert.ok(chunks <= 63);
-          const videoPath = `/tmp/lend-ya-m5-${tag}.mp4`;
+          const videoPath = path.join(process.env.MRT_TEST_ARTIFACT_DIR!, `lend-ya-m5-${tag}.mp4`);
           await run("ffmpeg", [
             "-v",
             "error",
@@ -1131,7 +1133,7 @@ test(
             );
           }
           await page.screenshot({
-            path: "/tmp/lend-ya-m5-admin-tablet.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-m5-admin-tablet.png"),
             fullPage: true,
             style: "nextjs-portal{display:none!important}",
           });
@@ -1144,14 +1146,14 @@ test(
             ),
           );
           await page.screenshot({
-            path: "/tmp/lend-ya-m5-marketplace-desktop.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-m5-marketplace-desktop.png"),
             fullPage: true,
             style: "nextjs-portal{display:none!important}",
           });
           await page.setViewportSize({ width: 768, height: 1024 });
           await page.goto(`${base}/profile/${owner.id}`);
           await page.screenshot({
-            path: "/tmp/lend-ya-m5-profile-tablet.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-m5-profile-tablet.png"),
             fullPage: true,
             style: "nextjs-portal{display:none!important}",
           });

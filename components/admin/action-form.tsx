@@ -1,6 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
+
+const subscribeHydration = () => () => {};
+const clientReady = () => true;
+const serverNotReady = () => false;
 type Option = { value: string; label: string };
 export function AdminActionForm({
   endpoint,
@@ -19,6 +23,7 @@ export function AdminActionForm({
   fixed?: Record<string, string | boolean>;
   dispute?: boolean;
 }) {
+  const ready = useSyncExternalStore(subscribeHydration, clientReady, serverNotReady);
   const router = useRouter(),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
@@ -31,6 +36,9 @@ export function AdminActionForm({
         Existing evidence remains intact.
       </p>
       <form
+        method="post"
+        data-admin-ready={String(ready)}
+        aria-busy={!ready || busy}
         className="mt-4 grid min-w-0 gap-4"
         onSubmit={async (e) => {
           e.preventDefault();
@@ -77,6 +85,7 @@ export function AdminActionForm({
           }
         }}
       >
+        <fieldset disabled={!ready || busy} className="contents" aria-label={title}>
         <label className="grid gap-1 text-sm">
           Decision
           <select
@@ -140,11 +149,12 @@ export function AdminActionForm({
           />
         </label>
         <button
-          disabled={busy}
+          disabled={!ready || busy}
           className="justify-self-start rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
         >
           {busy ? "Saving…" : "Confirm decision"}
         </button>
+        </fieldset>
       </form>
       {message ? (
         <p

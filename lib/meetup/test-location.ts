@@ -1,5 +1,5 @@
 import { disposableDatabaseUrl } from "../disposable-database-url";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 
 export const TEST_LOCATION_TTL = 60 * 60 * 1000;
 export type TestCentre = {
@@ -11,8 +11,25 @@ export type TestCentre = {
 };
 // Deliberately process-local: no disk, database, coordinates in DTOs, or restart recovery.
 // A different worker/restart fails closed. Use a single dev server for this demo.
-const centres = new Map<number, TestCentre>();
+// Webpack route bundles can load separate copies of this module in one worker.
+// Share only within that process and exact test binding; never persist or carry
+// centres into another database, run, allowlist, mode, worker or restart.
+const shared = globalThis as typeof globalThis & {
+  hustlenTestCentres?: { scope: string; centres: Map<number, TestCentre> };
+};
+function testCentres() {
+  const scope = createHash("sha256").update(JSON.stringify([
+    "test-location-v1", process.env.NODE_ENV, process.env.DATABASE_URL,
+    process.env.MRT_TEST_DATABASE_URL, process.env.MRT_TEST_RUN_ID,
+    process.env.MEETUP_TEST_LOCATION_ENABLED, process.env.MEETUP_TEST_LOCATION_USER_IDS,
+    process.env.MEETUP_PREVIEW_USER_IDS,
+  ])).digest("hex");
+  if (shared.hustlenTestCentres?.scope !== scope)
+    shared.hustlenTestCentres = { scope, centres: new Map() };
+  return shared.hustlenTestCentres.centres;
+}
 export function currentTestCentre(id: number, now = Date.now()) {
+  const centres = testCentres();
   const centre = centres.get(id);
   if (centre && centre.expiresAt <= now) {
     centres.delete(id);
@@ -21,7 +38,7 @@ export function currentTestCentre(id: number, now = Date.now()) {
   return centre;
 }
 export function revokeTestCentre(id: number) {
-  centres.delete(id);
+  testCentres().delete(id);
 }
 export function createTestCentre(
   id: number,
@@ -29,6 +46,7 @@ export function createTestCentre(
   latitude: number,
   longitude: number,
 ) {
+  const centres = testCentres();
   const centre: TestCentre = {
     generation: randomBytes(16).toString("hex"),
     latitude,

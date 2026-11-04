@@ -1,4 +1,6 @@
+import { nextDevBundlerArgs } from "./support/next-bundler";
 import { connectTestDatabase } from "./support/test-database";
+import { meetupFixture } from "./support/meetup-fixture";
 import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -70,7 +72,7 @@ test(
     const tag = randomUUID(),
       password = `Test-${randomUUID()}`,
       files: string[] = [];
-    const log = openSync("/tmp/lend-ya-moderation-server.log", "w");
+    const log = openSync(path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-moderation-server.log"), "w");
     let server: ChildProcess | undefined,
       browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
     const api = async (
@@ -165,9 +167,21 @@ test(
         startAt: "2035-01-01T10:00+08:00",
         endAt: "2035-01-02T10:01+08:00",
       });
-    const patch = (id: number, action: string, who = owner) =>
-      api(`/api/bookings/${id}`, who.cookie, "PATCH", { action });
-    const stage = (id: number, action: string, who: User, extra = {}) => {
+    const pickupProof = new Map<number, { meetupChallengeId: string; physicalReceipt: boolean }>();
+    const verification = () => meetupFixture(base, owner.cookie, borrower.cookie);
+    const patch = async (id: number, action: string, who = owner) => {
+      const pending = action === "inspect" && who === owner && (await api(`/api/bookings/${id}`, who.cookie)).json.booking.status === "RETURN_PENDING";
+      // Administrative resume/version changes invalidate an earlier scan. Obtain
+      // fresh bilateral proof at the actual receipt step, never reuse stale proof.
+      if (pending) await verification().arrivals(id, "RETURN");
+      const proof = pending ? await verification().scanPayload(id, "RETURN") : {};
+      return api(`/api/bookings/${id}`, who.cookie, "PATCH", { action, ...proof });
+    };
+    const stage = async (id: number, action: string, who: User, extra = {}) => {
+      // The mandatory protocol checks arrival before accepting return evidence,
+      // independently of the later owner receipt/inspection acknowledgement.
+      if (action === "return" && who === borrower)
+        await verification().arrivals(id, "RETURN");
       const form = new FormData();
       form.set(
         "payload",
@@ -178,6 +192,7 @@ test(
           conditionNotes: `${who === owner ? "Owner" : "Borrower"} ${action} original evidence`,
           conditionConfirmed: true,
           returnConfirmed: true,
+          ...(action === "handoff" && who === borrower ? pickupProof.get(id) : {}),
           ...extra,
         }),
       );
@@ -185,7 +200,10 @@ test(
         "photos",
         new File([image], "condition.png", { type: "image/png" }),
       );
-      return api(`/api/bookings/${id}/${action}`, who.cookie, "POST", form);
+      const result = await api(`/api/bookings/${id}/${action}`, who.cookie, "POST", form);
+      if (result.status === 200 && action === "handoff" && who === owner)
+        pickupProof.set(id, await verification().scanPayload(id, "PICKUP"));
+      return result;
     };
     const inUse = async () => {
       const l = await createListing();
@@ -194,6 +212,7 @@ test(
       assert.equal(b.status, 201, b.text);
       const id = b.json.booking.id;
       assert.equal((await patch(id, "accept")).status, 200);
+      await verification().arrivals(id, "PICKUP");
       assert.equal((await stage(id, "handoff", owner)).status, 200);
       assert.equal((await stage(id, "handoff", borrower)).status, 200);
       return { id, listingId: l.json.listing.id };
@@ -265,6 +284,7 @@ test(
         [
           "node_modules/next/dist/bin/next",
           "dev",
+          ...nextDevBundlerArgs(),
           "--hostname",
           "localhost",
           "--port",
@@ -442,8 +462,8 @@ test(
           );
           const expired = await account("ExpiredSession");
           await pool.query(
-            'UPDATE "AuthSession" SET "expiresAt"=NOW()-INTERVAL \'1 second\' WHERE "userId"=$1',
-            [expired.id],
+            'UPDATE "AuthSession" SET "expiresAt"=$2 WHERE "userId"=$1',
+            [expired.id, new Date(Date.now() - 1000).toISOString()],
           );
           assert.equal(
             (await api(url, expired.cookie, "PATCH", valid)).status,
@@ -1246,6 +1266,29 @@ test(
             .getByRole("button", { name: "Log in", exact: true })
             .click();
           await page.waitForURL("**/admin");
+          // Delay the real JS assets: SSR controls must never submit a native
+          // GET containing a confidential reason while handlers are unavailable.
+          const delayed = await context.newPage();
+          let release!: () => void;
+          const gate = new Promise<void>(resolve => { release = resolve; });
+          let held = 0;
+          await delayed.route(/\/_next\/static\/.*\.js(?:\?|$)/, async route => {
+            held++; await gate; await route.continue();
+          });
+          try {
+            await delayed.goto(`${base}/admin/users/${outsider.id}`, { waitUntil: "commit" });
+            await expect(delayed.getByLabel("Required administrative reason")).toBeDisabled();
+            await expect(delayed.getByRole("button", { name: "Confirm decision", exact: true })).toBeDisabled();
+            assert.equal(await delayed.locator("form[data-admin-ready]").getAttribute("method"), "post");
+            assert.ok(held > 0);
+            release();
+            await expect(delayed.getByRole("button", { name: "Confirm decision", exact: true })).toBeEnabled({ timeout: 30000 });
+          } finally { release(); await delayed.close(); }
+          const leakedQueries: string[] = [];
+          page.on("request", request => {
+            const url = new URL(request.url());
+            if (request.isNavigationRequest() && (url.searchParams.has("reason") || url.searchParams.has("adminNotes"))) leakedQueries.push(url.pathname);
+          });
           const confirm = async () => {
             page.once("dialog", (d) => d.accept());
             const result = page.waitForResponse(
@@ -1360,7 +1403,7 @@ test(
           ).toHaveCount(0);
           assert.equal((await detail(rental.id)).status, "ADMIN_CLOSED");
           await page.screenshot({
-            path: "/tmp/lend-ya-dispute-desktop.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-dispute-desktop.png"),
             fullPage: true,
             style: "nextjs-portal{display:none!important}",
           });
@@ -1395,7 +1438,7 @@ test(
             );
           }
           await page.screenshot({
-            path: "/tmp/lend-ya-moderation-mobile.png",
+            path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-moderation-mobile.png"),
             fullPage: true,
             style: "nextjs-portal{display:none!important}",
           });
@@ -1428,6 +1471,7 @@ test(
             userPage.getByText("Confidential investigation note"),
           ).toHaveCount(0);
           await userContext.close();
+          assert.deepEqual(leakedQueries, [], "Administrative text must never enter navigation URLs");
           await context.close();
         },
       );

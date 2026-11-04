@@ -3,12 +3,13 @@ import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
 import {readFile} from "node:fs/promises";
 import {spawnSync} from "node:child_process";
-import {mkdtemp,symlink,writeFile,rm} from "node:fs/promises";
+import {mkdtemp,symlink,writeFile,rm,mkdir,link,realpath} from "node:fs/promises";
 import {tmpdir} from "node:os";
 import {join} from "node:path";
 import {buildReviewPacket,blankReview,validateReview,renderReviewMarkdown} from "../lib/ai-case-brief/review-packet";
 import {qualityCorpus} from "../lib/ai-case-brief/experiment";
 import {reviewSupplement} from "../lib/ai-case-brief/review-corpus";
+import {readReviewFile} from "../lib/ai-case-brief/review-file";
 const pinned="ced5a1e9f01f3eea0250fbfa2e85b8f4026002b3994ac9c927b3442efd04fff0";
 test("12D preserves pinned corpus, pairs source fidelity and offline-only packet reproducibility",async()=>{
  const original=globalThis.fetch;globalThis.fetch=async()=>{throw Error("Unexpected egress");};
@@ -50,7 +51,7 @@ test("review modules contain no private readers, credentials, approval loaders o
  }
 });
 test("local CLI validates blank packet, refuses overwrite, malformed, oversized and symlink inputs",async()=>{
- const root=await mkdtemp(join(tmpdir(),"hustlen-review-test-"));
+ const root=await realpath(await mkdtemp(join(tmpdir(),"hustlen-review-test-")));
  const run=(...args:string[])=>spawnSync(process.execPath,["--import","tsx","scripts/offline-ai-review.ts",...args],{encoding:"utf8"});
  try{
  const target=join(root,"packet");assert.equal(run("prepare",target).status,0);
@@ -60,5 +61,25 @@ test("local CLI validates blank packet, refuses overwrite, malformed, oversized 
  await writeFile(bad," ".repeat(512001));assert.equal(run("validate",bad).status,1);
  const link=join(root,"link.json");await symlink(join(target,"review.json"),link);assert.equal(run("validate",link).status,1);
  assert.equal(run("validate",target).status,1);assert.equal(run("approve",bad).status,1);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test("review reader rejects symlink ancestors, hard links, nonfiles and unsafe paths",async()=>{
+ const root=await realpath(await mkdtemp(join(tmpdir(),"hustlen-review-path-")));
+ try{
+  const directory=join(root,"private");await mkdir(directory);
+  const file=join(directory,"review.json");await writeFile(file,'{"bounded":true}');
+  assert.equal(await readReviewFile(file),'{"bounded":true}');
+  const alias=join(root,"alias");await symlink(directory,alias,process.platform==="win32"?"junction":"dir");
+  await assert.rejects(readReviewFile(join(alias,"review.json")),/INVALID_REVIEW_FILE/);
+  await assert.rejects(readReviewFile(directory),/INVALID_REVIEW_FILE/);
+  await assert.rejects(readReviewFile(file+"\0"),/INVALID_REVIEW_FILE/);
+  const hard=join(root,"hard.json");await link(file,hard);
+  await assert.rejects(readReviewFile(hard),/INVALID_REVIEW_FILE/);
+  await assert.rejects(readReviewFile(file),/INVALID_REVIEW_FILE/);
+  if(process.platform==="win32"){
+   await assert.rejects(readReviewFile(file+":stream"),/INVALID_REVIEW_FILE/);
+   await assert.rejects(readReviewFile("\\\\server\\share\\review.json"),/INVALID_REVIEW_FILE/);
+  }
  }finally{await rm(root,{recursive:true,force:true});}
 });
