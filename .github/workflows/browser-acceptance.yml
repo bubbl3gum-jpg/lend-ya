@@ -1,0 +1,90 @@
+name: Browser acceptance closure
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: browser-acceptance-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        bundler: [webpack, turbopack]
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 55433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://postgres@127.0.0.1:55433/postgres
+      MRT_TEST_BUNDLER: ${{ matrix.bundler }}
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Browser and media prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          npx playwright install --with-deps chromium
+          node -e 'const p = require("@playwright/test").chromium.executablePath(); require("node:fs").appendFileSync(process.env.GITHUB_ENV, "CHROMIUM_PATH=" + p + "\nMRT_BROWSER_PATH=" + p + "\n");'
+      - run: npm run db:generate
+      - name: Sequential development acceptance (fresh owned database per suite)
+        shell: bash
+        run: |
+          mkdir -p .test-artifacts/closure-ci
+          failed=0
+          for suite in test:unit test:authorization test:login-readiness test:rental-api test:rental-browser test:meetup test:chat; do
+            label="${suite//:/_}"
+            export MRT_TEST_DATABASE_URL="postgresql://postgres@127.0.0.1:55433/hustlen_test_closure_${label}"
+            if npm run "$suite" > ".test-artifacts/closure-ci/${label}.log" 2>&1; then
+              printf '%s PASS\n' "$suite"
+            else
+              failed=1
+              printf '%s FAIL\n' "$suite"
+              tail -n 80 ".test-artifacts/closure-ci/${label}.log"
+            fi
+          done
+          exit "$failed"
+      - name: Separate production camera comparison
+        if: ${{ !cancelled() }}
+        env:
+          MRT_TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:55433/hustlen_test_closure_camera_production
+        run: npm run test:meetup-camera -- --camera-production
+      - name: TypeScript, lint and production build
+        if: ${{ !cancelled() }}
+        env:
+          MRT_TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:55433/hustlen_test_closure_build
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run build:verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-acceptance-${{ matrix.bundler }}
+          include-hidden-files: true
+          retention-days: 7
+          path: |
+            .test-artifacts/**/*.log
+            .test-artifacts/**/*.json
+            .test-artifacts/**/*-browser.ndjson
+            .test-artifacts/**/*.png
+            .test-artifacts/**/*.html

@@ -1,3 +1,4 @@
+import { browserDiagnostics } from "./support/browser-diagnostics";
 import { observeCamera } from "./support/camera-diagnostics";
 import "dotenv/config";
 import { test } from "node:test";
@@ -55,6 +56,11 @@ test(
       serverSecret = randomBytes(32).toString("hex"),
       artifact = process.env.MRT_TEST_ARTIFACT_DIR!;
     const productionCamera = process.env.MRT_TEST_CAMERA_PRODUCTION === "1";
+    const diagnostics = browserDiagnostics(artifact, "meetup");
+    t.afterEach(async context => {
+      diagnostics.caseResult(context.name, (context as typeof context & {error?: unknown}).error);
+      await diagnostics.checkpoint();
+    });
     const logPath = path.join(artifact, "meetup-server.log"),
       log = openSync(logPath, "a");
     let server: ChildProcess | undefined,
@@ -389,19 +395,29 @@ test(
           instance = await chromium.launch({ executablePath: process.env.MRT_BROWSER_PATH ?? "/usr/bin/chromium", headless: true, args: ["--no-sandbox"] });
           const ownerContext = await instance.newContext({ geolocation: centre, permissions: ["geolocation"] });
           const borrowerContext = await instance.newContext({ geolocation: centre, permissions: ["geolocation"] });
+          diagnostics.observeContext(ownerContext);
+          diagnostics.observeContext(borrowerContext);
           for (const [context, actor] of [[ownerContext, owner], [borrowerContext, borrower]] as const)
             await context.addCookies([{ name: "p2p_session", value: actor.cookie.slice("p2p_session=".length), url: base }]);
           const ownerPage = await ownerContext.newPage(), borrowerPage = await borrowerContext.newPage();
           const simulate = async (purpose: "PICKUP" | "RETURN") => {
-            await ownerPage.goto(`${base}/bookings/${r.id}`);
-            await borrowerPage.goto(`${base}/bookings/${r.id}`);
+            // Dev may refresh the same URL while its remaining assets load.
+            // Establish HTTP commit; subsequent control/API checks establish readiness.
+            assert.equal((await ownerPage.goto(`${base}/bookings/${r.id}`, {waitUntil:"commit"}))?.status(),200);
+            assert.equal((await borrowerPage.goto(`${base}/bookings/${r.id}`, {waitUntil:"commit"}))?.status(),200);
+            await expect(ownerPage).toHaveURL(`${base}/bookings/${r.id}`);
+            await expect(borrowerPage).toHaveURL(`${base}/bookings/${r.id}`);
+            // HTTP commit/hydrated shell precedes the participant-scoped status
+            // request. The region only exists after real verification data loads.
+            for (const page of [ownerPage, borrowerPage])
+              await expect(page.getByRole("region", {name:"MRT meetup verification", exact:true})).toBeVisible({timeout:30000});
             const create = ownerPage.getByRole("button", { name: "Use my current location as a temporary test meetup" });
             await expect(create).toBeDisabled();
             await ownerPage.getByLabel("I acknowledge this is a simulated meetup, not arrival at the real MRT station.").check();
             await create.click();
             await expect(ownerPage.getByText("Waiting for both participants to acknowledge.")).toBeVisible();
             assert.equal((await check(r.id, owner, purpose, centre)).status, 409);
-            await borrowerPage.reload();
+            await borrowerPage.reload({waitUntil:"commit"});
             await borrowerPage.getByRole("button", { name: "I acknowledge this simulated meetup, not arrival at the real MRT station" }).click();
             for (const [page, actor] of [[ownerPage, owner], [borrowerPage, borrower]] as const) {
               const response = page.waitForResponse((res) => res.url().endsWith(`/api/bookings/${r.id}/meetup/checkin`) && res.request().method() === "POST");
@@ -429,6 +445,7 @@ test(
           assert.equal((await op(r.id, "receipt", owner, { action: "inspect", meetupChallengeId: returned.json.challengeId, physicalReceipt: true })).status, 200);
           assert.equal((await detail(r.id)).json.booking.status, "INSPECTION");
         } finally {
+          await diagnostics.checkpoint();
           try { await instance?.close(); } finally { await stop(); await start(); }
         }
       });
@@ -1582,6 +1599,8 @@ test(
             geolocation: { ...point, latitude:point.latitude+0.00005, accuracy: 10 },
             permissions: ["geolocation", "camera"],
           });
+          diagnostics.observeContext(ownerContext);
+          diagnostics.observeContext(borrowerContext);
           let opage = await ownerContext.newPage();
           let bpage = await borrowerContext.newPage();
           for (const [page, actor] of [
@@ -1853,6 +1872,7 @@ test(
           const ownerLogin=await ownerContext.storageState();await opage.close();
           returnBrowser=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true,args:["--use-fake-device-for-media-stream",`--use-file-for-fake-video-capture=${returnMedia}`,"--use-fake-ui-for-media-stream"]});
           const returnContext=await returnBrowser.newContext({storageState:ownerLogin,timezoneId:"Asia/Taipei",viewport:{width:390,height:844},permissions:["camera"]});
+          diagnostics.observeContext(returnContext);
           opage=await returnContext.newPage();const saveReturn=await observeCamera(opage,"return");cameraSavers.push(saveReturn);
           opage.on("dialog",dialog=>void dialog.accept());
           await opage.goto(`${base}/bookings/${id}`);
@@ -1928,12 +1948,32 @@ test(
           );
           assert.equal(overflow, false);
           assert.equal((await detail(id)).json.booking.status, "COMPLETED");
+          const delayedReview = await opage.context().newPage();
+          let releaseReview!: () => void;
+          const reviewGate = new Promise<void>(resolve => { releaseReview = resolve; });
+          let heldReviewScripts = 0;
+          await delayedReview.route(/\/_next\/static\/.*\.js(?:\?|$)/, async route => { heldReviewScripts++; await reviewGate; await route.continue(); });
+          try {
+            await delayedReview.goto(`${base}/bookings/${id}`, {waitUntil:"commit"});
+            await expect(delayedReview.getByLabel("Comment", {exact:true})).toBeDisabled();
+            await expect(delayedReview.getByRole("button", {name:"Submit verified review",exact:true})).toBeDisabled();
+            await expect(delayedReview.locator("form[data-review-ready]")).toHaveAttribute("method", "post");
+            assert.ok(heldReviewScripts > 0);
+            releaseReview();
+            await expect(delayedReview.getByLabel("Comment", {exact:true})).toBeEnabled({timeout:30000});
+          } finally { releaseReview(); await delayedReview.close(); }
           await bpage.goto(`${base}/bookings/${id}`);
+          const leakedReviewUrls: string[] = [];
           for (const [page, label] of [[opage, "Owner camera review"], [bpage, "Borrower camera review"]] as const) {
+            page.on("framenavigated", frame => { if(frame === page.mainFrame()) { const url = new URL(frame.url()); if(url.searchParams.has("comment") || url.searchParams.has("rating")) leakedReviewUrls.push(url.pathname); } });
             await page.getByLabel("Comment", { exact: true }).fill(label);
+            const reviewResponse = page.waitForResponse(response => new URL(response.url()).pathname === `/api/bookings/${id}/reviews` && response.request().method() === "POST");
             await page.getByRole("button", { name: "Submit verified review", exact: true }).click();
+            assert.equal((await reviewResponse).status(), 201);
             await expect(page.getByText(label, { exact: true })).toBeVisible();
           }
+          assert.deepEqual(leakedReviewUrls, []);
+          await writeFile(path.join(artifact, "review-hydration.json"), JSON.stringify({heldReviewScripts,disabledUntilHydrated:true,fallbackMethod:"post",actualReviewPosts:2,reviewTextNeverInNavigation:true},null,2));
           assert.equal((await db.query('SELECT count(*)::int n FROM "VerifiedReview" WHERE "bookingId"=$1', [id])).rows[0].n, 2);
           await returnBrowser.close();returnBrowser=undefined;
           await cameraBrowser.close();
@@ -1945,6 +1985,7 @@ test(
             // the following legacy-preview cases on the unprivileged server.
             try {
               for (const save of cameraSavers) await save().catch(() => {});
+              await diagnostics.checkpoint();
               cameraSavers.length = 0;
               const closed = await Promise.allSettled([cameraBrowser, returnBrowser, browser].map((instance) => instance?.close()));
               cameraBrowser = returnBrowser = browser = undefined;

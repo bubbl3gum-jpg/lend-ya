@@ -1,3 +1,4 @@
+import { browserDiagnostics } from "./support/browser-diagnostics";
 import { nextDevBundlerArgs } from "./support/next-bundler";
 import {browserMeetupFixture} from "./support/meetup-fixture";
 import { connectTestDatabase } from "./support/test-database";
@@ -19,8 +20,9 @@ import { formatRentalTime } from "../lib/booking-time";
 // Owns its dev server, enabling a real process-restart persistence check.
 test(
   "two-user browser rental workflow and application restart",
-  // Includes both-dashboard reopening at every state plus error/loading recovery.
-  { timeout: 240000 },
+  // Includes cold dev compilation, full restarts, private image decoding and
+  // all history/error cases. Per-operation and security deadlines stay unchanged.
+  { timeout: 420000 },
   async (t) => {
     assert.ok(
       process.env.TEST_DATABASE_URL &&
@@ -33,6 +35,10 @@ test(
     let server: ChildProcess | undefined;
     const stop = async () => {
       if (server && server.exitCode === null && server.signalCode === null) {
+        // Preserve authenticated contexts but disconnect dev HMR before restart.
+        // Otherwise an old page may reconnect and reload during the next navigation.
+        for (const page of browser?.contexts().flatMap(context => context.pages()) ?? [])
+          await page.goto("about:blank", {waitUntil:"commit"});
         const exited = once(server, "exit");
         server.kill("SIGTERM");
         await exited;
@@ -61,7 +67,7 @@ test(
             "Test Next server exited; inspect the run artifact browser-server log",
           );
         try {
-          const response = await fetch(`${base}/api/listings`);
+          const response = await fetch(`${base}/api/listings`, {signal:AbortSignal.timeout(2000)});
           if (response.ok) return;
         } catch {
           /* readiness */
@@ -84,6 +90,11 @@ test(
     })
       .png()
       .toBuffer();
+    const diagnostics = browserDiagnostics(process.env.MRT_TEST_ARTIFACT_DIR!, "rental");
+    t.afterEach(async context => {
+      diagnostics.caseResult(context.name, (context as typeof context & {error?: unknown}).error);
+      await diagnostics.checkpoint();
+    });
     let completedId = 0;
     let submittedRequest: { key: string; body: Record<string, unknown> } | undefined;
     try {
@@ -101,6 +112,8 @@ test(
         timezoneId: "America/Los_Angeles",
         viewport: { width: 1280, height: 900 },
       });
+      diagnostics.observeContext(ownerContext);
+      diagnostics.observeContext(borrowerContext);
       const owner = await ownerContext.newPage(),
         borrower = await borrowerContext.newPage();
       for (const page of [owner, borrower])
@@ -122,6 +135,7 @@ test(
       await login(owner, "owner");
       await login(borrower, "borrower");
       const outsiderContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      diagnostics.observeContext(outsiderContext);
       const outsider = await outsiderContext.newPage();
       await login(outsider, "outsider");
       for (const page of [owner, borrower]) {
@@ -235,7 +249,11 @@ test(
         await reopen(id, "PENDING");
         await owner.getByRole("link", { name: "← Back to dashboard", exact: true }).click();
         const pendingCard = owner.getByRole("article", { name: `Booking #${id}: PENDING`, exact: true });
+        // Dev compiles this mutation handler on first use; wait for its actual
+        // successful response before measuring the refreshed dashboard state.
+        const acceptance = owner.waitForResponse(response => new URL(response.url()).pathname === `/api/bookings/${id}` && response.request().method() === "PATCH");
         await pendingCard.getByRole("button", { name: "Accept request" }).click();
+        assert.equal((await acceptance).status(), 200);
         const acceptedCard = owner.getByRole("article", { name: `Booking #${id}: CONFIRMED`, exact: true });
         await expect(acceptedCard).toBeVisible();
         await expect(acceptedCard.getByRole("button", { name: "Accept request" })).toHaveCount(0);
@@ -280,7 +298,10 @@ test(
             .selectOption(acceptable ? "acceptable" : "problem");
         for(const checkbox of await form.getByRole("checkbox").all()) await checkbox.check();
         await expect(button).toBeEnabled();
+        const action = title === "Submit item return" ? "return" : acceptable !== undefined ? "inspection" : "handoff";
+        const submitted = page.waitForResponse(response => new URL(response.url()).pathname === `/api/bookings/${id}/${action}` && response.request().method() === "POST");
         await button.click();
+        assert.equal((await submitted).status(),200);
         await expect(form).toHaveCount(0);
       };
       await t.test(
@@ -293,7 +314,7 @@ test(
             "Owner: scratch documented",
           );
           assert.equal((await pool.query('SELECT count(*)::int n FROM "MeetupCheckIn" WHERE "bookingId"=$1', [completedId])).rows[0].n, 0);
-          await owner.reload();
+          await owner.reload({waitUntil:"commit"});
           await expect(owner.getByText("Owner: scratch documented", { exact: true })).toBeVisible();
           await expect(owner.getByText("Serial number: BROWSER-SERIAL-123", { exact: true })).toBeVisible();
           await expect(owner.locator('img[alt*="condition photo"]')).toHaveCount(1);
@@ -302,7 +323,7 @@ test(
           assert.equal(early.confirmedAt, null);
           assert.equal(early.checklist.functionTested, "unknown");
           await reopen(completedId, "HANDOFF_PENDING");
-          await borrower.reload();
+          await borrower.reload({waitUntil:"commit"});
           await expect(
             borrower.getByText("Owner: scratch documented", { exact: true }),
           ).toBeVisible();
@@ -321,7 +342,7 @@ test(
             "Borrower: returned unchanged",
           );
           await reopen(completedId, "RETURN_PENDING");
-          await owner.reload();
+          await owner.reload({waitUntil:"commit"});
           await (await browserMeetupFixture(base,owner.context(),borrower.context())).scanPayload(Number(new URL(owner.url()).pathname.split("/").pop()),"RETURN");
           await owner.getByRole("button",{name:"Refresh verification status",exact:true}).click();
           await owner.getByLabel("I have physically received the returned equipment. This does not accept its condition.").check();
@@ -337,7 +358,7 @@ test(
           await expect(
             owner.getByText("COMPLETED", { exact: true }),
           ).toBeVisible();
-          await borrower.reload();
+          await borrower.reload({waitUntil:"commit"});
           await expect(
             borrower.getByText("COMPLETED", { exact: true }),
           ).toBeVisible();
@@ -346,9 +367,11 @@ test(
             await page
               .getByLabel("Comment", { exact: true })
               .fill("Browser verified review");
+            const reviewed = page.waitForResponse(response => new URL(response.url()).pathname === `/api/bookings/${completedId}/reviews` && response.request().method() === "POST");
             await page
               .getByRole("button", { name: "Submit verified review" })
               .click();
+            assert.equal((await reviewed).status(),201);
             await expect(
               page
                 .getByText("Browser verified review", { exact: true })
@@ -378,6 +401,7 @@ test(
           assert.ok(completedId);
           await stop();
           await start({ BOOKING_MAX_DURATION_DAYS: "1", BOOKING_MAX_NOTES_UNITS: "1" });
+          try {
           const original = (await pool.query('SELECT "requestKey","listingId","totalPrice","dailyPrice","deposit" FROM "Booking" WHERE id=$1', [completedId])).rows[0];
           assert.ok(original.requestKey, "Browser creates a durable retry key");
           assert.ok(submittedRequest, "Capture the actual booking submission");
@@ -448,6 +472,7 @@ test(
                       (image as HTMLImageElement).complete &&
                       (image as HTMLImageElement).naturalWidth > 0,
                   ),
+                  {timeout:30000, message:"Actual private evidence bytes decode after server restart"},
                 )
                 .toBe(true);
             }
@@ -484,8 +509,15 @@ test(
           assert.equal((await borrower.request.post(`${base}/api/bookings`, {
             data: { ...submittedRequest.body, quote: true },
           })).status(), 503, "Malformed policy must fail new quotations explicitly.");
-          await stop();
-          await start();
+          } catch (error) {
+            await diagnostics.checkpoint();
+            throw error;
+          } finally {
+            // A failed assertion must not leak the deliberately lowered/invalid
+            // policy into subsequent independent browser cases.
+            await stop();
+            await start();
+          }
         },
       );
       await t.test(
@@ -508,7 +540,7 @@ test(
             "Submit item return",
             "Borrower: accessory missing",
           );
-          await owner.reload();
+          await owner.reload({waitUntil:"commit"});
           await (await browserMeetupFixture(base,owner.context(),borrower.context())).scanPayload(Number(new URL(owner.url()).pathname.split("/").pop()),"RETURN");
           await owner.getByRole("button",{name:"Refresh verification status",exact:true}).click();
           await owner.getByLabel("I have physically received the returned equipment. This does not accept its condition.").check();
@@ -535,7 +567,7 @@ test(
           await expect(
             owner.getByText("DISPUTED", { exact: true }),
           ).toBeVisible();
-          await borrower.reload();
+          await borrower.reload({waitUntil:"commit"});
           await expect(
             borrower.getByText(/Administrative review is required/),
           ).toBeVisible();
@@ -555,7 +587,7 @@ test(
             data: { finding: "ISSUE_CONFIRMED", outcome: "CLOSE_RETURNED", reason: "Synthetic navigation fixture: returned equipment inspected; preserve evidence." },
           });
           assert.equal(closed.status(), 200, await closed.text());
-          await owner.reload(); await borrower.reload();
+          await owner.reload({waitUntil:"commit"}); await borrower.reload({waitUntil:"commit"});
           await reopen(id, "ADMIN_CLOSED");
           assert.equal((await pool.query('SELECT status FROM "Booking" WHERE id=$1', [id])).rows[0].status, "ADMIN_CLOSED");
         },
@@ -573,7 +605,9 @@ test(
         await card.getByRole("button", { name: "Reject request" }).click();
         await expect(card.getByRole("alert")).toHaveText("Synthetic temporary booking failure. Retry.");
         await owner.unroute(`${base}/api/bookings/${rejected}`);
+        const rejection = owner.waitForResponse(response => new URL(response.url()).pathname === `/api/bookings/${rejected}` && response.request().method() === "PATCH");
         await card.getByRole("button", { name: "Reject request" }).click();
+        assert.equal((await rejection).status(),200);
         const history = owner.locator("#owner-history").getByRole("article", { name: `Booking #${rejected}: CANCELLED`, exact: true });
         await expect(history).toBeVisible();
         await expect(history.getByRole("button")).toHaveCount(0);
@@ -627,7 +661,7 @@ test(
         // Temporary relation unavailability in this owned fixture only. No row or constraint changes.
         await pool.query('ALTER TABLE "Booking" RENAME TO "R7_Booking_unavailable"');
         try {
-          await outsider.reload();
+          await outsider.reload({waitUntil:"commit"});
           await expect(outsider.getByText("Unable to load your bookings. Please try again.", { exact: true })).toBeVisible();
         } finally {
           await pool.query('ALTER TABLE "R7_Booking_unavailable" RENAME TO "Booking"');
