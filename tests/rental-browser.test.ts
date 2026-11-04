@@ -35,7 +35,7 @@ test(
         await exited;
       }
     };
-    const start = async () => {
+    const start = async (settings: Record<string, string> = {}) => {
       server = spawn(
         process.execPath,
         [
@@ -47,7 +47,7 @@ test(
           String(port),
         ],
         {
-          env: { ...process.env, DATABASE_URL: process.env.TEST_DATABASE_URL },
+          env: { ...process.env, DATABASE_URL: process.env.TEST_DATABASE_URL, TZ: "UTC", ...settings },
           stdio: ["ignore", log, log],
         },
       );
@@ -90,9 +90,11 @@ test(
         args: ["--no-sandbox", "--disable-dev-shm-usage"],
       });
       const ownerContext = await browser.newContext({
+        timezoneId: "Pacific/Honolulu",
         viewport: { width: 1280, height: 900 },
       });
       const borrowerContext = await browser.newContext({
+        timezoneId: "America/Los_Angeles",
         viewport: { width: 1280, height: 900 },
       });
       const owner = await ownerContext.newPage(),
@@ -144,6 +146,9 @@ test(
           ),
         );
         await borrower.goto(`${base}/listings/${data.id}`);
+        await expect(borrower.getByText(/Maximum \d+ days/)).toContainText(
+          `Maximum ${process.env.BOOKING_MAX_DURATION_DAYS ?? "90"} days`,
+        );
         await borrower
           .getByRole("button", { name: "Choose meeting station", exact: true })
           .click();
@@ -164,6 +169,15 @@ test(
           request.url() === `${base}/api/bookings` && request.method() === "POST" &&
           request.postDataJSON()?.quote === false,
         );
+        let lostStatus: number | undefined;
+        const loseResponse = !completedId;
+        if (loseResponse) await borrower.route(`${base}/api/bookings`, async (route) => {
+          if (route.request().method() === "POST" && route.request().postDataJSON()?.quote === false) {
+            const committed = await route.fetch();
+            lostStatus = committed.status();
+            await route.abort("failed");
+          } else await route.continue();
+        });
         await borrower
           .getByRole("button", { name: "Confirm and submit request" })
           .click();
@@ -173,8 +187,22 @@ test(
           assert.ok(key);
           submittedRequest = { key, body: request.postDataJSON() };
         }
+        if (loseResponse) {
+          await expect.poll(() => lostStatus, { message: "Drop only the response of a real committed write." }).toBe(201);
+          await expect(borrower.locator("form").filter({
+            has: borrower.getByRole("heading", { name: "Request this rental", exact: true }),
+          }).getByRole("alert")).toBeVisible();
+          await borrower.unroute(`${base}/api/bookings`);
+          assert.equal((await pool.query('SELECT count(*)::int n FROM "Booking" WHERE "listingId"=$1', [data.id])).rows[0].n, 1);
+          const retried = borrower.waitForRequest(r => r.url() === `${base}/api/bookings` && r.method() === "POST");
+          await borrower.getByRole("button", { name: "Confirm and submit request" }).click();
+          const retry = await retried;
+          assert.equal(retry.headers()["idempotency-key"], request.headers()["idempotency-key"]);
+          assert.deepEqual(retry.postDataJSON(), request.postDataJSON(), "Lost-response retry must not become a new quotation.");
+        }
         await borrower.waitForURL("**/bookings/*");
         const id = Number(new URL(borrower.url()).pathname.split("/").pop());
+        assert.equal((await pool.query('SELECT count(*)::int n FROM "Booking" WHERE "listingId"=$1', [data.id])).rows[0].n, 1);
         await owner.goto(`${base}/bookings/${id}`);
         await owner.getByRole("button", { name: "Accept request" }).click();
         await expect(
@@ -304,12 +332,16 @@ test(
         async () => {
           assert.ok(completedId);
           await stop();
-          await start();
+          await start({ BOOKING_MAX_DURATION_DAYS: "1", BOOKING_MAX_NOTES_UNITS: "1" });
           const original = (await pool.query('SELECT "requestKey","listingId","totalPrice","dailyPrice","deposit" FROM "Booking" WHERE id=$1', [completedId])).rows[0];
           assert.ok(original.requestKey, "Browser creates a durable retry key");
           assert.ok(submittedRequest, "Capture the actual booking submission");
           assert.equal(submittedRequest.key, original.requestKey);
           assert.equal(submittedRequest.body.listingId, original.listingId);
+          assert.equal(submittedRequest.body.startAt, "2035-01-01T02:00:00.000Z");
+          assert.equal(submittedRequest.body.endAt, "2035-01-02T02:01:00.000Z");
+          const stored = (await pool.query(`SELECT to_char("startAt", 'YYYY-MM-DD"T"HH24:MI:SS.MS') instant FROM "Booking" WHERE id=$1`, [completedId])).rows[0];
+          assert.equal(stored.instant, "2035-01-01T02:00:00.000");
           // Listing changes cannot change the committed price snapshot or invalidate a retry.
           await pool.query('UPDATE "Listing" SET price=99.99 WHERE id=$1', [original.listingId]);
           const replay = await borrower.request.post(`${base}/api/bookings`, {
@@ -322,9 +354,18 @@ test(
           assert.equal(replayed.totalPrice, original.totalPrice);
           assert.equal(replayed.dailyPrice, original.dailyPrice);
           assert.equal(replayed.deposit, original.deposit);
+          const legacyBody = { ...submittedRequest.body, startAt: "2035-01-01T10:00", endAt: "2035-01-02T10:01" };
+          const legacyReplay = await borrower.request.post(`${base}/api/bookings`, {
+            headers: { "Idempotency-Key": original.requestKey }, data: legacyBody,
+          });
+          assert.equal(legacyReplay.status(), 201, "Stored matching legacy terms survive restart and lower policy.");
+          assert.equal((await legacyReplay.json()).booking.id, completedId);
+          assert.equal((await borrower.request.post(`${base}/api/bookings`, {
+            headers: { "Idempotency-Key": randomUUID() }, data: legacyBody,
+          })).status(), 400, "Legacy fallback cannot create a new request.");
           for (const change of [
             { notes: "different request" },
-            { startAt: "2035-01-01T11:00" },
+            { startAt: "2035-01-01T11:00+08:00" },
             { meetingStationId: Number(submittedRequest.body.meetingStationId) + 1 },
             { canonicalStationId: "different-station" },
             { expectedQuote: "stale" },
@@ -390,6 +431,16 @@ test(
             ).toBeVisible();
           }
           await owner.setViewportSize({ width: 1280, height: 900 });
+          await stop();
+          await start({ BOOKING_MAX_DURATION_DAYS: "NaN" });
+          assert.equal((await borrower.request.post(`${base}/api/bookings`, {
+            headers: { "Idempotency-Key": original.requestKey }, data: submittedRequest.body,
+          })).status(), 201, "Malformed current policy cannot invalidate a committed retry.");
+          assert.equal((await borrower.request.post(`${base}/api/bookings`, {
+            data: { ...submittedRequest.body, quote: true },
+          })).status(), 503, "Malformed policy must fail new quotations explicitly.");
+          await stop();
+          await start();
         },
       );
       await t.test(

@@ -1,5 +1,4 @@
-/** MVP rental clock: Asia/Taipei (UTC+08:00), maximum 90 elapsed days. */
-export const MAX_RENTAL_DAYS = 90;
+/** Legacy/local rental clock. Never use this permissive parser for new booking API writes. */
 export function parseRentalTime(value: unknown): Date | null {
   if (typeof value !== "string") return null;
   const match =
@@ -43,6 +42,21 @@ export function parseRentalTime(value: unknown): Date | null {
 }
 export function rentalDays(start: Date, end: Date) {
   return Math.ceil((end.getTime() - start.getTime()) / 86400000);
+}
+
+/** Explicit instants only; precision is bounded to PostgreSQL/JS milliseconds. */
+export function parseBookingInstant(value: unknown): Date | null {
+  if (typeof value !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/.test(value) ||
+      value.endsWith("-00:00")) return null;
+  const result = parseRentalTime(value);
+  return result && result.getUTCFullYear() >= 2000 && result.getUTCFullYear() <= 9999 ? result : null;
+}
+
+/** datetime-local always denotes Taipei wall time, never the device's zone. */
+export function taipeiInputInstant(value: string): string | null {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?$/.test(value)) return null;
+  return parseBookingInstant(`${value}+08:00`)?.toISOString() ?? null;
 }
 export function formatRentalTime(date: Date | string) {
   return (

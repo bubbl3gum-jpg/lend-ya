@@ -1,6 +1,6 @@
 import "server-only";
 import { announcementAdmin } from "../announcements/service";
-import { MAX_RENTAL_DAYS } from "../booking-time";
+import { resolveBookingPolicy } from "../booking-policy";
 import { locationSettings } from "../meetup/location";
 import {
   ttlSeconds,
@@ -45,16 +45,16 @@ export async function settingsInventory(): Promise<SettingRow[]> {
   add(
     "rental.maxDays",
     "Maximum rental duration",
-    String(MAX_RENTAL_DAYS),
-    "lib/booking-time.ts:MAX_RENTAL_DAYS",
+    safe(() => resolveBookingPolicy(process.env).maxDurationDays),
+    "BOOKING_MAX_DURATION_DAYS / lib/booking-policy.ts (default 90)",
     "integer days",
     "Rental eligibility and price interval",
   );
   add(
     "rental.clock",
-    "Rental display and unzoned input clock",
+    "Rental display and local form clock (API requires explicit instants)",
     "Asia/Taipei (UTC+08:00)",
-    "lib/booking-time.ts:parseRentalTime / formatRentalTime",
+    "lib/booking-time.ts:taipeiInputInstant / parseBookingInstant / formatRentalTime",
     "IANA timezone",
     "UTC storage; explicit offsets honored",
   );

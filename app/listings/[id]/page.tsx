@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BookingForm } from "@/components/booking-form";
+import { resolveBookingPolicy } from "@/lib/booking-policy";
 import { ListingStatusBadge } from "@/components/listing-status-badge";
 import { SiteHeader } from "@/components/site-header";
 import { getCurrentUser } from "@/lib/auth";
@@ -251,7 +252,7 @@ export default async function ListingDetailPage({
                     <T id="journey.transactionEnglish" />
                   </p>
                   <div lang="en">
-                    <BookingForm documentationPilot={agreementEnabled()}
+                    <BookingForm policy={resolveBookingPolicy(process.env)} documentationPilot={agreementEnabled()}
                       listing={{
                         id: listing.id,
                         title: listing.title,

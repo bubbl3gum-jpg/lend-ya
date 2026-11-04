@@ -35,7 +35,7 @@ test("Milestone 1: retries, auth isolation, evidence auditing and transport boun
     const listing = await api("/api/listings", owner.cookie, "POST", form);
     assert.equal(listing.status, 201);
     const listingId = listing.body.listing.id;
-    const input = { listingId, meetingStationId: station, startAt: "2035-01-01T10:00", endAt: "2035-01-02T10:00", notes: "Retry fixture" };
+    const input = { listingId, meetingStationId: station, startAt: "2035-01-01T10:00+08:00", endAt: "2035-01-02T10:00+08:00", notes: "Retry fixture" };
     await t.test("report gating is existing policy; an unreviewed allegation blocks booking until dismissal", async () => {
       const report = await api(`/api/listings/${listingId}/report`, admin.cookie, "POST", { reason: "Policy observation", description: "No enforcement policy change in this milestone" });
       assert.equal(report.status, 201);

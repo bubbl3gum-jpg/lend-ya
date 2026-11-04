@@ -232,8 +232,8 @@ test(
       const b = legacy ? {status:201,json:{booking:{id:(await db.query(`INSERT INTO "Booking" ("listingId","ownerId","renterId","meetingStationId","startAt","endAt",status,"totalPrice","dailyPrice","updatedAt") VALUES ($1,$2,$3,$4,'2038-01-01T02:00Z','2038-01-02T02:00Z','PENDING',10,10,now()) RETURNING id`,[l.json.listing.id,owner.id,borrower.id,stationId])).rows[0].id}}} : await api("/api/bookings", borrower, "POST", {
         listingId: l.json.listing.id,
         meetingStationId: stationId,
-        startAt: "2038-01-01T10:00",
-        endAt: "2038-01-02T10:00",
+        startAt: "2038-01-01T10:00+08:00",
+        endAt: "2038-01-02T10:00+08:00",
       });
       assert.equal(b.status, 201);
       assert.equal(
@@ -373,7 +373,7 @@ test(
         assert.equal((await api(`/api/bookings/${unused.id}`,owner,"PATCH",{action:"cancel"})).status,200);
         const before=(await db.query(`SELECT count(*)::int n FROM "Booking"`)).rows[0].n;
         await stop();await start(ids,180,900,600,false,false);
-        assert.equal((await api("/api/bookings",borrower,"POST",{listingId:unused.listingId,meetingStationId:stationId,startAt:"2039-01-01T10:00",endAt:"2039-01-02T10:00"})).status,503);
+        assert.equal((await api("/api/bookings",borrower,"POST",{listingId:unused.listingId,meetingStationId:stationId,startAt:"2039-01-01T10:00+08:00",endAt:"2039-01-02T10:00+08:00"})).status,503);
         assert.equal((await db.query(`SELECT count(*)::int n FROM "Booking"`)).rows[0].n,before,"Failed activation rolls back the new booking");
         await stop(); await start();
       });

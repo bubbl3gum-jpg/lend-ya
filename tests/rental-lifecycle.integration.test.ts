@@ -210,8 +210,8 @@ test("Milestone 3: real participant lifecycle, protected evidence, reviews and d
       const booking = await api("/api/bookings", borrower.cookie, "POST", {
         listingId: createdListing.json.listing.id,
         meetingStationId: stationId,
-        startAt: "2035-01-01T10:00",
-        endAt: "2035-01-02T10:01",
+        startAt: "2035-01-01T10:00+08:00",
+        endAt: "2035-01-02T10:01+08:00",
       });
       assert.equal(booking.status, 201);
       assert.equal(

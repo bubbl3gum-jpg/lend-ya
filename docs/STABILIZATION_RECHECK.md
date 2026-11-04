@@ -1,7 +1,7 @@
 # Original Prompt 1 acceptance recheck
 
 Date: **2026-11-04**. The opening review rechecks Prompt 1 only; its later
-Prompt 2 acceptance follow-up is appended below. Reports were inspected against
+Prompt 2 and Recovery R3 follow-ups are appended below. Reports were inspected against
 current source and fresh checks, not accepted as proof of correctness.
 
 ## Identity and provenance
@@ -162,3 +162,126 @@ before policy changes. Preserve authoritative exact Decimal arithmetic, durable
 replays, acceptance reservation locks, evidence, R1 setup/ownership safeguards
 and feature gates. Do not shift historical timestamps or fold the open build
 difference into booking validation work.
+
+## Recovery R3 — strict timestamps and configurable policy
+
+2026-11-04, Asia/Taipei. Starting clean local/remote checkpoint:
+`8d3adbb50e5c6a1a1a270d438f95d77116908b6e`, branch
+`recovery/candidate-validation-20261103`, verified GitHub origin. Existing
+checkpoint ancestry and later work were preserved; no reset. Root instructions,
+recovery/recheck documents, applicable existing UI contracts, booking callers,
+API/hash/transaction logic and tests were inspected. Tests below executed on
+that source plus the reviewed R3 working-tree changes committed with this report;
+subsequent documentation does not imply another source revision was tested.
+
+### Implemented contract and acceptance
+
+| Requirement | Implementation / actual evidence | R3 disposition |
+| --- | --- | --- |
+| Taipei local input to explicit API instants | Single maintained creation form uses calendar-checked `taipeiInputInstant`; sends ISO Z before quotation and creation. Browser contexts Los Angeles/Honolulu versus UTC server assert actual payload and PostgreSQL stored time. | **Pass**; no device-zone interpretation. |
+| Strict new API requests | `parseBookingInstant` requires explicit Z/numeric offset; rejects impossible dates, unknown -00:00 offset, malformed syntax and >3 fractional digits. Supported range/precision documented in `BOOKING_TIME.md`. | **Pass**; new naive requests/quotes return 400. |
+| Preserve old operation identities | Canonical field order/hash normalization, caller-scoped key and stored quote checks remain unchanged. Legacy parsing can only return a matching authenticated stored operation; a miss cannot create or quote. | **Pass**; synthetic old now-past 60-day operation replays under configured 30, wrong actor/unknown key/altered terms fail, restart tests replay both explicit/legacy forms. No historical hash/row rewrite. |
+| Configurable bounded policy | Server-only env resolution uses `BOOKING_MAX_DURATION_DAYS` 1–365, default **90**; `BOOKING_MAX_NOTES_UNITS` 1–10000, default **2000 raw UTF-16 units**. Missing only uses defaults; malformed/empty/fractional/unsafe settings fail. Resolved numbers feed the form and read-only Admin duration inventory. | **Pass**; earlier proposed 30-day default deliberately **not adopted**. Configured 30 is exercised, not made the default. |
+| Replays precede current policy | Matching committed request returns before current limits/config/future validation. Form preserves an in-memory same-key failed-response retry. | **Pass**; browser restart with lower duration/notes settings and then malformed duration preserves retries while new quote returns 503. |
+| Raw notes and whitespace | Compare raw `.length` before trimming; spaces count, surrogate-pair emoji consume two units. Storage/hash still trim and normalize empty to null. Form maxlength/help and alert use the same resolved policy. | **Pass**; exact UTF-16/whitespace boundaries and invalid settings tested. |
+| Post-lock new-write expiry | Check start after existing listing lock and immediately before insertion after documentation binding; throw controlled 400 inside transaction for rollback. Same-operation conflict recovery may still replay a committed row. | **Pass**; real PostgreSQL blocked-request observation, wait until its start boundary, release lock, verify 400 and no partial Booking/Meetup rows. |
+| Exact pricing unchanged | Authoritative listing Decimal × ceil(elapsed 24h periods), existing DECIMAL(12,2) guard/snapshots/serialization. | **Pass**; quotation tests at 9999999999.99 and 9999999999.98, overflow rejection, +1ms billing, equivalent offsets and ignored client price/total tampering; existing stored-price tests/lifecycle remain passing. |
+| Reservations/auth/evidence/idempotency | Existing Serializable transaction/listing lock, overlapping PENDING and conflicting acceptance behavior preserved; no lifecycle/gate changes. | **Pass** for focused API/lifecycle/stability and owned documentation-agreement regressions, not a claim R5 is complete. |
+
+API/form rollout and replay details, defaults/bounds and notes behavior are in
+`docs/BOOKING_TIME.md` and `.env.example`; README now links the contract. A narrow
+inventory compatibility update replaces the removed fixed-duration constant
+with the resolved value behind the same Admin read authorization. No Admin edit
+capability or gate was added. Other features that intentionally accept local
+wall time keep the old parser; it was not globally made strict.
+
+Maintained API test fixtures in rental/stability and adjacent chat, meetup,
+documentation, moderation, location, workbench, security and recovery helpers
+were coordinated by adding explicit +08:00 to booking request literals. Their
+intended instants remain the same. HTML datetime-local entries, synthetic SQL
+history and the new deliberate legacy-replay probes remain appropriately local.
+No assertions were deleted, and this does not claim every adjacent suite ran.
+
+### Executed checks and cleanup
+
+Fresh local `postgres:17` container `lend-ya-r3-validation-20261104`, no existing
+volume/database or copied credentials, loopback port 32771. Each suite ran
+sequentially on a distinct new owned target, using existing creation/marker/
+actual-driver guards and cleanup. Credentials omitted; use your own local
+connection via `MRT_TEST_DATABASE_URL` to reproduce these commands.
+
+| Command | Actual result | Fresh owned database |
+| --- | --- | --- |
+| `npm run db:generate` | **Pass**, exit 0, Client 7.10.1 | No DB work |
+| `npm run typecheck` | **Pass**, full route generation/tsc, including final changed files | No DB work |
+| `npm run lint` | **Pass**, no diagnostics, including final changed files | No DB work |
+| `TZ=UTC npm run test:unit` | **Pass**, 206 passed, 0 failed/skipped | No DB work |
+| `TZ=America/Los_Angeles npm run test:unit` | **Pass**, 206 passed, 0 failed/skipped | No DB work |
+| `TZ=UTC npm run test:rental-api` | **Pass**, 15 passed, 0 failed/skipped; default 90/2000 | `hustlen_test_r3_api_default_20261104` |
+| `TZ=UTC BOOKING_MAX_DURATION_DAYS=30 npm run test:rental-api` | **Pass**, 15 passed, 0 failed/skipped | `hustlen_test_r3_api_30_20261104` |
+| `TZ=UTC BOOKING_MAX_DURATION_DAYS=30 npm run test:rental-browser` with verified Chromium paths | **Pass**, 4 passed, 0 failed/skipped; actual form uses configured 30, explicit storage, restarted lower/malformed policy and lifecycle | `hustlen_test_r3_browser_20261104` |
+| `TZ=UTC npm run test:stability` | **Pass**, 8 passed, 0 failed/skipped, including controlled real deadlock/idempotency/permissions | `hustlen_test_r3_stability_20261104` |
+| `TZ=UTC npm run test:rental-documentation` with Chromium paths | **Pass**, 1 passed, 0 failed/skipped; existing scoped agreement/acknowledgement and acceptance gates | `hustlen_test_r3_documentation_20261104` |
+| `TZ=UTC npm run build:verify` | **Pass**, complete initialized production build, exit 0; final form-retry source also rebuilt successfully below | `hustlen_test_r3_build_20261104` |
+
+The initial browser and initialized build passed before final review found the
+form's existing quotation-reset behavior would interfere with a lost-response
+retry. The final fix retains the reviewed request after transport/5xx failures.
+Its new real-browser probe commits a write, drops only the response, and requires
+the same key/payload plus one stored booking on retry. The first probe run in
+`hustlen_test_r3_browser_retry_20261104` failed because its asynchronous test
+assertion observed an unrelated/unscoped alert before the response callback set
+the status (undefined versus 201); subsequent subtests cascaded. No production
+failure was hidden or assertion removed. The test now polls the actual committed
+response status and scopes the alert to the booking form. That failed runner
+still removed its owned database/uploads. Final probe and final build results
+are recorded below after execution.
+
+**Final-source checks passed:** the corrected lost-response probe and complete
+browser suite passed **4/4**, zero skips, on
+`hustlen_test_r3_browser_final_20261104`. The real server commit was observed
+before dropping its response; retry used an identical key/body and left exactly
+one booking. Full typing and lint passed again after this last form change.
+Both complete unit runs were repeated on the final source: **206/206 under UTC**
+and **206/206 under America/Los_Angeles**, zero skips. Final `build:verify` passed
+all migration, compilation, typing, static-generation and route-report stages
+on `hustlen_test_r3_build_final_20261104`; this is not compilation-only success.
+Logs include `/tmp/lend-r3-browser-final2.log`, `types-last`, `lint-last`,
+`unit-utc-final`, `unit-la-final` and `build-final` under `/tmp/lend-r3-*.log`.
+
+**Cleanup independently verified:** a maintenance query against only the new
+task container found zero `hustlen_test_*` databases. All **nine** R3 runner
+manifests record `preserved: false`; eight successful runs passed and the one
+asynchronous probe failure is explicitly recorded as failed. No listing upload
+files remain. The task container was then stopped/auto-removed. Existing
+developer/production databases, uploads and containers were not accessed or
+reset; diagnostic artifacts remain ignored for review.
+
+**R3 acceptance: Pass**, with retained 90-day default and documented external
+client rollout requirements. There is no remaining R3 validation blocker. These
+results do not imply R4/R5 acceptance or a database-independent build.
+
+`/usr/bin/chromium` was checked executable before browser suites (version
+154.0.8037.57). `MRT_BROWSER_PATH` and `CHROMIUM_PATH` used that executable.
+Logs are session-local `/tmp/lend-r3-*.log`; existing runner manifests are ignored
+under `.test-artifacts/`. Source fixture-only changes in other specialized suites
+were type-checked, not all executed individually. Clean installation/dependency
+audit and baseline were not repeated: no dependency/setup/runner/seed/migration
+metadata changed, and recent Prompt 1 evidence remains labelled as such above.
+
+### Remaining differences / R4–R5 handover
+
+The task's explicit policy is retained **90**, configurable; it intentionally
+differs from the earlier proposed default 30. Currency, elapsed-day rounding,
+stored timestamps and historical idempotency rows are unchanged. Older/external
+clients need explicit instants for new requests; only matching stored legacy
+operations have compatibility access. This is a coordinated client/API rollout,
+not a migration that can infer historical intent.
+
+R4: make all booking/activity displays consistently communicate Taipei time;
+the existing UTC activity display and broader formatter input expectations are
+not fixed here. R5: extend exact adjacency, deterministic nonconflicting/MVCC
+retry/concurrency coverage beyond the focused lock-expiry and preserved existing
+races. The separate empty-schema build failure remains open; no request-time
+rendering change was introduced. No production activation, provider call, main
+merge, force push or deployment is part of this task.

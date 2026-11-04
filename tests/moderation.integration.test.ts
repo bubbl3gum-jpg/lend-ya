@@ -162,8 +162,8 @@ test(
       api("/api/bookings", who.cookie, "POST", {
         listingId,
         meetingStationId: stationId,
-        startAt: "2035-01-01T10:00",
-        endAt: "2035-01-02T10:01",
+        startAt: "2035-01-01T10:00+08:00",
+        endAt: "2035-01-02T10:01+08:00",
       });
     const patch = (id: number, action: string, who = owner) =>
       api(`/api/bookings/${id}`, who.cookie, "PATCH", { action });

@@ -592,8 +592,8 @@ test(
           const b = await api("/api/bookings", borrower.cookie, "POST", {
             listingId,
             meetingStationId: stations[0],
-            startAt: "2035-01-01T10:00",
-            endAt: "2035-01-02T10:01",
+            startAt: "2035-01-01T10:00+08:00",
+            endAt: "2035-01-02T10:01+08:00",
           });
           assert.equal(b.status, 201);
           assert.equal(
@@ -816,8 +816,8 @@ test(
             b = await api("/api/bookings", borrower.cookie, "POST", {
               listingId: l.json.listing.id,
               meetingStationId: stations[0],
-              startAt: "2035-02-01T10:00",
-              endAt: "2035-02-02T10:00",
+              startAt: "2035-02-01T10:00+08:00",
+              endAt: "2035-02-02T10:00+08:00",
             }),
             id = b.json.booking.id;
           assert.equal(b.status, 201);

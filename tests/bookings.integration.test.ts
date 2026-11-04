@@ -4,6 +4,8 @@ import "dotenv/config";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
+import { resolveBookingPolicy } from "../lib/booking-policy";
 import { Pool } from "pg";
 
 // Run against a migrated, disposable test database and its matching Next server.
@@ -86,8 +88,8 @@ test("real booking API: two-user persistence, validation, privacy, history and c
     const input = {
       listingId,
       meetingStationId: stationId,
-      startAt: "2035-01-01T10:00",
-      endAt: "2035-01-02T10:01",
+      startAt: "2035-01-01T10:00+08:00",
+      endAt: "2035-01-02T10:01+08:00",
       notes: "test",
     };
     const create = (cookie = borrower.cookie, overrides = {}) =>
@@ -97,10 +99,10 @@ test("real booking API: two-user persistence, validation, privacy, history and c
       assert.equal((await create(owner.cookie)).status, 409);
       for (const override of [
         { meetingStationId: 2147483647 },
-        { startAt: "2020-01-01T10:00" },
+        { startAt: "2020-01-01T10:00+08:00" },
         { endAt: input.startAt },
-        { startAt: "2035-02-30T10:00" },
-        { endAt: "2036-01-01T10:00" },
+        { startAt: "2035-02-30T10:00+08:00" },
+        { endAt: "2036-01-01T10:00+08:00" },
         { notes: "a".repeat(2001) },
         { notes: {} },
       ])
@@ -290,8 +292,8 @@ test("real booking API: two-user persistence, validation, privacy, history and c
           200,
         );
         const later = await create(borrower.cookie, {
-          startAt: "2035-02-01T10:00",
-          endAt: "2035-02-02T10:00",
+          startAt: "2035-02-01T10:00+08:00",
+          endAt: "2035-02-02T10:00+08:00",
         });
         assert.equal(later.status, 201);
         assert.equal(
@@ -300,8 +302,8 @@ test("real booking API: two-user persistence, validation, privacy, history and c
         );
         await patch(later.result.booking.id, owner.cookie, "cancel");
         const pending = await create(borrower.cookie, {
-          startAt: "2035-03-01T10:00",
-          endAt: "2035-03-02T10:00",
+          startAt: "2035-03-01T10:00+08:00",
+          endAt: "2035-03-02T10:00+08:00",
         });
         const evidence = {
           conditionConfirmed: true,
@@ -366,8 +368,8 @@ test("real booking API: two-user persistence, validation, privacy, history and c
           200,
         );
         const laterPending = await create(borrower.cookie, {
-          startAt: "2035-04-01T10:00",
-          endAt: "2035-04-02T10:00",
+          startAt: "2035-04-01T10:00+08:00",
+          endAt: "2035-04-02T10:00+08:00",
         });
         assert.equal(laterPending.status, 201);
         for (const [action, cookie] of [
@@ -397,6 +399,98 @@ test("real booking API: two-user persistence, validation, privacy, history and c
         );
       },
     );
+    await t.test("strict instants, policy/Decimal boundaries, legacy replay and post-lock expiry", async () => {
+      const policy = resolveBookingPolicy(process.env);
+      const listing = (await pool.query(
+        'INSERT INTO "Listing" ("ownerId",title,description,category,price,deposit,condition,"updatedAt") VALUES ($1,$2,$2,\'Electronics\',12.34,25.67,\'Good\',NOW()) RETURNING id',
+        [owner.id, `strict-${tag}`],
+      )).rows[0].id;
+      await pool.query('INSERT INTO "ListingStation" ("listingId","stationId") VALUES ($1,$2)', [listing, stationId]);
+      await pool.query('INSERT INTO "ListingMedia" ("listingId",url,"mimeType",kind) VALUES ($1,$2,\'image/png\',\'PHOTO\')', [listing, "/uploads/listings/booking-test-fixture.png"]);
+      const base = { ...input, listingId: listing, startAt: "2035-01-01T02:00:00.000Z", endAt: "2035-01-02T02:00:00.000Z" };
+      const quote = (change = {}) => api("/api/bookings", borrower.cookie, "POST", { ...base, ...change, quote: true });
+      const count = async () => (await pool.query('SELECT count(*)::int n FROM "Booking" WHERE "listingId"=$1', [listing])).rows[0].n;
+      for (const change of [{ startAt: "2035-01-01T10:00" }, { startAt: "2035-02-30T10:00+08:00" },
+        { startAt: "2035-01-01T02:00:00.0001Z" }, { startAt: "2035-01-01T02:00-00:00" },
+        { endAt: base.startAt }, { notes: "😀".repeat(1001) }, { notes: " ".repeat(2001) }]) {
+        assert.equal((await quote(change)).status, 400);
+        assert.equal(await count(), 0);
+      }
+      const boundary = new Date(Date.parse(base.startAt) + policy.maxDurationDays * 86400000);
+      assert.equal((await quote({ endAt: boundary.toISOString(), notes: "😀".repeat(1000) })).status, 200);
+      assert.equal((await quote({ endAt: new Date(boundary.getTime() + 1).toISOString() })).status, 400);
+      const offset = await quote({ startAt: "2035-01-01T10:00+08:00", endAt: "2035-01-01T21:00-05:00", totalPrice: "0.01", price: "0.01" });
+      assert.equal(offset.status, 200);
+      assert.equal(offset.result.quote.totalPrice, "12.34");
+      assert.equal(offset.result.quote.startAt, base.startAt);
+      assert.equal((await quote({ endAt: "2035-01-02T02:00:00.001Z" })).result.quote.totalPrice, "24.68");
+      await pool.query('UPDATE "Listing" SET price=9999999999.99 WHERE id=$1', [listing]);
+      assert.equal((await quote()).result.quote.totalPrice, "9999999999.99");
+      assert.equal((await quote({ endAt: "2035-01-02T02:00:00.001Z" })).status, 400);
+      await pool.query('UPDATE "Listing" SET price=4999999999.99 WHERE id=$1', [listing]);
+      assert.equal((await quote({ endAt: "2035-01-03T02:00:00.000Z" })).result.quote.totalPrice, "9999999999.98");
+      await pool.query('UPDATE "Listing" SET price=5000000000 WHERE id=$1', [listing]);
+      assert.equal((await quote({ endAt: "2035-01-03T02:00:00.000Z" })).status, 400);
+      await pool.query('UPDATE "Listing" SET price=12.34 WHERE id=$1', [listing]);
+      assert.equal(await count(), 0, "Quotations/rejections must not persist bookings.");
+
+      // Synthetic historical operation with the original canonical hash format.
+      // No existing row/hash is rewritten, and its now-past 60-day window must
+      // replay even when this suite is run with a configured 30-day maximum.
+      const key = randomUUID();
+      const legacy = { ...base, startAt: "2020-01-01T10:00", endAt: "2020-03-01T10:00", notes: " legacy notes " };
+      const hash = createHash("sha256").update(JSON.stringify({ listingId: listing,
+        startAt: "2020-01-01T02:00:00.000Z", endAt: "2020-03-01T02:00:00.000Z",
+        meetingStationId: stationId, canonicalStationId: null, notes: "legacy notes" })).digest("hex");
+      const historical = (await pool.query(
+        'INSERT INTO "Booking" ("listingId","ownerId","renterId","meetingStationId","startAt","endAt",status,"dailyPrice","totalPrice",deposit,notes,"requestKey","requestHash","updatedAt") VALUES ($1,$2,$3,$4,\'2020-01-01 02:00\',\'2020-03-01 02:00\',\'CANCELLED\',12.34,740.40,25.67,\'legacy notes\',$5,$6,NOW()) RETURNING id',
+        [listing, owner.id, borrower.id, stationId, key, hash],
+      )).rows[0].id;
+      const send = async (body: object, cookie = borrower.cookie, requestKey = key) => {
+        const response = await fetch(`${process.env.TEST_BASE_URL}/api/bookings`, { method: "POST",
+          headers: { Cookie: cookie, "Content-Type": "application/json", "Idempotency-Key": requestKey }, body: JSON.stringify(body) });
+        return { status: response.status, body: await response.json() };
+      };
+      const replay = await send(legacy);
+      assert.equal(replay.status, 201);
+      assert.equal(replay.body.booking.id, historical);
+      assert.equal(replay.body.booking.totalPrice, "740.4");
+      assert.equal((await send({ ...legacy, startAt: "2020-01-01T02:00Z", endAt: "2020-03-01T02:00Z" })).status, 201);
+      assert.equal((await send({ ...legacy, notes: "altered" })).status, 409);
+      assert.equal((await send({ ...legacy, expectedQuote: "wrong" })).status, 409);
+      assert.equal((await send(legacy, outsider.cookie)).status, 400);
+      assert.equal((await send(legacy, borrower.cookie, randomUUID())).status, 400);
+      assert.equal((await send({ ...legacy, quote: true })).status, 400);
+      assert.equal(await count(), 1);
+
+      const blocker = await connectTestDatabase();
+      let waiting: ReturnType<typeof send> | undefined;
+      try {
+        await blocker.query("BEGIN");
+        await blocker.query('SELECT id FROM "Listing" WHERE id=$1 FOR UPDATE', [listing]);
+        const pid = (await blocker.query("SELECT pg_backend_pid() pid")).rows[0].pid;
+        const start = Date.now() + 2500;
+        waiting = send({ ...base, startAt: new Date(start).toISOString(), endAt: new Date(start + 86400000).toISOString() }, borrower.cookie, randomUUID());
+        let observed = false;
+        for (let i = 0; i < 100; i++) {
+          const rows = await pool.query("SELECT query FROM pg_stat_activity WHERE datname=current_database() AND $1=ANY(pg_blocking_pids(pid))", [pid]);
+          if (rows.rows.some(r => String(r.query).includes("FOR UPDATE"))) { observed = true; break; }
+          await new Promise(resolve => setTimeout(resolve, 15));
+        }
+        assert.ok(observed, "Must observe the real API waiting for the listing lock.");
+        // Wait for the actual boundary, after deterministic lock observation.
+        await new Promise(resolve => setTimeout(resolve, Math.max(0, start - Date.now() + 25)));
+        await blocker.query("COMMIT");
+        const expired = await waiting;
+        assert.equal(expired.status, 400);
+        assert.match(expired.body.error, /expired while waiting/);
+        assert.equal(await count(), 1, "Expired lock wait must not insert a partial booking.");
+        assert.equal((await pool.query('SELECT count(*)::int n FROM "MeetupSession" WHERE "bookingId" IN (SELECT id FROM "Booking" WHERE "listingId"=$1)', [listing])).rows[0].n, 0);
+      } finally {
+        await blocker.query("ROLLBACK"); await blocker.end();
+        if (waiting) await waiting;
+      }
+    });
     await t.test("concurrent identical booking requests are durable and changed terms conflict", async () => {
       const key = randomUUID();
       const isolatedListing = (await pool.query(
@@ -405,7 +499,7 @@ test("real booking API: two-user persistence, validation, privacy, history and c
       )).rows[0].id;
       await pool.query('INSERT INTO "ListingStation" ("listingId","stationId") VALUES ($1,$2)', [isolatedListing, stationId]);
       await pool.query('INSERT INTO "ListingMedia" ("listingId",url,"mimeType",kind) VALUES ($1,$2,\'image/png\',\'PHOTO\')', [isolatedListing, "/uploads/listings/booking-test-fixture.png"]);
-      const payload = { ...input, listingId: isolatedListing, startAt: "2041-01-01T10:00", endAt: "2041-01-02T10:00", canonicalStationId: "taipei-main" };
+      const payload = { ...input, listingId: isolatedListing, startAt: "2041-01-01T10:00+08:00", endAt: "2041-01-02T10:00+08:00", canonicalStationId: "taipei-main" };
       const send = async (body: object, cookie = borrower.cookie) => {
         const response = await fetch(`${process.env.TEST_BASE_URL}/api/bookings`, {
           method: "POST",
@@ -421,7 +515,7 @@ test("real booking API: two-user persistence, validation, privacy, history and c
       assert.equal(retry.status, 201);
       assert.equal(retry.body.booking.id, results[0].body.booking.id);
       assert.equal((await send({ ...payload, notes: "changed" })).status, 409);
-      assert.equal((await send({ ...payload, endAt: "2041-01-03T10:00" })).status, 409);
+      assert.equal((await send({ ...payload, endAt: "2041-01-03T10:00+08:00" })).status, 409);
       assert.equal((await send({ ...payload, expectedQuote: "stale" })).status, 409);
       assert.equal((await send(payload, "")).status, 401);
       assert.equal((await pool.query('SELECT count(*)::int AS n FROM "Booking" WHERE "renterId"=$1 AND "requestKey"=$2', [borrower.id, key])).rows[0].n, 1);

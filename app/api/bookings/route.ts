@@ -10,8 +10,9 @@ import { requireActiveAccounts } from "@/lib/marketplace-permissions";
 import {
   parseRentalTime,
   rentalDays,
-  MAX_RENTAL_DAYS,
+  parseBookingInstant,
 } from "@/lib/booking-time";
+import { resolveBookingPolicy, bookingPolicyError, BookingPolicyError } from "@/lib/booking-policy";
 import { Prisma } from "@prisma/client";
 import {
   apiError,
@@ -115,8 +116,12 @@ export async function POST(request: Request): Promise<Response> {
       typeof body.listingId === "number"
         ? parsePathId(String(body.listingId))
         : null;
-    const startAt = parseRentalTime(body.startAt);
-    const endAt = parseRentalTime(body.endAt);
+    const strictStart = parseBookingInstant(body.startAt);
+    const strictEnd = parseBookingInstant(body.endAt);
+    // Legacy parsing may establish an authenticated stored replay ONLY. It must
+    // never authorize a new operation, quote, or changed idempotency payload.
+    const startAt = strictStart ?? parseRentalTime(body.startAt);
+    const endAt = strictEnd ?? parseRentalTime(body.endAt);
     const meetingStationId =
       typeof body.meetingStationId === "number"
         ? parsePathId(String(body.meetingStationId))
@@ -137,13 +142,8 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    if (endAt.getTime() - startAt.getTime() > MAX_RENTAL_DAYS * 86400000)
-      return apiError("Maximum rental duration is 90 days.", 400);
-    if (
-      body.notes !== undefined &&
-      (typeof body.notes !== "string" || body.notes.length > 2000)
-    )
-      return apiError("Notes must be text of at most 2000 characters.", 400);
+    if (body.notes !== undefined && typeof body.notes !== "string")
+      return apiError("Notes must be text.", 400);
     let normalizedDocumentation;
     if(body.documentation!==undefined){try{normalizedDocumentation=acknowledgement(body.documentation);}catch{throw new DocumentationError("DOCUMENTATION_ACK_REQUIRED",400);}}
     requestHash = body.quote === true ? undefined : createHash("sha256")
@@ -153,12 +153,17 @@ export async function POST(request: Request): Promise<Response> {
     // No mutation is performed by replay; permission is still scoped to the authenticated actor.
     const repeated = await replay();
     if (repeated) return repeated;
-    if (startAt <= new Date())
-      return apiError("Start time must be in the future.", 400);
+    if (!strictStart || !strictEnd)
+      return apiError("Booking timestamps require a valid explicit Z or numeric offset, with at most millisecond precision.", 400);
+    const policy = resolveBookingPolicy(process.env);
+    const invalid = bookingPolicyError(startAt, endAt, body.notes, policy, Date.now());
+    if (invalid) return apiError(invalid, 400);
     return await prisma.$transaction(
       async (transaction) => {
         await requireActiveAccounts(transaction, [currentUser.id]);
         await transaction.$queryRaw`SELECT id FROM "Listing" WHERE id = ${listingId} FOR UPDATE`;
+        if (startAt.getTime() <= Date.now())
+          throw new RentalError("Start time expired while waiting. Choose a future start.", 400);
         const listing = await transaction.listing.findUnique({
           where: { id: listingId },
           select: {
@@ -303,6 +308,10 @@ export async function POST(request: Request): Promise<Response> {
             409,
           );
         const documentationBinding=await bindDocumentationRequest(transaction,currentUser.id,request,documentationTerms,body.documentation,body);
+        // Throw to roll back any documentation binding if time expired during
+        // subsequent authorization/row-lock work, rather than committing it.
+        if (startAt.getTime() <= Date.now())
+          throw new RentalError("Start time expired while waiting. Choose a future start.", 400);
         const booking = await transaction.booking.create({
           data: {
             ...documentationBinding,
@@ -328,7 +337,13 @@ export async function POST(request: Request): Promise<Response> {
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
   } catch (error) {
-    if(error instanceof RentalError) return apiError(error.message,error.status);
+    if (error instanceof BookingPolicyError)
+      return apiError("Booking policy configuration is invalid. Contact the marketplace operator.", 503);
+    if(error instanceof RentalError) {
+      // An identical operation may have committed while this request waited.
+      const repeated = await replay();
+      return repeated ?? apiError(error.message,error.status);
+    }
     const documentationError=documentationFailure(error);if(documentationError)return documentationError;
     if (requestKey && (isSerializationConflict(error) ||
       (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"))) {

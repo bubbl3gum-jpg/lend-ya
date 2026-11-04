@@ -6,11 +6,14 @@ import {agreementText} from "@/lib/i18n/agreement";
 import {formatTime} from "@/lib/i18n/core";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { taipeiInputInstant } from "@/lib/booking-time";
+import { bookingPolicyError, type BookingPolicy } from "@/lib/booking-policy";
 
 import { MRTStationSelector } from "./mrt/MRTStationSelector";
 import { stationLabel, type DatabaseStation } from "@/lib/mrt/network";
 
 type BookingFormProps = {
+  policy: BookingPolicy;
   documentationPilot?:boolean;
   listing: {
     id: number;
@@ -21,7 +24,7 @@ type BookingFormProps = {
   };
 };
 
-export function BookingForm({ listing,documentationPilot=false }: BookingFormProps) {
+export function BookingForm({ listing, policy, documentationPilot=false }: BookingFormProps) {
   const {locale}=useLocale(),docText=agreementText(locale);
   const [documentation,setDocumentation]=useState<DocumentationReview|null>(null),[ack,setAck]=useState("");
   const router = useRouter();
@@ -39,7 +42,7 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
   const [reviewed, setReviewed] = useState("");
   const selection = JSON.stringify({ startAt, endAt, meetingStationId, notes });
   const [loading, setLoading] = useState(false);
-  const requestIdentity = useRef<{ selection: string; key: string } | null>(null);
+  const requestIdentity = useRef<{ selection: string; key: string; submitted: boolean } | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,17 +51,26 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
     setLoading(true);
 
     try {
+      const startInstant = taipeiInputInstant(startAt);
+      const endInstant = taipeiInputInstant(endAt);
+      if (!startInstant || !endInstant) throw new Error("Enter valid Taipei booking dates and times.");
+      const invalid = bookingPolicyError(new Date(startInstant), new Date(endInstant), notes, policy, Date.now());
+      // A previous submission may have committed even if its response was lost.
+      // Let the server resolve a same-key retry before applying current limits.
+      if (invalid && !(requestIdentity.current?.selection === selection && requestIdentity.current.submitted))
+        throw new Error(invalid);
       if (!meetingStationId)
         throw new Error("Choose and confirm a meeting station.");
       if (requestIdentity.current?.selection !== selection)
-        requestIdentity.current = { selection, key: crypto.randomUUID() };
+        requestIdentity.current = { selection, key: crypto.randomUUID(), submitted: false };
+      if (reviewed === selection) requestIdentity.current.submitted = true;
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { ...(documentationPilot?{"X-Hustlen-Documentation-Agreement":"1"}:{}),"Content-Type": "application/json", "Idempotency-Key": requestIdentity.current.key },
         body: JSON.stringify({
           listingId: listing.id,
-          startAt,
-          endAt,
+          startAt: startInstant,
+          endAt: endInstant,
           meetingStationId: Number(meetingStationId),
           canonicalStationId: listing.supportedStations.find(
             (s) => s.station.id === Number(meetingStationId),
@@ -76,6 +88,10 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
 
       const result = await response.json();
       if (!response.ok) {
+        // A definitive client error permits a new quote. Network/5xx failures
+        // can hide a committed write, so retain the exact submission for replay.
+        if (response.status < 500 && requestIdentity.current)
+          requestIdentity.current.submitted = false;
         if(result.code?.startsWith("DOCUMENTATION_")){setDocumentation(null);setAck("");setReviewed("");throw new Error(docText.changed);}
         if (result.code === "STATION_UNAVAILABLE") {
           setMeetingStationId("");
@@ -99,7 +115,7 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
           ? err.message
           : "Unable to create booking request.";
       setError(message);
-      if(!documentation)setReviewed("");
+      if(!documentation && !requestIdentity.current?.submitted)setReviewed("");
     } finally {
       setLoading(false);
     }
@@ -115,7 +131,7 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
       </h3>
 
       <p className="mb-4 text-sm">
-        All rental times are Asia/Taipei (UTC+08:00). Maximum 90 days. Partial
+        All rental times are Asia/Taipei (UTC+08:00). Maximum {policy.maxDurationDays} days. Partial
         days round up.
       </p>
       <div className="space-y-4">
@@ -154,11 +170,15 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
             rows={3}
-            maxLength={2000}
+            maxLength={policy.maxNotesUnits}
+            aria-describedby="booking-notes-limit"
             className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             placeholder="Any pickup notes or preferences"
           />
         </label>
+        <p id="booking-notes-limit" className="text-sm text-slate-600">
+          Notes: {notes.length}/{policy.maxNotesUnits} text units. Spaces count; an emoji may use two.
+        </p>
       </div>
 
       {quote && reviewed === selection ? (
@@ -189,7 +209,7 @@ export function BookingForm({ listing,documentationPilot=false }: BookingFormPro
         </div>
       ) : null}
       {documentation&&reviewed===selection&&<div lang={locale}><p>{docText.expiry}: {formatTime(locale,documentation.expiresAt)}</p><DocumentLedger document={documentation.document} digest={documentation.contentDigest} mediaQuery={`contextId=${documentation.contextId}`}/><label><input type="checkbox" checked={ack===selection+documentation.contextId} onChange={e=>setAck(e.target.checked?selection+documentation.contextId:"")}/>{docText.ack}</label></div>}
-      {error ? <p className="mt-4 text-sm text-rose-600">{error}</p> : null}
+      {error ? <p role="alert" className="mt-4 text-sm text-rose-600">{error}</p> : null}
 
       <button
         type="submit"

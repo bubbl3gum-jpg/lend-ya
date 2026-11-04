@@ -138,8 +138,8 @@ test(
       let r = await api("/api/bookings", renter.cookie, "POST", {
         listingId,
         meetingStationId: station,
-        startAt: "2035-01-01T10:00",
-        endAt: "2035-01-02T10:00",
+        startAt: "2035-01-01T10:00+08:00",
+        endAt: "2035-01-02T10:00+08:00",
         notes: canary,
       });
       assert.equal(r.status, 201);
