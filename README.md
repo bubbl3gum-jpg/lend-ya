@@ -93,6 +93,13 @@ npm run lint
 npm run build
 ```
 
+Production build is font-independent but requires accessible initialized
+application tables during homepage prerendering. `npm run build` uses your
+configured database; for isolated acceptance use `npm run build:verify`, which
+creates an owned test database and deploys migrations before the full build.
+An empty-schema build fails; these build contracts are not equivalent. See
+[the Prompt 1 acceptance recheck](docs/STABILIZATION_RECHECK.md).
+
 Set `MRT_TEST_DATABASE_URL` securely to a **nonexisting** local database named `hustlen_test_*`, distinct from the development `DATABASE_URL`. Do not create or migrate it yourself: the isolated runner creates, marks and removes it, refusing existing databases. The PostgreSQL role needs create/drop permission. Set `MRT_BROWSER_PATH` and `CHROMIUM_PATH` to an installed Chromium executable (cloud: `/usr/bin/chromium`); install FFmpeg/ffprobe for media tests.
 
 ```bash
