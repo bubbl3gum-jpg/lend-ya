@@ -1,8 +1,8 @@
 # Original Prompt 1 acceptance recheck
 
-Date: **2026-11-04**. This rechecks Prompt 1 only; it does not restart or execute
-the later stabilization prompts. Reports were inspected against current source
-and fresh checks, not accepted as proof of correctness.
+Date: **2026-11-04**. The opening review rechecks Prompt 1 only; its later
+Prompt 2 acceptance follow-up is appended below. Reports were inspected against
+current source and fresh checks, not accepted as proof of correctness.
 
 ## Identity and provenance
 
@@ -113,3 +113,52 @@ R2 disposition at `be75415`; revalidate advisories at that stage rather than
 resetting or blindly repeating upgrades. Prior residual minimatch counts are
 dated dependency evidence in `DEPENDENCY_SECURITY.md`, not a new audit executed
 in this Prompt 1 review. R3–R7 behavior and product decisions remain untouched.
+
+## Prompt 2 acceptance follow-up / Recovery R2
+
+**2026-11-04, Asia/Taipei.** Starting local and independently queried remote:
+`b532e0348c219fd78a8f04dfa95bfc3eaad569c9`, on the same recovery branch and
+verified GitHub origin. Working tree/index were clean; checkpoint ancestry and
+the existing R2 commit `be75415` were verified. Nothing was reset or recreated.
+Manifest, lock, overrides and lint configuration are unchanged from R2, and the
+executable source is unchanged from the recent Prompt 1 checks above.
+
+| Requirement | Actual implementation/disposition | Newly executed evidence | Acceptance |
+| --- | --- | --- | --- |
+| Fresh full audit, findings versus failures | 16 moderate affected-package entries, 0 high/critical; **one distinct advisory**, GHSA-g3hv-75wg-m249 | `npm audit --json`: valid result, exit 1 because findings exist; no retrieval/authentication failure | **Pass**, residual finding explicitly retained |
+| Production-installed audit | Zero findings; not a claim of complete application security | `npm audit --omit=dev --json`: valid result, exit 0 | **Pass** |
+| Versions, paths and exposure | minimatch 3.1.5 through ESLint 9.39.5/config-array/eslintrc and import/a11y/React plugins; 10.2.6 through TypeScript ESLint 8.71.0. Every reported node is marked dev in lock. Lint and CI execute these packages; no marketplace API path was found. | Targeted `npm ls`, full installed graph exit 0, current source/config inspection, all 16 findings mapped to lock versions/dev flags | **Pass**, development/CI DoS exposure remains relevant |
+| Compatible supported remediation | Fixed range starts 11.0.1, current latest 11.0.4. Published 3.x/10.x lines remain 3.1.5/10.2.6. Current consumers still require those affected majors. | Fresh `npm view` versions/dependencies/peers/engines: ESLint 10.14.0 still needs minimatch 10; plugins still exclude ESLint 10 peers; config-next 16.4.5 and typescript-estree 8.72.1 retain affected families | **Pass** for disposition; no compatible advisory-removing update established, no forced override/downgrade/suppression |
+| Existing fixes/override retained | Scoped Prisma mysql2 3.24.6 retained; Prisma 7.10.1 publishes exact 3.24.4, latest mysql2 remains 3.24.6. Locked deepmerge-ts 8.0.2/fast-uri 3.1.9/zod 4.6.7 retained. | Installed dependency paths and fresh Prisma/mysql2 registry metadata; manifest/lock unchanged | **Pass**, PostgreSQL-only application usage; no MySQL protocol testing claimed |
+| Accurate dated documentation | Existing R2 counts/path inventory still match. README's November 4 counts and linked disposition remain accurate without another README edit. | Fresh audits compared with existing R2 report; this appendix and security-report addendum record recheck evidence | **Pass** |
+| Appropriate functional validation | Documentation-only changes; dependency/config/source unchanged | Reuse, **not rerun**, recent Prompt 1 clean install, generation, full typing, lint, 202 units, 33-migration/76-table baseline with failure cleanup, and initialized full build | **Pass** for unchanged executable source |
+
+**Before/after:** no finding, version, dependency metadata, override or exposure
+change since the preceding R2 assessment. The residual moderate advisory is
+documented, not suppressed or declared fixed. Upstream must supply compatible
+backports or supported consumer releases adopting fixed minimatch APIs/versions.
+No new high/critical or production advisory regression is reported.
+
+New evidence files are session-local `/tmp/lend-p2-recheck-{full,prod}.json`,
+`/tmp/lend-p2-recheck-paths.txt`, `/tmp/lend-p2-recheck-installed.json`; registry
+queries also returned successfully. No database/API/browser/build suite or clean
+installation was newly executed in this Prompt 2 review. No database was created
+or accessed, so no new database cleanup operation was required.
+
+**Separate open difference retained:** the earlier normal empty-schema build
+failed on homepage prerendering; the prepared isolated full build passed. No
+rendering change was made and database-independent build acceptance is not met.
+
+**Prompt 2/C acceptance: Pass with documented residual advisory.** Only the
+recheck/security documentation changes are checkpointed. Normal push must target
+only this recovery branch, followed by independent exact remote-SHA comparison;
+no main merge, force push, deployment or environment publication.
+
+Handover for **Prompt 3/D**: inspect current parser/form/API and documented
+business rules, split Taipei wall-clock input conversion from strict explicit
+API instants, validate real dates and policy configuration, and add appropriate
+boundary tests. Resolve the fixed 90-day versus configurable 30-day default
+before policy changes. Preserve authoritative exact Decimal arithmetic, durable
+replays, acceptance reservation locks, evidence, R1 setup/ownership safeguards
+and feature gates. Do not shift historical timestamps or fold the open build
+difference into booking validation work.

@@ -169,3 +169,34 @@ without breaking durable replays. Resolve the fixed 90-day versus configurable
 pricing, overlapping-pending/acceptance reservation rules, evidence workflows,
 R1 ownership/setup safeguards and all provisional feature gates. Historical
 timestamps remain unchanged; R2 authorizes no reconstruction beyond dependencies.
+
+## Prompt 2/C acceptance recheck — 2026-11-04 (Asia/Taipei)
+
+Reverified from clean local/remote `b532e0348c219fd78a8f04dfa95bfc3eaad569c9`.
+Fresh full and production audits again retrieved successfully: full exit 1,
+16 moderate package entries from **one** distinct GHSA-g3hv-75wg-m249 advisory;
+production exit 0, zero findings. All installed paths, versions and dev flags
+still match the inventory above; `npm ls --all --json` exits 0.
+
+Fresh upstream checks again find ESLint 10.14.0 using minimatch ^10.2.6,
+config-next 16.4.5 retaining affected plugin families, typescript-estree 8.72.1
+using ^10.2.2, and latest import/a11y/React plugins still using ^3.1.2 and
+excluding ESLint 10 peers. No 3.x/10.x compatible fixed release was found;
+11.0.4 is current latest. Node compatibility alone does not establish API/peer
+compatibility. Prisma 7.10.1 still pins mysql2 3.24.4, while installed override
+3.24.6 equals stable latest. Retain the override and prior transitive fixes.
+
+No dependency, application, setup, lockfile or lint-rule changes were justified.
+Remaining development/CI exposure and upstream follow-up conditions above remain
+valid; this is a disposition acceptance, not a clean-advisory claim. README's
+November 4 summary remains current. `STABILIZATION_RECHECK.md` now appends the
+requirement/evidence acceptance matrix and Prompt 3/D handover.
+
+Newly executed: audits, targeted/full dependency graph, lock/dev classification,
+current upstream metadata and actual usage inspection. Reused explicitly from
+the recent **Prompt 1 recheck**, not newly executed: clean installation,
+generation, full typing, lint, 202 units, baseline and initialized full build.
+No new database work or broader functional suites were needed for docs-only
+changes. The empty-schema build failure remains a separate open difference.
+Raw audit/tree evidence: `/tmp/lend-p2-recheck-*`. Executable metadata/source
+was checked unchanged from `be75415`; no installed dependency was replaced.
