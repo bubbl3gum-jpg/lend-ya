@@ -1,7 +1,7 @@
 # Original Prompt 1 acceptance recheck
 
 Date: **2026-11-04**. The opening review rechecks Prompt 1 only; its later
-Prompt 2 and Recovery R3/R4/R5 follow-ups are appended below. Reports were inspected against
+Prompt 2 and Recovery R3/R4/R5/R6 follow-ups are appended below. Reports were inspected against
 current source and fresh checks, not accepted as proof of correctness.
 
 ## Identity and provenance
@@ -445,3 +445,49 @@ Detailed manifest/cleanup evidence is in `DATABASE_REGRESSIONS.md`. Handover:
 **R6 historical timestamp risk assessment**, authorized provenance and synthetic
 fixtures only; current regression success is not evidence that real old rows
 need correction. No production access, historical update, merge or deployment.
+
+## Recovery R6 — historical timestamp risk assessment
+
+2026-11-04. Starting checkout `/workspace/lend-ya-recovery`, branch
+`recovery/candidate-validation-20261103`, clean tree; local and independently
+queried remote `0e8bd63be4e5db5e73f9d9b2cf2e02b0f1a79611`. Origin remains
+`https://github.com/bubbl3gum-jpg/lend-ya.git`; ancestry verified, no reset or
+replacement checkout. Tested source is that revision plus the synthetic tests
+committed with this report. Application/schema/replay/booking policy is unchanged.
+
+**Conclusion: potential exposure, insufficient evidence for correction.**
+Fresh path/pickaxe Git inspection confirms the old host-local `new Date` path
+(`51c0169`, old baseline `f856dc3`), candidate's explicit Taipei-naive parsing
+(`18529a3`, inherited by `cf611494`), and R3's strict API/stored-replay separation
+(`de79da9`). The legacy migration also copies RentalRequest endpoints into Booking;
+seed and synthetic fixture paths have distinct origins. These source facts do
+not establish deployments, historical server zones, customer use or affected IDs.
+No production DB/log/deployment account was accessed. Author offsets/current TZ
+and empty owned test databases do not supply the missing evidence.
+
+| Requirement | Actual implementation/evidence | Disposition |
+| --- | --- | --- |
+| Parser history and provenance | Source/forms/API/helper/migration/seed/CI and existing reports inspected; deployment and original input/intent remain unverified. Full evidence matrix in `HISTORICAL_TIMESTAMP_RISK.md`. | Pass for assessment; real affected-record determination unavailable |
+| Synthetic old-parser reproduction | Five focused additions in existing `booking-time.test.ts`, using separate TZ-controlled Node processes with the actual historical string/type/NaN/new Date behavior, not current API acceptance. Show naive zone differences, explicit-offset invariance, non-unique stored provenance, DST duration/ceil-day changes and possible new overlap from a selective hypothetical endpoint proposal. | Pass |
+| Multiple-zone focused checks | `TZ=UTC`, `TZ=Asia/Taipei`, `TZ=America/Los_Angeles` with `node --import tsx --test tests/booking-time.test.ts`: **13 passed each**, zero failures/skips. | Pass |
+| Unit suite | `TZ=UTC npm run test:unit` and `TZ=America/Los_Angeles npm run test:unit`: **214 passed each**, zero failures/skips. | Pass |
+| Full typing/lint | `npm run typecheck` (Next typegen + full project tsc) and `npm run lint`: exit 0, no diagnostics. | Pass |
+| Correction decision/process | No correction justified, no migration/correction routine/blanket shift. Conditional dry-run requirements cover evidence-backed selection/exclusions, per-endpoint duration/day/overlap analysis, immutable terms and replay, backup/restore/rollback, concurrency, authorization/audit. No recalculation of agreed amounts or idempotency edits. | Pass |
+
+Detailed evidence, exact source revisions, missing provenance and execution are
+in [HISTORICAL_TIMESTAMP_RISK.md](HISTORICAL_TIMESTAMP_RISK.md), linked from
+`BOOKING_TIME.md`. The missing original assessment is reconstructed from current
+available evidence; no original missing implementation is claimed recovered.
+No unexpected failing test attempt occurred.
+
+**R6 acceptance: Pass for the risk assessment and synthetic coverage.** R5's
+actual DB/API/browser/baseline runs and R4's full initialized-isolated-database
+build are reused, dated evidence, not fresh R6 executions. No DB, build, install
+or generation run was needed for these database-free test/documentation changes;
+no database/upload cleanup was performed or needed. Historical intent and real
+deployment/record provenance remain unavailable; no data correction is authorized
+or justified. The separate **empty-schema build limitation remains open**.
+
+Next: **R7 remaining owner/renter navigation coverage**, preserving R1–R5,
+current role/history permissions, lifecycle/evidence and feature gates. Do not
+turn historical uncertainty into a timestamp rewrite during navigation work.

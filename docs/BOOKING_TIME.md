@@ -4,6 +4,9 @@
 policy behavior without replacing candidate pricing, idempotency or reservation
 semantics. The **90-day default is retained**; the earlier proposed 30-day
 default is **not adopted**. No existing booking or idempotency row is migrated.
+See [the R6 historical timestamp risk assessment](HISTORICAL_TIMESTAMP_RISK.md)
+for source provenance, synthetic demonstrations and why no historical correction
+is currently justified.
 
 ## New requests and maintained clients
 

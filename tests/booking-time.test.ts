@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import {
   parseRentalTime,
   rentalDays,
@@ -8,6 +9,81 @@ import {
   taipeiInputInstant,
 } from "../lib/booking-time";
 import { resolveBookingPolicy, bookingPolicyError } from "../lib/booking-policy";
+
+// Reproduce the host-local parser from 51c0169/f856dc3, not today's API policy.
+// Separate processes keep each runtime's TZ independent of the unit runner.
+function historicalInstants(tz: string, inputs: string[]): string[] {
+  const run = spawnSync(process.execPath, ["-e", `
+    function parseDateTime(value) {
+      if (typeof value !== "string") return null;
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+    console.log(JSON.stringify(JSON.parse(process.argv[1]).map(value => parseDateTime(value)?.toISOString() ?? null)));
+  `, JSON.stringify(inputs)], { env: { ...process.env, TZ: tz }, encoding: "utf8", timeout: 10000 });
+  assert.ifError(run.error);
+  assert.equal(run.status, 0, run.stderr);
+  const result = JSON.parse(run.stdout) as (string | null)[];
+  assert.equal(result.length, inputs.length);
+  assert.ok(result.every((value): value is string => typeof value === "string"));
+  return result as string[];
+}
+
+test("historical naive parsing depends on UTC, Taipei and the DST-observing server zone", () => {
+  const input = ["2020-07-01T10:00", "2020-01-01T10:00"];
+  assert.deepEqual(historicalInstants("UTC", input), ["2020-07-01T10:00:00.000Z", "2020-01-01T10:00:00.000Z"]);
+  assert.deepEqual(historicalInstants("Asia/Taipei", input), ["2020-07-01T02:00:00.000Z", "2020-01-01T02:00:00.000Z"]);
+  assert.deepEqual(historicalInstants("America/Los_Angeles", input), ["2020-07-01T17:00:00.000Z", "2020-01-01T18:00:00.000Z"]);
+});
+
+test("historical explicit offsets identify one instant across server zones", () => {
+  const inputs = ["2020-07-01T10:00+08:00", "2020-07-01T02:00Z", "2020-06-30T19:00-07:00"];
+  for (const tz of ["UTC", "Asia/Taipei", "America/Los_Angeles"])
+    assert.deepEqual(historicalInstants(tz, inputs), inputs.map(() => "2020-07-01T02:00:00.000Z"));
+});
+
+test("a stored timestamp cannot distinguish original strings, server zones or participant intent", () => {
+  const origins = [
+    historicalInstants("UTC", ["2020-07-01T10:00"])[0],
+    historicalInstants("Asia/Taipei", ["2020-07-01T18:00"])[0],
+    historicalInstants("America/Los_Angeles", ["2020-07-01T10:00Z"])[0],
+  ];
+  assert.equal(new Set(origins).size, 1, "Different input origins collapse to the same stored instant.");
+  const stored = Object.freeze({ startAt: origins[0] });
+  assert.equal(stored.startAt, "2020-07-01T10:00:00.000Z");
+  // If the first input actually meant Taipei 10:00, its intended instant differs.
+  // The stored row does not tell us whether that claim is true.
+  const claimedIntent = historicalInstants("Asia/Taipei", ["2020-07-01T10:00"])[0];
+  assert.notEqual(claimedIntent, stored.startAt);
+  assert.deepEqual(Object.keys(stored), ["startAt"]);
+});
+
+test("historical DST interpretation changes elapsed duration and ceil-day billing", () => {
+  const fall = ["2020-10-31T12:00", "2020-11-01T12:00"];
+  const spring = ["2020-03-07T12:00", "2020-03-08T12:00"];
+  const hours = (values: string[]) => (Date.parse(values[1]) - Date.parse(values[0])) / 3600000;
+  for (const tz of ["UTC", "Asia/Taipei"]) {
+    assert.equal(hours(historicalInstants(tz, fall)), 24);
+    assert.equal(hours(historicalInstants(tz, spring)), 24);
+  }
+  const losAngelesFall = historicalInstants("America/Los_Angeles", fall);
+  assert.equal(hours(losAngelesFall), 25);
+  assert.equal(Math.ceil(hours(losAngelesFall) / 24), 2);
+  assert.equal(Math.ceil(hours(historicalInstants("Asia/Taipei", fall)) / 24), 1);
+  assert.equal(hours(historicalInstants("America/Los_Angeles", spring)), 23);
+});
+
+test("a selective hypothetical endpoint correction can introduce a reservation overlap", () => {
+  const stored = Object.freeze({ start: "2020-07-01T10:00Z", end: "2020-07-01T12:00Z" });
+  const alreadyCorrect = Object.freeze({ start: "2020-07-01T03:00Z", end: "2020-07-01T05:00Z" });
+  // Synthetic before/after proposal only: no correction function or database write.
+  const proposed = Object.freeze({ start: "2020-07-01T02:00Z", end: "2020-07-01T04:00Z" });
+  const overlap = (a: { start: string; end: string }, b: { start: string; end: string }) => Date.parse(a.start) < Date.parse(b.end) && Date.parse(a.end) > Date.parse(b.start);
+  assert.equal(overlap(stored, alreadyCorrect), false);
+  assert.equal(overlap(proposed, alreadyCorrect), true);
+  assert.equal(stored.start, "2020-07-01T10:00Z");
+  assert.equal(alreadyCorrect.start, "2020-07-01T03:00Z");
+});
 
 test("Taipei wall time denotes the same instant under UTC and American host clocks", () => {
   const previous = process.env.TZ;
