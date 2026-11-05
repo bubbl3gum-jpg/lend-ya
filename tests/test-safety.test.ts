@@ -328,3 +328,43 @@ test("browser diagnostics capture current HMR controls without binary React debu
     await rm(directory, { recursive: true });
   }
 });
+
+test("browser acceptance rejects hydration failures without hiding expected recovery diagnostics", async () => {
+  const { EventEmitter } = await import("node:events");
+  const { mkdtemp, readFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join, resolve, sep } = await import("node:path");
+  const { browserDiagnostics } = await import("./support/browser-diagnostics");
+  const directory = await mkdtemp(join(tmpdir(), "hustlen-hydration-gate-"));
+  try {
+    const failures = [
+      { source: "pageerror", text: "Hydration failed because the server rendered HTML didn't match the client." },
+      { source: "console", text: "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties." },
+      { source: "pageerror", text: "Minified React error #418; visit https://react.dev/errors/418" },
+    ];
+    for (const [index, failure] of failures.entries()) {
+      const context = Object.assign(new EventEmitter(), { pages: () => [] });
+      const page = new EventEmitter();
+      const diagnostics = browserDiagnostics(directory, `hydration-${index}`);
+      diagnostics.observeContext(context as unknown as import("@playwright/test").BrowserContext);
+      context.emit("page", page);
+      page.emit("console", { type: () => "error", text: () => "Synthetic expected 503 recovery" });
+      page.emit("pageerror", new Error("Synthetic recovery fixture"));
+      diagnostics.assertNoHydrationErrors();
+      if (failure.source === "console")
+        page.emit("console", { type: () => "error", text: () => failure.text });
+      else page.emit("pageerror", new Error(failure.text));
+      assert.throws(() => diagnostics.assertNoHydrationErrors(), /Unexpected hydration errors in browser acceptance/);
+      assert.throws(() => diagnostics.assertNoHydrationErrors(), /Unexpected hydration errors/, "Failure evidence must remain sticky");
+      const trace = await readFile(join(directory, `hydration-${index}-browser.ndjson`), "utf8");
+      const messages = trace.trim().split("\n").map(line => JSON.parse(line));
+      assert.equal(messages.length, 3);
+      assert.ok(trace.includes("Synthetic expected 503 recovery"));
+      assert.ok(trace.includes("Synthetic recovery fixture"));
+      assert.ok(messages.some(event => event.message === failure.text || event.text === failure.text));
+    }
+  } finally {
+    assert.ok(resolve(directory).startsWith(resolve(tmpdir()) + sep));
+    await rm(directory, { recursive: true });
+  }
+});

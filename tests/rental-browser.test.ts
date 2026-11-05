@@ -753,6 +753,8 @@ test(
         }
         assert.deepEqual(await snapshot(), before, "Rendering must not rewrite historical instants, amounts or relationships.");
       });
+      // Functional UI assertions must not certify a run with a recovered hydration failure.
+      diagnostics.assertNoHydrationErrors();
     } finally {
       if (browser) await browser.close();
       await stop();

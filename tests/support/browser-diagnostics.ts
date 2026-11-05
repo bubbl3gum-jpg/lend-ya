@@ -7,6 +7,11 @@ import path from "node:path";
 export function browserDiagnostics(artifact: string, label: string) {
   const pages: Page[] = [];
   let checkpoint = 0;
+  const hydrationErrors: { page: number; source: string; message: string }[] = [];
+  const noteHydrationError = (page: number, source: string, message: string) => {
+    if (/Hydration failed|hydrated but some attributes|Minified React error #418\b/i.test(message))
+      hydrationErrors.push({ page, source, message: message.slice(0, 4000) });
+  };
   const pathname = (url: string) => { try { return new URL(url).pathname; } catch { return "unknown"; } };
   const record = (event: object) => appendFileSync(path.join(artifact, `${label}-browser.ndjson`), JSON.stringify({ time: new Date().toISOString(), ...event }) + "\n", { mode: 0o600 });
   function observePage(page: Page) {
@@ -17,8 +22,15 @@ export function browserDiagnostics(artifact: string, label: string) {
     page.on("domcontentloaded", () => emit("document-lifecycle", {event:"domcontentloaded"}));
     page.on("load", () => emit("document-lifecycle", {event:"load"}));
     page.on("requestfinished", request => { if (request.isNavigationRequest()) emit("navigation-finished", {path:pathname(request.url()), timing:request.timing()}); });
-    page.on("console", message => emit("console", { type: message.type(), text: message.text().slice(0, 4000) }));
-    page.on("pageerror", error => emit("pageerror", { message: error.message, stack: error.stack?.slice(0, 4000) }));
+    page.on("console", message => {
+      const text = message.text();
+      emit("console", { type: message.type(), text: text.slice(0, 4000) });
+      if (message.type() === "error" || message.type() === "warning") noteHydrationError(index, "console", text);
+    });
+    page.on("pageerror", error => {
+      emit("pageerror", { message: error.message, stack: error.stack?.slice(0, 4000) });
+      noteHydrationError(index, "pageerror", error.message);
+    });
     page.on("requestfailed", request => emit("requestfailed", { method: request.method(), type: request.resourceType(), path: pathname(request.url()), error: request.failure()?.errorText }));
     page.on("response", response => { if (response.status() >= 300 || response.request().resourceType() === "image" || !["GET", "HEAD"].includes(response.request().method())) emit("response", { method:response.request().method(), path: pathname(response.url()), status: response.status(), timing:response.request().timing() }); });
     page.on("framenavigated", frame => { if (frame === page.mainFrame()) emit("navigation", { path: pathname(frame.url()) }); });
@@ -50,6 +62,10 @@ export function browserDiagnostics(artifact: string, label: string) {
     page.on("crash", () => emit("crash"));
   }
   return {
+    assertNoHydrationErrors() {
+      if (hydrationErrors.length)
+        throw new Error("Unexpected hydration errors in browser acceptance: " + JSON.stringify(hydrationErrors));
+    },
     caseResult(name: string, error: unknown) { record({kind:"case", name, error:error instanceof Error ? {message:error.message, stack:error.stack} : null}); },
     observeContext(context: BrowserContext) { context.pages().forEach(observePage); context.on("page", observePage); },
     async checkpoint() {
