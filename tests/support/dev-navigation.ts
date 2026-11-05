@@ -11,7 +11,11 @@ export function developmentNavigation() {
     const state = {pending:new Set<Request>(),changed:Date.now(),rebuilding:false};
     states.set(page,state);
     page.on("request",request=>{
-      if((request.isNavigationRequest() && request.frame()===page.mainFrame()) || request.headers()["rsc"] === "1") {
+      const document=request.isNavigationRequest() && request.frame()===page.mainFrame();
+      // A replacement document supersedes the previous document's RSC streams.
+      // Dev reloads can abandon a stream without delivering a terminal event.
+      if(document){state.pending.clear();state.rebuilding=false;}
+      if(document || request.headers()["rsc"] === "1") {
         state.pending.add(request);state.changed=Date.now();
         if(request.isNavigationRequest())state.rebuilding=false;
       }
@@ -39,8 +43,8 @@ export function developmentNavigation() {
           await page.evaluate(()=>document.readyState === "complete").catch(()=>false))return;
         await new Promise(resolve=>setTimeout(resolve,50));
       }
-      const pending=[...state.pending].map(request=>({path:new URL(request.url()).pathname,prefetch:request.headers()["next-router-prefetch"]??request.headers()["next-router-segment-prefetch"]??null,document:request.isNavigationRequest()}));
-      const readyState=await page.evaluate(()=>document.readyState).catch(()=>"unavailable");
+      const pending=[...state.pending].map(request=>({path:new URL(request.url()).pathname,prefetch:request.headers()["next-router-prefetch"]??request.headers()["next-router-segment-prefetch"]??null,document:request.isNavigationRequest(),startTime:request.timing().startTime}));
+      const readyState=await page.evaluate(()=>({state:document.readyState,timeOrigin:performance.timeOrigin})).catch(()=>"unavailable");
       throw Error("Development document/RSC navigation did not settle within 30 seconds: "+JSON.stringify({pending,rebuilding:state.rebuilding,readyState,path:new URL(page.url()).pathname}));
     },
   };
