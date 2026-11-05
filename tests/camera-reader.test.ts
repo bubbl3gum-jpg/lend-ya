@@ -114,6 +114,30 @@ test(
         assert.equal(result.matched, true, "Public fixture " + n);
         results.push(result);
       }
+      // Public RETURN fixture 147 reproduces a valid pattern missed by all three
+      // original views. A second camera frame must recover without increasing
+      // the detector budget or supplying a decoded value to the application.
+      const retryText = publicQrFixture(147).replace(":15:PICKUP:", ":22:RETURN:");
+      const retryUri = "data:image/png;base64," + (await QRCode.toBuffer(retryText, {width:480, margin:4})).toString("base64");
+      const retry = await page.evaluate(async ({uri, text}) => {
+        const image = new Image(); image.src = uri; await image.decode();
+        // Match the real continuous camera's CPU-backed capture context.
+        const canvas = document.createElement("canvas"); canvas.width = 640; canvas.height = 480;
+        const ctx = canvas.getContext("2d", {willReadFrequently:true})!;
+        ctx.fillStyle = "white"; ctx.fillRect(0,0,640,480); ctx.drawImage(image,80,0);
+        const lib = (window as unknown as {CameraReaderFixture:{CameraQrReader:new()=>{decodeFromCanvas:(canvas:HTMLCanvasElement)=>{getText:()=>string}}}}).CameraReaderFixture;
+        const reader = new lib.CameraQrReader(); const attempts:number[] = [];
+        const listener = (event:Event) => {const stage = (event as CustomEvent).detail.stage; if(stage === "frame") attempts.push(1); else if(stage === "half-attempt" || stage === "rotate-attempt") attempts[attempts.length-1]++;};
+        window.addEventListener("hustlen-camera-diagnostic",listener);
+        let decoded = false, firstMiss = false;
+        try { for(let frame=0;frame<2;frame++) { ctx.fillStyle="white";ctx.fillRect(0,0,640,480);ctx.drawImage(image,80,0); try {decoded=reader.decodeFromCanvas(canvas).getText()===text;if(decoded)break;} catch {if(frame===0)firstMiss=true;} } }
+        finally {window.removeEventListener("hustlen-camera-diagnostic",listener);}
+        return {decoded,firstMiss,attempts};
+      }, {uri:retryUri,text:retryText});
+      console.log("Public RETURN 147 frame regression:", JSON.stringify(retry));
+      assert.equal(retry.firstMiss,true,"Regression must exercise a failed full three-view frame");
+      assert.ok(retry.attempts.every(count=>count<=3),"Keep at most three actual detector calls per frame");
+      assert.equal(retry.decoded,true,"Public RETURN 147 must decode actual pixels within two frames");
       assert.ok(
         results.some(
           (r) => r.counts["half-decoded"] || r.counts["rotate-decoded"],
@@ -122,6 +146,7 @@ test(
       );
       const summary = {
         publicFixtures: 128,
+        multiFrameReturnRegression: retry,
         decoded: results.filter((r) => r.matched).length,
         native: results.filter((r) => r.counts["native-decoded"]).length,
         half: results.filter((r) => r.counts["half-decoded"]).length,

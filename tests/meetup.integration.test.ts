@@ -46,7 +46,9 @@ type Payload = {
 };
 test(
   "Milestone 3: isolated MRT pickup/return, secrets, custody, two-browser acceptance and restart",
-  { timeout: 600000 },
+  // Full coverage includes fixed expiry waits, cold restarts, camera decoding
+  // and evidence capture. Per-operation and authentication/QR deadlines are unchanged.
+  { timeout: 750000 },
   async (t) => {
     const db = await connectTestDatabase(),
       port = process.env.TEST_MEETUP_PORT!,
