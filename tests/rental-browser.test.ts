@@ -1,3 +1,4 @@
+import { developmentNavigation } from "./support/dev-navigation";
 import { browserDiagnostics } from "./support/browser-diagnostics";
 import { nextDevBundlerArgs } from "./support/next-bundler";
 import {browserMeetupFixture} from "./support/meetup-fixture";
@@ -91,6 +92,7 @@ test(
       .png()
       .toBuffer();
     const diagnostics = browserDiagnostics(process.env.MRT_TEST_ARTIFACT_DIR!, "rental");
+    const navigation = developmentNavigation();
     t.afterEach(async context => {
       diagnostics.caseResult(context.name, (context as typeof context & {error?: unknown}).error);
       await diagnostics.checkpoint();
@@ -113,7 +115,9 @@ test(
         viewport: { width: 1280, height: 900 },
       });
       diagnostics.observeContext(ownerContext);
+      navigation.observeContext(ownerContext);
       diagnostics.observeContext(borrowerContext);
+      navigation.observeContext(borrowerContext);
       const owner = await ownerContext.newPage(),
         borrower = await borrowerContext.newPage();
       for (const page of [owner, borrower])
@@ -136,6 +140,7 @@ test(
       await login(borrower, "borrower");
       const outsiderContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
       diagnostics.observeContext(outsiderContext);
+      navigation.observeContext(outsiderContext);
       const outsider = await outsiderContext.newPage();
       await login(outsider, "outsider");
       for (const page of [owner, borrower]) {
@@ -146,7 +151,10 @@ test(
       const reopen = async (id: number, status: string) => {
         const group = ["COMPLETED", "CANCELLED", "ADMIN_CLOSED"].includes(status) ? "history" : "active";
         for (const [page, role] of [[owner, "owner"], [borrower, "borrower"]] as const) {
+          // Streamed links may be visible before a prior document/RSC refresh ends.
+          await navigation.settle(page);
           await page.getByRole("link", { name: "← Back to dashboard", exact: true }).click();
+          await navigation.settle(page);
           const card = page.locator(`#${role}-${group}`).getByRole("article", { name: `Booking #${id}: ${status}`, exact: true });
           await expect(card).toBeVisible();
           await expect(card).toContainText("Asia/Taipei, UTC+08:00");
@@ -154,6 +162,7 @@ test(
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${status} dashboard fits viewport`);
           if (status === "PENDING") await page.screenshot({ path: path.join(process.env.MRT_TEST_ARTIFACT_DIR!, `r7-${role}-mobile-pending.png`), fullPage: true });
           await card.locator(`a[href="/bookings/${id}"]`).click();
+          await navigation.settle(page);
           await expect(page).toHaveURL(`${base}/bookings/${id}`);
           await expect(page.getByText(status, { exact: true })).toBeVisible();
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${status} detail fits viewport`);
