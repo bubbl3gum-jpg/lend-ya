@@ -199,6 +199,9 @@ test(
           ),
         );
         await borrower.goto(`${base}/listings/${data.id}`);
+        // Cold dev compilation can replace a loaded document. Settle the
+        // observed transition before opening a stateful native station dialog.
+        await navigation.settle(borrower);
         await expect(borrower.getByText(/Maximum \d+ days/)).toContainText(
           `Maximum ${process.env.BOOKING_MAX_DURATION_DAYS ?? "90"} days`,
         );

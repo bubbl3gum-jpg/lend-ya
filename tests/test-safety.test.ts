@@ -307,9 +307,14 @@ test("browser diagnostics capture current HMR controls without binary React debu
       socket.emit("framesent", { payload: JSON.stringify(subscription) });
       socket.emit("framesent", { payload: Buffer.from(JSON.stringify(subscription)) });
       socket.emit("framesent", { payload: '{"type":"turbopack-unsubscribe","path":"static/chunks/fixture.js"}' });
+      socket.emit("close");
     }
     const trace = await readFile(join(directory, "protocol-browser.ndjson"), "utf8");
-    assert.equal(trace.trim().split("\n").length, 6);
+    assert.equal(trace.trim().split("\n").length, 10);
+    const events = trace.trim().split("\n").map(line => JSON.parse(line));
+    assert.deepEqual(events.filter(event => event.kind === "hmr-open").map(event => event.socket), [0, 1]);
+    assert.deepEqual(events.filter(event => event.kind === "hmr-close").map(event => event.socket), [0, 1]);
+    for (const socket of [0, 1]) assert.equal(events.filter(event => event.socket === socket).length, 5);
     assert.ok(trace.includes("HMR hash mismatch"));
     assert.ok(!trace.includes("private-react-debug-fixture"));
     assert.ok(!trace.includes("private-hmr-token"));

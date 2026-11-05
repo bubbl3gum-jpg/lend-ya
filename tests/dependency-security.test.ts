@@ -47,18 +47,26 @@ test("Zod rejects an oversized constrained array before expanding per-element er
   // GHSA-mrhx-c7xc-m3w5: bound memory/time in a child; sparse input itself is small.
   const script = `
     import { z } from "zod";
+    import { writeSync } from "node:fs";
     import assert from "node:assert/strict";
+    const phase = (name) => writeSync(2, JSON.stringify({phase:name,atMs:performance.now()}) + "\\n");
+    phase("imports-complete");
     const result = z.array(z.string()).max(2).safeParse(new Array(100000));
+    phase("parse-complete");
     assert.equal(result.success, false);
     assert.equal(result.error.issues.length, 1);
     assert.equal(result.error.issues[0].code, "too_big");
     assert.equal(result.error.issues[0].maximum, 2);
     assert.deepEqual(z.array(z.string()).max(2).parse(["item"]), ["item"]);
+    phase("assertions-complete");
   `;
+  const started = performance.now();
   const result = spawnSync(process.execPath,
     ["--max-old-space-size=64", "--input-type=module", "-e", script],
     { timeout: 3000, encoding: "utf8" });
-  assert.equal(result.error, undefined);
+  const evidence = { wallMs: performance.now() - started, status: result.status, signal: result.signal, error: result.error?.message, phases: result.stderr };
+  console.log("Zod bounded-child evidence:", JSON.stringify(evidence));
+  assert.equal(result.error, undefined, JSON.stringify(evidence));
   assert.equal(result.signal, null);
   assert.equal(result.status, 0, result.stderr);
 });

@@ -13,6 +13,10 @@ export function browserDiagnostics(artifact: string, label: string) {
     if (pages.includes(page)) return;
     const index = pages.push(page) - 1;
     const emit = (kind: string, data: object = {}) => record({ page: index, kind, ...data });
+    let nextSocket = 0;
+    page.on("domcontentloaded", () => emit("document-lifecycle", {event:"domcontentloaded"}));
+    page.on("load", () => emit("document-lifecycle", {event:"load"}));
+    page.on("requestfinished", request => { if (request.isNavigationRequest()) emit("navigation-finished", {path:pathname(request.url()), timing:request.timing()}); });
     page.on("console", message => emit("console", { type: message.type(), text: message.text().slice(0, 4000) }));
     page.on("pageerror", error => emit("pageerror", { message: error.message, stack: error.stack?.slice(0, 4000) }));
     page.on("requestfailed", request => emit("requestfailed", { method: request.method(), type: request.resourceType(), path: pathname(request.url()), error: request.failure()?.errorText }));
@@ -21,10 +25,14 @@ export function browserDiagnostics(artifact: string, label: string) {
     page.on("websocket", socket => {
       const endpoint = pathname(socket.url());
       if (endpoint !== "/_next/hmr" && !endpoint.includes("webpack-hmr")) return;
+      const identity = nextSocket++;
+      const socketEvent = (kind:string, data:object = {}) => emit(kind, {socket:identity, ...data});
+      socketEvent("hmr-open", {endpoint});
+      socket.on("close", () => socketEvent("hmr-close"));
       socket.on("framereceived", event => {
         // Binary frames carry React debug payloads, not HMR control messages.
         if (typeof event.payload !== "string") return;
-        emit("hmr", { data: event.payload.slice(0, 2000) });
+        socketEvent("hmr", { data: event.payload.slice(0, 2000) });
       });
       socket.on("framesent", event => {
         if (typeof event.payload !== "string") return;
@@ -32,10 +40,10 @@ export function browserDiagnostics(artifact: string, label: string) {
           const message = JSON.parse(event.payload);
           if (message.type === "turbopack-subscribe" || message.type === "turbopack-unsubscribe") {
             const resource = typeof message.path === "string" ? message.path.split(/[?#]/, 1)[0] : "";
-            emit("hmr-subscription", { type: message.type, resource: /^static\/chunks\//.test(resource) ? resource.slice(0, 1000) : "nonstandard-resource", hmrVersion: typeof message.hmrVersion === "string" ? message.hmrVersion.slice(0, 64) : undefined });
+            socketEvent("hmr-subscription", { type: message.type, resource: /^static\/chunks\//.test(resource) ? resource.slice(0, 1000) : "nonstandard-resource", hmrVersion: typeof message.hmrVersion === "string" ? message.hmrVersion.slice(0, 64) : undefined });
           }
           if (message.event === "client-full-reload")
-            emit("hmr-reload", { stackTrace: String(message.stackTrace ?? "").slice(0, 4000), dependencyChain: message.dependencyChain, hadRuntimeError: message.hadRuntimeError });
+            socketEvent("hmr-reload", { stackTrace: String(message.stackTrace ?? "").slice(0, 4000), dependencyChain: message.dependencyChain, hadRuntimeError: message.hadRuntimeError });
         } catch { /* Binary/non-JSON diagnostics are not application requests. */ }
       });
     });
