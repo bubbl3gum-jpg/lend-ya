@@ -30,12 +30,12 @@ export function developmentNavigation() {
     observeContext(context:BrowserContext){context.pages().forEach(observe);context.on("page",observe);},
     async settle(page:Page){
       const state=states.get(page);if(!state)throw Error("Observe the browser context before navigation");
-      const deadline=Date.now()+30000;
+      const started=Date.now(),deadline=started+30000;
       while(Date.now()<deadline){
         if(page.isClosed())throw Error("Acceptance page closed during navigation");
         // A quiet window after actual transition activity, not a fixed sleep
         // replacing any UI, destination, response or persisted-state assertion.
-        if(state.pending.size===0 && !state.rebuilding && Date.now()-state.changed>=500 &&
+        if(state.pending.size===0 && !state.rebuilding && Date.now()-Math.max(state.changed,started)>=500 &&
           await page.evaluate(()=>document.readyState === "complete").catch(()=>false))return;
         await new Promise(resolve=>setTimeout(resolve,50));
       }
