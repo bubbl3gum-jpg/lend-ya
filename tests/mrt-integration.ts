@@ -93,6 +93,22 @@ async function main() {
       other = await register("other");
     browserWorkloadStartedAt=new Date().toISOString();
     const page = await owner.newPage();
+    // Final baseline acceptance: real homepage/navigation in the selected dev bundler.
+    const home = await page.goto("/");
+    assert.equal(home?.status(), 200);
+    await page.locator('#experience-preferences[aria-busy="false"]').waitFor({ state: "visible", timeout: 30000 });
+    await page.screenshot({ path: path.join(artifactDir, "screenshots/homepage-desktop.png"), fullPage: true, caret: "initial" });
+    await page.locator('a[href="/listings"]:visible').first().click();
+    await page.waitForURL(baseURL + "/listings", { timeout: 30000 });
+    await page.locator('a[href="/"]:visible').first().click();
+    await page.waitForURL(baseURL + "/", { timeout: 30000 });
+    assert.equal((await page.request.get("/api/auth/me")).status(), 200);
+    await page.locator('#experience-preferences[aria-busy="false"]').waitFor({ state: "visible", timeout: 30000 });
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "Homepage fits a mobile viewport");
+    await page.screenshot({ path: path.join(artifactDir, "screenshots/homepage-mobile.png"), fullPage: true, caret: "initial" });
+    await page.setViewportSize({ width: 1280, height: 720 });
+    checks.push("Real homepage, primary Browse/Home links, persistent session and mobile viewport");
 
     await page.goto("/listings/new");
     await page

@@ -239,3 +239,35 @@ test("the isolated CLI rejects unsafe options before opening even a local connec
     }
   } finally { await new Promise<void>((resolve, reject) => trap.close((error) => error ? reject(error) : resolve())); }
 });
+
+test("browser workflow database labels satisfy the unchanged disposable target guard", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const { disposableDatabaseUrl } = await import("../lib/disposable-database-url");
+  const workflow = await readFile(".github/workflows/browser-acceptance.yml", "utf8");
+  const loop = workflow.match(/for suite in ([^;\r\n]+); do/);
+  assert.ok(loop, "Inspect the real browser workflow suite inventory");
+  const suites = loop[1].trim().split(/\s+/);
+  const normalizers = [...workflow.matchAll(/^\s+label="\$\{(suite|label)\/\/([:-])\/_\}"\s*$/gm)];
+  assert.ok(normalizers.length > 0, "Inspect the real Bash label substitutions");
+  const databases = new Set<string>();
+  for (const suite of suites) {
+    let label = suite;
+    for (const [index, expression] of normalizers.entries()) {
+      assert.equal(expression[1], index === 0 ? "suite" : "label");
+      label = label.replaceAll(expression[2], "_");
+    }
+    const database = `hustlen_test_closure_${label}`;
+    const target = disposableDatabaseUrl(`postgresql://postgres@127.0.0.1:55433/${database}`, undefined, {});
+    assert.equal(target.pathname, `/${database}`);
+    assert.ok(!databases.has(database), "Each suite must retain its own isolated database");
+    databases.add(database);
+    if (suite.includes("-")) {
+      assert.throws(() => disposableDatabaseUrl(
+        `postgresql://postgres@127.0.0.1:55433/hustlen_test_closure_${suite.replaceAll(":", "_")}`,
+        undefined, {},
+      ), "Legacy hyphenated database names must remain rejected");
+    }
+  }
+  for (const required of ["test:login-readiness", "test:rental-api", "test:rental-browser"])
+    assert.ok(suites.includes(required), "Keep regression coverage for " + required);
+});
