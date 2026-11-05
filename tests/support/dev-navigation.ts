@@ -39,7 +39,9 @@ export function developmentNavigation() {
           await page.evaluate(()=>document.readyState === "complete").catch(()=>false))return;
         await new Promise(resolve=>setTimeout(resolve,50));
       }
-      throw Error("Development document/RSC navigation did not settle within 30 seconds");
+      const pending=[...state.pending].map(request=>({path:new URL(request.url()).pathname,prefetch:request.headers()["next-router-prefetch"]??request.headers()["next-router-segment-prefetch"]??null,document:request.isNavigationRequest()}));
+      const readyState=await page.evaluate(()=>document.readyState).catch(()=>"unavailable");
+      throw Error("Development document/RSC navigation did not settle within 30 seconds: "+JSON.stringify({pending,rebuilding:state.rebuilding,readyState,path:new URL(page.url()).pathname}));
     },
   };
 }
