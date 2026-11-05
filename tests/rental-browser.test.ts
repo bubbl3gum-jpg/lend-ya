@@ -34,6 +34,7 @@ test(
     const base = `http://localhost:${port}`;
     const log = openSync(path.join(process.env.MRT_TEST_ARTIFACT_DIR!, "lend-ya-browser-server.log"), "w");
     let server: ChildProcess | undefined;
+    let serverInstance = 0;
     const stop = async () => {
       if (server && server.exitCode === null && server.signalCode === null) {
         // Preserve authenticated contexts but disconnect dev HMR before restart.
@@ -58,7 +59,8 @@ test(
           String(port),
         ],
         {
-          env: { ...process.env, DATABASE_URL: process.env.TEST_DATABASE_URL, TZ: "UTC", ...settings },
+          env: { ...process.env, DATABASE_URL: process.env.TEST_DATABASE_URL, TZ: "UTC", ...settings,
+            MRT_TEST_SERVER_INSTANCE: String(++serverInstance) },
           stdio: ["ignore", log, log],
         },
       );

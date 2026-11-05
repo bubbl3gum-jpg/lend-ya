@@ -1,10 +1,19 @@
 import type { NextConfig } from "next";
 
+/** Compiler artifacts belong to one owned test-server incarnation, not its database. */
+export function ownedTestOutput(env: Record<string, string | undefined>): string | undefined {
+  if (env.NODE_ENV !== "development" || !/^[a-f0-9]{24}$/.test(env.MRT_TEST_RUN_ID ?? "")) return;
+  const base = `.test-artifacts/${env.MRT_TEST_RUN_ID}/next`;
+  const instance = env.MRT_TEST_SERVER_INSTANCE;
+  if (instance === undefined) return base;
+  if (!/^[1-9][0-9]{0,3}$/.test(instance)) throw Error("Invalid owned test server instance");
+  return `${base}/server-${instance}`;
+}
+const testOutput = ownedTestOutput(process.env);
 const nextConfig: NextConfig = {
-  ...(process.env.NODE_ENV === "development" &&
-  /^[a-f0-9]{24}$/.test(process.env.MRT_TEST_RUN_ID ?? "")
+  ...(testOutput
     ? {
-        distDir: `.test-artifacts/${process.env.MRT_TEST_RUN_ID}/next`,
+        distDir: testOutput,
         typescript: {
           tsconfigPath: `.test-artifacts/${process.env.MRT_TEST_RUN_ID}/tsconfig.json`,
         },

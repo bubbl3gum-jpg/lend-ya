@@ -19,8 +19,20 @@ export function browserDiagnostics(artifact: string, label: string) {
     page.on("response", response => { if (response.status() >= 300 || response.request().resourceType() === "image" || !["GET", "HEAD"].includes(response.request().method())) emit("response", { method:response.request().method(), path: pathname(response.url()), status: response.status(), timing:response.request().timing() }); });
     page.on("framenavigated", frame => { if (frame === page.mainFrame()) emit("navigation", { path: pathname(frame.url()) }); });
     page.on("websocket", socket => {
-      if (!pathname(socket.url()).includes("webpack-hmr")) return;
-      socket.on("framereceived", event => emit("hmr", { data: String(event.payload).slice(0, 2000) }));
+      const endpoint = pathname(socket.url());
+      if (endpoint !== "/_next/hmr" && !endpoint.includes("webpack-hmr")) return;
+      socket.on("framereceived", event => {
+        // Binary frames carry React debug payloads, not HMR control messages.
+        if (typeof event.payload !== "string") return;
+        emit("hmr", { data: event.payload.slice(0, 2000) });
+      });
+      socket.on("framesent", event => {
+        try {
+          const message = JSON.parse(String(event.payload));
+          if (message.event === "client-full-reload")
+            emit("hmr-reload", { stackTrace: String(message.stackTrace ?? "").slice(0, 4000), dependencyChain: message.dependencyChain, hadRuntimeError: message.hadRuntimeError });
+        } catch { /* Binary/non-JSON diagnostics are not application requests. */ }
+      });
     });
     page.on("crash", () => emit("crash"));
   }

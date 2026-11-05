@@ -271,3 +271,45 @@ test("browser workflow database labels satisfy the unchanged disposable target g
   for (const required of ["test:login-readiness", "test:rental-api", "test:rental-browser"])
     assert.ok(suites.includes(required), "Keep regression coverage for " + required);
 });
+test("owned test server incarnations isolate compiler output without changing normal or production output", async () => {
+  const { ownedTestOutput } = await import("../next.config");
+  const binding = { NODE_ENV: "development", MRT_TEST_RUN_ID: "a".repeat(24) };
+  const base = `.test-artifacts/${binding.MRT_TEST_RUN_ID}/next`;
+  assert.equal(ownedTestOutput(binding), base, "Existing single-server test layout stays compatible");
+  assert.equal(ownedTestOutput({...binding, MRT_TEST_SERVER_INSTANCE: "1"}), base + "/server-1");
+  assert.equal(ownedTestOutput({...binding, MRT_TEST_SERVER_INSTANCE: "2"}), base + "/server-2");
+  for (const instance of ["0", "01", "-1", "1/../../escape", "10000", "", "NaN"])
+    assert.throws(() => ownedTestOutput({...binding, MRT_TEST_SERVER_INSTANCE: instance}));
+  assert.equal(ownedTestOutput({...binding, NODE_ENV: "production", MRT_TEST_SERVER_INSTANCE: "../../escape"}), undefined);
+  assert.equal(ownedTestOutput({NODE_ENV:"development", MRT_TEST_SERVER_INSTANCE:"1"}), undefined);
+  assert.equal(ownedTestOutput({...binding, MRT_TEST_RUN_ID:"../../escape", MRT_TEST_SERVER_INSTANCE:"1"}), undefined);
+});
+
+test("browser diagnostics capture current HMR controls without binary React debug payloads", async () => {
+  const { EventEmitter } = await import("node:events");
+  const { mkdtemp, readFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join, resolve, sep } = await import("node:path");
+  const { browserDiagnostics } = await import("./support/browser-diagnostics");
+  const directory = await mkdtemp(join(tmpdir(), "hustlen-hmr-observer-"));
+  try {
+    const context = Object.assign(new EventEmitter(), { pages: () => [] });
+    const page = new EventEmitter();
+    const diagnostics = browserDiagnostics(directory, "protocol");
+    diagnostics.observeContext(context as unknown as import("@playwright/test").BrowserContext);
+    context.emit("page", page);
+    for (const endpoint of ["/_next/hmr", "/_next/webpack-hmr"]) {
+      const socket = Object.assign(new EventEmitter(), { url: () => "http://localhost:3000" + endpoint });
+      page.emit("websocket", socket);
+      socket.emit("framereceived", { payload: Buffer.from("private-react-debug-fixture") });
+      socket.emit("framereceived", { payload: '{"type":"reloadPage","data":"HMR hash mismatch"}' });
+    }
+    const trace = await readFile(join(directory, "protocol-browser.ndjson"), "utf8");
+    assert.equal(trace.trim().split("\n").length, 2);
+    assert.ok(trace.includes("HMR hash mismatch"));
+    assert.ok(!trace.includes("private-react-debug-fixture"));
+  } finally {
+    assert.ok(resolve(directory).startsWith(resolve(tmpdir()) + sep));
+    await rm(directory, { recursive: true });
+  }
+});
