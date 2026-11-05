@@ -69,6 +69,7 @@ test(
       browser: Awaited<ReturnType<typeof chromium.launch>> | undefined,
       cameraBrowser: Awaited<ReturnType<typeof chromium.launch>> | undefined,
       returnBrowser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+    let serverInstance = 0;
     async function stop() {
       if (server && server.exitCode === null && server.signalCode === null) {
         const exited = once(server, "exit");
@@ -101,6 +102,7 @@ test(
         {
           env: {
             ...process.env,
+            MRT_TEST_SERVER_INSTANCE: String(++serverInstance),
             NODE_ENV: productionCamera ? "production" : "development",
             HUSTLEN_INSPECTION_CANDIDATE:"owned-preview-only",
             HUSTLEN_INSPECTION_ORIGIN:base,
@@ -1099,7 +1101,7 @@ test(
         assert.equal((await api(evidenceUrl,outsider)).status,403);assert.equal((await api(evidenceUrl,borrower)).status,200);
         const b=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH,headless:true,args:["--no-sandbox","--disable-dev-shm-usage"]});
         try {
-        async function inspectBrowser(a:Actor,label:string){const ctx=await b.newContext();const page=await ctx.newPage();const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text());});page.on("response",r=>{if(r.status()>=400)errors.push(String(r.status())+" "+new URL(r.url()).pathname);});
+        async function inspectBrowser(a:Actor,label:string){const ctx=await b.newContext();diagnostics.observeContext(ctx);const page=await ctx.newPage();const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text());});page.on("response",r=>{if(r.status()>=400)errors.push(String(r.status())+" "+new URL(r.url()).pathname);});
           await page.goto(base+"/login");await page.getByLabel("Email address").fill(a.email);await page.getByLabel("Password",{exact:true}).fill(password);await page.getByRole("button",{name:"Log in",exact:true}).click();await expect(page).toHaveURL(base+"/dashboard",{timeout:30000});
           await page.goto(base+"/dev/inspection");await page.getByLabel("Your booking ID",{exact:true}).fill(String(sample.id));await page.getByRole("button",{name:"Load permitted rental",exact:true}).click();await expect(page.getByText(/Physical return acknowledged/)).toBeVisible();
           await page.getByLabel("Factual description",{exact:true}).fill(label==="owner"?"A possible surface difference, not an established finding.":"I disagree; the accessory return needs clarification.");if(label==="owner")await page.getByLabel("Affected item or component",{exact:true}).fill("Camera body");
@@ -1118,7 +1120,7 @@ test(
         const expired={...owner,cookie:"p2p_session=invalid-synthetic-session"};assert.equal((await read(expired)).status,401);
         const latest=(await read(owner)).value;assert.equal(latest.financialState,"NOT_IMPLEMENTED");assert.equal(latest.disputes.length,1);
         await writeFile(path.join(artifact,"inspection-browser-evidence.json"),JSON.stringify({actualLogin:true,realGeofenceQrAndPhysicalReceipt:true,manualCodeNotCameraClaim:true,window24Hours:true,reloadStable:true,scanAloneInsufficient:true,crossAccountDenied:true,evidenceAuthorization:true,originalEvidenceDigestPreserved:true,realLogoutSessionRevocation:true,suspendedParticipantObligationsPreserved:true,explicitLegacyDisputeOnly:true,disputeDoesNotReverseReturn:true,borrowerUnsentDisagreement:true,noNotificationDeadlineActivated:true,noFinancialAction:true,noExternalAI:true,responsiveViewports:3},null,2));
-        } finally { await b.close(); }
+        } catch (error) { await diagnostics.checkpoint(); throw error; } finally { await b.close(); }
       });
 
       await t.test(
@@ -1747,6 +1749,7 @@ test(
             geolocation: { ...point, accuracy: 10 },
             permissions: ["geolocation", "camera"],
           });
+          diagnostics.observeContext(borrowerContext);
           bpage = await borrowerContext.newPage();
           const savePickup=await observeCamera(bpage,"pickup");
           cameraSavers.push(savePickup);
@@ -2011,7 +2014,7 @@ test(
         for(const actor of [owner,borrower])assert.equal((await check(id,actor,"RETURN")).json.checkIn.outcome,"VERIFIED");
         const returned=(await op(id,"issue",borrower,{purpose:"RETURN"})).json;
         browser=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true});
-        const ctx=await browser.newContext();await ctx.addCookies([{name:"p2p_session",value:owner.cookie.slice("p2p_session=".length),url:base}]);const opage=await ctx.newPage();
+        const ctx=await browser.newContext();diagnostics.observeContext(ctx);await ctx.addCookies([{name:"p2p_session",value:owner.cookie.slice("p2p_session=".length),url:base}]);const opage=await ctx.newPage();
         await opage.goto(`${base}/bookings/${id}`);
           const manual=returned.manualCode;
           await opage
@@ -2065,7 +2068,7 @@ test(
         const make=async(file:string,label:string)=>{
           const instance=await chromium.launch({executablePath:process.env.MRT_BROWSER_PATH??"/usr/bin/chromium",headless:true,args:["--use-fake-device-for-media-stream",`--use-file-for-fake-video-capture=${file}`,"--use-fake-ui-for-media-stream"]});
           instances.push(instance);
-          const context=await instance.newContext({permissions:["camera"]});await context.addCookies([{name:"p2p_session",value:borrower.cookie.slice("p2p_session=".length),url:base}]);
+          const context=await instance.newContext({permissions:["camera"]});diagnostics.observeContext(context);await context.addCookies([{name:"p2p_session",value:borrower.cookie.slice("p2p_session=".length),url:base}]);
           const page=await context.newPage();const save=await observeCamera(page,label);await page.goto(`${base}/bookings/${id}`);return {instance,page,save};
         };
         const bad=await make(invalid,"invalid-content");

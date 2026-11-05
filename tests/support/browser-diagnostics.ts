@@ -27,8 +27,13 @@ export function browserDiagnostics(artifact: string, label: string) {
         emit("hmr", { data: event.payload.slice(0, 2000) });
       });
       socket.on("framesent", event => {
+        if (typeof event.payload !== "string") return;
         try {
-          const message = JSON.parse(String(event.payload));
+          const message = JSON.parse(event.payload);
+          if (message.type === "turbopack-subscribe" || message.type === "turbopack-unsubscribe") {
+            const resource = typeof message.path === "string" ? message.path.split(/[?#]/, 1)[0] : "";
+            emit("hmr-subscription", { type: message.type, resource: /^static\/chunks\//.test(resource) ? resource.slice(0, 1000) : "nonstandard-resource", hmrVersion: typeof message.hmrVersion === "string" ? message.hmrVersion.slice(0, 64) : undefined });
+          }
           if (message.event === "client-full-reload")
             emit("hmr-reload", { stackTrace: String(message.stackTrace ?? "").slice(0, 4000), dependencyChain: message.dependencyChain, hadRuntimeError: message.hadRuntimeError });
         } catch { /* Binary/non-JSON diagnostics are not application requests. */ }

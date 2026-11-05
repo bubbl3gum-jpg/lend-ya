@@ -303,11 +303,21 @@ test("browser diagnostics capture current HMR controls without binary React debu
       page.emit("websocket", socket);
       socket.emit("framereceived", { payload: Buffer.from("private-react-debug-fixture") });
       socket.emit("framereceived", { payload: '{"type":"reloadPage","data":"HMR hash mismatch"}' });
+      const subscription = { type: "turbopack-subscribe", path: "static/chunks/fixture.js?token=private-hmr-token", hmrVersion: "3".repeat(100), cookie: "private-cookie" };
+      socket.emit("framesent", { payload: JSON.stringify(subscription) });
+      socket.emit("framesent", { payload: Buffer.from(JSON.stringify(subscription)) });
+      socket.emit("framesent", { payload: '{"type":"turbopack-unsubscribe","path":"static/chunks/fixture.js"}' });
     }
     const trace = await readFile(join(directory, "protocol-browser.ndjson"), "utf8");
-    assert.equal(trace.trim().split("\n").length, 2);
+    assert.equal(trace.trim().split("\n").length, 6);
     assert.ok(trace.includes("HMR hash mismatch"));
     assert.ok(!trace.includes("private-react-debug-fixture"));
+    assert.ok(!trace.includes("private-hmr-token"));
+    assert.ok(!trace.includes("private-cookie"));
+    const subscriptions = trace.trim().split("\n").map(line => JSON.parse(line)).filter(event => event.kind === "hmr-subscription");
+    assert.equal(subscriptions.length, 4);
+    assert.ok(subscriptions.every(event => event.resource === "static/chunks/fixture.js"));
+    assert.deepEqual(subscriptions.filter(event => event.type === "turbopack-subscribe").map(event => event.hmrVersion), ["3".repeat(64), "3".repeat(64)]);
   } finally {
     assert.ok(resolve(directory).startsWith(resolve(tmpdir()) + sep));
     await rm(directory, { recursive: true });
