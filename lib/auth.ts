@@ -1,16 +1,14 @@
 import {
   createHash,
   randomBytes,
-  scrypt,
-  timingSafeEqual,
 } from "node:crypto";
 import { Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+export { hashPassword, verifyPassword } from "@/lib/password";
 
 const sessionCookieName = "p2p_session";
 const sessionLifetimeSeconds = 7 * 24 * 60 * 60;
-const passwordKeyLength = 64;
 
 const safeUserSelect = {
   id: true,
@@ -20,18 +18,6 @@ const safeUserSelect = {
   verificationStatus: true,
   createdAt: true,
 } as const;
-
-function derivePasswordKey(password: string, salt: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    scrypt(password, salt, passwordKeyLength, (error, key) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(key as Buffer);
-      }
-    });
-  });
-}
 
 function hashSessionToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
@@ -75,35 +61,20 @@ export async function setSessionCookie(credential: SessionCredential): Promise<v
   });
 }
 
-export async function hashPassword(password: string): Promise<string> {
-  const salt = randomBytes(16).toString("hex");
-  const key = await derivePasswordKey(password, salt);
-  return `scrypt$${salt}$${key.toString("hex")}`;
-}
-
-export async function verifyPassword(
-  password: string,
-  passwordHash: string,
-): Promise<boolean> {
-  const [algorithm, salt, expectedKeyHex] = passwordHash.split("$");
-  if (
-    algorithm !== "scrypt" ||
-    !salt ||
-    !expectedKeyHex ||
-    !/^[a-f\d]{128}$/i.test(expectedKeyHex)
-  ) {
-    return false;
-  }
-
-  const expectedKey = Buffer.from(expectedKeyHex, "hex");
-  const actualKey = await derivePasswordKey(password, salt);
-  return timingSafeEqual(actualKey, expectedKey);
-}
-
-export async function createSession(userId: number): Promise<void> {
+export async function createSession(userId: number, verifiedPasswordHash: string): Promise<boolean> {
   const credential = newSessionCredential();
-  await persistSession(userId, credential);
+  const created = await prisma.$transaction(async (transaction) => {
+    // Recovery takes this same row lock before changing passwords/revoking sessions.
+    const [user] = await transaction.$queryRaw<{ passwordHash: string }[]>`
+      SELECT "passwordHash" FROM "User" WHERE id = ${userId} FOR UPDATE
+    `;
+    if (!user || user.passwordHash !== verifiedPasswordHash) return false;
+    await persistSession(userId, credential, transaction);
+    return true;
+  });
+  if (!created) return false;
   await setSessionCookie(credential);
+  return true;
 }
 
 export async function deleteCurrentSession(): Promise<void> {
@@ -117,6 +88,10 @@ export async function deleteCurrentSession(): Promise<void> {
   }
 
   cookieStore.delete(sessionCookieName);
+}
+
+export async function clearSessionCookie(): Promise<void> {
+  (await cookies()).delete(sessionCookieName);
 }
 
 export async function getCurrentUser() {

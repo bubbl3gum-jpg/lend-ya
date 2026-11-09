@@ -9,9 +9,9 @@ import {
 import { prisma } from "@/lib/prisma";
 import {
   parseEmail,
-  parsePassword,
   parseRequiredString,
 } from "@/lib/api-validation";
+import { parseNewPassword, newPasswordRequirements } from "@/lib/password";
 
 const safeUserSelect = {
   id: true,
@@ -30,10 +30,10 @@ export async function POST(request: Request): Promise<Response> {
 
   const name = parseRequiredString(body.name, 120);
   const email = parseEmail(body.email);
-  const password = parsePassword(body.password, 8);
+  const password = parseNewPassword(body.password);
   if (!name || !email || !password) {
     return apiError(
-      "Provide a name (up to 120 characters), valid email, and password between 8 and 128 characters.",
+      `Provide a name (up to 120 characters) and valid email. ${newPasswordRequirements}`,
       400,
     );
   }

@@ -37,7 +37,9 @@ export async function POST(request: Request): Promise<Response> {
       return apiError("Invalid email or password.", 401);
     }
 
-    await createSession(user.id);
+    if (!(await createSession(user.id, user.passwordHash))) {
+      return apiError("Invalid email or password.", 401);
+    }
     return Response.json({
       user: {
         id: user.id,

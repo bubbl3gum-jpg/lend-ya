@@ -110,7 +110,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
-          placeholder={mode === "login" ? "Enter your password" : "At least 8 characters"}
+          placeholder={mode === "login" ? "Enter your password" : "8–128 characters, uppercase letter and digit"}
           required
         />
       </label>
@@ -138,14 +138,14 @@ export function AuthForm({ mode }: AuthFormProps) {
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 id="recovery-title" className="text-xl font-semibold text-slate-900">Recover your account</h2>
-              <p className="mt-2 text-sm text-slate-600">Enter your account email or phone number to request recovery instructions.</p>
+              <p className="mt-2 text-sm text-slate-600">Enter your account email to request recovery instructions.</p>
             </div>
             <button type="button" onClick={() => setForgotOpen(false)} aria-label="Close recovery dialog" className="rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-600">Close</button>
           </div>
           <form onSubmit={handleRecovery} className="mt-5 space-y-4">
             <label className="block text-sm font-medium text-slate-700">
-              Email or phone number
-              <input type="text" autoComplete="email" value={recoveryContact} onChange={(event) => setRecoveryContact(event.target.value)} required className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2" />
+              Email address
+              <input type="email" autoComplete="email" value={recoveryContact} onChange={(event) => setRecoveryContact(event.target.value)} required className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2" />
             </label>
             <button type="submit" disabled={recoveryLoading} className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60">{recoveryLoading ? "Submitting..." : "Request instructions"}</button>
             {recoveryMessage ? <p role="status" className="text-sm text-slate-600">{recoveryMessage}</p> : null}

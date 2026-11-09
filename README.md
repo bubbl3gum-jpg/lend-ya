@@ -24,6 +24,10 @@ Lend-Ya is a booking-based peer-to-peer marketplace MVP built with Next.js, Pris
 
 The seed creates local demo accounts `alice@example.test`, `bob@example.test`, and `charlie@example.test`. Their development password is `LocalDev123!`. Do not use these credentials outside local development.
 
+## Account recovery
+
+Account recovery email delivery is disabled by default. See [Resend/local setup](docs/ACCOUNT_RECOVERY_EMAIL_SETUP.md) and the [milestone 2 audit](docs/ACCOUNT_RECOVERY_MILESTONE_2.md) for worker configuration, test-sender restrictions, verification results and remaining reset-page work.
+
 ## Booking lifecycle
 
 `PENDING -> CONFIRMED -> HANDOFF_PENDING -> IN_USE -> RETURN_PENDING -> INSPECTION -> COMPLETED`

@@ -9,8 +9,11 @@
     "lint": "eslint",
     "admin:create": "tsx scripts/create-admin.ts",
     "mrt:import": "tsx scripts/import-mrt.ts",
+    "email:worker": "tsx scripts/email-worker.ts",
     "test": "tsx --test tests/*.test.ts",
     "test:integration": "tsx tests/run-isolated.ts",
+    "test:recovery": "tsx tests/run-isolated.ts --recovery",
+    "test:email": "tsx tests/run-isolated.ts --email",
     "test:migration": "tsx tests/run-isolated.ts --migration"
   },
   "dependencies": {

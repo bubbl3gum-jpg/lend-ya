@@ -3,6 +3,7 @@ import { spawn, type ChildProcess } from "node:child_process";
 import { mkdir, appendFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import net from "node:net";
+import { randomBytes } from "node:crypto";
 import { Client } from "pg";
 import {
   testDatabaseUrl,
@@ -43,7 +44,17 @@ async function main() {
     MRT_TEST_DATABASE_URL: url.toString(),
     MRT_TEST_RUN_ID: runId,
     MRT_TEST_ARTIFACT_DIR: artifactDir,
+    // Tests must never inherit a usable delivery credential or send real emails.
+    RECOVERY_EMAIL_MODE: "disabled",
+    RESEND_API_KEY: "not-a-real-api-key",
   };
+  if (process.argv.includes("--email")) {
+    env.RECOVERY_EMAIL_MODE = "resend-test";
+    env.RECOVERY_EMAIL_ENCRYPTION_KEY = randomBytes(32).toString("base64");
+    env.RECOVERY_EMAIL_FROM = "onboarding@resend.dev";
+    env.RECOVERY_EMAIL_TEST_RECIPIENT = "delivery-owner@example.test";
+    delete env.RECOVERY_TRUSTED_IP_HEADER;
+  }
   function run(args: string[]): Promise<void> {
     return new Promise((resolve, reject) => {
       const child = spawn(process.execPath, args, {
@@ -102,6 +113,7 @@ async function main() {
       ]);
       const port = await freePort();
       env.MRT_TEST_URL = `http://localhost:${port}`;
+      if (process.argv.includes("--email")) env.RECOVERY_APP_ORIGIN = env.MRT_TEST_URL;
       app = spawn(
         process.execPath,
         [
@@ -142,7 +154,11 @@ async function main() {
       }
       if (!ready)
         throw Error("Isolated app did not become ready; inspect server.log.");
-      await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-integration.ts"]);
+      await run([
+        "node_modules/tsx/dist/cli.mjs",
+        process.argv.includes("--email") ? "tests/email-integration.ts" :
+          process.argv.includes("--recovery") ? "tests/recovery-integration.ts" : "tests/mrt-integration.ts",
+      ]);
     }
     failed = false;
   } finally {
