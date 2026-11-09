@@ -5,8 +5,8 @@ import { passwordChangeConfig } from "../lib/password-change/config";
 test("closed raw password schema preserves bytes and rejects forged selectors", () => {
   const value = {
     currentPassword: " old password ",
-    newPassword: " new password ",
-    confirmPassword: " new password ",
+    newPassword: " New password 1 ",
+    confirmPassword: " New password 1 ",
   };
   assert.deepEqual(passwordChangeInput(value), value);
   for (const raw of [
@@ -16,6 +16,8 @@ test("closed raw password schema preserves bytes and rejects forged selectors", 
     { ...value, role: "ADMIN" },
     { ...value, assurance: "VERIFIED" },
     { ...value, newPassword: "short" },
+    { ...value, newPassword: "lowercase123", confirmPassword: "lowercase123" },
+    { ...value, newPassword: "UppercaseOnly", confirmPassword: "UppercaseOnly" },
     { ...value, confirmPassword: "different password" },
     { ...value, currentPassword: "x".repeat(129) },
     {

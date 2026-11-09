@@ -232,14 +232,14 @@ export const en = {
   "password.candidate":
     "Owned-development candidate · ordinary allowlisted accounts only. Recovery and notification delivery are not enabled.",
   "password.help":
-    "Use 8–128 characters, different from your current password. Passwords are not trimmed or translated. All sessions will be signed out.",
+    "Use 8–128 characters with an uppercase ASCII letter and a digit, different from your current password. Passwords are not trimmed or translated. All sessions will be signed out.",
   "password.current": "Current password",
   "password.new": "New password",
   "password.confirm": "Confirm new password",
   "password.submit": "Change password and sign out",
   "password.busy": "Changing password…",
   "password.input":
-    "Enter your current password and a different new password of 8–128 characters; confirmation must match.",
+    "Enter your current password and a different new password of 8–128 characters with an uppercase ASCII letter and a digit; confirmation must match.",
   "password.wrong":
     "The current password is incorrect. Re-enter the fields to try again.",
   "password.expired":
@@ -588,14 +588,14 @@ export const zhTW: Record<MessageId, string> = {
   "password.candidate":
     "限自有開發測試環境與允許清單內的一般帳號使用；尚未啟用帳號復原與通知寄送。",
   "password.help":
-    "請使用 8–128 個字元，且須與目前密碼不同。密碼不會被去除空白或翻譯；完成後所有工作階段都會登出。",
+    "請使用 8–128 個字元，包含英文大寫字母及數字，且須與目前密碼不同。密碼不會被去除空白或翻譯；完成後所有工作階段都會登出。",
   "password.current": "目前密碼",
   "password.new": "新密碼",
   "password.confirm": "確認新密碼",
   "password.submit": "變更密碼並登出",
   "password.busy": "正在變更密碼…",
   "password.input":
-    "請輸入目前密碼，並設定不同的 8–128 字元新密碼；兩次輸入的新密碼須相同。",
+    "請輸入目前密碼，並設定不同的 8–128 字元新密碼，包含英文大寫字母及數字；兩次輸入的新密碼須相同。",
   "password.wrong": "目前密碼不正確，請重新輸入後再試一次。",
   "password.expired": "登入狀態已失效，請重新登入後再變更密碼。",
   "password.denied": "此帳號無法使用本次測試版本的密碼變更功能。",

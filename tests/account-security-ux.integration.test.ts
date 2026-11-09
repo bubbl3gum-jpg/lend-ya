@@ -51,8 +51,8 @@ test(
         headers: headers(limited.token),
         body: JSON.stringify({
           currentPassword: next,
-          newPassword: "Different-next-password!",
-          confirmPassword: "Different-next-password!",
+          newPassword: "Different-next-password1!",
+          confirmPassword: "Different-next-password1!",
         }),
       });
     const attempts = await Promise.all(Array.from({ length: 6 }, wrong));

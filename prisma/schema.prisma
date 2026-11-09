@@ -51,6 +51,8 @@ enum DisputeStatus {
 }
 
 model User {
+  passwordRecovery PasswordRecovery?
+  emailOutbox EmailOutbox[]
   recoveryProposals DevRecoveryProposal[]
   recoveryEvents DevRecoveryEvent[]
   recoveryNotices DevRecoveryNotice[]
@@ -1458,4 +1460,69 @@ model DevRecoveryNotice {
  event DevRecoveryEvent @relation("RecoveryActivity",fields:[eventId],references:[id],onDelete:Restrict,onUpdate:NoAction)
  views DevRecoveryEvent[] @relation("RecoveryViews")
  @@index([disputeId,recipientId])
+}
+
+enum EmailKind {
+  RECOVERY
+  PASSWORD_CHANGED
+}
+
+enum EmailStatus {
+  PENDING
+  PROCESSING
+  ACCEPTED
+  FAILED
+  CANCELLED
+}
+
+model PasswordRecovery {
+  userId    Int      @id
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+// Accepted requests enforce a rolling hour; old events are pruned on subsequent requests.
+model PasswordRecoveryRequest {
+  id        Int      @id @default(autoincrement())
+  emailHash String
+  ipHash    String
+  createdAt DateTime @default(now())
+
+  @@index([emailHash, createdAt])
+  @@index([ipHash, createdAt])
+  @@index([createdAt])
+}
+
+model EmailOutbox {
+  id               String      @id
+  userId           Int
+  kind             EmailKind
+  status           EmailStatus @default(PENDING)
+  encryptedPayload String?
+  recoveryTokenHash String?
+  expiresAt        DateTime
+  createdAt        DateTime    @default(now())
+  nextAttemptAt    DateTime    @default(now())
+  attempts         Int         @default(0)
+  leaseToken       String?
+  leaseUntil       DateTime?
+  providerId       String?
+  lastErrorCode    String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextAttemptAt])
+  @@index([userId, kind, status])
+  @@index([expiresAt])
+}
+
+model EmailDeliveryHealth {
+  id            String   @id
+  heartbeatAt   DateTime
+  pausedUntil   DateTime?
+  lastErrorCode String?
 }

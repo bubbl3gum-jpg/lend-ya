@@ -144,3 +144,7 @@ Database integration tests now require an explicit **nonexisting**, disposable `
 ## Unified product demo consolidation — 2 November 2026
 
 The current integration candidate is `integration/hustlen-product-consolidation-20261102`, not automatically `main` or the older AI milestone branch. Start with [the safe demo runbook](docs/product/DEMO_RUNBOOK.md), [product capabilities](docs/product/PRODUCT_CAPABILITIES.md), [fresh test report](docs/product/COMPLETE_TEST_REPORT.md) and [release-readiness decision](docs/product/RELEASE_READINESS_REPORT.md). Only fresh owned disposable databases may be changed for this demonstration. Existing experimental gates remain; Vision/payment/production activation is outside this consolidation. Genuine Mac Qwen and physical-device acceptance must not be inferred from mocked or virtual-camera tests.
+
+## Account recovery infrastructure
+
+Account recovery and encrypted email queues are integrated with sending disabled by default. See [integration audit](docs/ACCOUNT_RECOVERY_INTEGRATION.md) and [email setup](docs/ACCOUNT_RECOVERY_EMAIL_SETUP.md). Dedicated reset screens and live email testing remain separate milestones.

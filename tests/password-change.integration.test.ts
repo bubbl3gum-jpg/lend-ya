@@ -297,6 +297,16 @@ test(
         0,
       );
     }
+    const staleLink = await actor("Pending recovery credential");
+    await db.query(`INSERT INTO "PasswordRecovery" ("userId", "tokenHash", "expiresAt") VALUES ($1,$2,NOW()+interval '30 minutes')`, [staleLink.id, createHash("sha256").update("fixture-credential").digest("hex")]);
+    const jobId = randomUUID();
+    await db.query(`INSERT INTO "EmailOutbox" (id,"userId",kind,"encryptedPayload","expiresAt") VALUES ($1,$2,'RECOVERY','fixture-ciphertext',NOW()+interval '30 minutes')`, [jobId, staleLink.id]);
+    assert.equal((await change(staleLink.token)).status, 200);
+    assert.equal((await db.query('SELECT count(*)::int n FROM "PasswordRecovery" WHERE "userId"=$1', [staleLink.id])).rows[0].n, 0);
+    const cancelledJob = (await db.query('SELECT status,"encryptedPayload" FROM "EmailOutbox" WHERE id=$1', [jobId])).rows[0];
+    assert.equal(cancelledJob.status, "CANCELLED");
+    assert.equal(cancelledJob.encryptedPayload, null);
+
     const suspended = await actor("Suspended security reader");
     await db.query(
       'UPDATE "User" SET "accountStatus"=\'SUSPENDED\' WHERE id=$1',
@@ -363,13 +373,13 @@ test(
     const concurrent = await actor("Concurrent fixture"),
       a = {
         ...body,
-        newPassword: "Concurrent-A-password!",
-        confirmPassword: "Concurrent-A-password!",
+        newPassword: "Concurrent-A-password1!",
+        confirmPassword: "Concurrent-A-password1!",
       },
       b = {
         ...body,
-        newPassword: "Concurrent-B-password!",
-        confirmPassword: "Concurrent-B-password!",
+        newPassword: "Concurrent-B-password2!",
+        confirmPassword: "Concurrent-B-password2!",
       };
     const replies = await Promise.all([
       change(concurrent.token, a),
@@ -455,7 +465,7 @@ test(
       .getByRole("button", { name: "變更密碼並登出", exact: true })
       .click();
     await expect(page.locator("#password-error")).toHaveText(
-      "請輸入目前密碼，並設定不同的 8–128 字元新密碼；兩次輸入的新密碼須相同。",
+      "請輸入目前密碼，並設定不同的 8–128 字元新密碼，包含英文大寫字母及數字；兩次輸入的新密碼須相同。",
     );
     await page.getByLabel("介面語言", { exact: true }).selectOption("en");
     await expect(page.locator("#newPassword")).toHaveValue(nextPassword);
@@ -625,8 +635,8 @@ test(
     await expect(page).toHaveURL(base + "/dashboard");
     await page.goto(base + "/account");
     await page.locator("#currentPassword").fill(nextPassword);
-    await page.locator("#newPassword").fill("Another-owned-password!");
-    await page.locator("#confirmPassword").fill("Another-owned-password!");
+    await page.locator("#newPassword").fill("Another-owned-password1!");
+    await page.locator("#confirmPassword").fill("Another-owned-password1!");
     await db.query(
       'UPDATE "AuthSession" SET "expiresAt"=now()-interval \'1 second\' WHERE "userId"=$1',
       [user.id],

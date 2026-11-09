@@ -1,4 +1,6 @@
 "use client";
+
+import { parseNewPassword } from "../lib/password-policy";
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "./i18n/locale";
 import type { MessageId } from "@/lib/i18n/catalogues";
@@ -37,8 +39,7 @@ export function PasswordChange({
     if (!values.currentPassword || values.currentPassword.length > 128)
       invalid.push("currentPassword");
     if (
-      values.newPassword.length < 8 ||
-      values.newPassword.length > 128 ||
+      !parseNewPassword(values.newPassword) ||
       values.newPassword === values.currentPassword
     )
       invalid.push("newPassword");

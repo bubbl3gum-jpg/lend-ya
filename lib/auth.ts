@@ -1,11 +1,13 @@
-import { createHash, randomBytes, scrypt, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
+export { hashPassword, verifyPassword } from "./password";
+import { lockPasswordAccount } from "./password-account";
+export { lockPasswordAccount } from "./password-account";
 import { Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 const sessionCookieName = "p2p_session";
 const sessionLifetimeSeconds = 7 * 24 * 60 * 60;
-const passwordKeyLength = 64;
 
 const safeUserSelect = {
   id: true,
@@ -16,18 +18,6 @@ const safeUserSelect = {
   verificationStatus: true,
   createdAt: true,
 } as const;
-
-function derivePasswordKey(password: string, salt: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    scrypt(password, salt, passwordKeyLength, (error, key) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(key as Buffer);
-      }
-    });
-  });
-}
 
 function hashSessionToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
@@ -73,44 +63,10 @@ export async function setSessionCookie(
   });
 }
 
-export async function hashPassword(password: string): Promise<string> {
-  const salt = randomBytes(16).toString("hex");
-  const key = await derivePasswordKey(password, salt);
-  return `scrypt$${salt}$${key.toString("hex")}`;
-}
-
-export async function verifyPassword(
-  password: string,
-  passwordHash: string,
-): Promise<boolean> {
-  const [algorithm, salt, expectedKeyHex] = passwordHash.split("$");
-  if (
-    algorithm !== "scrypt" ||
-    !salt ||
-    !expectedKeyHex ||
-    !/^[a-f\d]{128}$/i.test(expectedKeyHex)
-  ) {
-    return false;
-  }
-
-  const expectedKey = Buffer.from(expectedKeyHex, "hex");
-  const actualKey = await derivePasswordKey(password, salt);
-  return timingSafeEqual(actualKey, expectedKey);
-}
-
 export class CredentialChangedError extends Error {
   constructor() {
     super("Credentials changed; sign in again.");
   }
-}
-/** Shared serialization point for password-authenticated issuers and credential revocation.
- * Never use a browser-supplied hash. The caller supplies the exact server-verified snapshot.
- */
-export async function lockPasswordAccount(
-  tx: Prisma.TransactionClient,
-  userId: number,
-) {
-  await tx.$executeRaw`SELECT pg_advisory_xact_lock(1105001,${userId})`;
 }
 export async function persistVerifiedSession(
   userId: number,
@@ -138,6 +94,11 @@ export async function createSession(
   await setSessionCookie(credential);
 }
 
+/** Cookie-only cleanup after a transaction has already revoked all sessions. */
+export async function clearSessionCookie(): Promise<void> {
+  (await cookies()).delete(sessionCookieName);
+}
+
 export async function deleteCurrentSession(): Promise<void> {
   const cookieStore = await cookies();
   const token = cookieStore.get(sessionCookieName)?.value;
@@ -148,7 +109,7 @@ export async function deleteCurrentSession(): Promise<void> {
     });
   }
 
-  cookieStore.delete(sessionCookieName);
+  await clearSessionCookie();
 }
 
 export async function getCurrentUser() {

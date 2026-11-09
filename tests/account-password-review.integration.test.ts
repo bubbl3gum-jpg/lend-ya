@@ -9,8 +9,8 @@ test("11F credential rotation rejects distinct strings with the same effective s
     base = process.env.TEST_BASE_URL!,
     art = process.env.MRT_TEST_ARTIFACT_DIR!;
   try {
-    const original = "Owned-\ud800-secret!",
-      equivalent = "Owned-\ud801-secret!",
+    const original = "Owned-\ud800-secret1!",
+      equivalent = "Owned-\ud801-secret1!",
       email = randomUUID() + "@fixture.test";
     assert.notEqual(original, equivalent);
     const headers = { Origin: base, "Content-Type": "application/json" };
@@ -73,7 +73,7 @@ test("11F credential rotation rejects distinct strings with the same effective s
       "Equivalent effective credentials must not be reported as a password rotation",
     );
     assert.equal(events, 0);
-    const actual = "Different-well-formed-password!";
+    const actual = "Different-well-formed-password1!";
     const changed = await fetch(base + "/api/account/password", {
       method: "POST",
       headers: {
@@ -118,8 +118,8 @@ for (const kind of ["audit", "credential"] as const)
     const db = await connectTestDatabase(),
       base = process.env.TEST_BASE_URL!,
       art = process.env.MRT_TEST_ARTIFACT_DIR!,
-      password = "Owned-storage-review-current!",
-      newPassword = "Owned-storage-review-next!",
+      password = "Owned-storage-review-current1!",
+      newPassword = "Owned-storage-review-next1!",
       email = randomUUID() + "@fixture.test",
       headers = { Origin: base, "Content-Type": "application/json" };
     let triggered = false;

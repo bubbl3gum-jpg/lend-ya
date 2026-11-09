@@ -1,3 +1,4 @@
+import { parseNewPassword } from "../password-policy";
 import { parsePassword } from "../api-validation";
 export type PasswordChangeInput = {
   currentPassword: string;
@@ -16,7 +17,7 @@ export function passwordChangeInput(
   )
     return null;
   const currentPassword = parsePassword(body.currentPassword, 1),
-    newPassword = parsePassword(body.newPassword, 8),
+    newPassword = parseNewPassword(body.newPassword),
     confirmPassword = parsePassword(body.confirmPassword, 8);
   if (
     !currentPassword ||

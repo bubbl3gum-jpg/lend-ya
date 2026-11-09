@@ -137,7 +137,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             onChange={(event) => setPassword(event.target.value)}
             className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             placeholder={
-              mode === "login" ? "Enter your password" : "At least 8 characters"
+              mode === "login" ? "Enter your password" : "8–128 characters, uppercase letter and digit"
             }
             required
           />
@@ -201,7 +201,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   Recover your account
                 </h2>
                 <p className="mt-2 text-sm text-slate-600">
-                  Enter your account email or phone number to request recovery
+                  Enter your account email to request recovery
                   instructions.
                 </p>
               </div>
@@ -216,9 +216,9 @@ export function AuthForm({ mode }: AuthFormProps) {
             </div>
             <form onSubmit={handleRecovery} className="mt-5 space-y-4">
               <label className="block text-sm font-medium text-slate-700">
-                Email or phone number
+                Email address
                 <input
-                  type="text"
+                  type="email"
                   autoComplete="email"
                   value={recoveryContact}
                   onChange={(event) => setRecoveryContact(event.target.value)}

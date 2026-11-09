@@ -1,4 +1,5 @@
 import "server-only";
+import { cancelPendingRecoveryEmails } from "../email/outbox";
 import { cookies, headers } from "next/headers";
 import { createHash, randomUUID } from "node:crypto";
 import { prisma } from "../prisma";
@@ -176,6 +177,8 @@ export async function changePassword(raw: unknown) {
     });
     if ((await tx.authSession.count({ where: { userId: user.id } })) !== 0)
       throw new Error("Session revocation incomplete");
+    await tx.passwordRecovery.deleteMany({ where: { userId: user.id } });
+    await cancelPendingRecoveryEmails(tx, user.id);
     const eventId = randomUUID();
     await tx.accountSecurityEvent.create({
       data: {

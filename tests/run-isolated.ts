@@ -38,6 +38,9 @@ async function main() {
     app: ChildProcess | undefined;
   const env: NodeJS.ProcessEnv = {
     ...process.env,
+    // Never inherit live delivery credentials into isolated regression servers.
+    RECOVERY_EMAIL_MODE: "disabled",
+    RESEND_API_KEY: "not-a-real-api-key",
     MEETUP_CODE_SECRET: randomBytes(32).toString("hex"),
     MEETUP_CONFIRMATION_TTL_SECONDS: "900",
     DATABASE_URL: url.toString(),
@@ -47,6 +50,13 @@ async function main() {
     TEST_DATABASE_URL: url.toString(),
     CHROMIUM_PATH: process.env.MRT_BROWSER_PATH ?? process.env.CHROMIUM_PATH,
   };
+  if (process.argv.includes("--email")) Object.assign(env, {
+    RECOVERY_EMAIL_MODE: "resend-test",
+    RECOVERY_EMAIL_ENCRYPTION_KEY: randomBytes(32).toString("base64"),
+    RECOVERY_EMAIL_FROM: "onboarding@resend.dev",
+    RECOVERY_EMAIL_TEST_RECIPIENT: "delivery-owner@example.test",
+  });
+  delete env.RECOVERY_TRUSTED_IP_HEADER;
   async function run(args: string[]): Promise<void> {
     const verified = await connectTestDatabaseTarget(url);
     try { await assertOwnedDatabase(verified, url, runId); }
@@ -103,6 +113,7 @@ async function main() {
     if(process.argv.includes("--investigation-receipt")) env.MRT_TEST_INVESTIGATION_RECEIPT_ONLY="1";
     if(process.argv.includes("--meetup-camera")) env.MRT_TEST_CAMERA_ONLY="1";
     const legacyGroup = [
+      "account-recovery-migration",
       "local-ai",
       "local-ai-real",
       "recovery-room-migration",
@@ -140,6 +151,7 @@ async function main() {
     ].find((group) => process.argv.includes(`--${group}`));
     const standalone = legacyGroup
       ? {
+          "account-recovery-migration": "tests/account-recovery-migration.test.ts",
           "recovery-room-migration": "tests/recovery-room-migration.test.ts",
           "condition-claims-migration": "tests/condition-claims-migration.test.ts",
           "rental-documentation-migration": "tests/rental-documentation-migration.test.ts",
@@ -192,7 +204,7 @@ async function main() {
     else if (process.argv.includes("--migration"))
       await run(["node_modules/tsx/dist/cli.mjs", "tests/mrt-migration.ts"]);
     else {
-      if (!["recovery-room-migration","condition-claims-migration","rental-documentation-migration","password-change-migration","platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
+      if (!["account-recovery-migration","recovery-room-migration","condition-claims-migration","rental-documentation-migration","password-change-migration","platform-settings-migration","announcements-migration","support-staff-migration","support-channel-migration","support-ticket-migration","admin-migration","meetup-migration","staff-migration","staff-session-migration","approval-migration","mfa-migration"].includes(legacyGroup??""))
         await run([
           "node_modules/prisma/build/index.js",
           "migrate",
@@ -214,6 +226,7 @@ async function main() {
         const port = await freePort();
         env.MRT_TEST_URL = `http://localhost:${port}`;
         env.TEST_BASE_URL = env.MRT_TEST_URL;
+        if (process.argv.includes("--email")) env.RECOVERY_APP_ORIGIN = env.MRT_TEST_URL;
         if (process.argv.includes("--support-tickets") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channels") || process.argv.includes("--support-channel-production")) {
           env.HUSTLEN_SUPPORT_TICKET_CANDIDATE="owned-development-only";
           env.HUSTLEN_SUPPORT_TICKET_ORIGIN=env.TEST_BASE_URL;
@@ -291,7 +304,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--recovery-room") || process.argv.includes("--recovery-room-production"))
+        if (process.argv.includes("--recovery") || process.argv.includes("--email"))
+          await run(["node_modules/tsx/dist/cli.mjs", process.argv.includes("--email") ? "tests/email-integration.ts" : "tests/recovery-integration.ts"]);
+        else if (process.argv.includes("--recovery-room") || process.argv.includes("--recovery-room-production"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/recovery-room.integration.test.ts"]);
         else if (process.argv.includes("--condition-claims") || process.argv.includes("--condition-claims-production"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/condition-claims.integration.test.ts"]);
