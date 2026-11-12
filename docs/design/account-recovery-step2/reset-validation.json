@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checks": [
+    "Missing/malformed/query-only links never submit; URL is scrubbed, feedback focused and reset response is no-store/no-referrer/noindex.",
+    "Canonical token is memory-only and not consumed on opening; raw password policy, length, confirmation, focus and independent visibility controls are enforced before POST.",
+    "Real existing API consumes token, preserves exact password including spaces, revokes sessions and clears cookie; focused success clears fields and returns explicitly to sign-in without auto-login or queued mail.",
+    "Used and expired valid-looking credentials produce the same invalid-link UI on submission; expiry failure does not change the password.",
+    "Reload/back/cache restoration loses sensitive state safely; reopening the original unconsumed email fragment works, with empty password fields.",
+    "Pending fence prevents duplicate submissions, disables fields/toggles, and maps a refused request to focused safe feedback without raw error text.",
+    "Network/503/unreadable-success responses clear fields and token, explain uncertainty and offer sign-in/new-link actions with no replay.",
+    "Real reset committed behind a deliberately lost response: timeout shows uncertainty, never claims failure/unchanged password and performs exactly one browser submission.",
+    "Light/dark, 1440/390/320px, keyboard visibility toggles and reduced motion; no horizontal overflow, browser exceptions, credential URLs/DOM/storage/history/console/server logs or outbound email jobs."
+  ],
+  "screenshots": "screenshots/",
+  "emailMode": "disabled",
+  "fixtureTokens": "internal preparation only; no request/email E2E"
+}

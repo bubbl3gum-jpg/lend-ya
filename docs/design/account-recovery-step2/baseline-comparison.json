@@ -1,0 +1,26 @@
+[
+  {
+    "screenshot": "login-desktop",
+    "pixelIdentical": true
+  },
+  {
+    "screenshot": "login-mobile-light",
+    "pixelIdentical": true
+  },
+  {
+    "screenshot": "login-mobile-dark",
+    "pixelIdentical": true
+  },
+  {
+    "screenshot": "recovery-desktop",
+    "pixelIdentical": true
+  },
+  {
+    "screenshot": "recovery-mobile-light",
+    "pixelIdentical": true
+  },
+  {
+    "screenshot": "recovery-mobile-dark",
+    "pixelIdentical": true
+  }
+]

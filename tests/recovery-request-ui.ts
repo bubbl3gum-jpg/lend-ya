@@ -157,12 +157,12 @@ async function main() {
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     // Email and password are never persisted by the UI to web storage.
     assert.equal(await page.evaluate(() => Object.values(localStorage).some(value => String(value).includes("synthetic-step1"))), false);
-    assert.equal((await context.request.get("/reset-password")).status(), 404);
+    assert.equal((await context.request.get("/reset-password")).status(), 200);
     await page.goto("/register");
     await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
     await expect(page.locator(".auth-entry")).toHaveCount(0);
     assert.deepEqual(errors, []);
-    checks.push("320px viewport, unchanged registration styling, no credential storage, no browser errors and Step 2 route remains unimplemented.");
+    checks.push("320px viewport, unchanged registration styling, no credential storage, no browser errors and reset route is reachable.");
     await writeFile(path.join(artifactDir, "recovery-request-ui.json"), JSON.stringify({ passed: true, checks, screenshots: "screenshots/", emailMode: "disabled", mockedAcceptance: true }, null, 2));
     console.log(JSON.stringify({ passed: true, checks }, null, 2));
   } finally {

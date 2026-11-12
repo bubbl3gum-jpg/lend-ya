@@ -21,7 +21,14 @@ const nextConfig: NextConfig = {
     : {}),
   // Candidate private references must not enter development access logs.
   // Application error diagnostics remain bounded and enabled independently.
-  logging: { incomingRequests: { ignore: [/\/(?:api\/)?admin\/locations\/lab(?:\/|$)/, /\/(?:api\/)?dev\/support-(?:agent|requester)(?:\/|$)/, /\/api\/support\/(?:tickets|channels)(?:\/|$)/, /\/customer-service\/tickets(?:\/|$)/] } },
+  logging: { incomingRequests: { ignore: [/\/reset-password(?:[/?#]|$)/, /\/(?:api\/)?admin\/locations\/lab(?:\/|$)/, /\/(?:api\/)?dev\/support-(?:agent|requester)(?:\/|$)/, /\/api\/support\/(?:tickets|channels)(?:\/|$)/, /\/customer-service\/tickets(?:\/|$)/] } },
+  async headers() {
+    return [{ source: "/reset-password", headers: [
+      { key: "Referrer-Policy", value: "no-referrer" },
+      { key: "Cache-Control", value: "private, no-store, max-age=0" },
+      { key: "X-Robots-Tag", value: "noindex, nofollow" },
+    ] }];
+  },
   images: { unoptimized: true },
   experimental: { proxyClientMaxBodySize: "64mb" },
 };

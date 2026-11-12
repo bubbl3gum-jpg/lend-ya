@@ -75,3 +75,15 @@
   .auth-entry *, .auth-entry *::before { transition: none !important; animation: none !important; }
   .auth-entry button:active:not(:disabled) { transform: none; }
 }
+
+/* Reset-only controls; approved login and request surfaces retain their styles. */
+.auth-reset .auth-password-control { position: relative; margin-top: -.4rem; }
+.auth-reset .auth-password-control input { margin: 0; padding-right: 4rem; }
+.auth-reset .auth-password-control button { position: absolute; top: 2px; right: 3px; min-width: 48px; min-height: 44px; padding: .4rem; background: transparent; color: var(--ink); font-size: .73rem; text-decoration: underline; text-underline-offset: .25em; }
+.auth-reset .auth-password-control button:hover { color: var(--accent); }
+.auth-reset-feedback h2 { margin-bottom: 1rem; }
+.auth-reset-feedback p { color: var(--muted-ink); font-size: .85rem; line-height: 1.75; }
+.auth-reset-actions { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.auth-entry .auth-action-link { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem; background: var(--accent); color: var(--on-accent); border: 1px solid var(--accent); border-radius: var(--radius-control); text-decoration: none; font-size: .85rem; font-weight: 600; text-align: center; }
+.auth-entry .auth-action-link:hover { filter: brightness(.93); }
+.auth-reset-new-link { padding: .6rem 0; min-height: 44px; font-size: .78rem; text-decoration: underline; }

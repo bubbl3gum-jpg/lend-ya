@@ -3,8 +3,9 @@ import { HeritageSurface, WheatMark } from "@/components/heritage/experience";
 import { readAppearance } from "@/lib/heritage/appearance";
 import "@/app/auth.css";
 
-export async function AuthShell({ recovery = false, children }: {
+export async function AuthShell({ recovery = false, reset = false, children }: {
   recovery?: boolean;
+  reset?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -26,8 +27,8 @@ export async function AuthShell({ recovery = false, children }: {
               : "For the things you need. And the good things you can share. Your next exchange begins here."}</p>
             <div className="auth-engraving" aria-hidden="true"><WheatMark /><span>Small things.<br /><em>Thoughtfully shared.</em></span></div>
           </section>
-          <section className="auth-sheet" aria-label={recovery ? "Password recovery" : "Sign in"}>
-            <p className="auth-eyebrow auth-sheet-number">{recovery ? "02 / Find your way back" : "01 / Your account"}</p>
+          <section className="auth-sheet" aria-label={reset ? "Reset password" : recovery ? "Password recovery" : "Sign in"}>
+            <p className="auth-eyebrow auth-sheet-number">{reset ? "03 / A fresh start" : recovery ? "02 / Find your way back" : "01 / Your account"}</p>
             {children}
           </section>
         </main>
