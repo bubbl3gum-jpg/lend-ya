@@ -1,0 +1,111 @@
+{
+  "ui": {
+    "passed": true,
+    "checks": [
+      "Real failed login preserves anonymous session, displays error, focuses feedback and restores submission.",
+      "Login network failure has readable feedback, preserved input and an explicit retry.",
+      "Keyboard login link opens a dedicated, titled recovery page without modal focus trapping.",
+      "Native required-email validation and real disabled-delivery response; preserved email, focused error, zero queued email.",
+      "Network failure offers an explicit retry and preserves input without claiming success.",
+      "Malformed/rate-limited/server responses map to safe distinct UI feedback, never raw response content.",
+      "Simulated neutral 202 and pending duplicate-submit protection; focused confirmation promises neither account existence nor delivery.",
+      "Changing email restores input focus; one-minute local cooldown unlocks without automatic resubmission.",
+      "Timed-out request reports an ambiguous outcome, restores focus and enforces a cooldown without replay.",
+      "390px mobile light/dark routes have no horizontal overflow, 16px email fields and >=44px primary targets under reduced motion.",
+      "320px viewport, unchanged registration styling, no credential storage, no browser errors and Step 2 route remains unimplemented."
+    ],
+    "screenshots": "screenshots/",
+    "emailMode": "disabled",
+    "mockedAcceptance": true
+  },
+  "axe": {
+    "runs": [
+      {
+        "route": "/login",
+        "theme": "light",
+        "width": 1440,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/forgot-password",
+        "theme": "light",
+        "width": 1440,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/login",
+        "theme": "light",
+        "width": 390,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/forgot-password",
+        "theme": "light",
+        "width": 390,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/login",
+        "theme": "dark",
+        "width": 1440,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/forgot-password",
+        "theme": "dark",
+        "width": 1440,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/login",
+        "theme": "dark",
+        "width": 390,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "route": "/forgot-password",
+        "theme": "dark",
+        "width": 390,
+        "violations": [],
+        "incomplete": [
+          "color-contrast"
+        ]
+      }
+    ]
+  },
+  "manualTokenContrastRatios": {
+    "lightMutedOnPaper": 5.19,
+    "lightMutedOnSheet": 6.0,
+    "lightPrimary": 7.41,
+    "lightError": 5.81,
+    "darkMutedOnSheet": 7.64,
+    "darkPrimary": 7.36,
+    "darkError": 10.99
+  },
+  "limitations": [
+    "Texture pseudo-elements prevent automatic contrast evaluation; base token ratios and screenshots reviewed separately.",
+    "No hardware screen-reader session performed.",
+    "Recovery confirmation screenshots use simulated HTTP 202; email remains disabled."
+  ]
+}

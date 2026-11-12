@@ -304,7 +304,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--recovery") || process.argv.includes("--email"))
+        if (process.argv.includes("--recovery-request-ui"))
+          await run(["node_modules/tsx/dist/cli.mjs", "tests/recovery-request-ui.ts"]);
+        else if (process.argv.includes("--recovery") || process.argv.includes("--email"))
           await run(["node_modules/tsx/dist/cli.mjs", process.argv.includes("--email") ? "tests/email-integration.ts" : "tests/recovery-integration.ts"]);
         else if (process.argv.includes("--recovery-room") || process.argv.includes("--recovery-room-production"))
           await run(["node_modules/tsx/dist/cli.mjs", "--test", "tests/recovery-room.integration.test.ts"]);
