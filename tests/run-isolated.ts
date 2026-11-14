@@ -50,7 +50,7 @@ async function main() {
     TEST_DATABASE_URL: url.toString(),
     CHROMIUM_PATH: process.env.MRT_BROWSER_PATH ?? process.env.CHROMIUM_PATH,
   };
-  if (process.argv.includes("--email")) Object.assign(env, {
+  if (process.argv.includes("--email") || process.argv.includes("--recovery-acceptance")) Object.assign(env, {
     RECOVERY_EMAIL_MODE: "resend-test",
     RECOVERY_EMAIL_ENCRYPTION_KEY: randomBytes(32).toString("base64"),
     RECOVERY_EMAIL_FROM: "onboarding@resend.dev",
@@ -226,7 +226,7 @@ async function main() {
         const port = await freePort();
         env.MRT_TEST_URL = `http://localhost:${port}`;
         env.TEST_BASE_URL = env.MRT_TEST_URL;
-        if (process.argv.includes("--email")) env.RECOVERY_APP_ORIGIN = env.MRT_TEST_URL;
+        if (process.argv.includes("--email") || process.argv.includes("--recovery-acceptance")) env.RECOVERY_APP_ORIGIN = env.MRT_TEST_URL;
         if (process.argv.includes("--support-tickets") || process.argv.includes("--support-ticket-production") || process.argv.includes("--support-channels") || process.argv.includes("--support-channel-production")) {
           env.HUSTLEN_SUPPORT_TICKET_CANDIDATE="owned-development-only";
           env.HUSTLEN_SUPPORT_TICKET_ORIGIN=env.TEST_BASE_URL;
@@ -304,7 +304,9 @@ async function main() {
         }
         if (!ready)
           throw Error("Isolated app did not become ready; inspect server.log.");
-        if (process.argv.includes("--password-reset-ui"))
+        if (process.argv.includes("--recovery-acceptance"))
+          await run(["node_modules/tsx/dist/cli.mjs", "tests/recovery-acceptance.ts"]);
+        else if (process.argv.includes("--password-reset-ui"))
           await run(["node_modules/tsx/dist/cli.mjs", "tests/password-reset-ui.ts"]);
         else if (process.argv.includes("--recovery-request-ui"))
           await run(["node_modules/tsx/dist/cli.mjs", "tests/recovery-request-ui.ts"]);
